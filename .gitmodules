@@ -1,0 +1,3 @@
+[submodule "lxml"]
+	path = lxml
+	url = https://github.com/aleph7/lxml.git

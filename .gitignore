@@ -1,0 +1,10 @@
+build/
+
+# CMake files
+CMakeCache.txt
+CMakeFiles
+Makefile
+cmake_install.cmake
+Testing
+CTestTestfile.cmake
+install_manifest.txt
