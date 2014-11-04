@@ -1,0 +1,140 @@
+//  Created by Alejandro Isaza on 2014-11-03.
+//  Copyright (c) 2014 Venture Media Labs. All rights reserved.
+
+#pragma once
+
+#include <mxml/dom/Node.h>
+#include <mxml/dom/InvalidDataError.h>
+
+#include <mxml/dom/Accidental.h>
+#include <mxml/dom/Appearance.h>
+#include <mxml/dom/Articulation.h>
+#include <mxml/dom/Attributes.h>
+#include <mxml/dom/Backup.h>
+#include <mxml/dom/Barline.h>
+#include <mxml/dom/Beam.h>
+#include <mxml/dom/Chord.h>
+#include <mxml/dom/Clef.h>
+#include <mxml/dom/Credit.h>
+#include <mxml/dom/CreditWords.h>
+#include <mxml/dom/Defaults.h>
+#include <mxml/dom/Direction.h>
+#include <mxml/dom/DirectionType.h>
+#include <mxml/dom/EmptyPlacement.h>
+#include <mxml/dom/Ending.h>
+#include <mxml/dom/Fermata.h>
+#include <mxml/dom/Forward.h>
+#include <mxml/dom/Identification.h>
+#include <mxml/dom/Key.h>
+#include <mxml/dom/Lyric.h>
+#include <mxml/dom/Measure.h>
+#include <mxml/dom/Mordent.h>
+#include <mxml/dom/Notations.h>
+#include <mxml/dom/Note.h>
+#include <mxml/dom/Optional.h>
+#include <mxml/dom/Ornaments.h>
+#include <mxml/dom/Part.h>
+#include <mxml/dom/Pedal.h>
+#include <mxml/dom/Pitch.h>
+#include <mxml/dom/Print.h>
+#include <mxml/dom/Repeat.h>
+#include <mxml/dom/Rest.h>
+#include <mxml/dom/Scaling.h>
+#include <mxml/dom/Score.h>
+#include <mxml/dom/Slur.h>
+#include <mxml/dom/Sound.h>
+#include <mxml/dom/StaffLayout.h>
+#include <mxml/dom/Syllabic.h>
+#include <mxml/dom/Tie.h>
+#include <mxml/dom/Tied.h>
+#include <mxml/dom/Time.h>
+#include <mxml/dom/TimedNode.h>
+#include <mxml/dom/Turn.h>
+#include <mxml/dom/Types.h>
+#include <mxml/dom/Unpitched.h>
+#include <mxml/dom/Wedge.h>
+
+
+#include "geometry/Point.h"
+#include "geometry/Rect.h"
+#include "geometry/Size.h"
+#include "geometry/LineSegment.h"
+
+#include "geometry/Geometry.h"
+
+#include "geometry/AccidentalGeometry.h"
+#include "geometry/ArticulationGeometry.h"
+#include "geometry/BarlineGeometry.h"
+#include "geometry/BeamGeometry.h"
+#include "geometry/ChordGeometry.h"
+#include "geometry/ClefGeometry.h"
+#include "geometry/DirectionGeometry.h"
+#include "geometry/DotGeometry.h"
+#include "geometry/EndingGeometry.h"
+#include "geometry/FermataGeometry.h"
+#include "geometry/KeyGeometry.h"
+#include "geometry/LyricGeometry.h"
+#include "geometry/MeasureElementGeometry.h"
+#include "geometry/MeasureGeometry.h"
+#include "geometry/NoteGeometry.h"
+#include "geometry/OrnamentsGeometry.h"
+#include "geometry/PartGeometry.h"
+#include "geometry/PedalGeometry.h"
+#include "geometry/RestGeometry.h"
+#include "geometry/ScoreGeometry.h"
+#include "geometry/SpanDirectionGeometry.h"
+#include "geometry/StemGeometry.h"
+#include "geometry/StreamOperators.h"
+#include "geometry/TieGeometry.h"
+#include "geometry/TieGeometryFactory.h"
+#include "geometry/TimeSignatureGeometry.h"
+
+
+#include "parsing/ArticulationHandler.h"
+#include "parsing/AttributesHandler.h"
+#include "parsing/BackupHandler.h"
+#include "parsing/BarlineHandler.h"
+#include "parsing/BaseHandler.h"
+#include "parsing/BeamHandler.h"
+#include "parsing/ClefHandler.h"
+#include "parsing/CreditHandler.h"
+#include "parsing/CreditWordsHandler.h"
+#include "parsing/DefaultsHandler.h"
+#include "parsing/DirectionHandler.h"
+#include "parsing/DirectionTypeHandler.h"
+#include "parsing/EmptyPlacementHandler.h"
+#include "parsing/EndingHandler.h"
+#include "parsing/FermataHandler.h"
+#include "parsing/ForwardHandler.h"
+#include "parsing/IdentificationHandler.h"
+#include "parsing/KeyHandler.h"
+#include "parsing/LyricHandler.h"
+#include "parsing/MeasureHandler.h"
+#include "parsing/MordentHandler.h"
+#include "parsing/NotationsHandler.h"
+#include "parsing/NoteHandler.h"
+#include "parsing/OrnamentsHandler.h"
+#include "parsing/PartHandler.h"
+#include "parsing/PitchHandler.h"
+#include "parsing/PrintHandler.h"
+#include "parsing/RepeatHandler.h"
+#include "parsing/RestHandler.h"
+#include "parsing/ScalingHandler.h"
+#include "parsing/ScoreHandler.h"
+#include "parsing/SlurHandler.h"
+#include "parsing/SoundHandler.h"
+#include "parsing/StaffLayoutHandler.h"
+#include "parsing/SyllabicHandler.h"
+#include "parsing/TieHandler.h"
+#include "parsing/TiedHandler.h"
+#include "parsing/TimeHandler.h"
+#include "parsing/TurnHandler.h"
+#include "parsing/UnpitchedHandler.h"
+
+
+#include "Event.h"
+#include "EventFactory.h"
+#include "EventSequence.h"
+#include "Span.h"
+#include "SpanCollection.h"
+#include "SpanFactory.h"
