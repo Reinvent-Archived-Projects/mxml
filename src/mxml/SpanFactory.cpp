@@ -3,13 +3,13 @@
 
 #include "SpanFactory.h"
 
-#include "geometry/AccidentalGeometry.h"
-#include "geometry/BarlineGeometry.h"
-#include "geometry/ClefGeometry.h"
-#include "geometry/KeyGeometry.h"
-#include "geometry/NoteGeometry.h"
-#include "geometry/StemGeometry.h"
-#include "geometry/TimeSignatureGeometry.h"
+#include <mxml/geometry/AccidentalGeometry.h>
+#include <mxml/geometry/BarlineGeometry.h>
+#include <mxml/geometry/ClefGeometry.h>
+#include <mxml/geometry/KeyGeometry.h>
+#include <mxml/geometry/NoteGeometry.h>
+#include <mxml/geometry/StemGeometry.h>
+#include <mxml/geometry/TimeSignatureGeometry.h>
 
 #include <mxml/dom/Backup.h>
 #include <mxml/dom/Forward.h>

@@ -2,7 +2,7 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
-#include "geometry/Point.h"
+#include <mxml/geometry/Point.h>
 #include <mxml/dom/Node.h>
 
 #include <algorithm>
