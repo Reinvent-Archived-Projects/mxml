@@ -21,7 +21,8 @@ enum Stem {
 enum StartStopContinue {
     TYPE_START,
     TYPE_CONTINUE,
-    TYPE_STOP
+    TYPE_STOP,
+    TYPE_CHANGE
 };
 
 enum Orientation {

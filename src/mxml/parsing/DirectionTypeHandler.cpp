@@ -148,6 +148,8 @@ dom::StartStopContinue PedalHandler::typeFromString(const std::string& string) {
         return dom::TYPE_STOP;
     if (string == "continue")
         return dom::TYPE_CONTINUE;
+    if (string == "change")
+        return dom::TYPE_CHANGE;
     throw dom::InvalidDataError("Invalid type " + string);
 }
 
