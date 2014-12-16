@@ -22,13 +22,12 @@ EventFactory::EventFactory(const dom::Score& score)
 
 const EventSequence& EventFactory::build() {
     _eventSequence.clear();
-    _maxTime = 0;
     _firstPass = true;
 
     for (auto& part : _score.parts()) {
         _part = part.get();
+        _measureStartTime = 0;
         _time = 0;
-        _maxTime = 0;
         for (_measureIndex = 0; _measureIndex < part->measures().size(); _measureIndex += 1) {
             const Measure& measure = *part->measures().at(_measureIndex);
             processMeasure(measure);
@@ -85,11 +84,25 @@ const EventSequence& EventFactory::build() {
     return _eventSequence;
 }
 
+int EventFactory::currentDivisions() const {
+    auto attributes = _eventSequence.attributes(_time);
+    if (attributes)
+        return attributes->divisions();
+    return 1;
+}
+
+dom::Time EventFactory::currentTime() const {
+    auto attributes = _eventSequence.attributes(_time);
+    if (attributes)
+        return attributes->time();
+    return dom::Time{};
+}
+
 void EventFactory::processMeasure(const dom::Measure& measure) {
     for (auto& node : measure.nodes()) {
-        if (node == measure.nodes().back() && !dynamic_cast<const TimedNode*>(node.get()) && _time != _maxTime)
-            _time = _maxTime;
-        
+        if (node == measure.nodes().back() && !dynamic_cast<const TimedNode*>(node.get()) && _eventSequence.attributes(_time))
+            _time = _measureStartTime + currentDivisions() * currentTime().beats();;
+
         if (const Barline* barline = dynamic_cast<const Barline*>(node.get())) {
             if (_firstPass)
                 processBarline(*barline);
@@ -101,6 +114,9 @@ void EventFactory::processMeasure(const dom::Measure& measure) {
             processTimedNode(*timedNode);
         }
     }
+
+    _measureStartTime += currentDivisions() * currentTime().beats();
+    _time = _measureStartTime;
 }
 
 void EventFactory::processBarline(const dom::Barline& barline) {
@@ -176,7 +192,6 @@ void EventFactory::processTimedNode(const TimedNode& node) {
     } else if (dynamic_cast<const Backup*>(&node)) {
         _time -= node.duration();
     }
-    _maxTime = std::max(_time, _maxTime);
 }
 
 void EventFactory::processChord(const Chord& chord) {

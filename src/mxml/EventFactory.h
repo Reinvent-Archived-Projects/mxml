@@ -29,14 +29,17 @@ private:
     void processTimedNode(const dom::TimedNode& node);
     void processChord(const dom::Chord& chord);
     void addNote(const dom::Note& note);
-    
+
+    int currentDivisions() const;
+    dom::Time currentTime() const;
+
 private:
     const dom::Score& _score;
     const dom::Part* _part;
 
     std::size_t _measureIndex;
+    dom::time_t _measureStartTime;
     dom::time_t _time;
-    dom::time_t _maxTime;
     bool _firstPass;
 
     dom::time_t _loopBegin;
