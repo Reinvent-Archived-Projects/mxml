@@ -347,7 +347,7 @@ coord_t SpanFactory::naturalWidthForNote(const dom::Note& note) {
     static const coord_t kBaseWidth = 12;
     static const coord_t kWidthIncrease = 20;
 
-    switch (note.type()) {
+    switch (note.type().value()) {
         case dom::Note::TYPE_1024TH:
         case dom::Note::TYPE_512TH:
         case dom::Note::TYPE_256TH:

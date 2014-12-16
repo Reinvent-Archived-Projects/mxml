@@ -25,7 +25,10 @@ RestGeometry::RestGeometry(const dom::Note& note) : _note(note) {
 }
 
 Size RestGeometry::Size(const dom::Note& note) {
-    switch (note.type()) {
+    if (!note.type().isPresent())
+        return kHalfSize;
+    
+    switch (note.type().value()) {
         case Note::TYPE_1024TH:
         case Note::TYPE_512TH:
         case Note::TYPE_256TH:

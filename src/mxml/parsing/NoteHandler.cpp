@@ -110,7 +110,7 @@ void NoteHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kDurationTag) == 0)
         _result->setDuration(presentOptional(_integerHandler.result()));
     else if (strcmp(qname.localName(), kTypeTag) == 0)
-        _result->setType(typeFromString(_stringHandler.result()));
+        _result->setType(presentOptional(typeFromString(_stringHandler.result())));
     else if (strcmp(qname.localName(), kChordTag) == 0)
         _result->setChord(_presenceHandler.result());
     else if (strcmp(qname.localName(), kGraceTag) == 0)

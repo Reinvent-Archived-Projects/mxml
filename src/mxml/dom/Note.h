@@ -48,7 +48,7 @@ public:
     Note()
     : _defaultX(),
       _defaultY(),
-      _type(TYPE_QUARTER),
+      _type(absentOptional(TYPE_QUARTER)),
       _chord(false),
       _grace(false),
       _printObject(true),
@@ -84,10 +84,10 @@ public:
         _defaultY = y;
     }
     
-    Type type() const {
+    Optional<Type> type() const {
         return _type;
     }
-    void setType(Type type) {
+    void setType(Optional<Type> type) {
         _type = type;
     }
     
@@ -226,7 +226,7 @@ private:
     Optional<float> _defaultX;
     Optional<float> _defaultY;
     
-    Type _type;
+    Optional<Type> _type;
     bool _chord;
     bool _grace;
     bool _printObject;
