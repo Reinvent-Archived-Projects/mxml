@@ -154,6 +154,8 @@ void MeasureGeometry::build() {
 
     setSize({_spans.width(_measureIndex), _partGeometry.stavesHeight() + 2*kVerticalPadding});
     setContentOffset({0, -kVerticalPadding});
+
+    centerLoneRest();
 }
 
 void MeasureGeometry::buildAttributes(const Attributes* attributes) {
@@ -305,6 +307,42 @@ void MeasureGeometry::buildRest(const Note* note) {
     location.y = _partGeometry.noteY(_currentAttributes, *note);
     geo->setLocation(location);
     addGeometry(std::move(geo));
+}
+
+void MeasureGeometry::centerLoneRest() {
+    RestGeometry* onlyRest = nullptr;
+    for (auto& geometry : geometries()) {
+        NoteGeometry* note = dynamic_cast<NoteGeometry*>(geometry.get());
+        if (note) {
+            onlyRest = nullptr;
+            break;
+        }
+
+        ChordGeometry* chord = dynamic_cast<ChordGeometry*>(geometry.get());
+        if (chord) {
+            onlyRest = nullptr;
+            break;
+        }
+
+        RestGeometry* rest = dynamic_cast<RestGeometry*>(geometry.get());
+        if (rest) {
+            if (onlyRest) {
+                onlyRest = nullptr;
+                break;
+            } else {
+                onlyRest = rest;
+            }
+        }
+    }
+    if (!onlyRest)
+        return;
+
+    // If there is only a rest in the measure, it should be centered
+    auto location = onlyRest->location();
+    const Span& span = *_spans.with(&onlyRest->note());
+    auto start = -_spans.origin(_measureIndex) + span.start();
+    location.x = start + (size().width - start) / 2 - onlyRest->size().width/2;
+    onlyRest->setLocation(location);
 }
 
 } // namespace mxml

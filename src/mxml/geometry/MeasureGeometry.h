@@ -64,6 +64,8 @@ private:
     void buildTimedNode(const dom::TimedNode* barline);
     void buildChord(const dom::Chord* chord);
     void buildRest(const dom::Note* note);
+
+    void centerLoneRest();
     
 private:
     const dom::Measure& _measure;

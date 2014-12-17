@@ -92,6 +92,8 @@ void MeasureHandler::endSubElement(const QName& qname, RecursiveHandler* parser)
 }
 
 void MeasureHandler::handleNote(std::unique_ptr<dom::Note>&& note) {
+    _empty = false;
+
     note->setMeasure(_result.get());
     note->setAttributes(_attributes);
     note->setStart(_time);
@@ -117,8 +119,6 @@ void MeasureHandler::handleNote(std::unique_ptr<dom::Note>&& note) {
         note->setStart(_lastTime);
         _chord->addNote(std::move(note));
     }
-
-    _empty = false;
 }
 
 void MeasureHandler::startChord(std::unique_ptr<dom::Note>&& note) {
