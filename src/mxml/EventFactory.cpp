@@ -85,14 +85,14 @@ const EventSequence& EventFactory::build() {
 }
 
 int EventFactory::currentDivisions() const {
-    auto attributes = _eventSequence.attributes(_time);
+    auto attributes = _eventSequence.attributes(_measureStartTime);
     if (attributes)
         return attributes->divisions();
     return 1;
 }
 
 dom::Time EventFactory::currentTime() const {
-    auto attributes = _eventSequence.attributes(_time);
+    auto attributes = _eventSequence.attributes(_measureStartTime);
     if (attributes)
         return attributes->time();
     return dom::Time{};
