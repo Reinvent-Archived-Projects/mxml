@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_CASE(moonlight) {
     EventFactory factory(score);
     const EventSequence& events = factory.build();
     
-    BOOST_CHECK_EQUAL(events.events().size(), 2872);
+    BOOST_CHECK_EQUAL(events.events().size(), 2857);
     
     BOOST_CHECK_EQUAL(*events.tempo(0), 160);
     BOOST_CHECK_EQUAL(*events.tempo(6359), 160);
