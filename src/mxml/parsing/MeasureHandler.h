@@ -22,6 +22,8 @@ public:
     MeasureHandler() : _lastTime(), _time() {}
     
     RecursiveHandler* startSubElement(const lxml::QName& qname);
+    void endElement(const lxml::QName& qname, const std::string& contents);
+
     void endSubElement(const lxml::QName& qname, RecursiveHandler* parser);
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     
@@ -43,6 +45,7 @@ private:
     dom::Chord* _chord;
     int _lastTime;
     int _time;
+    bool _empty;
 };
 
 } // namespace mxml

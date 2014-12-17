@@ -114,7 +114,7 @@ coord_t MeasureGeometry::staffYInFClef(Pitch::Step step, int octave) {
 void MeasureGeometry::build() {
     _currentTime = 0;
     _currentAttributes = _measure.baseAttributes();
-    
+
     for (auto& node : _measure.nodes()) {
         if (const Attributes* attributes = dynamic_cast<const Attributes*>(node.get())) {
             _currentAttributes = *attributes;
@@ -125,7 +125,7 @@ void MeasureGeometry::build() {
             buildTimedNode(timedNode);
         }
     }
-    
+
     std::vector<ChordGeometry*> chords;
     for (std::size_t i = 0; i < _geometries.size(); i += 1) {
         auto& geom = _geometries[i];

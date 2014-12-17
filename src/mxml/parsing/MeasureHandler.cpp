@@ -27,10 +27,25 @@ void MeasureHandler::startElement(const QName& qname, const AttributeMap& attrib
     _result->setBaseAttributes(_attributesHandler.defaultAttributes());
     _attributes = &_result->baseAttributes();
     _time = 0;
+    _empty = true;
     
     auto numberit = attributes.find(kNumberAttribute);
     if (numberit != attributes.end())
         _result->setNumber(numberit->second);
+}
+
+void MeasureHandler::endElement(const QName& qname, const std::string& contents) {
+    if (_empty) {
+        dom::Rest rest;
+        auto note = std::unique_ptr<dom::Note>(new dom::Note);
+        note->setRest(dom::presentOptional(rest));
+        note->setMeasure(_result.get());
+        note->setAttributes(_attributes);
+        note->setStart(0);
+        note->setType(dom::presentOptional(dom::Note::TYPE_WHOLE));
+        note->setDuration(dom::presentOptional(_attributes->divisions() * _attributes->time().value().beats()));
+        _result->addNode(std::move(note));
+    }
 }
 
 lxml::RecursiveHandler* MeasureHandler::startSubElement(const QName& qname) {
@@ -102,6 +117,8 @@ void MeasureHandler::handleNote(std::unique_ptr<dom::Note>&& note) {
         note->setStart(_lastTime);
         _chord->addNote(std::move(note));
     }
+
+    _empty = false;
 }
 
 void MeasureHandler::startChord(std::unique_ptr<dom::Note>&& note) {
