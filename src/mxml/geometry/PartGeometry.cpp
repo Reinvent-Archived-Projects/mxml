@@ -13,8 +13,8 @@
 #include "SpanDirectionGeometry.h"
 #include "TieGeometryFactory.h"
 
-#include "../dom/Pedal.h"
-#include "../dom/Wedge.h"
+#include <mxml/dom/Pedal.h>
+#include <mxml/dom/Wedge.h>
 
 namespace mxml {
 
@@ -82,26 +82,53 @@ void PartGeometry::buildDirections() {
 void PartGeometry::buildDirection(const MeasureGeometry& measureGeom, const dom::Direction& direction) {
     if (dynamic_cast<const dom::Wedge*>(direction.type())) {
         buildWedge(measureGeom, direction);
-    } else if (dynamic_cast<const dom::Pedal*>(direction.type())) {
-        buildPedal(measureGeom, direction);
-    } else {
-        std::unique_ptr<Geometry> dirGeom(new DirectionGeometry(direction));
-        
-        const Span& span = *measureGeom.spans().with(&direction);
-        Point location;
-        location.x = span.start() - span.leftMargin()/2;
-        if (direction.placement() == dom::PLACEMENT_ABOVE && direction.staff() == 1)
-            location.y = staffOrigin(direction.staff()) - 3*PartGeometry::kStaffLineSpacing;
-        else if (direction.placement() == dom::PLACEMENT_ABOVE)
-            location.y = staffOrigin(direction.staff()) - PartGeometry::kStaffLineSpacing;
-        else
-            location.y = staffOrigin(direction.staff()) + staffHeight() + PartGeometry::kStaffLineSpacing;
-        location.y -= stavesHeight()/2;
-        dirGeom->setLocation(location);
-
-        _directionGeometries.push_back(dirGeom.get());
-        addGeometry(std::move(dirGeom));
+        return;
     }
+
+    if (dynamic_cast<const dom::Pedal*>(direction.type())) {
+        buildPedal(measureGeom, direction);
+        return;
+    }
+
+    std::unique_ptr<Geometry> dirGeom(new DirectionGeometry(direction));
+
+    Point location;
+
+    const Span& span = *measureGeom.spans().with(&direction);
+    location.x = span.start() - span.leftMargin()/2;
+
+    // Better placement defaults if the placement is not specified
+    dom::Placement placement = direction.placement();
+    if (!direction.placement().isPresent()) {
+        if (dynamic_cast<const dom::Dynamics*>(direction.type())) {
+            if (direction.staff() == 1)
+                placement = dom::PLACEMENT_BELOW;
+            else
+                placement = dom::PLACEMENT_ABOVE;
+        } else if (dynamic_cast<const dom::Words*>(direction.type())) {
+            if (direction.staff() == 1)
+                placement = dom::PLACEMENT_ABOVE;
+            else
+                placement = dom::PLACEMENT_BELOW;
+        }
+    }
+
+    if (placement == dom::PLACEMENT_ABOVE) {
+        if (direction.staff() == 1)
+            location.y = staffOrigin(direction.staff()) - 3*PartGeometry::kStaffLineSpacing;
+        else
+            location.y = staffOrigin(direction.staff()) - PartGeometry::kStaffLineSpacing;
+        dirGeom->setVerticalAnchorPointValues(1, 0);
+    } else {
+        location.y = staffOrigin(direction.staff()) + staffHeight() + PartGeometry::kStaffLineSpacing;
+        dirGeom->setVerticalAnchorPointValues(0, 0);
+    }
+    location.y -= stavesHeight()/2;
+
+    dirGeom->setLocation(location);
+
+    _directionGeometries.push_back(dirGeom.get());
+    addGeometry(std::move(dirGeom));
 }
 
 

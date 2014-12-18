@@ -13,12 +13,12 @@ namespace dom {
 
 class Direction : public Node {
 public:
-    Direction() : _placement(PLACEMENT_ABOVE), _type(), _staff(1), _start(0), _offset() {}
+    Direction() : _placement(absentOptional(PLACEMENT_ABOVE)), _type(), _staff(1), _start(0), _offset() {}
     
-    Placement placement() const {
+    Optional<Placement> placement() const {
         return _placement;
     }
-    void setPlacement(Placement placement) {
+    void setPlacement(Optional<Placement> placement) {
         _placement = placement;
     }
     
@@ -58,7 +58,7 @@ public:
     }
     
 private:
-    Placement _placement;
+    Optional<Placement> _placement;
     std::unique_ptr<DirectionType> _type;
     int _staff;
     time_t _start;

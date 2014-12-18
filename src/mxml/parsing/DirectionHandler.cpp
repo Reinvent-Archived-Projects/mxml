@@ -21,7 +21,7 @@ void DirectionHandler::startElement(const QName& qname, const AttributeMap& attr
     
     auto placement = attributes.find(kPlacementAttribute);
     if (placement != attributes.end())
-        _result->setPlacement(placementFromString(placement->second));
+        _result->setPlacement(presentOptional(placementFromString(placement->second)));
 }
 
 lxml::RecursiveHandler* DirectionHandler::startSubElement(const QName& qname) {
