@@ -95,7 +95,11 @@ void PartGeometry::buildDirection(const MeasureGeometry& measureGeom, const dom:
     Point location;
 
     const Span& span = *measureGeom.spans().with(&direction);
-    location.x = span.start() - span.leftMargin()/2;
+    if (dirGeom->size().width > 2*NoteGeometry::kQuarterWidth) {
+        location.x = span.start() - span.leftMargin()/2;
+    } else {
+        location.x = span.start();
+    }
 
     // Better placement defaults if the placement is not specified
     dom::Placement placement = direction.placement();

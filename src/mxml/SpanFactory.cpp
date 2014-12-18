@@ -160,6 +160,7 @@ void SpanFactory::build(const dom::Direction* direction) {
     SpanCollection::iterator span = _spans.eventSpan(_measureIndex, _currentTime);
     if (span == _spans.end()) {
         span = _spans.add(_measureIndex, _currentTime);
+        span->setEvent(true);
     }
     
     span->addNode(direction);
