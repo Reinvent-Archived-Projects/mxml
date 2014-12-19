@@ -53,46 +53,14 @@ public:
     coord_t noteY(const dom::Attributes& attributes, const dom::Note& note) const;
     
 private:
-    void build();
-    
-    void buildDirections();
-    void buildDirection(const MeasureGeometry&  measureGeom, const dom::Direction& direction);
-    void buildWedge(const MeasureGeometry& measureGeom, const dom::Direction& direction);
-    void buildWedge(const MeasureGeometry& startMeasureGeom, const dom::Direction& startDirection,
-                    const MeasureGeometry& stopMeasureGeom, const dom::Direction& stopDirection);
-    void buildPedal(const MeasureGeometry& measureGeom, const dom::Direction& direction);
-    void buildPedal(const MeasureGeometry& startMeasureGeom, const dom::Direction& startDirection,
-                    const MeasureGeometry& stopMeasureGeom, const dom::Direction& stopDirection);
-
-    void buildOrnaments();
-    void buildOrnaments(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom);
-    void buildOrnament(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom, const dom::Ornaments& ornaments);
-
-    void buildEndings();
-    void buildEndings(const MeasureGeometry& measureGeom, const BarlineGeometry& barlineGeom);
-
-    void buildLyrics();
-    void buildLyrics(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom);
-    void buildLyric(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom, const dom::Lyric& lyric);
-
-    void placeDirection(PlacementGeometry& geometry);
-    void swapPlacement(PlacementGeometry& geometry);
-
-    void resolveCollisions();
-    void resolveDirectionDirectionCollisions();
-    void resolveDirectionCollision(std::vector<PlacementGeometry*>& geometries);
-    
-private:
     const dom::Part& _part;
     const SpanCollection& _spans;
-    std::vector<std::pair<const MeasureGeometry*, const dom::Direction*>> _openSpanDirections;
-
-    dom::Optional<dom::Ending> _startEnding;
-    Point _startEndingLocation;
     
     std::vector<MeasureGeometry*> _measureGeometries;
     std::vector<TieGeometry*> _tieGeometries;
     std::vector<PlacementGeometry*> _directionGeometries;
+
+    friend class PartGeometryFactory;
 };
 
 } // namespace mxml

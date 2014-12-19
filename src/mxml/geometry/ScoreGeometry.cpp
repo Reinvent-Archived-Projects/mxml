@@ -2,6 +2,7 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #include "PartGeometry.h"
+#include "PartGeometryFactory.h"
 #include "ScoreGeometry.h"
 #include <mxml/SpanFactory.h>
 
@@ -13,7 +14,8 @@ ScoreGeometry::ScoreGeometry(const dom::Score& score, bool naturalSpacing) : _sc
 
     coord_t offset = 0;
     for (auto& part : _score.parts()) {
-        std::unique_ptr<PartGeometry> geom(new PartGeometry(*part, _spans));
+        PartGeometryFactory factory(*part, _spans);
+        std::unique_ptr<PartGeometry> geom = factory.build();
         geom->setHorizontalAnchorPointValues(0, 0);
         geom->setVerticalAnchorPointValues(0, 0);
         geom->setLocation({0, offset});
