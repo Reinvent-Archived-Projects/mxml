@@ -10,7 +10,8 @@ const coord_t EndingGeometry::kMinWidth = 20;
 const coord_t EndingGeometry::kHeight = 20;
 
 EndingGeometry::EndingGeometry(const dom::Ending& startEnding, const Point& startLocation, const dom::Ending& stopEnding, const Point& stopLocation)
-:   _startEnding(startEnding),
+:   PlacementGeometry(presentOptional(dom::PLACEMENT_ABOVE), 1),
+    _startEnding(startEnding),
     _startLocation(startLocation),
     _stopEnding(stopEnding),
     _stopLocation(stopLocation) {

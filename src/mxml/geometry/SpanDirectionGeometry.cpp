@@ -15,7 +15,8 @@ using namespace dom;
 const coord_t SpanDirectionGeometry::kLineWidth = 1;
 
 SpanDirectionGeometry::SpanDirectionGeometry(const Direction& start, const Point& startLocation, const Direction& stop, const Point& stopLocation)
-: _startDirection(start),
+: PlacementGeometry(start.placement(), start.staff()),
+  _startDirection(start),
   _startLocation(startLocation),
   _stopDirection(stop),
   _stopLocation(stopLocation)

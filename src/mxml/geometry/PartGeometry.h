@@ -36,7 +36,7 @@ public:
     const std::vector<TieGeometry*> tieGeometries() const {
         return _tieGeometries;
     }
-    const std::vector<Geometry*> directionGeometries() const {
+    const std::vector<PlacementGeometry*> directionGeometries() const {
         return _directionGeometries;
     }
     
@@ -74,6 +74,13 @@ private:
     void buildLyrics();
     void buildLyrics(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom);
     void buildLyric(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom, const dom::Lyric& lyric);
+
+    void placeDirection(PlacementGeometry& geometry);
+    void swapPlacement(PlacementGeometry& geometry);
+
+    void resolveCollisions();
+    void resolveDirectionDirectionCollisions();
+    void resolveDirectionCollision(std::vector<PlacementGeometry*>& geometries);
     
 private:
     const dom::Part& _part;
@@ -85,7 +92,7 @@ private:
     
     std::vector<MeasureGeometry*> _measureGeometries;
     std::vector<TieGeometry*> _tieGeometries;
-    std::vector<Geometry*> _directionGeometries;
+    std::vector<PlacementGeometry*> _directionGeometries;
 };
 
 } // namespace mxml

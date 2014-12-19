@@ -2,12 +2,12 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
-#include "Geometry.h"
+#include "PlacementGeometry.h"
 #include <mxml/dom/Direction.h>
 
 namespace mxml {
 
-class SpanDirectionGeometry : public Geometry {
+class SpanDirectionGeometry : public PlacementGeometry {
 public:
     static const coord_t kLineWidth;
     

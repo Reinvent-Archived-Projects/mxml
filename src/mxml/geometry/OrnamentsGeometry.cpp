@@ -11,7 +11,13 @@ static const Size kTrillMarkSize = {18, 16};
 static const Size kTurnSize = {24, 10};
 static const Size kInvertedTurnSize = {24, 16};
 
-OrnamentsGeometry::OrnamentsGeometry(const dom::Ornaments& ornaments) : _ornaments(ornaments) {
+OrnamentsGeometry::OrnamentsGeometry(const dom::Ornaments& ornaments, int staff)
+: PlacementGeometry(dom::absentOptional(dom::PLACEMENT_ABOVE), staff),
+  _ornaments(ornaments)
+{
+    if (ornaments.placement())
+        setPlacement(ornaments.placement()->placement());
+
     if (ornaments.trillMark().isPresent()) {
         setSize(kTrillMarkSize);
     } else if (ornaments.turn().isPresent()) {

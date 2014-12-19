@@ -2,12 +2,12 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
-#include "Geometry.h"
+#include "PlacementGeometry.h"
 #include <mxml/dom/Direction.h>
 
 namespace mxml {
 
-class DirectionGeometry : public Geometry {
+class DirectionGeometry : public PlacementGeometry {
 public:
     explicit DirectionGeometry(const dom::Direction& direction);
     

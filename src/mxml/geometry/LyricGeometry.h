@@ -2,18 +2,21 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
-#include "Geometry.h"
+#include "PlacementGeometry.h"
 #include <mxml/dom/Lyric.h>
 
 namespace mxml {
 
-class LyricGeometry : public Geometry {
+class LyricGeometry : public PlacementGeometry {
 public:
-    explicit LyricGeometry(const dom::Lyric& lyric);
+    explicit LyricGeometry(const dom::Lyric& lyric, int staff);
 
     const dom::Lyric& lyric() const {
         return _lyric;
     }
+
+private:
+    int calculateWidth() const;
 
 private:
     const dom::Lyric& _lyric;

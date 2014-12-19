@@ -2,14 +2,14 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
-#include "Geometry.h"
+#include "PlacementGeometry.h"
 #include <mxml/dom/Ornaments.h>
 
 namespace mxml {
 
-class OrnamentsGeometry : public Geometry {
+class OrnamentsGeometry : public PlacementGeometry {
 public:
-    explicit OrnamentsGeometry(const dom::Ornaments& ornaments);
+    explicit OrnamentsGeometry(const dom::Ornaments& ornaments, int staff);
 
     const dom::Ornaments& ornaments() const {
         return _ornaments;

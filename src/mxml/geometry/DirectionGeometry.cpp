@@ -5,7 +5,10 @@
 
 namespace mxml {
 
-DirectionGeometry::DirectionGeometry(const dom::Direction& direction) : _direction(direction) {
+DirectionGeometry::DirectionGeometry(const dom::Direction& direction)
+: PlacementGeometry(direction.placement(), direction.staff()),
+  _direction(direction)
+{
     dom::Dynamics* dynamics = dynamic_cast<dom::Dynamics*>(direction.type());
     if (dynamics) {
         setSize({static_cast<coord_t>(28 * dynamics->string().length()), 34});

@@ -2,12 +2,12 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
-#include "Geometry.h"
+#include "PlacementGeometry.h"
 #include <mxml/dom/Ending.h>
 
 namespace mxml {
 
-class EndingGeometry : public Geometry {
+class EndingGeometry : public PlacementGeometry {
 public:
     static const coord_t kMinWidth;
     static const coord_t kHeight;

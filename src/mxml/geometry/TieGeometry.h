@@ -2,13 +2,13 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
-#include "Geometry.h"
+#include "PlacementGeometry.h"
 #include <mxml/dom/Types.h>
 #include <mxml/dom/Optional.h>
 
 namespace mxml {
 
-class TieGeometry : public Geometry {
+class TieGeometry : public PlacementGeometry {
 public:
     static const coord_t kMaxHeight;
     static const coord_t kEndPointLineWidth;
@@ -34,21 +34,12 @@ public:
         build();
     }
     
-    const dom::Optional<dom::Placement>& placement() const {
-        return _placement;
-    }
-    void setPlacement(dom::Optional<dom::Placement> placement) {
-        _placement = placement;
-        build();
-    }
-    
 private:
     void build();
     
 private:
     Point _startLocation;
     Point _stopLocation;
-    dom::Optional<dom::Placement> _placement;
 };
 
 } // namespace mxml
