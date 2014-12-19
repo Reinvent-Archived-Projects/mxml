@@ -52,7 +52,15 @@ public:
     void setDivisions(Optional<int> divisions) {
         _divisions = divisions;
     }
-    
+
+    static int divisionsPerBeat(int divisions, const Time& time) {
+        return divisions * 4 / time.beatType();
+    }
+
+    static int divisionsPerMeasure(int divisions, const Time& time) {
+        return divisionsPerBeat(divisions, time) * time.beats();
+    }
+
     Optional<int> staves() const {
         return _staves;
     }

@@ -115,7 +115,7 @@ void EventFactory::processMeasure(const dom::Measure& measure) {
         }
     }
 
-    _measureStartTime += currentDivisions() * currentTime().beats();
+    _measureStartTime += Attributes::divisionsPerMeasure(currentDivisions(), currentTime());
     _time = _measureStartTime;
 }
 
