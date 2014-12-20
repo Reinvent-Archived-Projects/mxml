@@ -154,17 +154,24 @@ namespace mxml {
         stopLocation.x = stopSpan.start() + stopSpan.eventOffset();
 
         int staff = startDirection.staff();
-        if (startDirection.placement() == dom::PLACEMENT_ABOVE && staff == 1) {
-            startLocation.y = stopLocation.y = _partGeometry->staffOrigin(staff) - 3*PartGeometry::kStaffLineSpacing;
-        } else if (startDirection.placement() == dom::PLACEMENT_ABOVE) {
+        dom::Placement placement = startDirection.placement();
+        if (!startDirection.placement().isPresent()) {
+            if (staff == 1)
+                placement = dom::PLACEMENT_BELOW;
+            else
+                placement = dom::PLACEMENT_ABOVE;
+        }
+
+        if (placement == dom::PLACEMENT_ABOVE) {
             startLocation.y = stopLocation.y = _partGeometry->staffOrigin(staff) - _part.staffDistance()/2;
-        } else if (startDirection.placement() == dom::PLACEMENT_BELOW) {
+        } else if (placement == dom::PLACEMENT_BELOW) {
             startLocation.y = stopLocation.y = _partGeometry->staffOrigin(staff) + _partGeometry->staffHeight() + _part.staffDistance()/2;
         }
         startLocation.y -= _partGeometry->stavesHeight()/2;
         stopLocation.y -= _partGeometry->stavesHeight()/2;
 
         std::unique_ptr<PlacementGeometry> geo(new SpanDirectionGeometry(startDirection, startLocation, stopDirection, stopLocation));
+        geo->setPlacement(dom::Optional<dom::Placement>(placement, startDirection.placement().isPresent()));
         geo->setLocation(startLocation);
 
         _partGeometry->_directionGeometries.push_back(geo.get());

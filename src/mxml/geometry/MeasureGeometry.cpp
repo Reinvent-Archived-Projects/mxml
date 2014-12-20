@@ -15,7 +15,6 @@
 
 #include "../dom/Backup.h"
 #include "../dom/Forward.h"
-#include "../dom/Wedge.h"
 
 namespace mxml {
 
