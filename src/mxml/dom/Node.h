@@ -18,6 +18,13 @@ public:
         _parent = parent;
     }
 
+    const Node* root() const {
+        const Node* root = this;
+        while (root->parent())
+            root = root->parent();
+        return root;
+    }
+
 private:
     const Node* _parent;
 };

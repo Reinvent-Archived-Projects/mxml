@@ -10,13 +10,13 @@
 
 namespace mxml {
 
-std::ostream& operator<<(std::ostream& os, const mxml::Point& point) {
+inline std::ostream& operator<<(std::ostream& os, const mxml::Point& point) {
     return os << "(" << point.x << ", " << point.y << ")";
 }
-std::ostream& operator<<(std::ostream& os, const mxml::Size& size) {
+inline std::ostream& operator<<(std::ostream& os, const mxml::Size& size) {
     return os << "[" << size.width << ", " << size.height << "]";
 }
-std::ostream& operator<<(std::ostream& os, const mxml::Rect& rect) {
+inline std::ostream& operator<<(std::ostream& os, const mxml::Rect& rect) {
     return os << "{" << rect.origin << ", " << rect.size << "}";
 }
 

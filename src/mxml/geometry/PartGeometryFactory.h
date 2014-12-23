@@ -35,10 +35,6 @@ namespace mxml {
         void placeDirection(PlacementGeometry& geometry);
         void swapPlacement(PlacementGeometry& geometry);
 
-        void resolveCollisions();
-        void resolveDirectionDirectionCollisions();
-        void resolveDirectionCollision(std::vector<PlacementGeometry*>& geometries);
-
     private:
         const dom::Part& _part;
         const SpanCollection& _spans;

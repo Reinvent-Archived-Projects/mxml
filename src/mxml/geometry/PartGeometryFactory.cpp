@@ -3,6 +3,7 @@
 
 #include "BarlineGeometry.h"
 #include "ChordGeometry.h"
+#include "CollisionHandler.h"
 #include "DirectionGeometry.h"
 #include "EndingGeometry.h"
 #include "MeasureGeometry.h"
@@ -49,9 +50,12 @@ namespace mxml {
             _partGeometry->_tieGeometries.push_back(tie.get());
             _partGeometry->addGeometry(std::move(tie));
         }
-
-        resolveCollisions();
+        
+        CollisionHandler collisionHandler(*_partGeometry);
+        collisionHandler.resolveCollisions();
+        
         _partGeometry->setBounds(_partGeometry->subGeometriesFrame());
+
         return std::move(_partGeometry);
     }
 
@@ -344,96 +348,5 @@ namespace mxml {
 
         _partGeometry->_directionGeometries.push_back(geo.get());
         _partGeometry->addGeometry(std::move(geo));
-    }
-
-    void PartGeometryFactory::resolveCollisions() {
-        resolveDirectionDirectionCollisions();
-    }
-
-    void PartGeometryFactory::resolveDirectionDirectionCollisions() {
-        // This is the collision priority of different direction types. Geometryies with lower numbers are less likely to
-        // be moved.
-        auto typeOrder = std::map<std::type_index, int>{};
-        typeOrder[std::type_index(typeid(SpanDirectionGeometry*))] = 0;
-        typeOrder[std::type_index(typeid(EndingGeometry*))] = 1;
-        typeOrder[std::type_index(typeid(OrnamentsGeometry*))] = 2;
-        typeOrder[std::type_index(typeid(LyricGeometry*))] = 3;
-        typeOrder[std::type_index(typeid(DirectionGeometry*))] = 4;
-
-        // Order geometries by type
-        auto geoms = _partGeometry->_directionGeometries;
-        std::sort(geoms.begin(), geoms.end(), [&](const PlacementGeometry* g1, const PlacementGeometry* g2) {
-            auto& o1 = typeOrder[std::type_index(typeid(g1))];
-            auto& o2 = typeOrder[std::type_index(typeid(g2))];
-            if (o1 < o2)
-                return true;
-            if (o1 > o2)
-                return false;
-
-            // Order directions of the same type by size. This is because usually short directions are more closely related
-            // to one particular note, and therefore should not be pushed out.
-            return g1->size().width < g2->size().width;
-        });
-
-        const auto& size = geoms.size();
-        std::vector<PlacementGeometry*> collisions;
-        for (std::size_t i = 0; i < size; i += 1) {
-            const auto& geom1 = geoms[i];
-            collisions.clear();
-
-            for (std::size_t j = i + 1; j < size; j += 1) {
-                const auto& geom2 = geoms[j];
-
-                if (intersect(geom1->frame(), geom2->frame())) {
-                    if (collisions.empty())
-                        collisions.push_back(geom1);
-                    collisions.push_back(geom2);
-                }
-            }
-            
-            if (!collisions.empty())
-                resolveDirectionCollision(collisions);
-        }
-    }
-    
-    void PartGeometryFactory::resolveDirectionCollision(std::vector<PlacementGeometry*>& geometries) {
-        const auto& size = geometries.size();
-        const auto& refFrame = geometries[0]->frame();
-        const auto& placement = geometries[0]->placement().value();
-        for (std::size_t i = 1; i < size; i += 1) {
-            auto& geom = *geometries[i];
-            
-            // Don't move lyrics that collide with each other, they would loose continuity
-            if (dynamic_cast<LyricGeometry*>(&geom) && dynamic_cast<LyricGeometry*>(geometries[0]))
-                continue;
-            
-            // Try changing the placement
-            if (dynamic_cast<DirectionGeometry*>(&geom) && !geom.placement().isPresent() && geometries[0]->placement().value() == geom.placement().value()) {
-                swapPlacement(geom);
-                
-                // If it still collides, undo
-                if (!_partGeometry->collidingGeometries(geom.frame()).empty()) {
-                    swapPlacement(geom);
-                } else {
-                    continue;
-                }
-            }
-            
-            Rect frame = geom.frame();
-            if (placement == dom::PLACEMENT_ABOVE)
-                frame.origin.y = refFrame.origin.y - frame.size.height;
-            else
-                frame.origin.y = refFrame.origin.y + refFrame.size.height;
-            geom.setFrame(frame);
-        }
-    }
-    
-    void PartGeometryFactory::swapPlacement(PlacementGeometry& geometry) {
-        if (geometry.placement() == dom::PLACEMENT_ABOVE)
-            geometry.setPlacement(absentOptional(dom::PLACEMENT_BELOW));
-        else
-            geometry.setPlacement(absentOptional(dom::PLACEMENT_ABOVE));
-        
-        placeDirection(geometry);
     }
 }
