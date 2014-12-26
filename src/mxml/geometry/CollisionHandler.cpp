@@ -24,6 +24,9 @@
 
 #include <typeinfo>
 
+static const int kMaxCollisionsPerGeometry = 10;
+
+
 namespace mxml {
 
     CollisionHandler::CollisionHandler(const PartGeometry& partGeometry) : _partGeometry(partGeometry) {
@@ -111,14 +114,19 @@ namespace mxml {
             return;
 
         // Put the less movable geometry first, so that we move the other one
-        if (isImmovable(pair.firstGeometry()))
-            resolveCollision(pair.firstGeometry(), pair.secondGeometry());
-        else if (isImmovable(pair.secondGeometry()))
-            resolveCollision(pair.secondGeometry(), pair.firstGeometry());
-        else if (_geometryTypeComparator(pair.firstGeometry(), pair.secondGeometry()))
-            resolveCollision(pair.firstGeometry(), pair.secondGeometry());
-        else
-            resolveCollision(pair.secondGeometry(), pair.firstGeometry());
+        Geometry* first = pair.firstGeometry();
+        Geometry* second = pair.secondGeometry();
+
+        if (!isImmovable(pair.firstGeometry()) && isImmovable(pair.secondGeometry()))
+            std::swap(first, second);
+        else if (!_geometryTypeComparator(pair.firstGeometry(), pair.secondGeometry()))
+            std::swap(first, second);
+
+        auto noteGeometry = dynamic_cast<NoteGeometry*>(first);
+        auto restGeometry = dynamic_cast<RestGeometry*>(second);
+        if (noteGeometry && restGeometry)
+            resolveCollision(noteGeometry, restGeometry);
+        resolveCollision(first, second);
     }
 
     bool CollisionHandler::isImmovable(const Geometry* geometry) {
@@ -151,20 +159,41 @@ namespace mxml {
             return;
 
         g2->setFrame(g2->parentGeometry()->convertFromRoot(f2));
+        readdGeometry(g2);
+    }
 
-        // Remove all pending collisions involving g2
+    void CollisionHandler::resolveCollision(const NoteGeometry* note, RestGeometry* rest) {
+        Rect noteFrame = _partGeometry.convertFromGeometry(note->frame(), note->parentGeometry());
+        Rect restFrame = _partGeometry.convertFromGeometry(rest->frame(), rest->parentGeometry());
+
+        // Only move things that are already outside the staves further away
+        if (note->note().stem() == dom::STEM_UP)
+            restFrame.origin.y = noteFrame.origin.y + noteFrame.size.height + 1;
+        else if (note->note().stem() == dom::STEM_DOWN)
+            restFrame.origin.y = noteFrame.origin.y - restFrame.size.height - 1;
+
+        rest->setFrame(rest->parentGeometry()->convertFromRoot(restFrame));
+        readdGeometry(rest);
+    }
+
+    void CollisionHandler::readdGeometry(Geometry* geometry) {
+        _collisionCount[geometry] += 1;
+        if (_collisionCount[geometry] > kMaxCollisionsPerGeometry)
+            return;
+
+        // Remove all pending collisions involving rest
         auto it = _collisionPairs.begin();
         while (it != _collisionPairs.end()) {
             auto next = std::next(it);
 
-            if (it->firstGeometry() == g2 || it->secondGeometry() == g2)
+            if (it->firstGeometry() == geometry || it->secondGeometry() == geometry)
                 _collisionPairs.erase(it);
 
             it = next;
         }
 
-        // Re-add collisions involving g2
-        addAllCollisions(g2);
+        // Re-add collisions involving rest
+        addAllCollisions(geometry);
     }
 
     bool CollisionHandler::colliding(const Geometry* g1, const Geometry* g2) const {

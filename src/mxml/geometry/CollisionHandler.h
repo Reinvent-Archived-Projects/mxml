@@ -11,6 +11,9 @@
 #include <vector>
 
 namespace mxml {
+    class NoteGeometry;
+    class RestGeometry;
+
     class CollisionHandler {
     protected:
         /**
@@ -91,7 +94,10 @@ namespace mxml {
 
         void resolveCollision(CollisionPair& pair);
         void resolveCollision(const Geometry* g1, Geometry* g2);
+        void resolveCollision(const NoteGeometry* note, RestGeometry* rest);
 
+        void readdGeometry(Geometry* geometry);
+        
         bool colliding(const Geometry* g1, const Geometry* g2) const;
         static bool isImmovable(const Geometry* geometry);
 
@@ -101,5 +107,6 @@ namespace mxml {
 
         std::multiset<Geometry*, GeometryXComparator> _geometries;
         std::multiset<CollisionPair, CollisionPairComparator> _collisionPairs;
+        std::map<Geometry*, int> _collisionCount;
     };
 }
