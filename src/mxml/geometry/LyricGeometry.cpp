@@ -27,7 +27,7 @@ LyricGeometry::LyricGeometry(const dom::Lyric& lyric, int staff)
 : PlacementGeometry(lyric.placement(), staff),
   _lyric(lyric)
 {
-    setSize({static_cast<coord_t>(calculateWidth()), 23});
+    setSize({static_cast<coord_t>(width(lyric)), 23});
 
     setHorizontalAnchorPointValues(0.5, 0);
     if (lyric.placement() == dom::PLACEMENT_ABOVE)
@@ -36,10 +36,10 @@ LyricGeometry::LyricGeometry(const dom::Lyric& lyric, int staff)
         setVerticalAnchorPointValues(0, 0);
 }
 
-int LyricGeometry::calculateWidth() const {
-    const auto& size = _lyric.text().length();
+coord_t LyricGeometry::width(const dom::Lyric& lyric) {
+    const auto& size = lyric.text().length();
 
-    auto stringCopy = _lyric.text();
+    auto stringCopy = lyric.text();
     const auto& string = trim(stringCopy).c_str();
 
     int width = 0;

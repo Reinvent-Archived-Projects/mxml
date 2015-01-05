@@ -15,8 +15,7 @@ public:
         return _lyric;
     }
 
-private:
-    int calculateWidth() const;
+    static coord_t width(const dom::Lyric& lyric);
 
 private:
     const dom::Lyric& _lyric;

@@ -7,6 +7,7 @@
 #include <mxml/geometry/BarlineGeometry.h>
 #include <mxml/geometry/ClefGeometry.h>
 #include <mxml/geometry/KeyGeometry.h>
+#include <mxml/geometry/LyricGeometry.h>
 #include <mxml/geometry/NoteGeometry.h>
 #include <mxml/geometry/StemGeometry.h>
 #include <mxml/geometry/TimeSignatureGeometry.h>
@@ -207,6 +208,7 @@ void SpanFactory::build(const dom::Chord* chord) {
     coord_t headWidth = 0;
     coord_t stemWidth = 0;
     coord_t naturalWidth = -1;
+    coord_t lyricsWidth = 0;
     for (auto& note : chord->notes()) {
         headWidth = std::max(headWidth, NoteGeometry::Size(*note).width);
         if (note->accidental())
@@ -218,6 +220,10 @@ void SpanFactory::build(const dom::Chord* chord) {
             naturalWidth = naturalWidthForNote(*note);
         else
             naturalWidth = std::min(naturalWidth, naturalWidthForNote(*note));
+
+        for (auto& lyric : note->lyrics()) {
+            lyricsWidth = std::max(lyricsWidth, LyricGeometry::width(*lyric));
+        }
     }
     
     coord_t width = headWidth;
@@ -229,6 +235,8 @@ void SpanFactory::build(const dom::Chord* chord) {
     // The stem flag should overlap the right margin
     if (stemWidth > 0)
         width += std::max(coord_t(0), stemWidth - kNoteMargin);
+
+    width = std::max(width, lyricsWidth);
 
     if (chord->firstNote()->grace()) {
         width *= MeasureGeometry::kGraceNoteScale;
