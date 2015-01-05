@@ -6,6 +6,8 @@
 #include "MeasureGeometry.h"
 #include "NoteGeometry.h"
 
+#include <mxml/Metrics.h>
+
 namespace mxml {
 
 const coord_t TieGeometryFactory::kTieSpacing = 2;
@@ -48,32 +50,32 @@ void TieGeometryFactory::createGeometriesFromNotes(const vector<NoteGeometry*>& 
 
 void TieGeometryFactory::createGeometryFromNote(const NoteGeometry& noteGeometry) {
     const dom::Note& note = noteGeometry.note();
-    if (!note.notations().isPresent())
+    if (!note.notations())
         return;
     
-    const dom::Notations& notations = note.notations();
+    const auto& notations = note.notations();
     
-    for (auto& tie : notations.ties()) {
-        auto key = std::make_pair(note.staff(), note.pitch().value());
-        if (tie.type() == dom::TYPE_START) {
+    for (auto& tie : notations->ties()) {
+        auto key = std::make_pair(note.staff(), note.pitch().get());
+        if (tie->type() == dom::TYPE_START) {
             _tieStartGeometries[key] = &noteGeometry;
-        } else if (tie.type() == dom::TYPE_STOP) {
+        } else if (tie->type() == dom::TYPE_STOP) {
             auto startGeom = _tieStartGeometries.find(key);
             if (startGeom != _tieStartGeometries.end()) {
-                _tieGeometries.push_back(std::move(buildTieGeometry(startGeom->second, &noteGeometry, tie.placement())));
+                _tieGeometries.push_back(std::move(buildTieGeometry(startGeom->second, &noteGeometry, tie->placement())));
                 _tieStartGeometries.erase(startGeom);
             }
         }
     }
     
-    for (auto& slur : notations.slurs()) {
-        auto key = std::make_pair(note.staff(), slur.number());
-        if (slur.type() == dom::TYPE_START) {
+    for (auto& slur : notations->slurs()) {
+        auto key = std::make_pair(note.staff(), slur->number());
+        if (slur->type() == dom::TYPE_START) {
             _slurStartGeometries[key] = &noteGeometry;
-        } else if (slur.type() == dom::TYPE_STOP) {
+        } else if (slur->type() == dom::TYPE_STOP) {
             auto startGeom = _slurStartGeometries.find(key);
             if (startGeom != _slurStartGeometries.end()) {
-                _tieGeometries.push_back(std::move(buildSlurGeometry(startGeom->second, &noteGeometry, slur.placement())));
+                _tieGeometries.push_back(std::move(buildSlurGeometry(startGeom->second, &noteGeometry, slur->placement())));
                 _slurStartGeometries.erase(startGeom);
             }
         }
@@ -90,10 +92,10 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometry(const NoteGeom
     stopLocation.x = stop->frame().min().x;
     
     if (!placement.isPresent()) {
-        coord_t startStaffY = startLocation.y - _partGeometry.staffOrigin(start->note().staff());
-        coord_t stopStaffY = stopLocation.y - _partGeometry.staffOrigin(stop->note().staff());
+        coord_t startStaffY = startLocation.y - Metrics::staffOrigin(_partGeometry.part(), start->note().staff());
+        coord_t stopStaffY = stopLocation.y - Metrics::staffOrigin(_partGeometry.part(), stop->note().staff());
         coord_t avgy = (startStaffY + stopStaffY) / 2;
-        if (avgy < PartGeometry::staffHeight()/2)
+        if (avgy < Metrics::staffHeight()/2)
             tieGeom->setPlacement(absentOptional(dom::PLACEMENT_ABOVE));
         else
             tieGeom->setPlacement(absentOptional(dom::PLACEMENT_BELOW));
@@ -123,10 +125,10 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
     stopLocation.x -= kTieSpacing;
     
     if (!placement.isPresent()) {
-        coord_t startStaffY = startLocation.y - _partGeometry.staffOrigin(start->note().staff());
-        coord_t stopStaffY = stopLocation.y - _partGeometry.staffOrigin(stop->note().staff());
+        coord_t startStaffY = startLocation.y - Metrics::staffOrigin(_partGeometry.part(), start->note().staff());
+        coord_t stopStaffY = stopLocation.y - Metrics::staffOrigin(_partGeometry.part(), stop->note().staff());
         coord_t avgy = (startStaffY + stopStaffY) / 2;
-        if (avgy < PartGeometry::staffHeight()/2)
+        if (avgy < Metrics::staffHeight()/2)
             tieGeom->setPlacement(absentOptional(dom::PLACEMENT_ABOVE));
         else
             tieGeom->setPlacement(absentOptional(dom::PLACEMENT_BELOW));
@@ -147,7 +149,7 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
     }
     
     // Avoid collisions with beamed sets
-    if (!start->note().beams().empty() && start->note().beams().front().type() != dom::Beam::TYPE_END) {
+    if (!start->note().beams().empty() && start->note().beams().front()->type() != dom::Beam::TYPE_END) {
         ChordGeometry* chordGeom = (ChordGeometry*)start->parentGeometry();
         Rect stemFrame = chordGeom->stem()->frame();
         
@@ -159,7 +161,7 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
             startLocation.y = stemFrame.min().y - 2*kTieSpacing;
         }
     }
-    if (!stop->note().beams().empty() && stop->note().beams().front().type() != dom::Beam::TYPE_BEGIN) {
+    if (!stop->note().beams().empty() && stop->note().beams().front()->type() != dom::Beam::TYPE_BEGIN) {
         ChordGeometry* chordGeom = (ChordGeometry*)stop->parentGeometry();
         Rect stemFrame = chordGeom->stem()->frame();
         

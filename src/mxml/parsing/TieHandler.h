@@ -7,7 +7,7 @@
 
 namespace mxml {
 
-class TieHandler : public lxml::BaseRecursiveHandler<dom::Tie> {
+class TieHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Tie>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     static dom::StartStopContinue typeFromString(const std::string& string);

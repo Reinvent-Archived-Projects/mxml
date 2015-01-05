@@ -22,6 +22,13 @@ public:
         return _clef;
     }
     
+    void setNatural(const bool natural) {
+        _natural = natural;
+    }
+    bool natural() const {
+        return _natural;
+    }
+    
     static Size keySize(const dom::Key& key);
     
     /**
@@ -29,9 +36,11 @@ public:
      */
     static coord_t keyStaffY(int fifth, const dom::Clef& clef);
     
+    
 private:
     const dom::Key& _key;
     const dom::Clef& _clef;
+    bool _natural;
 };
 
 } // namespace mxml

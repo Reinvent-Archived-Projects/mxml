@@ -10,7 +10,7 @@
 
 namespace mxml {
 
-class StaffLayoutHandler : public lxml::BaseRecursiveHandler<dom::StaffLayout> {
+class StaffLayoutHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::StaffLayout>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     RecursiveHandler* startSubElement(const lxml::QName& qname);

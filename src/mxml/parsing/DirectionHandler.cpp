@@ -17,7 +17,7 @@ static const char* kDirectionTypeTag = "direction-type";
 static const char* kSoundTag = "sound";
 
 void DirectionHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    _result.reset(new Direction);
+    _result.reset(new Direction());
     
     auto placement = attributes.find(kPlacementAttribute);
     if (placement != attributes.end())
@@ -46,7 +46,7 @@ void DirectionHandler::endSubElement(const QName& qname, RecursiveHandler* parse
     else if (strcmp(qname.localName(), kDirectionTypeTag) == 0)
         _result->setType(_directionTypeHandler.result());
     else if (strcmp(qname.localName(), kSoundTag) == 0)
-        _result->setSound(presentOptional(_soundHandler.result()));
+        _result->setSound(_soundHandler.result());
 }
 
 Placement DirectionHandler::placementFromString(const std::string& string) {

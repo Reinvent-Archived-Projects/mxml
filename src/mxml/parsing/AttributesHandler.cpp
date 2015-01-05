@@ -16,12 +16,10 @@ static const char* kTimeTag = "time";
 static const char* kKeyTag = "key";
 
 void AttributesHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    _result.reset(new Attributes(_defaultAttributes));
+    _result.reset(new Attributes());
 }
 
 void AttributesHandler::endElement(const QName& qname, const std::string& contents) {
-    _defaultAttributes = *_result;
-    _defaultAttributes.reset();
 }
 
 lxml::RecursiveHandler* AttributesHandler::startSubElement(const QName& qname) {
@@ -46,17 +44,17 @@ void AttributesHandler::endSubElement(const QName& qname, RecursiveHandler* pars
     else if (strcmp(qname.localName(), kStavesTag) == 0)
         _result->setStaves(presentOptional(_integerHandler.result()));
     else if (strcmp(qname.localName(), kClefTag) == 0) {
-        dom::Clef clef = _clefHandler.result();
-        clef.setParent(_result.get());
-        _result->setClef(clef.number(), presentOptional(std::move(clef)));
+        std::unique_ptr<dom::Clef> clef = std::move(_clefHandler.result());
+        clef->setParent(_result.get());
+        _result->setClef(clef->number(), std::move(clef));
     } else if (strcmp(qname.localName(), kTimeTag) == 0) {
-        dom::Time time = _timeHandler.result();
-        time.setParent(_result.get());
-        _result->setTime(presentOptional(std::move(time)));
+        std::unique_ptr<dom::Time> time = std::move(_timeHandler.result());
+        time->setParent(_result.get());
+        _result->setTime(std::move(time));
     } else if (strcmp(qname.localName(), kKeyTag) == 0) {
-        dom::Key key = _keyHandler.result();
-        key.setParent(_result.get());
-        _result->setKey(key.number(), presentOptional(std::move(key)));
+        std::unique_ptr<dom::Key> key = std::move(_keyHandler.result());
+        key->setParent(_result.get());
+        _result->setKey(key->number(), std::move(key));
     }
 }
 

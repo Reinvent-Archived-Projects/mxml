@@ -5,15 +5,18 @@
 
 namespace mxml {
 
+using dom::StaffLayout;
 using lxml::QName;
 
 static const char* kNumberAttribute = "number";
 static const char* kStaffDistanceTag = "staff-distance";
 
-void StaffLayoutHandler::startElement(const QName& qname, const AttributeMap& attributes) {
+void StaffLayoutHandler::startElement(const QName& qname, const lxml::RecursiveHandler::AttributeMap& attributes) {
+    _result.reset(new StaffLayout());
+    
     auto number = attributes.find(kNumberAttribute);
     if (number != attributes.end())
-        _result.setNumber(lxml::IntegerHandler::parseInteger(number->second));
+        _result->setNumber(lxml::IntegerHandler::parseInteger(number->second));
 }
 
 lxml::RecursiveHandler* StaffLayoutHandler::startSubElement(const QName& qname) {
@@ -26,7 +29,7 @@ void StaffLayoutHandler::endSubElement(const QName& qname, RecursiveHandler* par
     using dom::presentOptional;
     
     if (strcmp(qname.localName(), kStaffDistanceTag) == 0)
-        _result.setStaffDistance(presentOptional((float)_doubleHandler.result()));
+        _result->setStaffDistance(presentOptional((float)_doubleHandler.result()));
 }
 
 } // namespace mxml

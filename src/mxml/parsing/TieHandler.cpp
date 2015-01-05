@@ -6,14 +6,17 @@
 
 namespace mxml {
 
-    using lxml::QName;
+using dom::Tie;
+using lxml::QName;
 
 static const char* kTypeAttribute = "type";
 
 void TieHandler::startElement(const QName& qname, const AttributeMap& attributes) {
+    _result.reset(new Tie());
+    
     auto type = attributes.find(kTypeAttribute);
     if (type != attributes.end())
-        _result.setType(typeFromString(type->second));
+        _result->setType(typeFromString(type->second));
 }
 
 dom::StartStopContinue TieHandler::typeFromString(const std::string& string) {

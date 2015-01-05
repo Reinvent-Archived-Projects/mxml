@@ -13,7 +13,7 @@ public:
     
 public:
     explicit ClefGeometry(const dom::Clef& clef);
-    
+
     const dom::Clef& clef() const {
         return _clef;
     }

@@ -18,19 +18,19 @@ static const char* kTextTag = "text";
 using dom::Lyric;
 
 void LyricHandler::startElement(const lxml::QName& qname, const AttributeMap& attributes) {
-    _result = Lyric();
+    _result.reset(new Lyric());
 
     auto number = attributes.find(kNumberAttribute);
     if (number != attributes.end())
-        _result.setNumber(lxml::IntegerHandler::parseInteger(number->second));
+        _result->setNumber(lxml::IntegerHandler::parseInteger(number->second));
 
     auto name = attributes.find(kNameAttribute);
     if (name != attributes.end())
-        _result.setName(name->second);
+        _result->setName(name->second);
 
     auto print = attributes.find(kPrintObjectAttribute);
     if (print != attributes.end())
-        _result.setPrintObject(print->second == "no" ? false : true);
+        _result->setPrintObject(print->second == "no" ? false : true);
 }
 
 lxml::RecursiveHandler* LyricHandler::startSubElement(const lxml::QName& qname) {
@@ -43,9 +43,9 @@ lxml::RecursiveHandler* LyricHandler::startSubElement(const lxml::QName& qname) 
 
 void LyricHandler::endSubElement(const lxml::QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kSyllabicTag) == 0)
-        _result.setSyllabic(dom::presentOptional(_syllabicHandler.result()));
+        _result->setSyllabic(_syllabicHandler.result());
     else if (strcmp(qname.localName(), kTextTag) == 0)
-        _result.setText(_stringHandler.result());
+        _result->setText(_stringHandler.result());
 }
 
 } // namespace

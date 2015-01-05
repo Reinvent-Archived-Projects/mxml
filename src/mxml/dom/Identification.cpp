@@ -9,27 +9,27 @@ namespace dom {
 static std::string EMPTY_STRING;
 
 const std::string& Identification::creator(const std::string& type) const {
-    for (const TypedValue& creator : _creators) {
-        if (creator.type() == type)
-            return creator.value();
+    for (const auto& creator : _creators) {
+        if (creator->type() == type)
+            return creator->value();
     }
     return EMPTY_STRING;
 }
 
-void Identification::addCreator(const TypedValue& creator) {
-    _creators.push_back(creator);
+void Identification::addCreator(std::unique_ptr<TypedValue> creator) {
+    _creators.push_back(std::move(creator));
 }
 
 const std::string& Identification::rights(const std::string& type) const {
-    for (const TypedValue& rights : _rights) {
-        if (rights.type() == type)
-            return rights.value();
+    for (const auto& rights : _rights) {
+        if (rights->type() == type)
+            return rights->value();
     }
     return EMPTY_STRING;
 }
 
-void Identification::addRights(const TypedValue& rights) {
-    _rights.push_back(rights);
+void Identification::addRights(std::unique_ptr<TypedValue> rights) {
+    _rights.push_back(std::move(rights));
 }
 
 } // namespace dom

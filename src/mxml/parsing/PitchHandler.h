@@ -11,7 +11,7 @@
 
 namespace mxml {
 
-class PitchHandler : public lxml::BaseRecursiveHandler<dom::Pitch> {
+class PitchHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Pitch>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     RecursiveHandler* startSubElement(const lxml::QName& qname);

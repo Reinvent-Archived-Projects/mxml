@@ -25,6 +25,7 @@ public:
     
 public:
     Key() : _number(1), _printObject(true), _cancel(), _fifths(), _mode(MODE_MAJOR) {}
+    Key(const Key& rhs) : _number(rhs.number()), _printObject(rhs.printObject()), _cancel(rhs.cancel()), _fifths(rhs.fifths()), _mode(rhs.mode()) {}
     
     int number() const {
         return _number;
@@ -33,7 +34,7 @@ public:
         _number = number;
     }
     
-    bool printObject() {
+    bool printObject() const {
         return _printObject;
     }
     void setPrintObject(bool printObject) {
@@ -61,7 +62,7 @@ public:
         _mode = mode;
     }
     
-private:
+public:
     int _number;
     bool _printObject;
     

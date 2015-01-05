@@ -3,6 +3,8 @@
 
 #include "MeasureGeometry.h"
 
+#include <iostream>
+
 #include "BarlineGeometry.h"
 #include "BeamGeometry.h"
 #include "ChordGeometry.h"
@@ -16,6 +18,8 @@
 #include "../dom/Backup.h"
 #include "../dom/Forward.h"
 
+#include <mxml/Metrics.h>
+
 namespace mxml {
 
 using namespace dom;
@@ -23,100 +27,19 @@ using namespace dom;
 const coord_t MeasureGeometry::kGraceNoteScale = 0.85;
 const coord_t MeasureGeometry::kVerticalPadding = 40;
 
-MeasureGeometry::MeasureGeometry(const Measure& measure, const PartGeometry& partGeometry, const SpanCollection& spans)
-    : _measure(measure), _partGeometry(partGeometry), _spans(spans) {
+MeasureGeometry::MeasureGeometry(const Measure& measure, const PartGeometry& partGeometry, const SpanCollection& spans, AttributesManager& attributesManager)
+: _measure(measure), _partGeometry(partGeometry), _spans(spans), _attributesManager(attributesManager) {
     _measureIndex = partGeometry.part().indexOfMeasure(&measure);
     assert(_measureIndex != static_cast<std::size_t>(-1));
     build();
 }
 
-coord_t MeasureGeometry::staffY(const Attributes& attributes, const Note& note) {
-    coord_t y = 20;
-    if (note.pitch().isPresent()) {
-        const Clef& clef = attributes.clef(note.staff());
-        y = staffY(clef, note.pitch());
-    } else if (note.rest().isPresent()) {
-        const Clef& clef = attributes.clef(note.staff());
-        y = staffY(clef, note.rest());
-    } else if (note.defaultY().isPresent()) {
-        y = note.defaultY();
-    }
-    return y * PartGeometry::kStaffLineSpacing / 10;
-}
-
-coord_t MeasureGeometry::staffY(const Clef& clef, const Pitch& pitch) {
-    switch (clef.sign().value()) {
-        case Clef::SIGN_G: return staffYInGClef(pitch.step(), pitch.octave());
-        case Clef::SIGN_F: return staffYInFClef(pitch.step(), pitch.octave());
-        case Clef::SIGN_C: return staffYInCClef(pitch.step(), pitch.octave());
-        default: return 20;
-    }
-}
-
-coord_t MeasureGeometry::staffY(const Clef& clef, const Rest& rest) {
-    if (!rest.displayStep().isPresent() || !rest.displayOctave().isPresent())
-        return 20;
-    
-    switch (clef.sign().value()) {
-        case Clef::SIGN_G: return staffYInGClef(rest.displayStep(), rest.displayOctave());
-        case Clef::SIGN_F: return staffYInFClef(rest.displayStep(), rest.displayOctave());
-        case Clef::SIGN_C: return staffYInCClef(rest.displayStep(), rest.displayOctave());
-        default: return 20;
-    }
-}
-
-coord_t MeasureGeometry::staffYInGClef(Pitch::Step step, int octave) {
-    coord_t y;
-    switch (step) {
-        case Pitch::STEP_C: y = 50; break;
-        case Pitch::STEP_D: y = 45; break;
-        case Pitch::STEP_E: y = 40; break;
-        case Pitch::STEP_F: y = 35; break;
-        case Pitch::STEP_G: y = 30; break;
-        case Pitch::STEP_A: y = 25; break;
-        case Pitch::STEP_B: y = 20; break;
-        default: y = 20;
-    }
-    return y - (octave - 4) * 35;
-}
-
-coord_t MeasureGeometry::staffYInCClef(Pitch::Step step, int octave) {
-    coord_t y;
-    switch (step) {
-        case Pitch::STEP_C: y = 20; break;
-        case Pitch::STEP_D: y = 15; break;
-        case Pitch::STEP_E: y = 10; break;
-        case Pitch::STEP_F: y = 5; break;
-        case Pitch::STEP_G: y = 0; break;
-        case Pitch::STEP_A: y = -5; break;
-        case Pitch::STEP_B: y = -10; break;
-        default: y = 20;
-    }
-    return y - (octave - 5) * 35;
-}
-
-coord_t MeasureGeometry::staffYInFClef(Pitch::Step step, int octave) {
-    coord_t y;
-    switch (step) {
-        case Pitch::STEP_C: y = 25; break;
-        case Pitch::STEP_D: y = 20; break;
-        case Pitch::STEP_E: y = 15; break;
-        case Pitch::STEP_F: y = 10; break;
-        case Pitch::STEP_G: y = 5; break;
-        case Pitch::STEP_A: y = 0; break;
-        case Pitch::STEP_B: y = -5; break;
-        default: y = 20;
-    }
-    return y - (octave - 3) * 35;
-}
-
 void MeasureGeometry::build() {
     _currentTime = 0;
-    _currentAttributes = _measure.baseAttributes();
-
+    
     for (auto& node : _measure.nodes()) {
         if (const Attributes* attributes = dynamic_cast<const Attributes*>(node.get())) {
-            _currentAttributes = *attributes;
+            _attributesManager.addAttributes(*attributes);
             buildAttributes(attributes);
         } else if (const Barline* barline = dynamic_cast<const Barline*>(node.get())) {
             buildBarline(barline);
@@ -138,11 +61,11 @@ void MeasureGeometry::build() {
         
         chords.push_back(chordGeom);
         
-        const Beam& beam = note->beams().front();
-        if (beam.type() == Beam::TYPE_BEGIN) {
-        } else if (beam.type() == Beam::TYPE_CONTINUE) {
-        } else if (beam.type() == Beam::TYPE_END) {
-            std::unique_ptr<BeamGeometry> beamGeom(new BeamGeometry(chords, _currentAttributes));
+        const auto& beam = note->beams().front();
+        if (beam->type() == Beam::TYPE_BEGIN) {
+        } else if (beam->type() == Beam::TYPE_CONTINUE) {
+        } else if (beam->type() == Beam::TYPE_END) {
+            std::unique_ptr<BeamGeometry> beamGeom(new BeamGeometry(chords));
             ChordGeometry* firstChordGeom = chords.front();
             beamGeom->setLocation(firstChordGeom->location());
             chords.clear();
@@ -151,73 +74,85 @@ void MeasureGeometry::build() {
         }
     }
 
-    setSize({_spans.width(_measureIndex), _partGeometry.stavesHeight() + 2*kVerticalPadding});
+    setSize({_spans.width(_measureIndex), Metrics::stavesHeight(_partGeometry.part()) + 2*kVerticalPadding});
     setContentOffset({0, -kVerticalPadding});
 
     centerLoneRest();
 }
 
 void MeasureGeometry::buildAttributes(const Attributes* attributes) {
-    for (int staff = 1; staff <= attributes->staves(); staff += 1) {
-        if (!attributes->clef(staff).isPresent())
+    for (int staff = 1; staff <= _attributesManager.staves(); staff += 1) {
+        if (!attributes->clef(staff))
             continue;
 
-        const Clef& clef = attributes->clef(staff);
-        auto it = _spans.with(&clef);
+        const auto& clef = attributes->clef(staff);
+        auto it = _spans.with(clef);
         if  (it == _spans.end())
             continue;
 
-        std::unique_ptr<ClefGeometry> geo(new ClefGeometry(clef));
+        std::unique_ptr<ClefGeometry> geo(new ClefGeometry(*clef));
         geo->setStaff(staff);
 
         const Span& span = *it;
         Point location;
         location.x = span.start() + span.width()/2 - _spans.origin(_measureIndex);
-        location.y = _partGeometry.staffOrigin(staff) + _partGeometry.staffHeight()/2;
+        location.y = Metrics::staffOrigin(_partGeometry.part(), staff) + Metrics::staffHeight()/2;
         geo->setLocation(location);
         
         addGeometry(std::move(geo));
     }
     
-    for (int staff = 1; staff <= attributes->staves(); staff += 1) {
-        if (!attributes->time().isPresent())
+    for (int staff = 1; staff <= _attributesManager.staves(); staff += 1) {
+        if (!attributes->time())
             continue;
         
-        const Time& time = attributes->time();
-        auto it = _spans.with(&time);
+        const auto& time = attributes->time();
+        auto it = _spans.with(time);
         if  (it == _spans.end())
             continue;
+        
         const Span& span = *it;
 
-        std::unique_ptr<TimeSignatureGeometry> geo(new TimeSignatureGeometry(time));
+        std::unique_ptr<TimeSignatureGeometry> geo(new TimeSignatureGeometry(*time));
         geo->setStaff(staff);
 
         Point location;
         location.x = span.start() + span.width()/2 - _spans.origin(_measureIndex);
-        location.y = _partGeometry.staffOrigin(staff) + _partGeometry.staffHeight()/2;
+        location.y = Metrics::staffOrigin(_partGeometry.part(), staff) + Metrics::staffHeight()/2;
         geo->setLocation(location);
         
         addGeometry(std::move(geo));
     }
     
-    for (int staff = 1; staff <= attributes->staves(); staff += 1) {
-        if (!attributes->key(staff).isPresent())
+    for (int staff = 1; staff <= _attributesManager.staves(); staff += 1) {
+        if (!attributes->key(staff))
             continue;
         
-        const Key& key = attributes->key(staff);
-        auto it = _spans.with(&key);
+        const auto& key = attributes->key(staff);
+        auto it = _spans.with(key);
         if  (it == _spans.end())
             continue;
+        
         const Span& span = *it;
-
-        const Clef& clef = attributes->clef(staff);
-        std::unique_ptr<KeyGeometry> geo(new KeyGeometry(key, clef));
-        geo->setStaff(staff);
-
+        const auto& clef = _attributesManager.clef(_measure, staff, attributes->start());
+        std::unique_ptr<KeyGeometry> geo;
+        
+        if (key->fifths() == 0) {
+            const auto& activeKey = _attributesManager.key(_measure, staff, attributes->start()-1);
+            if (!activeKey)
+                continue;
+            
+            geo.reset(new KeyGeometry(*activeKey, *clef));
+            geo->setNatural(true);
+        } else {
+            geo.reset(new KeyGeometry(*key, *clef));
+        }
+    
         Point location;
         location.x = span.start() + span.width()/2 - _spans.origin(_measureIndex);
-        location.y = _partGeometry.staffOrigin(staff) + _partGeometry.staffHeight()/2;
+        location.y = Metrics::staffOrigin(_partGeometry.part(), staff) + Metrics::staffHeight()/2;
         geo->setLocation(location);
+        geo->setStaff(staff);
         
         addGeometry(std::move(geo));
     }
@@ -265,7 +200,7 @@ void MeasureGeometry::buildChord(const Chord* chord) {
     if (!chord->firstNote()->printObject())
         return;
     
-    std::unique_ptr<ChordGeometry> geo(new ChordGeometry(*chord, _currentAttributes, _partGeometry));
+    std::unique_ptr<ChordGeometry> geo(new ChordGeometry(*chord, _attributesManager, _partGeometry));
 
     Point location = geo->refNoteLocation();
     if (chord->stem() == STEM_UP) {
@@ -291,7 +226,7 @@ void MeasureGeometry::buildChord(const Chord* chord) {
 }
 
 void MeasureGeometry::buildRest(const Note* note) {
-    assert (note->rest().isPresent());
+    assert (note->rest());
     if (!note->printObject())
         return;
     
@@ -303,7 +238,7 @@ void MeasureGeometry::buildRest(const Note* note) {
     const Span& span = *it;
     Point location;
     location.x = span.start() + span.eventOffset() - _spans.origin(_measureIndex);
-    location.y = _partGeometry.noteY(_currentAttributes, *note);
+    location.y = Metrics::noteY(_attributesManager, *note);
     geo->setLocation(location);
     addGeometry(std::move(geo));
 }

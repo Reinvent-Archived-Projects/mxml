@@ -11,23 +11,23 @@
 
 using namespace mxml;
 
-BOOST_AUTO_TEST_CASE(moonlight) {
-    ScoreHandler handler;
-    std::ifstream is("moonlight.xml");
-    lxml::parse(is, "moonlight.xml", handler);
+ BOOST_AUTO_TEST_CASE(moonlight) {
+     ScoreHandler handler;
+     std::ifstream is("moonlight.xml");
+     lxml::parse(is, "moonlight.xml", handler);
     
-    const dom::Score& score = *handler.result();
+     const dom::Score& score = *handler.result();
 
-    EventFactory factory(score);
-    const EventSequence& events = factory.build();
+     EventFactory factory(score);
+     const EventSequence& events = factory.build();
     
-    BOOST_CHECK_EQUAL(events.events().size(), 2857);
+     BOOST_CHECK_EQUAL(events.events().size(), 2857);
     
-    BOOST_CHECK_EQUAL(*events.tempo(0), 160);
-    BOOST_CHECK_EQUAL(*events.tempo(6359), 160);
-    BOOST_CHECK_CLOSE(*events.tempo(6360), 80, 0.01);
+     BOOST_CHECK_EQUAL(*events.tempo(0), 160);
+     BOOST_CHECK_EQUAL(*events.tempo(6359), 160);
+     BOOST_CHECK_CLOSE(*events.tempo(6360), 80, 0.01);
     
-    BOOST_CHECK_EQUAL(events.loops().size(), 1);
-    BOOST_CHECK_EQUAL(events.loops()[0].begin, 480);
-    BOOST_CHECK_EQUAL(events.loops()[0].count, 1);
-}
+     BOOST_CHECK_EQUAL(events.loops().size(), 1);
+     BOOST_CHECK_EQUAL(events.loops()[0].begin, 480);
+     BOOST_CHECK_EQUAL(events.loops()[0].count, 1);
+ }

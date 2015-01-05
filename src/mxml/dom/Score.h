@@ -18,47 +18,38 @@ class Score : public Node {
 public:
     Score() : _parts() {}
     
-    const Identification& identification() const {
+    const std::unique_ptr<Identification>& identification() const {
         return _identification;
     }
-    void setIdentification(const Identification& id) {
-        _identification = id;
-    }
-    void setIdentification(Identification&& id) {
-        _identification = id;
+    void setIdentification(std::unique_ptr<Identification> id) {
+        _identification = std::move(id);
     }
     
-    const Defaults& defaults() const {
+    const std::unique_ptr<Defaults>& defaults() const {
         return _defaults;
     }
-    void setDefaults(const Defaults& defaults) {
-        _defaults = defaults;
-    }
-    void setDefaults(Defaults&& defaults) {
-        _defaults = defaults;
+    void setDefaults(std::unique_ptr<Defaults> defaults) {
+        _defaults = std::move(defaults);
     }
     
-    const std::vector<Credit> credits() const {
+    const std::vector<std::unique_ptr<Credit>>& credits() const {
         return _credits;
     }
-    void addCredit(const Credit& credit) {
-        _credits.push_back(credit);
-    }
-    void addCredit(Credit&& credit) {
-        _credits.push_back(credit);
+    void addCredit(std::unique_ptr<Credit> credit) {
+        _credits.push_back(std::move(credit));
     }
     
     const std::vector<std::unique_ptr<Part>>& parts() const {
         return _parts;
     }
-    void addPart(std::unique_ptr<Part>&& part) {
+    void addPart(std::unique_ptr<Part> part) {
         _parts.push_back(std::move(part));
     }
     
 private:
-    Identification _identification;
-    Defaults _defaults;
-    std::vector<Credit> _credits;
+    std::unique_ptr<Identification> _identification;
+    std::unique_ptr<Defaults> _defaults;
+    std::vector<std::unique_ptr<Credit>> _credits;
     std::vector<std::unique_ptr<Part>> _parts;
 };
 

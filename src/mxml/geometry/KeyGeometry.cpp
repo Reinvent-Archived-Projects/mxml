@@ -5,11 +5,15 @@
 #include "AccidentalGeometry.h"
 #include "PartGeometry.h"
 
+#include <mxml/Metrics.h>
+
 namespace mxml {
 
 const coord_t KeyGeometry::kSpacing = 2;
 
-KeyGeometry::KeyGeometry(const dom::Key& key, const dom::Clef& clef) : _key(key), _clef(clef) {
+KeyGeometry::KeyGeometry(const dom::Key& key, const dom::Clef& clef) : _key(key), _clef(clef), _natural(false) {
+    assert(&key);
+    assert(&clef);
     setSize(keySize(key));
     setStaff(_key.number());
 }
@@ -18,9 +22,11 @@ Size KeyGeometry::keySize(const dom::Key& key) {
     Size size;
     if (key.fifths() > 0)
         size.width = key.fifths() * (AccidentalGeometry::kSharpSize.width + kSpacing) - kSpacing;
+    else if (key.fifths() == 0)
+        size.width = key.fifths() * (AccidentalGeometry::kNaturalSize.width + kSpacing) - kSpacing;
     else if (key.fifths() < 0)
         size.width = -key.fifths() * (AccidentalGeometry::kFlatSize.width + kSpacing) - kSpacing;
-    size.height = PartGeometry::staffHeight() + PartGeometry::kStaffLineSpacing + std::max(AccidentalGeometry::kFlatSize.height/2, AccidentalGeometry::kSharpSize.height/2);
+    size.height = Metrics::staffHeight() + Metrics::kStaffLineSpacing + std::max(AccidentalGeometry::kFlatSize.height/2, AccidentalGeometry::kSharpSize.height/2);
     return size;
 }
 

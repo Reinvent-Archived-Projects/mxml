@@ -8,7 +8,7 @@
 
 namespace mxml {
 
-class SoundHandler : public lxml::BaseRecursiveHandler<dom::Sound> {
+class SoundHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Sound>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
 };

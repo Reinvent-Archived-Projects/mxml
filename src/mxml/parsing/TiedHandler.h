@@ -7,7 +7,7 @@
 
 namespace mxml {
 
-class TiedHandler : public lxml::BaseRecursiveHandler<dom::Tied> {
+class TiedHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Tied>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     

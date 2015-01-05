@@ -18,13 +18,10 @@ public:
     static const coord_t kHookLength;
     
 public:
-    BeamGeometry(std::vector<ChordGeometry*> chords, const dom::Attributes& attributes);
+    BeamGeometry(std::vector<ChordGeometry*> chords);
     
     const std::vector<ChordGeometry*>& chords() const {
         return _chords;
-    }
-    const dom::Attributes& attributes() const {
-        return _attributes;
     }
 
     dom::Placement placement() const {
@@ -47,7 +44,6 @@ private:
     
 private:
     std::vector<ChordGeometry*> _chords;
-    const dom::Attributes& _attributes;
 
     dom::Placement _placement;
     Point _beamBegin;

@@ -30,7 +30,8 @@ public:
     };
     
 public:
-    Articulation() {}
+    Articulation() = default;
+    Articulation(Type type) : _type(type) {}
     
     Type type() const {
         return _type;

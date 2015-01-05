@@ -7,7 +7,7 @@
 
 namespace mxml {
 
-class TurnHandler : public lxml::BaseRecursiveHandler<dom::Turn> {
+class TurnHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Turn>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
 };

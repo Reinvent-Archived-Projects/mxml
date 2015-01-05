@@ -17,6 +17,8 @@
 #include <mxml/dom/Pedal.h>
 #include <mxml/dom/Wedge.h>
 
+#include <mxml/Metrics.h>
+
 #include <typeindex>
 #include <typeinfo>
 
@@ -30,7 +32,7 @@ namespace mxml {
 
         coord_t offset = 0;
         for (auto& measure : _part.measures()) {
-            std::unique_ptr<MeasureGeometry> geo(new MeasureGeometry(*measure, *_partGeometry, _spans));
+            std::unique_ptr<MeasureGeometry> geo(new MeasureGeometry(*measure, *_partGeometry, _spans, _attributesManager));
             geo->setHorizontalAnchorPointValues(0, 0);
             geo->setLocation({offset, 0});
             offset += geo->size().width;
@@ -114,15 +116,16 @@ namespace mxml {
 
     void PartGeometryFactory::placeDirection(PlacementGeometry& geometry) {
         auto location = geometry.location();
-
+        auto& part = _partGeometry->part();
+        
         if (geometry.placement() == dom::PLACEMENT_ABOVE) {
-            location.y = _partGeometry->staffOrigin(geometry.staff()) - PartGeometry::kStaffLineSpacing;
+            location.y = Metrics::staffOrigin(part, geometry.staff()) - Metrics::kStaffLineSpacing;
             geometry.setVerticalAnchorPointValues(1, 0);
         } else {
-            location.y = _partGeometry->staffOrigin(geometry.staff()) + _partGeometry->staffHeight() + PartGeometry::kStaffLineSpacing;
+            location.y = Metrics::staffOrigin(part, geometry.staff()) + Metrics::staffHeight() + Metrics::kStaffLineSpacing;
             geometry.setVerticalAnchorPointValues(0, 0);
         }
-        location.y -= _partGeometry->stavesHeight()/2;
+        location.y -= Metrics::stavesHeight(part)/2;
 
         geometry.setLocation(location);
     }
@@ -165,14 +168,16 @@ namespace mxml {
             else
                 placement = dom::PLACEMENT_ABOVE;
         }
-
+        
+        auto& part = _partGeometry->part();
+        
         if (placement == dom::PLACEMENT_ABOVE) {
-            startLocation.y = stopLocation.y = _partGeometry->staffOrigin(staff) - _part.staffDistance()/2;
+            startLocation.y = stopLocation.y = Metrics::staffOrigin(part, staff) - _part.staffDistance()/2;
         } else if (placement == dom::PLACEMENT_BELOW) {
-            startLocation.y = stopLocation.y = _partGeometry->staffOrigin(staff) + _partGeometry->staffHeight() + _part.staffDistance()/2;
+            startLocation.y = stopLocation.y = Metrics::staffOrigin(part, staff) + Metrics::staffHeight() + _part.staffDistance()/2;
         }
-        startLocation.y -= _partGeometry->stavesHeight()/2;
-        stopLocation.y -= _partGeometry->stavesHeight()/2;
+        startLocation.y -= Metrics::stavesHeight(part)/2;
+        stopLocation.y -= Metrics::stavesHeight(part)/2;
 
         std::unique_ptr<PlacementGeometry> geo(new SpanDirectionGeometry(startDirection, startLocation, stopDirection, stopLocation));
         geo->setPlacement(dom::Optional<dom::Placement>(placement, startDirection.placement().isPresent()));
@@ -213,7 +218,7 @@ namespace mxml {
         stopLocation.x = stopSpan.start() + stopSpan.eventOffset();
 
         int staff = startDirection.staff();
-        startLocation.y = stopLocation.y = _partGeometry->staffOrigin(staff) + _partGeometry->staffHeight() + _part.staffDistance()/2 - _partGeometry->stavesHeight()/2;
+        startLocation.y = stopLocation.y = Metrics::staffOrigin(_part, staff) + Metrics::staffHeight() + _part.staffDistance()/2 - Metrics::stavesHeight(_part)/2;
 
         std::unique_ptr<PlacementGeometry> geo(new PedalGeometry(startDirection, startLocation, stopDirection, stopLocation));
         geo->setLocation(startLocation);
@@ -233,12 +238,12 @@ namespace mxml {
 
     void PartGeometryFactory::buildOrnaments(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom) {
         for (auto& note : chordGeom.chord().notes()) {
-            if (!note->notations().isPresent())
+            if (!note->notations())
                 continue;
 
-            const dom::Notations& notations = note->notations();
-            for (auto& ornament : notations.ornaments())
-                buildOrnament(measureGeom, chordGeom, ornament);
+            auto& notations = note->notations();
+            for (auto& ornament : notations->ornaments())
+                buildOrnament(measureGeom, chordGeom, *ornament);
         }
     }
 
@@ -287,23 +292,24 @@ namespace mxml {
 
     void PartGeometryFactory::buildEndings(const MeasureGeometry& measureGeom, const BarlineGeometry& barlineGeom) {
         const dom::Barline& barline = barlineGeom.barline();
-        if (!barline.ending().isPresent())
+        if (!barline.ending())
             return;
-        const dom::Ending& ending = barline.ending();
+        
+        auto& ending = barline.ending();
 
-        if ((ending.type() == dom::Ending::STOP || ending.type() == dom::Ending::DISCONTINUE) && _startEnding.isPresent()) {
+        if ((ending->type() == dom::Ending::STOP || ending->type() == dom::Ending::DISCONTINUE) && _startEnding.isPresent()) {
             Point stopLocation;
             stopLocation.x = measureGeom.frame().max().x - 1;
             stopLocation.y = measureGeom.origin().y + MeasureGeometry::kVerticalPadding - EndingGeometry::kHeight - 10;
 
-            std::unique_ptr<EndingGeometry> endingGeom(new EndingGeometry(_startEnding, _startEndingLocation, ending, stopLocation));
+            std::unique_ptr<EndingGeometry> endingGeom(new EndingGeometry(_startEnding, _startEndingLocation, *ending, stopLocation));
             endingGeom->setLocation(_startEndingLocation);
             _partGeometry->_directionGeometries.push_back(endingGeom.get());
             _partGeometry->addGeometry(std::move(endingGeom));
 
             _startEnding.reset();
-        } else if (ending.type() == dom::Ending::START) {
-            _startEnding.setPresentValue(ending);
+        } else if (ending->type() == dom::Ending::START) {
+            _startEnding.setPresentValue(*ending);
             _startEndingLocation = measureGeom.location();
             _startEndingLocation.y = measureGeom.origin().y + MeasureGeometry::kVerticalPadding - EndingGeometry::kHeight - 10;
         }
@@ -321,7 +327,7 @@ namespace mxml {
     void PartGeometryFactory::buildLyrics(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom) {
         for (auto noteGeom : chordGeom.notes()) {
             for (auto& lyric : noteGeom->note().lyrics()) {
-                buildLyric(measureGeom, chordGeom, lyric);
+                buildLyric(measureGeom, chordGeom, *lyric);
             }
         }
     }

@@ -16,15 +16,15 @@ static const char* kTempoAttribute = "tempo";
 static const char* kDynamicsAttribute = "dynamics";
 
 void SoundHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    _result = Sound();
+    _result.reset(new Sound());
     
     auto tempo = attributes.find(kTempoAttribute);
     if (tempo != attributes.end())
-        _result.setTempo(presentOptional(static_cast<float>(DoubleHandler::parseDouble(tempo->second))));
+        _result->setTempo(presentOptional(static_cast<float>(DoubleHandler::parseDouble(tempo->second))));
     
     auto dynamics = attributes.find(kDynamicsAttribute);
     if (dynamics != attributes.end())
-        _result.setDynamics(presentOptional(static_cast<float>(DoubleHandler::parseDouble(dynamics->second))));
+        _result->setDynamics(presentOptional(static_cast<float>(DoubleHandler::parseDouble(dynamics->second))));
 }
 
 } // namespace mxml

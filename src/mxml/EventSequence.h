@@ -79,7 +79,7 @@ public:
             return _loopNumber;
         }
         
-        const dom::Attributes* attributes() const;
+//        const dom::Attributes* attributes() const;
         float tempo() const;
         float dynamics() const;
         

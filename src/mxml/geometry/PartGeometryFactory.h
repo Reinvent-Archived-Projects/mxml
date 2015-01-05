@@ -3,6 +3,8 @@
 
 #pragma once
 #include "PartGeometry.h"
+
+#include <mxml/AttributesManager.h>
 #include <mxml/dom/Part.h>
 
 namespace mxml {
@@ -44,5 +46,7 @@ namespace mxml {
 
         dom::Optional<dom::Ending> _startEnding;
         Point _startEndingLocation;
+        
+        AttributesManager _attributesManager;
     };
 }

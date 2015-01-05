@@ -45,17 +45,17 @@ public:
 public:
     Identification() {}
     
-    const std::vector<TypedValue>& creators() const {
+    const std::vector<std::unique_ptr<TypedValue>>& creators() const {
         return _creators;
     }
     const std::string& creator(const std::string& type) const;
-    void addCreator(const TypedValue& creator);
+    void addCreator(std::unique_ptr<TypedValue> creator);
     
-    const std::vector<TypedValue>& rights() const {
+    const std::vector<std::unique_ptr<TypedValue>>& rights() const {
         return _rights;
     }
     const std::string& rights(const std::string& type) const;
-    void addRights(const TypedValue& rights);
+    void addRights(std::unique_ptr<TypedValue> rights);
     
     const std::string& source() const {
         return _source;
@@ -65,8 +65,8 @@ public:
     }
     
 private:
-    std::vector<TypedValue> _creators;
-    std::vector<TypedValue> _rights;
+    std::vector<std::unique_ptr<TypedValue>> _creators;
+    std::vector<std::unique_ptr<TypedValue>> _rights;
     std::string _source;
 };
 

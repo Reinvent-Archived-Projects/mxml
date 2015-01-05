@@ -9,7 +9,7 @@
 #include "NoteGeometry.h"
 #include "StemGeometry.h"
 
-#include <mxml/dom/Attributes.h>
+#include <mxml/AttributesManager.h>
 #include <mxml/dom/Chord.h>
 
 namespace mxml {
@@ -26,14 +26,12 @@ public:
     static const coord_t kDotSpacing;
     
 public:
-    ChordGeometry(const dom::Chord& chord, const dom::Attributes& attributes, const PartGeometry& partGeometry);
+    ChordGeometry(const dom::Chord& chord, const AttributesManager& attributesManager, const PartGeometry& partGeometry);
     
     const dom::Chord& chord() const {
         return _chord;
     }
-    const dom::Attributes& attributes() const {
-        return _attributes;
-    }
+    
     const PartGeometry& partGeometry() const {
         return _partGeometry;
     }
@@ -83,7 +81,7 @@ private:
     
 private:
     const dom::Chord& _chord;
-    const dom::Attributes& _attributes;
+    const AttributesManager& _attributesManager;
     const PartGeometry& _partGeometry;
     
     std::vector<NoteGeometry*> _notes;

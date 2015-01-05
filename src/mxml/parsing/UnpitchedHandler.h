@@ -10,8 +10,9 @@
 
 namespace mxml {
 
-class UnpitchedHandler : public lxml::BaseRecursiveHandler<dom::Unpitched> {
+class UnpitchedHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Unpitched>> {
 public:
+    void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     virtual RecursiveHandler* startSubElement(const lxml::QName& qname);
     virtual void endSubElement(const lxml::QName& qname, lxml::RecursiveHandler* parser);
     

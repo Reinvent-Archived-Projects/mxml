@@ -5,6 +5,8 @@
 #include "PartGeometry.h"
 #include "FermataGeometry.h"
 
+#include <mxml/Metrics.h>
+
 namespace mxml {
 
 const coord_t ChordGeometry::kStemVerticalOffset = 1;
@@ -13,8 +15,8 @@ const coord_t ChordGeometry::kArticulationSpacing = 1;
 const coord_t ChordGeometry::kFermataSpacing = 11;
 const coord_t ChordGeometry::kDotSpacing = 2;
 
-ChordGeometry::ChordGeometry(const dom::Chord& chord, const dom::Attributes& attributes, const PartGeometry& partGeometry)
-: _chord(chord), _attributes(attributes), _partGeometry(partGeometry), _notes(), _stem() {
+ChordGeometry::ChordGeometry(const dom::Chord& chord, const AttributesManager& attributesManager, const PartGeometry& partGeometry)
+: _chord(chord), _attributesManager(attributesManager), _partGeometry(partGeometry), _notes(), _stem() {
     build();
 }
 
@@ -59,8 +61,7 @@ void ChordGeometry::build() {
 Rect ChordGeometry::buildNotes() {
     for (auto& note : _chord.notes()) {
         std::unique_ptr<NoteGeometry> geom(new NoteGeometry(*note));
-        
-        Point loc = {0, _partGeometry.noteY(_attributes, *note)};
+        Point loc = {0, Metrics::noteY(_attributesManager, *note)};
         geom->setLocation(loc);
         buildDot(*geom);
         
@@ -86,7 +87,7 @@ Rect ChordGeometry::buildNotes() {
         // Notes that are too close need to be shifted sideways
         for (std::size_t j = i + 1; j < sorted.size(); j += 1) {
             NoteGeometry* noteGeom = sorted[j];
-            if (loc.x == noteGeom->location().x && std::abs(loc.y - noteGeom->location().y) < PartGeometry::kStaffLineSpacing) {
+            if (loc.x == noteGeom->location().x && std::abs(loc.y - noteGeom->location().y) < Metrics::kStaffLineSpacing) {
                 if (stem == dom::STEM_UP)
                     loc.x += geom->size().width;
                 else
@@ -108,7 +109,7 @@ Rect ChordGeometry::buildNotes() {
 
 void ChordGeometry::buildDot(const NoteGeometry& noteGeom) {
     const dom::Note& note = noteGeom.note();
-    if (!note.dot().isPresent())
+    if (!note.dot())
         return;
 
     std::unique_ptr<DotGeometry> dotGeom(new DotGeometry);
@@ -116,9 +117,9 @@ void ChordGeometry::buildDot(const NoteGeometry& noteGeom) {
     Point dotLocation = noteGeom.location();
     dotLocation.x += noteGeom.size().width/2 + dotGeom->anchorPoint().x + kDotSpacing;
     
-    coord_t staffY = dotLocation.y - _partGeometry.staffOrigin(note.staff());
+    coord_t staffY = dotLocation.y - Metrics::staffOrigin(_partGeometry.part(), note.staff());
     if ((int)staffY % 10 == 0) {
-        if (note.dot().value().placement() == dom::PLACEMENT_ABOVE)
+        if (note.dot()->placement() == dom::PLACEMENT_ABOVE)
             dotLocation.y -= 5;
         else
             dotLocation.y += 5;
@@ -135,10 +136,10 @@ void ChordGeometry::buildAccidentals(const Rect& notesFrame) {
 
 void ChordGeometry::buildAccidental(const NoteGeometry& noteGeom, const Rect& notesFrame) {
     const dom::Note& note = noteGeom.note();
-    if (!note.accidental().isPresent())
+    if (!note.accidental())
         return;
 
-    std::unique_ptr<AccidentalGeometry> accGeom(new AccidentalGeometry(note.accidental()));
+    std::unique_ptr<AccidentalGeometry> accGeom(new AccidentalGeometry(*note.accidental()));
     
     Point accLocation = noteGeom.location();
     accLocation.x = notesFrame.origin.x - kAccidentalSpacing - accGeom->size().width/2;
@@ -154,17 +155,17 @@ void ChordGeometry::buildNotations(const Rect& notesFrame) {
     // Notations should be on the first note of the chord
     const dom::Note* note = _chord.notes().front().get();
     
-    if (!note || !note->notations().isPresent())
+    if (!note || !note->notations())
         return;
 
     Rect frame = notesFrame;
-    const dom::Notations& notations = note->notations();
-    for (auto& artic : notations.articulations()) {
-        buildArticulation(artic, frame);
+    const auto& notations = note->notations();
+    for (auto& artic : notations->articulations()) {
+        buildArticulation(*artic, frame);
     }
 
-    if (notations.fermata().isPresent()) {
-        buildFermata(notations.fermata(), frame);
+    if (notations->fermata()) {
+        buildFermata(*notations->fermata(), frame);
     }
 }
 
@@ -185,10 +186,10 @@ void ChordGeometry::buildArticulation(const dom::Articulation& articulation, Rec
     location.x = notesFrame.center().x;
     if (above) {
         location.y = notesFrame.origin.y - size.height/2 - kArticulationSpacing;
-        staffY = notesFrame.origin.y - _partGeometry.staffOrigin(staff);
+        staffY = notesFrame.origin.y - Metrics::staffOrigin(_partGeometry.part(), staff);
     } else {
         location.y = notesFrame.max().y + size.height/2 + kArticulationSpacing;
-        staffY = notesFrame.max().y - _partGeometry.staffOrigin(staff);
+        staffY = notesFrame.max().y - Metrics::staffOrigin(_partGeometry.part(), staff);
     }
 
     // Add extra spacing if there is a staff line between the note and the articulation
@@ -201,19 +202,19 @@ void ChordGeometry::buildArticulation(const dom::Articulation& articulation, Rec
 
     // Avoid placing the on a staff line
     bool intersectsStaffLine = false;
-    coord_t y = _partGeometry.staffOrigin(staff);
-    for (int i = 1; i <= PartGeometry::kStaffLineCount; i += 1) {
+    coord_t y = Metrics::staffOrigin(_partGeometry.part(), staff);
+    for (int i = 1; i <= Metrics::kStaffLineCount; i += 1) {
         if (location.y - size.height/2 < y && location.y + size.height/2 > y) {
             intersectsStaffLine = true;
             break;
         }
-        y += PartGeometry::kStaffLineSpacing;
+        y += Metrics::kStaffLineSpacing;
     }
     if (intersectsStaffLine) {
         if (above)
-            location.y = y - mxml::PartGeometry::kStaffLineSpacing/2;
+            location.y = y - Metrics::kStaffLineSpacing/2;
         else
-            location.y = y + mxml::PartGeometry::kStaffLineSpacing/2;
+            location.y = y + Metrics::kStaffLineSpacing/2;
     }
     
     geom->setLocation(location);

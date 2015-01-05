@@ -7,7 +7,7 @@
 
 namespace mxml {
 
-class SlurHandler : public lxml::BaseRecursiveHandler<dom::Slur> {
+class SlurHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Slur>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     

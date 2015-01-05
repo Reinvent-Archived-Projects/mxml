@@ -13,16 +13,18 @@ using dom::Fermata;
 static const char* kTypeAttribute = "type";
 
 void FermataHandler::startElement(const QName& qname, const AttributeMap& attributes) {
+    _result.reset(new Fermata());
+    
     auto type = attributes.find(kTypeAttribute);
     if (type != attributes.end())
-        _result.setType(typeFromString(type->second));
+        _result->setType(typeFromString(type->second));
 }
 
 void FermataHandler::endElement(const QName& qname, const std::string& contents) {
     if (contents.empty())
-        _result.setShape(Fermata::SHAPE_NORMAL);
+        _result->setShape(Fermata::SHAPE_NORMAL);
     else
-        _result.setShape(shapeFromString(contents));
+        _result->setShape(shapeFromString(contents));
 }
 
 Fermata::Type FermataHandler::typeFromString(const std::string& string) {

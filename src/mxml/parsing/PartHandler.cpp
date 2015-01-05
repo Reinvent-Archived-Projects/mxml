@@ -13,7 +13,7 @@ static const char* kIdTag = "id";
 static const char* kMeasureTag = "measure";
 
 void PartHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    _result.reset(new Part);
+    _result.reset(new Part());
 
     auto id = attributes.find(kIdTag);
     if (id != attributes.end())

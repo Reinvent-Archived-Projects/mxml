@@ -9,7 +9,7 @@
 
 namespace mxml {
 
-class CreditHandler : public lxml::BaseRecursiveHandler<dom::Credit> {
+class CreditHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Credit>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     RecursiveHandler* startSubElement(const lxml::QName& qname);

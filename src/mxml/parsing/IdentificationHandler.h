@@ -8,13 +8,13 @@
 
 namespace mxml {
 
-class TypedValueHandler : public lxml::BaseRecursiveHandler<dom::TypedValue> {
+class TypedValueHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::TypedValue>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     void endElement(const lxml::QName& qname, const std::string& contents);
 };
 
-class IdentificationHandler : public lxml::BaseRecursiveHandler<dom::Identification> {
+class IdentificationHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Identification>> {
 public:
     RecursiveHandler* startSubElement(const lxml::QName& qname);
     void endSubElement(const lxml::QName& qname, RecursiveHandler* parser);

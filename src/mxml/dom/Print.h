@@ -20,16 +20,16 @@ public:
         _staffSpacing = staffSpacing;
     }
     
-    const Optional<StaffLayout>& staffLayout() const {
+    const std::unique_ptr<StaffLayout>& staffLayout() const {
         return _staffLayout;
     }
-    void setStaffLayout(const Optional<StaffLayout>& layout) {
-        _staffLayout = layout;
+    void setStaffLayout(std::unique_ptr<StaffLayout> layout) {
+        _staffLayout = std::move(layout);
     }
     
 private:
     Optional<float> _staffSpacing;
-    Optional<StaffLayout> _staffLayout;
+    std::unique_ptr<StaffLayout> _staffLayout;
 };
 
 } // namespace dom

@@ -10,7 +10,7 @@
 
 namespace mxml {
 
-class LyricHandler : public lxml::BaseRecursiveHandler<dom::Lyric> {
+class LyricHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Lyric>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     RecursiveHandler* startSubElement(const lxml::QName& qname);

@@ -3,6 +3,8 @@
 
 #pragma once
 #include "EventSequence.h"
+#include "AttributesManager.h"
+
 #include <map>
 
 namespace mxml {
@@ -30,9 +32,6 @@ private:
     void processChord(const dom::Chord& chord);
     void addNote(const dom::Note& note);
 
-    int currentDivisions() const;
-    dom::Time currentTime() const;
-
 private:
     const dom::Score& _score;
     const dom::Part* _part;
@@ -45,6 +44,7 @@ private:
     dom::time_t _loopBegin;
     dom::time_t _endingBegin;
     EventSequence _eventSequence;
+    AttributesManager _attributesManager;
 };
 
 } // namespace mxml

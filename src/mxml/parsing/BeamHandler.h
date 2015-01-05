@@ -7,7 +7,7 @@
 
 namespace mxml {
 
-class BeamHandler : public lxml::BaseRecursiveHandler<dom::Beam> {
+class BeamHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Beam>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     void endElement(const lxml::QName& qname, const std::string& contents);

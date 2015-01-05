@@ -33,26 +33,26 @@ public:
         return firstNote()->stem();
     }
     
-    const std::vector<Beam>& beams() const {
+    const std::vector<std::unique_ptr<Beam>>& beams() const {
         return firstNote()->beams();
     }
     
     bool isBeamStart() const {
         if (_notes.empty() || firstNote()->beams().empty())
             return false;
-        return firstNote()->beams().front().type() == Beam::TYPE_BEGIN;
+        return firstNote()->beams().front()->type() == Beam::TYPE_BEGIN;
     }
     
     bool isBeamContinue() const {
         if (_notes.empty() || firstNote()->beams().empty())
             return false;
-        return firstNote()->beams().front().type() == Beam::TYPE_CONTINUE;
+        return firstNote()->beams().front()->type() == Beam::TYPE_CONTINUE;
     }
     
     bool isBeamEnd() const {
         if (_notes.empty() || firstNote()->beams().empty())
             return false;
-        return firstNote()->beams().front().type() == Beam::TYPE_END;
+        return firstNote()->beams().front()->type() == Beam::TYPE_END;
     }
     
     bool hasBeam() const {

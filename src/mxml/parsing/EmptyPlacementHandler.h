@@ -7,7 +7,7 @@
 
 namespace mxml {
 
-class EmptyPlacementHandler : public lxml::BaseRecursiveHandler<dom::EmptyPlacement> {
+class EmptyPlacementHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::EmptyPlacement>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     static dom::Placement placementFromString(const std::string& string);

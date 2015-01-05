@@ -21,12 +21,7 @@ public:
     RecursiveHandler* startSubElement(const lxml::QName& qname);
     void endSubElement(const lxml::QName& qname, RecursiveHandler* parser);
     
-    const dom::Attributes& defaultAttributes() const {
-        return _defaultAttributes;
-    }
-    
 private:
-    dom::Attributes _defaultAttributes;
     ClefHandler _clefHandler;
     lxml::IntegerHandler _integerHandler;
     TimeHandler _timeHandler;

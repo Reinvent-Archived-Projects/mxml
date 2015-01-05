@@ -24,8 +24,6 @@ void MeasureHandler::startElement(const QName& qname, const AttributeMap& attrib
     endChord();
     
     _result.reset(new Measure());
-    _result->setBaseAttributes(_attributesHandler.defaultAttributes());
-    _attributes = &_result->baseAttributes();
     _time = 0;
     _empty = true;
     
@@ -36,14 +34,13 @@ void MeasureHandler::startElement(const QName& qname, const AttributeMap& attrib
 
 void MeasureHandler::endElement(const QName& qname, const std::string& contents) {
     if (_empty) {
-        dom::Rest rest;
         auto note = std::unique_ptr<dom::Note>(new dom::Note);
-        note->setRest(dom::presentOptional(rest));
+        note->setRest(std::unique_ptr<dom::Rest>(new dom::Rest));
         note->setMeasure(_result.get());
         note->setAttributes(_attributes);
         note->setStart(0);
         note->setType(dom::presentOptional(dom::Note::TYPE_WHOLE));
-        note->setDuration(dom::presentOptional(dom::Attributes::divisionsPerMeasure(_attributes->divisions(), _attributes->time())));
+        note->setDuration(dom::presentOptional(dom::Attributes::divisionsPerMeasure(_attributes->divisions(), *_attributes->time())));
         _result->addNode(std::move(note));
     }
 }
@@ -78,8 +75,10 @@ void MeasureHandler::endSubElement(const QName& qname, RecursiveHandler* parser)
         _time -= backup->duration();
         _result->addNode(std::move(backup));
     } else if (strcmp(qname.localName(), kAttributesTag) == 0) {
-        _attributes = _attributesHandler.result().get();
-        _result->addNode(_attributesHandler.result());
+        auto attributes = _attributesHandler.result();
+        attributes->setStart(_time);
+        attributes->setParent(_result.get());
+        _result->addNode(std::move(attributes));
     } else if (strcmp(qname.localName(), kDirectionTag) == 0) {
         std::unique_ptr<dom::Direction> direction = _directionHandler.result();
         direction->setStart(_time);
@@ -105,7 +104,7 @@ void MeasureHandler::handleNote(std::unique_ptr<dom::Note>&& note) {
     }
     
     // Rests are a special case. A rest ends a chord but can appear whitin a beamed set.
-    if (note->rest().isPresent()) {
+    if (note->rest()) {
         endChord();
         _result->addNode(std::move(note));
         return;

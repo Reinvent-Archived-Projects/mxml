@@ -8,7 +8,7 @@
 
 namespace mxml {
 
-class CreditWordsHandler : public lxml::BaseRecursiveHandler<dom::CreditWords> {
+class CreditWordsHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::CreditWords>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     void endElement(const lxml::QName& qname, const std::string& contents);

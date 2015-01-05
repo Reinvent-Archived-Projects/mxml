@@ -15,7 +15,7 @@ static const char* kTurnTag = "turn";
 static const char* kInvertedTurnTag = "invertedTurn";
 
 void OrnamentsHandler::startElement(const lxml::QName& qname, const AttributeMap& attributes) {
-    _result = Ornaments();
+    _result.reset(new Ornaments());
 }
 
 lxml::RecursiveHandler* OrnamentsHandler::startSubElement(const lxml::QName& qname) {
@@ -34,15 +34,15 @@ lxml::RecursiveHandler* OrnamentsHandler::startSubElement(const lxml::QName& qna
 
 void OrnamentsHandler::endSubElement(const lxml::QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kTrillMarkTag) == 0)
-        _result.setTrillMark(presentOptional(_emptyPlacementHandler.result()));
+        _result->setTrillMark(_emptyPlacementHandler.result());
     else if (strcmp(qname.localName(), kMordentTag) == 0)
-       _result.setMordent(presentOptional(_mordentHandler.result()));
+       _result->setMordent(_mordentHandler.result());
     else if (strcmp(qname.localName(), kInvertedMordentTag) == 0)
-        _result.setInvertedMordent(presentOptional(_mordentHandler.result()));
+        _result->setInvertedMordent(_mordentHandler.result());
     else if (strcmp(qname.localName(), kTurnTag) == 0)
-        _result.setTurn(presentOptional(_turnHandler.result()));
+        _result->setTurn(_turnHandler.result());
     else if (strcmp(qname.localName(), kInvertedTurnTag) == 0)
-        _result.setInvertedTurn(presentOptional(_turnHandler.result()));
+        _result->setInvertedTurn(_turnHandler.result());
 }
 
 } // namespace

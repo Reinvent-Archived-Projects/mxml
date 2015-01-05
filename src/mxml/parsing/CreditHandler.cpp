@@ -13,11 +13,11 @@ static const char* kPageAttribute = "page";
 static const char* kCreditWordsTag = "credit-words";
 
 void CreditHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    _result = Credit();
+    _result.reset(new Credit());
     
     auto page = attributes.find(kPageAttribute);
     if (page != attributes.end())
-        _result.setPage(lxml::IntegerHandler::parseInteger(page->second));
+        _result->setPage(lxml::IntegerHandler::parseInteger(page->second));
 }
 
 lxml::RecursiveHandler* CreditHandler::startSubElement(const QName& qname) {
@@ -28,7 +28,7 @@ lxml::RecursiveHandler* CreditHandler::startSubElement(const QName& qname) {
 
 void CreditHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kCreditWordsTag) == 0)
-        _result.addCreditWords(_creditWordsHandler.result());
+        _result->addCreditWords(_creditWordsHandler.result());
 }
 
 } // namespace mxml

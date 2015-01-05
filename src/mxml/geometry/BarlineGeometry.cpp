@@ -3,6 +3,8 @@
 
 #include "BarlineGeometry.h"
 
+#include <mxml/Metrics.h>
+
 namespace mxml {
 
 using dom::Barline;
@@ -15,16 +17,16 @@ const coord_t BarlineGeometry::kDotDiameter = 4;
 BarlineGeometry::BarlineGeometry(const Barline& barline, const PartGeometry& partGeometry) : _barline(barline), _partGeometry(partGeometry) {
     Size size;
     size.width = Width(_barline);
-    size.height = _partGeometry.stavesHeight();
+    size.height = Metrics::stavesHeight(_partGeometry.part());
     if (_barline.style() == Barline::TICK)
-        size.height = PartGeometry::kStaffLineSpacing;
+        size.height = Metrics::kStaffLineSpacing;
     else if (_barline.style() == Barline::SHORT)
-        size.height = 2*PartGeometry::kStaffLineSpacing;
+        size.height = 2*Metrics::kStaffLineSpacing;
     setSize(size);
 }
 
 coord_t BarlineGeometry::Width(const Barline& barline) {
-    if (barline.repeat().isPresent())
+    if (barline.repeat())
         return kLightLineWidth + kLineSpacing + kHeavyLineWidth + kLineSpacing + kDotDiameter;
     
     switch (barline.style()) {

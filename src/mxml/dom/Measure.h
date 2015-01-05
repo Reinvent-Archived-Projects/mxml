@@ -34,11 +34,11 @@ public:
         _number = number;
     }
     
-    const Attributes& baseAttributes() const {
+    const unique_ptr<Attributes>& baseAttributes() const {
         return _baseAttributes;
     }
-    void setBaseAttributes(const Attributes& attr) {
-        _baseAttributes = attr;
+    void setBaseAttributes(unique_ptr<Attributes> attr) {
+        _baseAttributes = std::move(attr);
     }
     
     const std::vector<unique_ptr<Node>>& nodes() const {
@@ -59,9 +59,8 @@ public:
     
 private:
     std::string _number;
-    Attributes _baseAttributes;
-    
-    std::vector<unique_ptr<Node>> _nodes;
+    unique_ptr<Attributes> _baseAttributes;
+    vector<unique_ptr<Node>> _nodes;
 };
 
 } // namespace dom

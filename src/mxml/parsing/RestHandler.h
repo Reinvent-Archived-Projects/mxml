@@ -10,7 +10,7 @@
 
 namespace mxml {
 
-class RestHandler : public lxml::BaseRecursiveHandler<dom::Rest> {
+class RestHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Rest>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     RecursiveHandler* startSubElement(const lxml::QName& qname);

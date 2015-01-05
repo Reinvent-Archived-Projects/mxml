@@ -8,7 +8,7 @@
 
 namespace mxml {
 
-class EndingHandler : public lxml::BaseRecursiveHandler<dom::Ending> {
+class EndingHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Ending>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     void endElement(const lxml::QName& qname, const std::string& contents);

@@ -14,23 +14,23 @@ class Defaults : public Node {
 public:
     Defaults() : _scaling(), _staffLayout() {}
     
-    const Optional<Scaling>& scaling() const {
+    const std::unique_ptr<Scaling>& scaling() const {
         return _scaling;
     }
-    void setScaling(const Optional<Scaling>& scaling) {
-        _scaling = scaling;
+    void setScaling(std::unique_ptr<Scaling> scaling) {
+        _scaling = std::move(scaling);
     }
     
-    const Optional<StaffLayout>& staffLayout() const {
+    const std::unique_ptr<StaffLayout>& staffLayout() const {
         return _staffLayout;
     }
-    void setStaffLayout(const Optional<StaffLayout>& layout) {
-        _staffLayout = layout;
+    void setStaffLayout(std::unique_ptr<StaffLayout> layout) {
+        _staffLayout = std::move(layout);
     }
     
 private:
-    Optional<Scaling> _scaling;
-    Optional<StaffLayout> _staffLayout;
+    std::unique_ptr<Scaling> _scaling;
+    std::unique_ptr<StaffLayout> _staffLayout;
 };
 
 } // namespace dom

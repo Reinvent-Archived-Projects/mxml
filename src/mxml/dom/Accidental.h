@@ -20,6 +20,7 @@ public:
 public:
     Accidental() : _type(TYPE_SHARP) {}
     Accidental(Type type) : _type(type) {}
+    Accidental(const Accidental& rhs) : _type(rhs.type()) {}
     
     Type type() const {
         return _type;

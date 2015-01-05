@@ -7,8 +7,9 @@
 
 namespace mxml {
 
-class SyllabicHandler : public lxml::BaseRecursiveHandler<dom::Syllabic> {
+class SyllabicHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Syllabic>> {
 public:
+    void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     void endElement(const lxml::QName& qname, const std::string& contents);
     static dom::Syllabic::Type typeFromString(const std::string& string);
 };

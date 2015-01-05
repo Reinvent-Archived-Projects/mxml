@@ -6,7 +6,7 @@
 
 namespace mxml {
 
-    using lxml::QName;
+using lxml::QName;
 using dom::Key;
 
 static const char* kNumberAttribute = "number";
@@ -16,15 +16,15 @@ static const char* kFifthsTag = "fifths";
 static const char* kModeTag = "mode";
 
 void KeyHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    _result = Key();
+    _result.reset(new Key());
     
     auto number = attributes.find(kNumberAttribute);
     if (number != attributes.end())
-        _result.setNumber(lxml::IntegerHandler::parseInteger(number->second));
+        _result->setNumber(lxml::IntegerHandler::parseInteger(number->second));
     
     auto print = attributes.find(kPrintObjectAttribute);
     if (print != attributes.end())
-        _result.setPrintObject(print->second == "no" ? false : true);
+        _result->setPrintObject(print->second == "no" ? false : true);
 }
 
 lxml::RecursiveHandler* KeyHandler::startSubElement(const QName& qname) {
@@ -39,11 +39,11 @@ lxml::RecursiveHandler* KeyHandler::startSubElement(const QName& qname) {
 
 void KeyHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kCancelTag) == 0)
-        _result.setCancel(_integerHandler.result());
+        _result->setCancel(_integerHandler.result());
     else if (strcmp(qname.localName(), kFifthsTag) == 0)
-        _result.setFifths(_integerHandler.result());
+        _result->setFifths(_integerHandler.result());
     else if (strcmp(qname.localName(), kModeTag) == 0)
-        _result.setMode(modeFromString(_stringHandler.result()));
+        _result->setMode(modeFromString(_stringHandler.result()));
 }
 
 Key::Mode KeyHandler::modeFromString(const std::string& string) {

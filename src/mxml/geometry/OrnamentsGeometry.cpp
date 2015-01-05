@@ -18,15 +18,15 @@ OrnamentsGeometry::OrnamentsGeometry(const dom::Ornaments& ornaments, int staff)
     if (ornaments.placement())
         setPlacement(ornaments.placement()->placement());
 
-    if (ornaments.trillMark().isPresent()) {
+    if (ornaments.trillMark()) {
         setSize(kTrillMarkSize);
-    } else if (ornaments.turn().isPresent()) {
+    } else if (ornaments.turn()) {
         setSize(kTurnSize);
-    } else if (ornaments.invertedTurn().isPresent()) {
+    } else if (ornaments.invertedTurn()) {
         setSize(kInvertedTurnSize);
-    } else if (ornaments.mordent().isPresent()) {
+    } else if (ornaments.mordent()) {
         setSize(kMordentSize);
-    } else if (ornaments.invertedMordent().isPresent()) {
+    } else if (ornaments.invertedMordent()) {
         setSize(kInvertedMordentSize);
     }
 }

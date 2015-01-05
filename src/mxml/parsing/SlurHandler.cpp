@@ -7,7 +7,8 @@
 
 namespace mxml {
 
-    using lxml::QName;
+using dom::Slur;
+using lxml::QName;
 
 static const char* kNumberAttribute = "number";
 static const char* kTypeAttribute = "type";
@@ -15,21 +16,23 @@ static const char* kPlacementAttribute = "placement";
 static const char* kOrientationAttribute = "orientation";
 
 void SlurHandler::startElement(const QName& qname, const AttributeMap& attributes) {
+    _result.reset(new Slur());
+
     auto number = attributes.find(kNumberAttribute);
     if (number != attributes.end())
-        _result.setNumber(lxml::IntegerHandler::parseInteger(number->second));
+        _result->setNumber(lxml::IntegerHandler::parseInteger(number->second));
     
     auto type = attributes.find(kTypeAttribute);
     if (type != attributes.end())
-        _result.setType(typeFromString(type->second));
+        _result->setType(typeFromString(type->second));
     
     auto placement = attributes.find(kPlacementAttribute);
     if (placement != attributes.end())
-        _result.setPlacement(placementFromString(placement->second));
+        _result->setPlacement(placementFromString(placement->second));
     
     auto orientation = attributes.find(kOrientationAttribute);
     if (orientation != attributes.end())
-        _result.setOrientation(orientationFromString(orientation->second));
+        _result->setOrientation(orientationFromString(orientation->second));
 }
 
 dom::StartStopContinue SlurHandler::typeFromString(const std::string& string) {

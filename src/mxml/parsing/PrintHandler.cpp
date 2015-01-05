@@ -13,13 +13,11 @@ static const char* kStaffSpacingAttribute = "staff-spacing";
 static const char* kStaffLayoutAttribute = "staff-layout";
 
 void PrintHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    using dom::presentOptional;
-
-    _result.reset(new Print);
+    _result.reset(new Print());
     
     auto staffSpacing = attributes.find(kStaffSpacingAttribute);
     if (staffSpacing != attributes.end())
-        _result->setStaffSpacing(presentOptional((float)lxml::DoubleHandler::parseDouble(staffSpacing->second)));
+        _result->setStaffSpacing(dom::presentOptional((float)lxml::DoubleHandler::parseDouble(staffSpacing->second)));
 }
 
 lxml::RecursiveHandler* PrintHandler::startSubElement(const QName& qname) {
@@ -31,7 +29,7 @@ lxml::RecursiveHandler* PrintHandler::startSubElement(const QName& qname) {
 
 void PrintHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kStaffLayoutAttribute) == 0)
-        _result->setStaffLayout(presentOptional(_staffLayoutHandler.result()));
+        _result->setStaffLayout(_staffLayoutHandler.result());
 }
 
 } // namespace mxml

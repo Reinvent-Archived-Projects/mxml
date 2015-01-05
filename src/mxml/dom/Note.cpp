@@ -12,13 +12,13 @@ namespace dom {
 
 unsigned int Note::midiNumber() const {
     unsigned int number = 0;
-    if (!_pitch.isPresent())
+    if (!pitch())
         return number;
 
-    const Pitch& pitch = _pitch;
-    number = (1 + pitch.octave()) * 12;
+    const auto& pitch = _pitch;
+    number = (1 + pitch->octave()) * 12;
 
-    switch (pitch.step()) {
+    switch (pitch->step()) {
         case Pitch::STEP_C:
             break;
 
@@ -47,7 +47,7 @@ unsigned int Note::midiNumber() const {
             break;
     }
 
-    return number + pitch.alter();
+    return number + pitch->alter();
 }
 
 } // namespace dom

@@ -20,39 +20,39 @@ static const char* kFontSizeAttribute = "font-size";
 void CreditWordsHandler::startElement(const QName& qname, const AttributeMap& attributes) {
     using lxml::DoubleHandler;
     
-    _result = CreditWords();
+    _result.reset(new CreditWords());
     
     auto defaultX = attributes.find(kDefaultXAttribute);
     if (defaultX != attributes.end())
-        _result.setDefaultX(DoubleHandler::parseDouble(defaultX->second));
+        _result->setDefaultX(DoubleHandler::parseDouble(defaultX->second));
     
     auto defaultY = attributes.find(kDefaultYAttribute);
     if (defaultY != attributes.end())
-        _result.setDefaultY(DoubleHandler::parseDouble(defaultY->second));
+        _result->setDefaultY(DoubleHandler::parseDouble(defaultY->second));
     
     auto justify = attributes.find(kJustifyAttribute);
     if (justify != attributes.end())
-        _result.setJustify(justifyFromString(justify->second));
+        _result->setJustify(justifyFromString(justify->second));
     
     auto fontFamily = attributes.find(kFontFamiltyAttribute);
     if (fontFamily != attributes.end())
-        _result.setFontFamily(fontFamily->second);
+        _result->setFontFamily(fontFamily->second);
     
     auto fontStyle = attributes.find(kFontStyleAttribute);
     if (fontStyle != attributes.end())
-        _result.setFontStyle(fontStyleFromString(fontStyle->second));
+        _result->setFontStyle(fontStyleFromString(fontStyle->second));
     
     auto fontWeight = attributes.find(kFontWeightAttribute);
     if (fontWeight != attributes.end())
-        _result.setFontWeight(fontWeightFromString(fontWeight->second));
+        _result->setFontWeight(fontWeightFromString(fontWeight->second));
     
     auto fontSize = attributes.find(kFontSizeAttribute);
     if (fontSize != attributes.end())
-        _result.setFontSize(DoubleHandler::parseDouble(fontSize->second));
+        _result->setFontSize(DoubleHandler::parseDouble(fontSize->second));
 }
 
 void CreditWordsHandler::endElement(const QName& qname, const std::string& contents) {
-    _result.setContents(contents);
+    _result->setContents(contents);
 }
 
 CreditWords::Justify CreditWordsHandler::justifyFromString(const std::string& string) {

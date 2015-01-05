@@ -17,6 +17,11 @@ public:
     void setParent(const Node* parent) {
         _parent = parent;
     }
+    
+protected:
+    // Nodes are only copyable within the dom
+    Node(const Node& rhs) = default;
+    Node& operator=(const Node& rhs) = default;
 
     const Node* root() const {
         const Node* root = this;

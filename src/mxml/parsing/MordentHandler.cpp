@@ -6,19 +6,21 @@
 
 namespace mxml {
 
+using dom::Mordent;
+
 static const char* kPlacementAttribute = "placement";
 static const char* kLongAttribute = "long";
 
 void MordentHandler::startElement(const lxml::QName& qname, const AttributeMap& attributes) {
-    _result = dom::Mordent();
+    _result.reset(new Mordent());
 
     auto placement = attributes.find(kPlacementAttribute);
     if (placement != attributes.end())
-        _result.setPlacement(presentOptional(EmptyPlacementHandler::placementFromString(placement->second)));
+        _result->setPlacement(presentOptional(EmptyPlacementHandler::placementFromString(placement->second)));
 
     auto longv = attributes.find(kLongAttribute);
     if (longv != attributes.end())
-        _result.setLong(longv->second == "yes");
+        _result->setLong(longv->second == "yes");
 }
 
 

@@ -84,29 +84,16 @@ const EventSequence& EventFactory::build() {
     return _eventSequence;
 }
 
-int EventFactory::currentDivisions() const {
-    auto attributes = _eventSequence.attributes(_measureStartTime);
-    if (attributes)
-        return attributes->divisions();
-    return 1;
-}
-
-dom::Time EventFactory::currentTime() const {
-    auto attributes = _eventSequence.attributes(_measureStartTime);
-    if (attributes)
-        return attributes->time();
-    return dom::Time{};
-}
-
 void EventFactory::processMeasure(const dom::Measure& measure) {
     for (auto& node : measure.nodes()) {
         if (node == measure.nodes().back() && !dynamic_cast<const TimedNode*>(node.get()) && _eventSequence.attributes(_time))
-            _time = _measureStartTime + currentDivisions() * currentTime().beats();;
+            _time = _measureStartTime + _attributesManager.divisions() * _attributesManager.time()->beats();
 
         if (const Barline* barline = dynamic_cast<const Barline*>(node.get())) {
             if (_firstPass)
                 processBarline(*barline);
         } else if (const Attributes* attributes = dynamic_cast<const Attributes*>(node.get())) {
+            _attributesManager.addAttributes(*attributes);
             processAttributes(*attributes);
         } else if (const Direction* direction = dynamic_cast<const Direction*>(node.get())) {
             processDirection(*direction);
@@ -114,15 +101,15 @@ void EventFactory::processMeasure(const dom::Measure& measure) {
             processTimedNode(*timedNode);
         }
     }
-
-    _measureStartTime += Attributes::divisionsPerMeasure(currentDivisions(), currentTime());
+    
+    _measureStartTime += Attributes::divisionsPerMeasure(_attributesManager.divisions(), *_attributesManager.time());
     _time = _measureStartTime;
 }
 
 void EventFactory::processBarline(const dom::Barline& barline) {
-    if (barline.repeat().isPresent()) {
-        const Repeat& repeat = barline.repeat();
-        if (repeat.direction() == Repeat::DIRECTION_FORWARD) {
+    if (barline.repeat()) {
+        const auto& repeat = barline.repeat();
+        if (repeat->direction() == Repeat::DIRECTION_FORWARD) {
             _loopBegin = _time;
         } else {
             EventSequence::Loop loop;
@@ -134,20 +121,20 @@ void EventFactory::processBarline(const dom::Barline& barline) {
         }
     }
     
-    if (barline.ending().isPresent()) {
-        const Ending& ending = barline.ending();
-        if (ending.type() == Ending::START) {
+    if (barline.ending()) {
+        const auto& ending = barline.ending();
+        if (ending->type() == Ending::START) {
             _endingBegin = _time;
         } else {
             EventSequence::Ending ee;
             ee.begin = _endingBegin;
             ee.end = _time;
-            ee.numbers = ending.numbers();
+            ee.numbers = ending->numbers();
             _eventSequence.addEnding(ee);
         }
         
-        if (ending.type() == Ending::DISCONTINUE && !_eventSequence.loops().empty())
-            _eventSequence.loops().back().count = *ending.numbers().rbegin() - 1;
+        if (ending->type() == Ending::DISCONTINUE && !_eventSequence.loops().empty())
+            _eventSequence.loops().back().count = *ending->numbers().rbegin() - 1;
     }
 }
 
@@ -160,22 +147,22 @@ void EventFactory::processAttributes(const dom::Attributes& attributes) {
 }
 
 void EventFactory::processDirection(const dom::Direction& direction) {
-    if (!direction.sound().isPresent())
+    if (!direction.sound())
         return;
-    const Sound& sound = direction.sound();
+    const auto& sound = direction.sound();
     
-    if (sound.tempo().isPresent()) {
+    if (sound->tempo()) {
         EventSequence::Value value;
         value.begin = _time;
-        value.value = sound.tempo().value();
+        value.value = sound->tempo();
         _eventSequence.addTempo(value);
     }
     
-    if (sound.dynamics().isPresent()) {
+    if (sound->dynamics()) {
         EventSequence::Value value;
         value.begin = _time;
         value.part = _part;
-        value.value = sound.dynamics().value();
+        value.value = sound->dynamics().value();
         _eventSequence.addDynamics(value);
     }
 }

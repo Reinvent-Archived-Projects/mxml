@@ -8,7 +8,7 @@
 
 namespace mxml {
 
-class RepeatHandler : public lxml::BaseRecursiveHandler<dom::Repeat> {
+class RepeatHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Repeat>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     

@@ -18,11 +18,11 @@ static const char* kTiedTag = "tied";
 NotationsHandler::NotationsHandler() : _articulationHandler(), _articulationsHandler(_articulationHandler) {}
 
 void NotationsHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    _result = Notations();
+    _result.reset(new Notations());
 
     auto print = attributes.find(kPrintObjectAttribute);
     if (print != attributes.end())
-        _result.setPrintObject(print->second == "no" ? false : true);
+        _result->setPrintObject(print->second == "no" ? false : true);
 }
 
 lxml::RecursiveHandler* NotationsHandler::startSubElement(const QName& qname) {
@@ -41,15 +41,15 @@ lxml::RecursiveHandler* NotationsHandler::startSubElement(const QName& qname) {
 
 void NotationsHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kArticulationsTag) == 0)
-        _result.setArticulations(_articulationsHandler.result());
+        _result->setArticulations(_articulationsHandler.result());
     else if (strcmp(qname.localName(), kFermataTag) == 0)
-        _result.setFermata(dom::presentOptional(_fermataHandler.result()));
+        _result->setFermata(_fermataHandler.result());
     else if (strcmp(qname.localName(), kOrnamentsTag) == 0)
-        _result.addOrnaments(_ornamentsHandler.result());
+        _result->addOrnaments(_ornamentsHandler.result());
     else if (strcmp(qname.localName(), kSlurTag) == 0)
-        _result.addSlur(_slurHandler.result());
+        _result->addSlur(_slurHandler.result());
     else if (strcmp(qname.localName(), kTiedTag) == 0)
-        _result.addTied(_tiedHandler.result());
+        _result->addTied(_tiedHandler.result());
 }
 
 } // namespace mxml

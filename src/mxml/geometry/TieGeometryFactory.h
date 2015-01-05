@@ -41,7 +41,7 @@ private:
     const PartGeometry& _partGeometry;
 
     vector<unique_ptr<TieGeometry>> _tieGeometries;
-    map<std::pair<int, dom::Pitch>, const NoteGeometry*> _tieStartGeometries;
+    map<std::pair<int, const dom::Pitch*>, const NoteGeometry*> _tieStartGeometries;
     map<std::pair<int, int>, const NoteGeometry*> _slurStartGeometries;
 };
 

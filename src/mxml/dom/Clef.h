@@ -5,6 +5,8 @@
 #include "Node.h"
 #include "Optional.h"
 
+#include <memory>
+
 namespace mxml {
 namespace dom {
 
@@ -20,23 +22,23 @@ public:
         SIGN_JIANPU,
     };
     
-    static Clef trebleClef(int number = 1) {
-        Clef clef(number);
-        clef.setSign(presentOptional(Clef::SIGN_G));
-        clef.setLine(presentOptional(2));
+    static std::unique_ptr<Clef> trebleClef(int number = 1) {
+        std::unique_ptr<Clef> clef(new Clef(number));
+        clef->setSign(presentOptional(Clef::SIGN_G));
+        clef->setLine(presentOptional(2));
         return clef;
     }
     
-    static Clef bassClef(int number = 1) {
-        Clef clef(number);
-        clef.setSign(presentOptional(Clef::SIGN_F));
-        clef.setLine(presentOptional(4));
+    static std::unique_ptr<Clef> bassClef(int number = 1) {
+        std::unique_ptr<Clef> clef(new Clef(number));
+        clef->setSign(presentOptional(Clef::SIGN_F));
+        clef->setLine(presentOptional(4));
         return clef;
     }
     
 public:
-    Clef() : _number(1), _sign(SIGN_NONE), _line() {}
-    Clef(int number) : _number(number), _sign(SIGN_NONE), _line() {}
+    Clef() : _number(1), _sign(SIGN_G), _line() {}
+    Clef(int number) : _number(number), _sign(SIGN_G), _line() {}
     
     int number() const {
         return _number;

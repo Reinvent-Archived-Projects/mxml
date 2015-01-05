@@ -5,7 +5,6 @@
 #include "Articulation.h"
 #include "Fermata.h"
 #include "Node.h"
-#include "Optional.h"
 #include "Ornaments.h"
 #include "Slur.h"
 #include "Tied.h"
@@ -25,52 +24,53 @@ public:
     void setPrintObject(bool printObject) {
         _printObject = printObject;
     }
+   
+    void addArticulation(std::unique_ptr<Articulation> articulation) {
+        _articulations.push_back(std::move(articulation));
+    }
     
-    const std::vector<Articulation>& articulations() const {
+    const std::vector<std::unique_ptr<Articulation>>& articulations() const {
         return _articulations;
     }
-    void setArticulations(const std::vector<Articulation>& articulations) {
-        _articulations = articulations;
-    }
-    void addArticulation(const Articulation& articulation) {
-        _articulations.push_back(articulation);
+    void setArticulations(std::vector<std::unique_ptr<Articulation>> articulations) {
+        _articulations = std::move(articulations);
     }
     
-    const Optional<Fermata>& fermata() const {
+    const std::unique_ptr<Fermata>& fermata() const {
         return _fermata;
     }
-    void setFermata(const Optional<Fermata>& fermata) {
-        _fermata = fermata;
+    void setFermata(std::unique_ptr<Fermata> fermata) {
+        _fermata = std::move(fermata);
     }
     
-    const std::vector<Slur>& slurs() const {
+    const std::vector<std::unique_ptr<Slur>>& slurs() const {
         return _slurs;
     }
-    void addSlur(const Slur& slur) {
-        _slurs.push_back(slur);
+    void addSlur(std::unique_ptr<Slur> slur) {
+        _slurs.push_back(std::move(slur));
     }
     
-    const std::vector<Tied>& ties() const {
+    const std::vector<std::unique_ptr<Tied>>& ties() const {
         return _ties;
     }
-    void addTied(const Tied& tied) {
-        _ties.push_back(tied);
+    void addTied(std::unique_ptr<Tied> tied) {
+        _ties.push_back(std::move(tied));
     }
 
-    const std::vector<Ornaments>& ornaments() const {
+    const std::vector<std::unique_ptr<Ornaments>>& ornaments() const {
         return _ornaments;
     }
-    void addOrnaments(const Ornaments& ornaments) {
-        _ornaments.push_back(ornaments);
+    void addOrnaments(std::unique_ptr<Ornaments> ornaments) {
+        _ornaments.push_back(std::move(ornaments));
     }
     
 private:
     bool _printObject;
-    Optional<Fermata> _fermata;
-    std::vector<Articulation> _articulations;
-    std::vector<Slur> _slurs;
-    std::vector<Tied> _ties;
-    std::vector<Ornaments> _ornaments;
+    std::unique_ptr<Fermata> _fermata;
+    std::vector<std::unique_ptr<Articulation>> _articulations;
+    std::vector<std::unique_ptr<Slur>> _slurs;
+    std::vector<std::unique_ptr<Tied>> _ties;
+    std::vector<std::unique_ptr<Ornaments>> _ornaments;
 };
 
 } // namespace dom

@@ -14,7 +14,7 @@ static const char* kDisplayStepTag = "display-step";
 static const char* kDisplayOctaveTag = "display-octave";
 
 void RestHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    _result = Rest();
+    _result.reset(new Rest());
 }
 
 lxml::RecursiveHandler* RestHandler::startSubElement(const QName& qname) {
@@ -29,9 +29,9 @@ void RestHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     using dom::presentOptional;
 
     if (strcmp(qname.localName(), kDisplayStepTag) == 0)
-        _result.setDisplayStep(presentOptional(PitchHandler::stepFromString(_stringHandler.result())));
+        _result->setDisplayStep(presentOptional(PitchHandler::stepFromString(_stringHandler.result())));
     else if (strcmp(qname.localName(), kDisplayOctaveTag) == 0)
-        _result.setDisplayOctave(presentOptional(_integerHandler.result()));
+        _result->setDisplayOctave(presentOptional(_integerHandler.result()));
 }
 
 } // namespace mxml

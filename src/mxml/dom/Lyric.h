@@ -3,7 +3,6 @@
 
 #pragma once
 #include "Node.h"
-#include "Optional.h"
 #include "Syllabic.h"
 #include "Types.h"
 
@@ -44,18 +43,18 @@ public:
         _printObject = print;
     }
 
-    const Optional<StartStopContinue>& extend() const {
+    const std::unique_ptr<StartStopContinue>& extend() const {
         return _extend;
     }
-    void setExtend(const Optional<StartStopContinue>& extend) {
-        _extend = extend;
+    void setExtend(std::unique_ptr<StartStopContinue>&& extend) {
+        _extend = std::move(extend);
     }
 
-    const Optional<Syllabic>& syllabic() const {
+    const std::unique_ptr<Syllabic>& syllabic() const {
         return _syllabic;
     }
-    void setSyllabic(const Optional<Syllabic>& syllabic) {
-        _syllabic = syllabic;
+    void setSyllabic(std::unique_ptr<Syllabic>&& syllabic) {
+        _syllabic = std::move(syllabic);
     }
 
     const std::string& text() const {
@@ -71,8 +70,8 @@ private:
     Placement _placement;
     bool _printObject;
 
-    Optional<StartStopContinue> _extend;
-    Optional<Syllabic> _syllabic;
+    std::unique_ptr<StartStopContinue> _extend;
+    std::unique_ptr<Syllabic> _syllabic;
     std::string _text;
 };
 

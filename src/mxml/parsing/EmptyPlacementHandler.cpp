@@ -13,11 +13,11 @@ using lxml::QName;
 static const char* kPlacementAttribute = "placement";
 
 void EmptyPlacementHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    _result = EmptyPlacement();
+    _result.reset(new EmptyPlacement());
     
     auto placement = attributes.find(kPlacementAttribute);
     if (placement != attributes.end())
-        _result.setPlacement(presentOptional(placementFromString(placement->second)));
+        _result->setPlacement(presentOptional(placementFromString(placement->second)));
 }
 
 Placement EmptyPlacementHandler::placementFromString(const std::string& string) {

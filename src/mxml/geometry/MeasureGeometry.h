@@ -4,6 +4,7 @@
 #pragma once
 #include "Geometry.h"
 
+#include <mxml/AttributesManager.h>
 #include <mxml/dom/Attributes.h>
 #include <mxml/dom/Measure.h>
 #include <mxml/dom/Barline.h>
@@ -25,7 +26,10 @@ public:
     static const coord_t kVerticalPadding;
 
 public:
-    MeasureGeometry(const dom::Measure& measure, const PartGeometry& partGeometry, const SpanCollection& spans);
+    MeasureGeometry(const dom::Measure& measure,
+                    const PartGeometry& partGeometry,
+                    const SpanCollection& spans,
+                    AttributesManager& attributesManager);
     
     const dom::Measure& measure() const {
         return _measure;
@@ -41,24 +45,12 @@ public:
     bool naturalSpacing() const {
         return _spans.naturalSpacing();
     }
-
+    
     /**
-     Return the vertical (y) position of the note relative to its staff. Positions
-     start at the top line of the staff and increase by 10 for every staff
-     line going down.
      */
-    static coord_t staffY(const dom::Attributes& attributes, const dom::Note& note);
+    void build();
     
 private:
-    /** Return the y position of a pitch within the staff for a given clef.
-     */
-    static coord_t staffY(const dom::Clef& clef, const dom::Pitch& pitch);
-    static coord_t staffY(const dom::Clef& clef, const dom::Rest& rest);
-    static coord_t staffYInGClef(dom::Pitch::Step step, int octave);
-    static coord_t staffYInCClef(dom::Pitch::Step step, int octave);
-    static coord_t staffYInFClef(dom::Pitch::Step step, int octave);
-    
-    void build();
     void buildAttributes(const dom::Attributes* attributes);
     void buildBarline(const dom::Barline* barline);
     void buildTimedNode(const dom::TimedNode* barline);
@@ -71,10 +63,11 @@ private:
     const dom::Measure& _measure;
     const PartGeometry& _partGeometry;
     const SpanCollection& _spans;
+    AttributesManager& _attributesManager;
+    
     std::size_t _measureIndex;
     
     int _currentTime;
-    dom::Attributes _currentAttributes;
 };
 
 } // namespace mxml

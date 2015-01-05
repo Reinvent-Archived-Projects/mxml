@@ -12,13 +12,15 @@ using lxml::QName;
 static const char* kNumberAttribute = "number";
 
 void BeamHandler::startElement(const QName& qname, const AttributeMap& attributes) {
+    _result.reset(new Beam());
+    
     auto number = attributes.find(kNumberAttribute);
     if (number != attributes.end())
-        _result.setNumber(lxml::IntegerHandler::parseInteger(number->second));
+        _result->setNumber(lxml::IntegerHandler::parseInteger(number->second));
 }
 
 void BeamHandler::endElement(const QName& qname, const std::string& contents) {
-    _result.setType(typeFromString(contents));
+    _result->setType(typeFromString(contents));
 }
 
 Beam::Type BeamHandler::typeFromString(const std::string& string) {

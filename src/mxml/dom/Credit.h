@@ -21,16 +21,16 @@ public:
         _page = page;
     }
     
-    const std::vector<CreditWords>& creditWords() const {
+    const std::vector<std::unique_ptr<CreditWords>>& creditWords() const {
         return _creditWords;
     }
-    void addCreditWords(const CreditWords& words) {
-        _creditWords.push_back(words);
+    void addCreditWords(std::unique_ptr<CreditWords>&& words) {
+        _creditWords.push_back(std::move(words));
     }
     
 private:
     int _page;
-    std::vector<CreditWords> _creditWords;
+    std::vector<std::unique_ptr<CreditWords>> _creditWords;
 };
 
 } // namespace dom

@@ -50,11 +50,11 @@ public:
         _offset = offset;
     }
     
-    const Optional<Sound>& sound() const {
+    const std::unique_ptr<Sound>& sound() const {
         return _sound;
     }
-    void setSound(const Optional<Sound>& sound) {
-        _sound = sound;
+    void setSound(std::unique_ptr<Sound> sound) {
+        _sound = std::move(sound);
     }
     
 private:
@@ -63,7 +63,7 @@ private:
     int _staff;
     time_t _start;
     Optional<float> _offset;
-    Optional<Sound> _sound;
+    std::unique_ptr<Sound> _sound;
 };
 
 } // namespace dom

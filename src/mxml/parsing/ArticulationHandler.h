@@ -10,7 +10,7 @@
 
 namespace mxml {
 
-class ArticulationHandler : public lxml::BaseRecursiveHandler<dom::Articulation> {
+class ArticulationHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Articulation>> {
 public:
     static const std::string kTagNames[];
     

@@ -4,6 +4,7 @@
 #pragma once
 #include "SpanCollection.h"
 
+#include <mxml/AttributesManager.h>
 #include <mxml/dom/Barline.h>
 #include <mxml/dom/Chord.h>
 #include <mxml/dom/Direction.h>
@@ -22,8 +23,8 @@ public:
     
 private:
     void build(const dom::Part* part);
-    void build(const dom::Measure* measure);
-    void build(const dom::Attributes* attributes);
+    void build(const dom::Measure* measure, AttributesManager* attributesManager);
+    void build(const dom::Attributes* attributes, AttributesManager* attributesManager);
     void build(const dom::Barline* barline);
     void build(const dom::Direction* direction);
     void build(const dom::TimedNode* node);

@@ -19,15 +19,15 @@ static const char* kBeatTypeTag = "beat-type";
 void TimeHandler::startElement(const QName& qname, const AttributeMap& attributes) {
     using dom::presentOptional;
 
-    _result = Time();
+    _result.reset(new Time());
     
     auto number = attributes.find(kNumberAttribute);
     if (number != attributes.end())
-        _result.setNumber(presentOptional(lxml::IntegerHandler::parseInteger(number->second)));
+        _result->setNumber(presentOptional(lxml::IntegerHandler::parseInteger(number->second)));
     
     auto symbol = attributes.find(kSymbolAttribute);
     if (symbol != attributes.end())
-        _result.setSymbol(symbolFromString(symbol->second));
+        _result->setSymbol(symbolFromString(symbol->second));
 }
 
 lxml::RecursiveHandler* TimeHandler::startSubElement(const QName& qname) {
@@ -44,11 +44,11 @@ void TimeHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     using dom::presentOptional;
 
     if (strcmp(qname.localName(), kBeatsTag) == 0)
-        _result.setBeats(_integerHandler.result());
+        _result->setBeats(_integerHandler.result());
     else if (strcmp(qname.localName(), kBeatTypeTag) == 0)
-        _result.setBeatType(_integerHandler.result());
+        _result->setBeatType(_integerHandler.result());
     else if (strcmp(qname.localName(), kSenzaMisuraTag) == 0)
-        _result.setSenzaMisura(presentOptional(_stringHandler.result()));
+        _result->setSenzaMisura(presentOptional(_stringHandler.result()));
 }
 
 Time::Symbol TimeHandler::symbolFromString(const std::string& string) {

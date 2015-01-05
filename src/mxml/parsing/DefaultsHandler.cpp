@@ -12,7 +12,7 @@ static const char* kScalingTag = "scaling";
 static const char* kStaffLayoutTag = "staff-layout";
 
 void DefaultsHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    _result = Defaults();
+    _result.reset(new Defaults());
 }
 
 lxml::RecursiveHandler* DefaultsHandler::startSubElement(const QName& qname) {
@@ -25,9 +25,9 @@ lxml::RecursiveHandler* DefaultsHandler::startSubElement(const QName& qname) {
 
 void DefaultsHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kScalingTag) == 0)
-        _result.setScaling(presentOptional(_scalingHandler.result()));
+        _result->setScaling(_scalingHandler.result());
     else if (strcmp(qname.localName(), kStaffLayoutTag) == 0)
-        _result.setStaffLayout(presentOptional(_staffLayoutHandler.result()));
+        _result->setStaffLayout(_staffLayoutHandler.result());
 }
 
 } // namespace mxml

@@ -7,7 +7,7 @@
 
 namespace mxml {
 
-class MordentHandler : public lxml::BaseRecursiveHandler<dom::Mordent> {
+class MordentHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Mordent>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
 };

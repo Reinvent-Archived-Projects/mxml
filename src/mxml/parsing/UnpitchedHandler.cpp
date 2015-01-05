@@ -7,10 +7,15 @@
 
 namespace mxml {
 
+using dom::Unpitched;
 using lxml::QName;
 
 static const char* kDisplayStepTag = "display-step";
 static const char* kDisplayOctaveTag = "display-octave";
+
+void UnpitchedHandler::startElement(const lxml::QName& qname, const AttributeMap& attributes) {
+    _result.reset(new Unpitched());
+}
 
 lxml::RecursiveHandler* UnpitchedHandler::startSubElement(const QName& qname) {
     if (strcmp(qname.localName(), kDisplayStepTag) == 0)
@@ -22,9 +27,9 @@ lxml::RecursiveHandler* UnpitchedHandler::startSubElement(const QName& qname) {
 
 void UnpitchedHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kDisplayStepTag) == 0)
-        _result.setDisplayStep(PitchHandler::stepFromString(_stringHandler.result()));
+        _result->setDisplayStep(PitchHandler::stepFromString(_stringHandler.result()));
     else if (strcmp(qname.localName(), kDisplayOctaveTag) == 0)
-        _result.setDisplayOctave(_integerHandler.result());
+        _result->setDisplayOctave(_integerHandler.result());
 }
 
 } // namespace mxml

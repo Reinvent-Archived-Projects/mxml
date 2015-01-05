@@ -22,6 +22,7 @@ public:
     
 public:
     Fermata() : _type(TYPE_UPRIGHT), _shape(SHAPE_NORMAL) {}
+    Fermata(const Fermata& rhs) : _type(rhs.type()), _shape(rhs.shape()) {}
     
     Type type() const {
         return _type;

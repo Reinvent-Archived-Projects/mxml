@@ -8,13 +8,13 @@
 using namespace mxml::dom;
 
 Note createNote(int octave, Pitch::Step step, float alter) {
-    Pitch pitch;
-    pitch.setOctave(octave);
-    pitch.setStep(step);
-    pitch.setAlter(alter);
+    std::unique_ptr<Pitch> pitch(new Pitch());
+    pitch->setOctave(octave);
+    pitch->setStep(step);
+    pitch->setAlter(alter);
 
     Note note;
-    note.setPitch(presentOptional(pitch));
+    note.setPitch(std::move(pitch));
 
     return note;
 }

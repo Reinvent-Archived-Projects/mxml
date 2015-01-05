@@ -14,7 +14,7 @@
 
 namespace mxml {
 
-class NotationsHandler : public lxml::BaseRecursiveHandler<dom::Notations> {
+class NotationsHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Notations>> {
 public:
     NotationsHandler();
     
@@ -24,7 +24,7 @@ public:
     
 private:
     ArticulationHandler _articulationHandler;
-    lxml::ListHandler<dom::Articulation> _articulationsHandler;
+    lxml::ListHandler<std::unique_ptr<dom::Articulation>> _articulationsHandler;
     FermataHandler _fermataHandler;
     OrnamentsHandler _ornamentsHandler;
     SlurHandler _slurHandler;

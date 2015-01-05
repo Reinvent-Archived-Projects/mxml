@@ -15,9 +15,11 @@ static const char* kSignTag = "sign";
 static const char* kLineTag = "line";
 
 void ClefHandler::startElement(const QName& qname, const AttributeMap& attributes) {
+    _result.reset(new Clef());
+    
     auto it = attributes.find(kNumberAttribute);
     if (it != attributes.end())
-        _result.setNumber(lxml::IntegerHandler::parseInteger(it->second));
+        _result->setNumber(lxml::IntegerHandler::parseInteger(it->second));
 }
 
 lxml::RecursiveHandler* ClefHandler::startSubElement(const QName& qname) {
@@ -30,9 +32,9 @@ lxml::RecursiveHandler* ClefHandler::startSubElement(const QName& qname) {
 
 void ClefHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kSignTag) == 0)
-        _result.setSign(signFromString(_stringHandler.result()));
+        _result->setSign(signFromString(_stringHandler.result()));
     else if (strcmp(qname.localName(), kLineTag) == 0)
-        _result.setLine(_integerHandler.result());
+        _result->setLine(_integerHandler.result());
 }
 
 Clef::Sign ClefHandler::signFromString(const std::string& string) {

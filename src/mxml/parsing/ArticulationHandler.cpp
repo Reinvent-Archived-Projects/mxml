@@ -30,12 +30,12 @@ const std::string ArticulationHandler::kTagNames[] = {
 };
 
 void ArticulationHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    _result = Articulation();
-    _result.setType(typeFromString(qname.localName()));
+    _result.reset(new Articulation());
+    _result->setType(typeFromString(qname.localName()));
     
     auto placement = attributes.find(kPlacementAttribute);
     if (placement != attributes.end())
-        _result.setPlacement(presentOptional(EmptyPlacementHandler::placementFromString(placement->second)));
+        _result->setPlacement(presentOptional(EmptyPlacementHandler::placementFromString(placement->second)));
 }
 
 Articulation::Type ArticulationHandler::typeFromString(const std::string& string) {

@@ -9,7 +9,7 @@
 
 namespace mxml {
 
-class ScalingHandler : public lxml::BaseRecursiveHandler<dom::Scaling> {
+class ScalingHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Scaling>> {
 public:
     RecursiveHandler* startSubElement(const lxml::QName& qname);
     void endSubElement(const lxml::QName& qname, lxml::RecursiveHandler* parser);

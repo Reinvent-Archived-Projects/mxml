@@ -7,7 +7,7 @@
 
 namespace mxml {
 
-class FermataHandler : public lxml::BaseRecursiveHandler<dom::Fermata> {
+class FermataHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Fermata>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     void endElement(const lxml::QName& qname, const std::string& contents);

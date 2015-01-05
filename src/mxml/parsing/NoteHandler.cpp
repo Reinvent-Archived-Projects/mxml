@@ -120,19 +120,21 @@ void NoteHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     else if (strcmp(qname.localName(), kStaffTag) == 0)
         _result->setStaff(_integerHandler.result());
     else if (strcmp(qname.localName(), kPitchTag) == 0)
-        _result->setPitch(presentOptional(_pitchHandler.result()));
+        _result->setPitch(_pitchHandler.result());
     else if (strcmp(qname.localName(), kRestTag) == 0)
-        _result->setRest(presentOptional(_restHandler.result()));
+        _result->setRest(_restHandler.result());
     else if (strcmp(qname.localName(), kUnpitchedTag) == 0)
-        _result->setUnpitched(presentOptional(_unpitchedHandler.result()));
-    else if (strcmp(qname.localName(), kAccidentalTag) == 0)
-        _result->setAccidental(presentOptional(dom::Accidental(accidentalTypeFromString(_stringHandler.result()))));
+        _result->setUnpitched(_unpitchedHandler.result());
+    else if (strcmp(qname.localName(), kAccidentalTag) == 0) {
+        std::unique_ptr<dom::Accidental> accidental(new dom::Accidental(accidentalTypeFromString(_stringHandler.result())));
+        _result->setAccidental(std::move(accidental));
+    }
     else if (strcmp(qname.localName(), kDotTag) == 0)
-        _result->setDot(presentOptional(_emptyPlacementHandler.result()));
+        _result->setDot(_emptyPlacementHandler.result());
     else if (strcmp(qname.localName(), kTieTag) == 0)
-        _result->setTie(presentOptional(_tieHandler.result()));
+        _result->setTie(_tieHandler.result());
     else if (strcmp(qname.localName(), kNotationsTag) == 0) {
-        _result->setNotations(std::move(presentOptional(std::move(_notationsHandler.result()))));
+        _result->setNotations(_notationsHandler.result());
     } else if (strcmp(qname.localName(), kBeamTag) == 0)
         _result->addBeam(_beamHandler.result());
     else if (strcmp(qname.localName(), kLyricTag) == 0)

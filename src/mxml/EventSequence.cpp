@@ -117,9 +117,9 @@ const Event* EventSequence::Iterator::operator->() const {
     return &_eventSequence->events().at(_index);
 }
 
-const dom::Attributes* EventSequence::Iterator::attributes() const {
-    return _eventSequence->attributes(_time);
-}
+//const dom::Attributes* EventSequence::Iterator::attributes() const {
+//    return _eventSequence->attributes(_time);
+//}
 
 float EventSequence::Iterator::tempo() const {
     const float* val = _eventSequence->tempo(_time);

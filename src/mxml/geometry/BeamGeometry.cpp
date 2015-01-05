@@ -14,8 +14,8 @@ const coord_t BeamGeometry::kBeamLineWidth = 4;
 const coord_t BeamGeometry::kBeamLineSpacing = 2;
 const coord_t BeamGeometry::kHookLength = 8;
 
-BeamGeometry::BeamGeometry(std::vector<ChordGeometry*> chords, const dom::Attributes& attributes)
-: _chords(chords), _attributes(attributes), _placement()
+BeamGeometry::BeamGeometry(std::vector<ChordGeometry*> chords)
+: _chords(chords), _placement()
 {
     build();
 }

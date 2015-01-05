@@ -11,7 +11,7 @@
 
 namespace mxml {
 
-class OrnamentsHandler : public lxml::BaseRecursiveHandler<dom::Ornaments> {
+class OrnamentsHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Ornaments>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     RecursiveHandler* startSubElement(const lxml::QName& qname);

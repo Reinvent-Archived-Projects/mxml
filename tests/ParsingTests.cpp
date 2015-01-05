@@ -81,12 +81,12 @@ BOOST_AUTO_TEST_CASE(parseMusicXML) {
     BOOST_CHECK_EQUAL(chord.notes().size(), 1);
     
     const dom::Note& note = *chord.notes()[0];
-    BOOST_CHECK(note.pitch().isPresent());
-    BOOST_CHECK_EQUAL(note.pitch().value().step(), dom::Pitch::STEP_C);
-    BOOST_CHECK_EQUAL(note.pitch().value().octave(), 6);
-    BOOST_CHECK_EQUAL(note.duration().value(), 36);
+    BOOST_CHECK(note.pitch());
+    BOOST_CHECK_EQUAL(note.pitch()->step(), dom::Pitch::STEP_C);
+    BOOST_CHECK_EQUAL(note.pitch()->octave(), 6);
+    BOOST_CHECK_EQUAL(note.duration(), 36);
     BOOST_CHECK_EQUAL(note.type(), dom::Note::TYPE_QUARTER);
     BOOST_CHECK_EQUAL(note.stem(), dom::STEM_DOWN);
     BOOST_CHECK_EQUAL(note.staff(), 1);
-    BOOST_CHECK(note.dot().isPresent());
+    BOOST_CHECK(note.dot());
 }

@@ -15,7 +15,7 @@ static const char* kEndingTag = "ending";
 static const char* kRepeatTag = "repeat";
 
 void BarlineHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    _result.reset(new Barline);
+    _result.reset(new Barline());
 }
 
 lxml::RecursiveHandler* BarlineHandler::startSubElement(const QName& qname) {
@@ -36,9 +36,9 @@ void BarlineHandler::endSubElement(const QName& qname, RecursiveHandler* parser)
     else if (strcmp(qname.localName(), kLocationTag) == 0)
         _result->setLocation(locationFromString(_stringHandler.result()));
     else if (strcmp(qname.localName(), kEndingTag) == 0)
-        _result->setEnding(presentOptional(_endingHandler.result()));
+        _result->setEnding(_endingHandler.result());
     else if (strcmp(qname.localName(), kRepeatTag) == 0)
-        _result->setRepeat(presentOptional(_repeatHandler.result()));
+        _result->setRepeat(_repeatHandler.result());
 }
 
 Barline::Style BarlineHandler::styleFromString(const std::string& string) {

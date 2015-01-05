@@ -9,7 +9,7 @@
 
 namespace mxml {
 
-class ClefHandler : public lxml::BaseRecursiveHandler<dom::Clef> {
+class ClefHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Clef>> {
 public:
     RecursiveHandler* startSubElement(const lxml::QName& qname);
     void endSubElement(const lxml::QName& qname, RecursiveHandler* parser);

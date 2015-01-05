@@ -21,6 +21,7 @@
 #include "StemGeometry.h"
 #include "TieGeometry.h"
 #include "TimeSignatureGeometry.h"
+#include <mxml/Metrics.h>
 
 #include <typeinfo>
 
@@ -149,8 +150,9 @@ namespace mxml {
         Rect f2 = _partGeometry.convertFromGeometry(g2->frame(), g2->parentGeometry());
 
         // Only move things that are already outside the staves further away
-        coord_t top = _partGeometry.staffOrigin(1) - _partGeometry.stavesHeight()/2;
-        coord_t bottom = _partGeometry.staffOrigin(_partGeometry.part().staves()) - _partGeometry.stavesHeight()/2;
+        auto& part = _partGeometry.part();
+        coord_t top = Metrics::staffOrigin(part, 1) - Metrics::stavesHeight(part)/2;
+        coord_t bottom = Metrics::staffOrigin(part, part.staves()) - Metrics::stavesHeight(part)/2;
         if (f2.origin.y <= top)
             f2.origin.y = f1.origin.y - f2.size.height - 1;
         else if (f2.max().y >= bottom)

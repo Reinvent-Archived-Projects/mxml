@@ -14,19 +14,19 @@ static const char* kNumberAttribute = "number";
 static const char* kTypeAttribute = "type";
 
 void EndingHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    _result = Ending();
+    _result.reset(new Ending());
     
     auto type = attributes.find(kTypeAttribute);
     if (type != attributes.end())
-        _result.setType(typeFromString(type->second));
+        _result->setType(typeFromString(type->second));
     
     auto number = attributes.find(kNumberAttribute);
     if (number != attributes.end())
-        _result.setNumbers(parseNumberList(number->second));
+        _result->setNumbers(parseNumberList(number->second));
 }
 
 void EndingHandler::endElement(const QName& qname, const std::string& contents) {
-    _result.setContent(contents);
+    _result->setContent(contents);
 }
 
 Ending::Type EndingHandler::typeFromString(const std::string& string) {

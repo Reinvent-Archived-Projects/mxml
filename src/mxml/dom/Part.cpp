@@ -29,9 +29,9 @@ std::size_t Part::indexOfMeasure(const Measure* measure) const {
 float Part::staffDistance() const {
     float defaultStaffDistance = 65;
     
-    const Score* score = dynamic_cast<const Score*>(parent());
-    if (score)
-        defaultStaffDistance = score->defaults().staffLayout().value().staffDistance();
+    const auto score = dynamic_cast<const Score*>(parent());
+    if (score && score->defaults() && score->defaults()->staffLayout())
+        defaultStaffDistance = score->defaults()->staffLayout()->staffDistance();
     
     if (_measures.empty())
         return defaultStaffDistance;
@@ -43,14 +43,14 @@ float Part::staffDistance() const {
         if (print)
             break;
     }
-    if (!print || !print->staffLayout().isPresent())
+    if (!print || !print->staffLayout())
         return defaultStaffDistance;
     
-    const StaffLayout& staffLayout = print->staffLayout();
-    if (!staffLayout.staffDistance().isPresent())
+    const auto& staffLayout = print->staffLayout();
+    if (!staffLayout->staffDistance().isPresent())
         return defaultStaffDistance;
     
-    return staffLayout.staffDistance().value();
+    return staffLayout->staffDistance().value();
 }
 
 int Part::staves() const {

@@ -11,40 +11,14 @@
 #include <cassert>
 #include <vector>
 
+using std::unique_ptr;
+
 namespace mxml {
 namespace dom {
 
 class Attributes : public Node {
 public:
-    Attributes() : _divisions(2), _staves(1), _clefs(1), _keys(1), _time() {}
-    
-    /**
-     Set all values as absent.
-     */
-    void reset() {
-        _divisions.setPresent(false);
-        _staves.setPresent(false);
-        for (int i = 0; i < _staves; i += 1) {
-            _clefs[i].setPresent(false);
-            _keys[i].setPresent(false);
-        }
-        _time.setPresent(false);
-    }
-    
-    /**
-     Copy all values from another instance and set all vaules as absent.
-     */
-    void reset(const Attributes& attrs) {
-        _divisions.setAbsentValue(attrs.divisions());
-        _staves.setAbsentValue(attrs.staves());
-        _clefs.resize(_staves);
-        _keys.resize(_staves);
-        for (int i = 0; i < _staves; i += 1) {
-            _clefs[i].setAbsentValue(attrs.clef(i + 1));
-            _keys[i].setAbsentValue(attrs.key(i + 1));
-        }
-        _time.setAbsentValue(attrs.time());
-    }
+    Attributes() : _divisions(1), _staves(1), _clefs(1), _keys(1), _time(), _start() {}
     
     Optional<int> divisions() const {
         return _divisions;
@@ -66,13 +40,23 @@ public:
     }
     void setStaves(Optional<int> staves) {
         if (_staves.value() > 0 && staves.value() > _staves.value()) {
-            const Optional<Clef>& lastClef = _clefs.back();
-            const Optional<Key>& lastKey = _keys.back();
+            auto& lastClef = _clefs.back();
+            auto& lastKey = _keys.back();
+            
             for (int i = _staves; i < staves; i += 1) {
-                _clefs.push_back(lastClef);
-                _clefs.back().value().setNumber(i);
-                _keys.push_back(lastKey);
-                _keys.back().value().setNumber(i);
+                if (lastClef) {
+                    _clefs.emplace_back(new Clef(*lastClef));
+                    _clefs.back()->setNumber(i);
+                } else {
+                    _clefs.emplace_back();
+                }
+                
+                if (lastKey) {
+                    _keys.emplace_back(new Key(*lastKey));
+                    _keys.back()->setNumber(i);
+                } else {
+                    _keys.emplace_back();
+                }
             }
         } else {
             _clefs.resize(staves);
@@ -82,49 +66,56 @@ public:
         _staves = staves;
     }
     
-    const Optional<Clef>& clef(int number) const {
-        assert(number >= 1 && number <= _clefs.size());
-        return _clefs[number - 1];
+    const Clef* clef(int number) const {
+        if (number > 0 && number <= _clefs.size())
+            return _clefs[number - 1].get();
+        return nullptr;
     }
-    void setClef(int number, const Optional<Clef>& clef) {
+    void setClef(int number, std::unique_ptr<Clef>&& clef) {
         assert(number >= 1 && number <= _clefs.size() + 1);
         if (_clefs.size() >= number)
-            _clefs[number - 1] = clef;
+            _clefs[number - 1] = std::move(clef);
     }
     
-    const Optional<Key>& key(int number) const {
-        assert(number >= 1 && number <= _keys.size());
-        return _keys[number - 1];
+    const Key* key(int number) const {
+        if (number > 0 && number <= _keys.size())
+            return _keys[number - 1].get();
+        return nullptr;
     }
-    void setKey(int number, const Optional<Key>& key) {
+    void setKey(int number, unique_ptr<Key> key) {
         assert(number >= 1 && number <= _keys.size() + 1);
         if (_keys.size() >= number)
-            _keys[number - 1] = key;
+            _keys[number - 1] = std::move(key);
         
         if (number == 1) {
             for (int i = 1; i < _staves; i += 1) {
-                _keys[i] = key;
-                _keys[i].value().setNumber(i);
+                _keys[i] = std::move(key);
+                _keys[i]->setNumber(i);
             }
         }
     }
     
-    const Optional<Time>& time() const {
-        return _time;
+    const Time* time() const {
+        return _time.get();
     }
-    void setTime(const Optional<Time>& time) {
-        _time = time;
+    void setTime(unique_ptr<Time> time) {
+        _time = std::move(time);
     }
-    void setTime(Optional<Time>&& time) {
-        _time = time;
+    
+    void setStart(time_t start) {
+        _start = start;
+    }
+    time_t start() const {
+        return _start;
     }
     
 private:
     Optional<int> _divisions;
     Optional<int> _staves;
-    std::vector<Optional<Clef>> _clefs;
-    std::vector<Optional<Key>> _keys;
-    Optional<Time> _time;
+    std::vector<unique_ptr<Clef>> _clefs;
+    std::vector<unique_ptr<Key>> _keys;
+    unique_ptr<Time> _time;
+    time_t _start;
 };
 
 } // namespace dom

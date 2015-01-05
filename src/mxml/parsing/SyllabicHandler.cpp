@@ -6,8 +6,14 @@
 
 namespace mxml {
 
+using dom::Syllabic;
+
+void SyllabicHandler::startElement(const lxml::QName& qname, const AttributeMap& attributes) {
+    _result.reset(new Syllabic());
+}
+
 void SyllabicHandler::endElement(const lxml::QName& qname, const std::string& contents) {
-    _result.setType(typeFromString(contents));
+    _result->setType(typeFromString(contents));
 }
 
 dom::Syllabic::Type SyllabicHandler::typeFromString(const std::string& string) {

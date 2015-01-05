@@ -87,7 +87,7 @@ public:
     Optional<Type> type() const {
         return _type;
     }
-    void setType(Optional<Type> type) {
+    void setType(const Optional<Type>& type) {
         _type = type;
     }
     
@@ -154,67 +154,67 @@ public:
         _release = release;
     }
 
-    const Optional<Pitch>& pitch() const {
+    const std::unique_ptr<Pitch>& pitch() const {
         return _pitch;
     }
-    void setPitch(const Optional<Pitch>& pitch) {
-        _pitch = pitch;
+    void setPitch(std::unique_ptr<Pitch> pitch) {
+        _pitch = std::move(pitch);
     }
     
-    const Optional<Rest>& rest() const {
+    const std::unique_ptr<Rest>& rest() const {
         return _rest;
     }
-    void setRest(const Optional<Rest>& rest) {
-        _rest = rest;
+    void setRest(std::unique_ptr<Rest> rest) {
+        _rest = std::move(rest);
     }
     
-    const Optional<Unpitched>& unpitched() const {
+    const std::unique_ptr<Unpitched>& unpitched() const {
         return _unpitched;
     }
-    void setUnpitched(const Optional<Unpitched>& unpitched) {
-        _unpitched = unpitched;
+    void setUnpitched(std::unique_ptr<Unpitched> unpitched) {
+        _unpitched = std::move(unpitched);
     }
     
-    const Optional<Accidental>& accidental() const {
+    const std::unique_ptr<Accidental>& accidental() const {
         return _accidental;
     }
-    void setAccidental(const Optional<Accidental>& accidental) {
-        _accidental = accidental;
+    void setAccidental(std::unique_ptr<Accidental> accidental) {
+        _accidental = std::move(accidental);
     }
     
-    const Optional<EmptyPlacement>& dot() const {
+    const std::unique_ptr<EmptyPlacement>& dot() const {
         return _dot;
     }
-    void setDot(const Optional<EmptyPlacement>& dot) {
-        _dot = dot;
+    void setDot(std::unique_ptr<EmptyPlacement> dot) {
+        _dot = std::move(dot);
     }
     
-    const Optional<Tie>& tie() const {
+    const std::unique_ptr<Tie>& tie() const {
         return _tie;
     }
-    void setTie(const Optional<Tie>& tie) {
-        _tie = tie;
+    void setTie(std::unique_ptr<Tie> tie) {
+        _tie = std::move(tie);
     }
     
-    const Optional<Notations>& notations() const {
+    const std::unique_ptr<Notations>& notations() const {
         return _notations;
     }
-    void setNotations(Optional<Notations>&& notations) {
+    void setNotations(std::unique_ptr<Notations> notations) {
         _notations = std::move(notations);
     }
     
-    const std::vector<Beam>& beams() const {
+    const std::vector<std::unique_ptr<Beam>>& beams() const {
         return _beams;
     }
-    void addBeam(const Beam& beam) {
-        _beams.push_back(beam);
+    void addBeam(std::unique_ptr<Beam> beam) {
+        _beams.push_back(std::move(beam));
     }
 
-    const std::vector<Lyric>& lyrics() const {
+    const std::vector<std::unique_ptr<Lyric>>& lyrics() const {
         return _lyrics;
     }
-    void addLyric(const Lyric& lyric) {
-        _lyrics.push_back(lyric);
+    void addLyric(std::unique_ptr<Lyric> lyric) {
+        _lyrics.push_back(std::move(lyric));
     }
 
     unsigned int midiNumber() const;
@@ -226,28 +226,28 @@ private:
     Optional<float> _defaultX;
     Optional<float> _defaultY;
     
-    Optional<Type> _type;
     bool _chord;
     bool _grace;
     bool _printObject;
     Stem _stem;
     int _staff;
-
+    
+    Optional<Type> _type;
     Optional<float> _dynamics;
     Optional<float> _endDynamics;
     time_t _attack;
     time_t _release;
-
-    Optional<Pitch> _pitch;
-    Optional<Rest> _rest;
-    Optional<Unpitched> _unpitched;
-    Optional<Accidental> _accidental;
-    Optional<EmptyPlacement> _dot;
-    Optional<Tie> _tie;
-    Optional<Notations> _notations;
     
-    std::vector<Beam> _beams;
-    std::vector<Lyric> _lyrics;
+    std::unique_ptr<Pitch> _pitch;
+    std::unique_ptr<Rest> _rest;
+    std::unique_ptr<Unpitched> _unpitched;
+    std::unique_ptr<Accidental> _accidental;
+    std::unique_ptr<EmptyPlacement> _dot;
+    std::unique_ptr<Tie> _tie;
+    std::unique_ptr<Notations> _notations;
+    
+    std::vector<std::unique_ptr<Beam>> _beams;
+    std::vector<std::unique_ptr<Lyric>> _lyrics;
 };
 
 } // namespace dom

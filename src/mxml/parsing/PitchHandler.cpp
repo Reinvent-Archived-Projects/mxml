@@ -15,7 +15,7 @@ static const char* kAlterTag = "alter";
 static const char* kOctaveTag = "octave";
 
 void PitchHandler::startElement(const lxml::QName& qname, const AttributeMap& attributes) {
-    _result = Pitch();
+    _result.reset(new Pitch());
 }
 
 lxml::RecursiveHandler* PitchHandler::startSubElement(const QName& qname) {
@@ -30,11 +30,11 @@ lxml::RecursiveHandler* PitchHandler::startSubElement(const QName& qname) {
 
 void PitchHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kStepTag) == 0)
-        _result.setStep(stepFromString(_stringHandler.result()));
+        _result->setStep(stepFromString(_stringHandler.result()));
     else if (strcmp(qname.localName(), kAlterTag) == 0)
-        _result.setAlter(_doubleHandler.result());
+        _result->setAlter(_doubleHandler.result());
     else if (strcmp(qname.localName(), kOctaveTag) == 0)
-        _result.setOctave(_integerHandler.result());
+        _result->setOctave(_integerHandler.result());
     
 }
 

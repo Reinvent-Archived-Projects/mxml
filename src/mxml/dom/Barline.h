@@ -49,25 +49,25 @@ public:
         _location = location;
     }
     
-    const Optional<Ending>& ending() const {
+    const std::unique_ptr<Ending>& ending() const {
         return _ending;
     }
-    void setEnding(const Optional<Ending>& ending) {
-        _ending = ending;
+    void setEnding(std::unique_ptr<Ending> ending) {
+        _ending = std::move(ending);
     }
     
-    const Optional<Repeat>& repeat() const {
+    const std::unique_ptr<Repeat>& repeat() const {
         return _repeat;
     }
-    void setRepeat(const Optional<Repeat>& repeat) {
-        _repeat = repeat;
+    void setRepeat(std::unique_ptr<Repeat> repeat) {
+        _repeat = std::move(repeat);
     }
     
 private:
     Style _style;
     Location _location;
-    Optional<Ending> _ending;
-    Optional<Repeat> _repeat;
+    std::unique_ptr<Ending> _ending;
+    std::unique_ptr<Repeat> _repeat;
 };
 
 } // namespace dom
