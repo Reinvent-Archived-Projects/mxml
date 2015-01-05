@@ -63,7 +63,6 @@ Rect ChordGeometry::buildNotes() {
         std::unique_ptr<NoteGeometry> geom(new NoteGeometry(*note));
         Point loc = {0, Metrics::noteY(_attributesManager, *note)};
         geom->setLocation(loc);
-        buildDot(*geom);
         
         _notes.push_back(geom.get());
         addGeometry(std::move(geom));
@@ -103,6 +102,11 @@ Rect ChordGeometry::buildNotes() {
             notesFrame = join(notesFrame, geom->frame());
         }
     }
+
+    // Build dots
+    for (auto& noteGeometry : _notes) {
+        buildDot(*noteGeometry);
+    }
     
     return notesFrame;
 }
@@ -123,6 +127,12 @@ void ChordGeometry::buildDot(const NoteGeometry& noteGeom) {
             dotLocation.y -= 5;
         else
             dotLocation.y += 5;
+    }
+    dotGeom->setLocation(dotLocation);
+
+    for (auto& noteGeometry : _notes) {
+        if (intersect(noteGeometry->frame(), dotGeom->frame()))
+            dotLocation.x = noteGeometry->frame().max().x + dotGeom->anchorPoint().x + kDotSpacing;
     }
     dotGeom->setLocation(dotLocation);
     

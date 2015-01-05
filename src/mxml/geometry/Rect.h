@@ -42,7 +42,13 @@ public:
     bool operator!=(const Rect& r) const {
         return origin != r.origin || size != r.size;
     }
-    
+
+    bool contains(const Point& p) const {
+        auto mn = min();
+        auto mx = max();
+        return p.x >= mn.x && p.x <= mx.x && p.y >= mn.y && p.y <= mx.y;
+    }
+
     Rect rotate(coord_t angle) const {
         Point corners[] = {
             {origin.x, origin.y},
