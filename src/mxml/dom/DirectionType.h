@@ -35,7 +35,6 @@ public:
 private:
     Optional<float> _defaultX;
     Optional<float> _defaultY;
-    bool _span;
 };
 
 class Dynamics : public DirectionType {

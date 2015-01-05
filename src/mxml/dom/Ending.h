@@ -19,7 +19,7 @@ public:
     };
     
 public:
-    Ending() : _numbers(), _type() {}
+    Ending() : _type(), _numbers() {}
     
     const Type type() const {
         return _type;
