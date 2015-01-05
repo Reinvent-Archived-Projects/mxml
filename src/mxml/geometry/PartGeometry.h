@@ -24,13 +24,16 @@ public:
         return _part;
     }
     
-    const std::vector<MeasureGeometry*> measureGeometries() const {
+    const std::vector<MeasureGeometry*>& measureGeometries() const {
         return _measureGeometries;
     }
-    const std::vector<TieGeometry*> tieGeometries() const {
+    const std::vector<TieGeometry*>& tieGeometries() const {
         return _tieGeometries;
     }
-    const std::vector<PlacementGeometry*> directionGeometries() const {
+    const std::vector<PlacementGeometry*>& directionGeometries() const {
+        return _directionGeometries;
+    }
+    std::vector<PlacementGeometry*>& directionGeometries() {
         return _directionGeometries;
     }
     

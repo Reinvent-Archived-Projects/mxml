@@ -8,6 +8,7 @@
 #include "EndingGeometry.h"
 #include "MeasureGeometry.h"
 #include "LyricGeometry.h"
+#include "LyricGeometryFactory.h"
 #include "OrnamentsGeometry.h"
 #include "PartGeometryFactory.h"
 #include "PedalGeometry.h"
@@ -24,7 +25,11 @@
 
 namespace mxml {
 
-    PartGeometryFactory::PartGeometryFactory(const dom::Part& part, const SpanCollection& spans) : _part(part), _spans(spans) {
+    PartGeometryFactory::PartGeometryFactory(const dom::Part& part, const SpanCollection& spans) : _part(part), _spans(spans), _partGeometry() {
+    }
+
+    PartGeometryFactory::~PartGeometryFactory() {
+        assert(!_partGeometry);
     }
 
     std::unique_ptr<PartGeometry> PartGeometryFactory::build() {
@@ -44,7 +49,9 @@ namespace mxml {
         buildDirections();
         buildOrnaments();
         buildEndings();
-        buildLyrics();
+
+        LyricGeometryFactory lyricGeometryFactory(*_partGeometry);
+        lyricGeometryFactory.build();
 
         TieGeometryFactory factory(*_partGeometry);
         auto ties = factory.buildTieGeometries(_partGeometry->geometries());
@@ -313,46 +320,5 @@ namespace mxml {
             _startEndingLocation = measureGeom.location();
             _startEndingLocation.y = measureGeom.origin().y + MeasureGeometry::kVerticalPadding - EndingGeometry::kHeight - 10;
         }
-    }
-
-    void PartGeometryFactory::buildLyrics() {
-        for (auto measure: _partGeometry->_measureGeometries) {
-            for (auto& geom : measure->geometries()) {
-                if (const ChordGeometry* chord = dynamic_cast<const ChordGeometry*>(geom.get()))
-                    buildLyrics(*measure, *chord);
-            }
-        }
-    }
-
-    void PartGeometryFactory::buildLyrics(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom) {
-        for (auto noteGeom : chordGeom.notes()) {
-            for (auto& lyric : noteGeom->note().lyrics()) {
-                buildLyric(measureGeom, chordGeom, *lyric);
-            }
-        }
-    }
-
-    void PartGeometryFactory::buildLyric(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom, const dom::Lyric& lyric) {
-        const int staff = chordGeom.chord().firstNote()->staff();
-        std::unique_ptr<PlacementGeometry> geo(new LyricGeometry(lyric, staff));
-
-        const Span& span = *measureGeom.spans().with(&chordGeom.chord());
-        Point location;
-        location.x = span.start() + span.eventOffset();
-        geo->setLocation(location);
-
-        placeDirection(*geo);
-
-        location = geo->location();
-        if (lyric.number() > 1) {
-            if (geo->placement() == dom::PLACEMENT_ABOVE)
-                location.y -= (lyric.number() - 1) * geo->size().height;
-            else
-                location.y += (lyric.number() - 1) * geo->size().height;
-            geo->setLocation(location);
-        }
-
-        _partGeometry->_directionGeometries.push_back(geo.get());
-        _partGeometry->addGeometry(std::move(geo));
     }
 }

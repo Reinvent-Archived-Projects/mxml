@@ -11,6 +11,8 @@ namespace mxml {
     class PartGeometryFactory {
     public:
         PartGeometryFactory(const dom::Part& part, const SpanCollection& spans);
+        ~PartGeometryFactory();
+        
         std::unique_ptr<PartGeometry> build();
 
     private:
@@ -29,10 +31,6 @@ namespace mxml {
 
         void buildEndings();
         void buildEndings(const MeasureGeometry& measureGeom, const BarlineGeometry& barlineGeom);
-
-        void buildLyrics();
-        void buildLyrics(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom);
-        void buildLyric(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom, const dom::Lyric& lyric);
 
         void placeDirection(PlacementGeometry& geometry);
         void swapPlacement(PlacementGeometry& geometry);
