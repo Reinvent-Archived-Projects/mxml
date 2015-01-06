@@ -42,15 +42,6 @@ const EventSequence& EventFactory::build() {
     dom::time_t time = 0;
     double wallTime = 0.0;
 
-    auto attributesIter = _eventSequence.attributes().begin();
-    auto attributesEndIter = _eventSequence.attributes().end();
-    auto attributesNextIter = attributesIter;
-    if (attributesIter != attributesEndIter) {
-        if (attributesIter->begin <= time)
-            divisions = attributesIter->attributes->divisions();
-        ++attributesNextIter;
-    }
-
     auto temposIter = _eventSequence.tempos().begin();
     auto temposEndIter = _eventSequence.tempos().end();
     auto temposNextIter = temposIter;
@@ -61,11 +52,8 @@ const EventSequence& EventFactory::build() {
     }
 
     for (Event& event : _eventSequence.events()) {
-        if (attributesNextIter != attributesEndIter && attributesNextIter->begin <= time) {
-            attributesIter = attributesNextIter;
-            divisions = attributesIter->attributes->divisions();
-            ++attributesNextIter;
-        }
+        const auto& measure = *_part->measures().at(event.measureIndex());
+        divisions = _eventSequence._attributesManager.divisions(measure);
 
         if (temposNextIter != temposEndIter && temposNextIter->begin <= time) {
             temposIter = temposNextIter;
@@ -86,15 +74,11 @@ const EventSequence& EventFactory::build() {
 
 void EventFactory::processMeasure(const dom::Measure& measure) {
     for (auto& node : measure.nodes()) {
-        if (node == measure.nodes().back() && !dynamic_cast<const TimedNode*>(node.get()) && _eventSequence.attributes(_time))
-            _time = _measureStartTime + _attributesManager.divisions() * _attributesManager.time()->beats();
-
         if (const Barline* barline = dynamic_cast<const Barline*>(node.get())) {
             if (_firstPass)
                 processBarline(*barline);
         } else if (const Attributes* attributes = dynamic_cast<const Attributes*>(node.get())) {
-            _attributesManager.addAttributes(*attributes);
-            processAttributes(*attributes);
+            _eventSequence._attributesManager.addAttributes(*attributes);
         } else if (const Direction* direction = dynamic_cast<const Direction*>(node.get())) {
             processDirection(*direction);
         } else if (const TimedNode* timedNode = dynamic_cast<const TimedNode*>(node.get())) {
@@ -102,7 +86,7 @@ void EventFactory::processMeasure(const dom::Measure& measure) {
         }
     }
     
-    _measureStartTime += Attributes::divisionsPerMeasure(_attributesManager.divisions(), *_attributesManager.time());
+    _measureStartTime += Attributes::divisionsPerMeasure(_eventSequence._attributesManager.divisions(), *_eventSequence._attributesManager.time());
     _time = _measureStartTime;
 }
 
@@ -136,14 +120,6 @@ void EventFactory::processBarline(const dom::Barline& barline) {
         if (ending->type() == Ending::DISCONTINUE && !_eventSequence.loops().empty())
             _eventSequence.loops().back().count = *ending->numbers().rbegin() - 1;
     }
-}
-
-void EventFactory::processAttributes(const dom::Attributes& attributes) {
-    EventSequence::Attributes attr;
-    attr.begin = _time;
-    attr.part = _part;
-    attr.attributes = &attributes;
-    _eventSequence.addAttributes(attr);
 }
 
 void EventFactory::processDirection(const dom::Direction& direction) {

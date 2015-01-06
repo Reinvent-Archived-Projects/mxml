@@ -4,6 +4,7 @@
 #pragma once
 #include "Event.h"
 #include <mxml/dom/Sound.h>
+#include <mxml/AttributesManager.h>
 
 #include <set>
 #include <vector>
@@ -79,7 +80,6 @@ public:
             return _loopNumber;
         }
         
-//        const dom::Attributes* attributes() const;
         float tempo() const;
         float dynamics() const;
         
@@ -106,7 +106,6 @@ public:
     EventSequence();
     
     Event& addEvent(const Event& event);
-    void addAttributes(const Attributes& attrs);
     void addTempo(const Value& value);
     void addDynamics(const Value& value);
     void addEnding(const Ending& ending);
@@ -118,12 +117,6 @@ public:
     }
     std::vector<Event>& events() {
         return _events;
-    }
-    const std::vector<Attributes>& attributes() const {
-        return _attributes;
-    }
-    std::vector<Attributes>& attributes() {
-        return _attributes;
     }
     const std::vector<Value>& tempos() const {
         return _tempos;
@@ -169,10 +162,6 @@ public:
     /** Return the last event for a given measure index.
      */
     const Event* lastEvent(std::size_t measureIndex) const;
-
-    /** Return a pointer to the attributes for the given event time, 0 if there are no attributes defined.
-     */
-    const dom::Attributes* attributes(dom::time_t time) const;
     
     /** Return a pointer to the tempo for the given event time, 0 if there is no tempo defined.
      */
@@ -196,14 +185,20 @@ public:
 
     Iterator begin(std::size_t measureIndex) const;
     Iterator end(std::size_t measureIndex) const;
-    
+
+    const AttributesManager& attributesManager() const {
+        return _attributesManager;
+    }
+
 private:
     std::vector<Event> _events;
-    std::vector<Attributes> _attributes;
     std::vector<Value> _tempos;
     std::vector<Value> _dynamics;
     std::vector<Ending> _endings;
     std::vector<Loop> _loops;
+    AttributesManager _attributesManager;
+
+    friend class EventFactory;
 };
 
 } // namespace mxml

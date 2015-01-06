@@ -26,7 +26,6 @@ public:
 private:
     void processMeasure(const dom::Measure& measure);
     void processBarline(const dom::Barline& node);
-    void processAttributes(const dom::Attributes& node);
     void processDirection(const dom::Direction& node);
     void processTimedNode(const dom::TimedNode& node);
     void processChord(const dom::Chord& chord);
@@ -44,7 +43,6 @@ private:
     dom::time_t _loopBegin;
     dom::time_t _endingBegin;
     EventSequence _eventSequence;
-    AttributesManager _attributesManager;
 };
 
 } // namespace mxml

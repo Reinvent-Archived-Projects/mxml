@@ -149,11 +149,6 @@ Event& EventSequence::addEvent(const Event& event) {
     return *_events.insert(it, event);
 }
 
-void EventSequence::addAttributes(const Attributes& attrs) {
-    auto it = std::upper_bound(_attributes.begin(), _attributes.end(), attrs);
-    _attributes.insert(it, attrs);
-}
-
 void EventSequence::addTempo(const Value& value) {
     auto it = std::upper_bound(_tempos.begin(), _tempos.end(), value);
     _tempos.insert(it, value);
@@ -178,7 +173,6 @@ void EventSequence::addLoop(const Loop& loop) {
 
 void EventSequence::clear() {
     _events.clear();
-    _attributes.clear();
     _tempos.clear();
     _dynamics.clear();
     _loops.clear();
@@ -233,15 +227,6 @@ const Event* EventSequence::lastEvent(std::size_t measureIndex) const {
         return nullptr;
     
     return &*it;
-}
-
-const dom::Attributes* EventSequence::attributes(dom::time_t time) const {
-    auto it = std::find_if(_attributes.rbegin(), _attributes.rend(), [time](const Attributes& attrs) {
-        return time >= attrs.begin;
-    });
-    if (it != _attributes.rend())
-        return it->attributes;
-    return 0;
 }
 
 const float* EventSequence::tempo(dom::time_t time) const {

@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(noteStaffY) {
     auto& measure = part->measures().front();
     
     AttributesManager attributesManager;
-    attributesManager.addAllAttribute(*measure);
+    attributesManager.addAllAttributes(*measure);
     
     Note note;
     note.setMeasure(measure.get());
@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(noteStaff2Y) {
     auto& measure = part->measures().front();
     
     AttributesManager attributesManager;
-    attributesManager.addAllAttribute(*measure);
+    attributesManager.addAllAttributes(*measure);
     
     Note note;
     note.setStaff(2);
@@ -72,7 +72,7 @@ BOOST_AUTO_TEST_CASE(noteY) {
     auto& measure = part->measures().front();
     
     AttributesManager attributesManager;
-    attributesManager.addAllAttribute(*measure);
+    attributesManager.addAllAttributes(*measure);
     
     Note note;
     note.setMeasure(measure.get());
