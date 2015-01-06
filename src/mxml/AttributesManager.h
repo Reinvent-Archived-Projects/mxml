@@ -9,6 +9,10 @@
 
 namespace mxml {
     
+static const dom::Key _defaultKey;
+static const dom::Clef _defaultClef;
+static const dom::Time _defaultTime;
+    
 class AttributesManager {
 public:
     void addAllAttributes(const dom::Measure& measure);
@@ -86,10 +90,7 @@ protected:
 
 private:
     std::vector<const dom::Attributes*> _attributes;
-    dom::Key _defaultKey;
-    dom::Clef _defaultClef;
-    dom::Time _defaultTime;
-    
+
 };
     
 }
