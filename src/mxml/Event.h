@@ -2,6 +2,7 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
+#include <mxml/dom/Note.h>
 #include <mxml/dom/Score.h>
 
 namespace mxml {

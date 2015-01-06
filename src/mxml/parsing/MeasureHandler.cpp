@@ -37,10 +37,9 @@ void MeasureHandler::endElement(const QName& qname, const std::string& contents)
         auto note = std::unique_ptr<dom::Note>(new dom::Note);
         note->setRest(std::unique_ptr<dom::Rest>(new dom::Rest));
         note->setMeasure(_result.get());
-        note->setAttributes(_attributes);
         note->setStart(0);
         note->setType(dom::presentOptional(dom::Note::TYPE_WHOLE));
-        note->setDuration(dom::presentOptional(dom::Attributes::divisionsPerMeasure(_attributes->divisions(), *_attributes->time())));
+        //note->setDuration(dom::presentOptional(dom::Attributes::divisionsPerMeasure(_attributes->divisions(), *_attributes->time())));
         _result->addNode(std::move(note));
     }
 }
@@ -94,7 +93,6 @@ void MeasureHandler::handleNote(std::unique_ptr<dom::Note>&& note) {
     _empty = false;
 
     note->setMeasure(_result.get());
-    note->setAttributes(_attributes);
     note->setStart(_time);
     
     // Only the first note of a chord advances the time

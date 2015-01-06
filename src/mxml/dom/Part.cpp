@@ -1,6 +1,7 @@
 //  Created by Alejandro Isaza on 2014-05-27.
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
+#include "Attributes.h"
 #include "Part.h"
 #include "Print.h"
 #include "Score.h"

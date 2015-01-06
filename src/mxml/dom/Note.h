@@ -63,13 +63,6 @@ public:
         _measure = measure;
     }
 
-    const Attributes* attributes() const {
-        return _attributes;
-    }
-    void setAttributes(const Attributes* attributes) {
-        _attributes = attributes;
-    }
-
     const Optional<float>& defaultX() const {
         return _defaultX;
     }
@@ -225,7 +218,6 @@ public:
     
 private:
     const Measure* _measure;
-    const Attributes* _attributes;
 
     Optional<float> _defaultX;
     Optional<float> _defaultY;
