@@ -125,10 +125,10 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
     }
     
     for (int staff = 1; staff <= _attributesManager.staves(); staff += 1) {
-        if (!attributes->key(staff))
+        const auto& key = _attributesManager.key(_measure, staff, attributes->start());
+        if (!key)
             continue;
         
-        const auto& key = attributes->key(staff);
         auto it = _spans.with(key);
         if  (it == _spans.end())
             continue;
