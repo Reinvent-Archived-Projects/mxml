@@ -25,6 +25,16 @@ public:
     Measure();
 
     /**
+     The measure's index. The first measure has index 0.
+     */
+    std::size_t index() const {
+        return _index;
+    }
+    void setIndex(std::size_t i) {
+        _index = i;
+    }
+
+    /**
      The measure number or label. It is usually a number stating at 1, but it can be any arbitraty string.
      */
     const std::string& number() const {
@@ -43,6 +53,7 @@ public:
     }
     
 private:
+    std::size_t _index;
     std::string _number;
     vector<unique_ptr<Node>> _nodes;
 };

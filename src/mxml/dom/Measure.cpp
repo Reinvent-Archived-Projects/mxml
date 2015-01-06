@@ -6,7 +6,7 @@
 namespace mxml {
 namespace dom {
 
-Measure::Measure() : _number() {}
+Measure::Measure() : _index(), _number() {}
 
 } // namespace dom
 } // namespace mxml

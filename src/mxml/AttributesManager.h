@@ -5,7 +5,10 @@
 #include <mxml/dom/Attributes.h>
 #include <mxml/dom/Measure.h>
 
+#include <algorithm>
 #include <map>
+#include <vector>
+
 
 namespace mxml {
     
@@ -15,18 +18,20 @@ static const dom::Time _defaultTime;
     
 class AttributesManager {
 public:
+    AttributesManager();
+    
     void addAllAttributes(const dom::Measure& measure);
     void addAttributes(const dom::Attributes& attributes);
-    
+
     /**
      Get active key for the given measure, staff and time.
      */
-    const dom::Key* key(const dom::Measure& measure, int staff, time_t time) const;
+    const dom::Key* key(std::size_t measureIndex, int staff, time_t time) const;
 
     /**
      Get active clef for the given measure, staff and time.
      */
-    const dom::Clef* clef(const dom::Measure& measure, int staff, time_t time) const;
+    const dom::Clef* clef(std::size_t measureIndex, int staff, time_t time) const;
 
     /**
      Get the clef for a given note.
@@ -36,7 +41,7 @@ public:
     /**
      Get active divisions for the given measure.
      */
-    int divisions(const dom::Measure& measure) const;
+    int divisions(std::size_t measureIndex) const;
 
     /**
      Get the number of staves. This method assumes that the staves value gets set once and never changes.
@@ -66,31 +71,20 @@ protected:
      @return The most recent attribute value in the measure at the given time or the default value.
      */
     template <typename T>
-    T getAttribute(const dom::Measure& measure, time_t time, T defaultValue, std::function<T (const dom::Attributes&, T)> chooser) const {
+    T getAttribute(std::size_t measureIndex, time_t time, T defaultValue, std::function<T (const dom::Attributes&, T)> chooser) const {
         T current = defaultValue;
-
-        bool reachedNotesMeasure = false;
-
-        for (auto& attribute : _attributes) {
-            if (reachedNotesMeasure)
-                break;
-
-            if (attribute->parent() == &measure) {
-                reachedNotesMeasure = true;
-
-                if (attribute->start() > time)
-                    break;
-            }
-            
-            current = chooser(*attribute, current);
+        for (auto attributes : _attributes) {
+            auto measure = static_cast<const dom::Measure*>(attributes->parent());
+            if (measure->index() > measureIndex || (measure->index() == measureIndex && attributes->start() > time))
+                return current;
+            current = chooser(*attributes, current);
         }
-        
         return current;
     }
 
 private:
     std::vector<const dom::Attributes*> _attributes;
-
+    int _staves;
 };
     
 }

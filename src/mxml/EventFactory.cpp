@@ -52,8 +52,7 @@ const EventSequence& EventFactory::build() {
     }
 
     for (Event& event : _eventSequence.events()) {
-        const auto& measure = *_part->measures().at(event.measureIndex());
-        divisions = _eventSequence._attributesManager.divisions(measure);
+        divisions = _eventSequence._attributesManager.divisions(event.measureIndex());
 
         if (temposNextIter != temposEndIter && temposNextIter->begin <= time) {
             temposIter = temposNextIter;

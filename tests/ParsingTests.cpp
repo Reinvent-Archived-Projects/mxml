@@ -70,6 +70,7 @@ BOOST_AUTO_TEST_CASE(parseMusicXML) {
     
     const dom::Measure& measure = *part.measures()[0];
     BOOST_CHECK_EQUAL(measure.parent(), &part);
+    BOOST_CHECK_EQUAL(measure.index(), 0);
     BOOST_CHECK_EQUAL(measure.number(), "22");
     BOOST_CHECK_EQUAL(measure.nodes().size(), 2);
     

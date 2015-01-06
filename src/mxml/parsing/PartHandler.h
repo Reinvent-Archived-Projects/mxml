@@ -20,6 +20,7 @@ public:
     
 private:
     MeasureHandler _measureHandler;
+    std::size_t _measureIndex;
 };
 
 } // namespace mxml

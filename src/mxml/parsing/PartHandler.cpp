@@ -14,6 +14,7 @@ static const char* kMeasureTag = "measure";
 
 void PartHandler::startElement(const QName& qname, const AttributeMap& attributes) {
     _result.reset(new Part());
+    _measureIndex = 0;
 
     auto id = attributes.find(kIdTag);
     if (id != attributes.end())
@@ -28,8 +29,10 @@ lxml::RecursiveHandler* PartHandler::startSubElement(const QName& qname) {
 
 void PartHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kMeasureTag) == 0) {
-        _measureHandler.result()->setParent(_result.get());
-        _result->addMeasure(_measureHandler.result());
+        auto measure = _measureHandler.result();
+        measure->setIndex(_measureIndex++);
+        measure->setParent(_result.get());
+        _result->addMeasure(std::move(measure));
     }
 }
 

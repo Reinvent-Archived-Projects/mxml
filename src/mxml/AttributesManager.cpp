@@ -5,6 +5,8 @@
 
 namespace mxml {
 
+AttributesManager::AttributesManager() : _attributes(), _staves(0) {}
+
 void AttributesManager::addAllAttributes(const dom::Measure& measure) {
     for (auto& node : measure.nodes()) {
         auto attributes = dynamic_cast<const dom::Attributes*>(node.get());
@@ -15,10 +17,15 @@ void AttributesManager::addAllAttributes(const dom::Measure& measure) {
 
 void AttributesManager::addAttributes(const dom::Attributes& attributes) {
     _attributes.push_back(&attributes);
+
+    if (attributes.staves().isPresent()) {
+        assert(_staves == 0); // We don't support changing the number of staves mid-song
+        _staves = attributes.staves();
+    }
 }
 
-const dom::Key* AttributesManager::key(const dom::Measure& measure, int staff, time_t time) const {
-    return getAttribute<const dom::Key*>(measure, time, &_defaultKey, [&](const dom::Attributes& attribute, const dom::Key* previous) {
+const dom::Key* AttributesManager::key(std::size_t measureIndex, int staff, time_t time) const {
+    return getAttribute<const dom::Key*>(measureIndex, time, &_defaultKey, [&](const dom::Attributes& attribute, const dom::Key* previous) {
         if (attribute.key(staff))
             return attribute.key(staff);
         else if (attribute.key(1))
@@ -27,8 +34,8 @@ const dom::Key* AttributesManager::key(const dom::Measure& measure, int staff, t
     });
 }
 
-const dom::Clef* AttributesManager::clef(const dom::Measure& measure, int staff, time_t time) const {
-    return getAttribute<const dom::Clef*>(measure, time, &_defaultClef, [&](const dom::Attributes& attribute, const dom::Clef* previous) {
+const dom::Clef* AttributesManager::clef(std::size_t measureIndex, int staff, time_t time) const {
+    return getAttribute<const dom::Clef*>(measureIndex, time, &_defaultClef, [&](const dom::Attributes& attribute, const dom::Clef* previous) {
         if (attribute.clef(staff))
             return attribute.clef(staff);
         else if (attribute.clef(1))
@@ -37,8 +44,8 @@ const dom::Clef* AttributesManager::clef(const dom::Measure& measure, int staff,
     });
 }
 
-int AttributesManager::divisions(const dom::Measure& measure) const {
-    return getAttribute<int>(measure, 0, 1, [&](const dom::Attributes& attribute, int previous) {
+int AttributesManager::divisions(std::size_t measureIndex) const {
+    return getAttribute<int>(measureIndex, 0, 1, [&](const dom::Attributes& attribute, int previous) {
         if (attribute.divisions().isPresent())
             return attribute.divisions().value();
         return previous;
@@ -46,16 +53,11 @@ int AttributesManager::divisions(const dom::Measure& measure) const {
 }
 
 const dom::Clef* AttributesManager::clef(const dom::Note& note) const {
-    return clef(*note.measure(), note.staff(), note.start());
+    return clef(note.measure()->index(), note.staff(), note.start());
 }
 
 int AttributesManager::staves() const {
-    for (auto attribute : _attributes) {
-        if (attribute->staves().isPresent())
-            return attribute->staves();
-    }
-    
-    return 0;
+    return _staves;
 }
 
 int AttributesManager::divisions() const {
@@ -79,5 +81,5 @@ const dom::Time* AttributesManager::time() const {
     
     return time;
 }
-    
+
 }
