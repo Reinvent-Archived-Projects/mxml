@@ -41,8 +41,27 @@ private:
     const PartGeometry& _partGeometry;
 
     vector<unique_ptr<TieGeometry>> _tieGeometries;
-    map<std::pair<int, const dom::Pitch*>, const NoteGeometry*> _tieStartGeometries;
     map<std::pair<int, int>, const NoteGeometry*> _slurStartGeometries;
+    
+    typedef std::pair<int, const dom::Pitch*> PitchKey;
+    struct PitchComparator {
+        bool operator()(const PitchKey& a, const PitchKey& b) const {
+            if (a.first < b.first)
+                return true;
+            
+            if (a.first > b.first)
+                return false;
+            
+            if (a.second->step() < b.second->step())
+                return true;
+            
+            if (a.second->step() > b.second->step())
+                return false;
+            
+            return a.second->octave() < b.second->octave();
+        }
+    };
+    map<PitchKey, const NoteGeometry*, PitchComparator> _tieStartGeometries;
 };
 
 } // namespace mxml
