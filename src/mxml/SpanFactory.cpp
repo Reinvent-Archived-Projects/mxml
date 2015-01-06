@@ -154,16 +154,17 @@ void SpanFactory::build(const dom::Attributes* attributes, AttributesManager* at
             width = KeyGeometry::keySize(*key).width;
         }
         
+        if (keySpan == _spans.end())
+            keySpan = _spans.add(_measureIndex, time);
+        
         if (width != 0) {
-            if (keySpan == _spans.end())
-                keySpan = _spans.add(_measureIndex, time);
-            
-            keySpan->setEvent(false);
             keySpan->pushLeftMargin(kAttributeMargin);
             keySpan->pushWidth(width);
             keySpan->pushRightMargin(kAttributeMargin);
-            keySpan->addNode(key);
         }
+        
+        keySpan->setEvent(false);
+        keySpan->addNode(key);
     }
 }
 
