@@ -9,12 +9,12 @@ namespace dom {
 
 class Accidental : public Node {
 public:
-    enum Type {
-        TYPE_SHARP,
+    enum Type : int {
+        TYPE_DOUBLE_FLAT = -2,
         TYPE_FLAT,
         TYPE_NATURAL,
-        TYPE_DOUBLE_SHARP,
-        TYPE_DOUBLE_FLAT
+        TYPE_SHARP,
+        TYPE_DOUBLE_SHARP
     };
     
 public:

@@ -159,6 +159,10 @@ public:
     }
     void setPitch(std::unique_ptr<Pitch> pitch) {
         _pitch = std::move(pitch);
+        
+        if (_pitch->alter() != 0) {
+            _accidental.reset(new Accidental((Accidental::Type)_pitch->alter()));
+        }
     }
     
     const std::unique_ptr<Rest>& rest() const {
