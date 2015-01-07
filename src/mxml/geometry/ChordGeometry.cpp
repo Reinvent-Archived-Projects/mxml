@@ -15,7 +15,7 @@ const coord_t ChordGeometry::kArticulationSpacing = 1;
 const coord_t ChordGeometry::kFermataSpacing = 11;
 const coord_t ChordGeometry::kDotSpacing = 2;
 
-ChordGeometry::ChordGeometry(const dom::Chord& chord, const AttributesManager& attributesManager, const PartGeometry& partGeometry)
+ChordGeometry::ChordGeometry(const dom::Chord& chord, AttributesManager& attributesManager, const PartGeometry& partGeometry)
 : _chord(chord), _attributesManager(attributesManager), _partGeometry(partGeometry), _notes(), _stem() {
     build();
 }
@@ -146,11 +146,18 @@ void ChordGeometry::buildAccidentals(const Rect& notesFrame) {
 
 void ChordGeometry::buildAccidental(const NoteGeometry& noteGeom, const Rect& notesFrame) {
     const dom::Note& note = noteGeom.note();
-    if (!note.accidental())
+    auto alter = note.alter();
+    if (!note.pitch())
         return;
 
-    std::unique_ptr<AccidentalGeometry> accGeom(new AccidentalGeometry(*note.accidental()));
-    
+    int previousAlter = _attributesManager.alter(note);
+    if (alter == previousAlter)
+        return;
+
+    _attributesManager.addAlter(note);
+
+    std::unique_ptr<AccidentalGeometry> accGeom(new AccidentalGeometry(alter));
+
     Point accLocation = noteGeom.location();
     accLocation.x = notesFrame.origin.x - kAccidentalSpacing - accGeom->size().width/2;
     accGeom->setLocation(accLocation);

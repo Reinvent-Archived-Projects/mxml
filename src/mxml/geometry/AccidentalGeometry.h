@@ -16,16 +16,16 @@ public:
     static const Size kDoubleFlatSize;
     
 public:
-    explicit AccidentalGeometry(const dom::Accidental& accidental);
+    explicit AccidentalGeometry(int alter);
     
-    const dom::Accidental& accidentail() const {
-        return _accidental;
+    int alter() const {
+        return _alter;
     }
     
-    static Size Size(const dom::Accidental& accidental);
+    static Size Size(int alter);
     
 private:
-    const dom::Accidental& _accidental;
+    int _alter;
 };
 
 } // namespace mxml

@@ -12,16 +12,28 @@
 
 namespace mxml {
     
-static const dom::Key _defaultKey;
-static const dom::Clef _defaultClef;
-static const dom::Time _defaultTime;
-    
 class AttributesManager {
+public:
+    struct Alter {
+        std::size_t measureIndex;
+        dom::time_t time;
+
+        int staff;
+        int octave;
+        dom::Pitch::Step step;
+
+        int amount;
+
+        Alter() : measureIndex(), time(0), staff(1), octave(4), step(), amount() {}
+    };
+
 public:
     AttributesManager();
     
     void addAllAttributes(const dom::Measure& measure);
     void addAttributes(const dom::Attributes& attributes);
+    void addAlter(const dom::Note& note);
+    void addAlter(std::size_t measureIndex, dom::time_t time, int staff, int octave, dom::Pitch::Step step, int alterAmount);
 
     /**
      Get active key for the given measure, staff and time.
@@ -58,6 +70,12 @@ public:
      */
     const dom::Time* time() const;
 
+    /**
+     Get the chromatic alteration for a particular note.
+     */
+    int alter(const dom::Note& note) const;
+    int alter(std::size_t measureIndex, dom::time_t time, int staff, int octave, dom::Pitch::Step step) const;
+
 protected:
     /**
      Get an attribute value for the given measure and time.
@@ -84,7 +102,12 @@ protected:
 
 private:
     std::vector<const dom::Attributes*> _attributes;
+    std::vector<Alter> _alters;
     int _staves;
+
+    static const dom::Key _defaultKey;
+    static const dom::Clef _defaultClef;
+    static const dom::Time _defaultTime;
 };
     
 }

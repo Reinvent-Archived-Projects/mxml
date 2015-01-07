@@ -13,12 +13,12 @@ const Size AccidentalGeometry::kFlatSize = {8, 39};
 const Size AccidentalGeometry::kDoubleSharpSize = {9, 9};
 const Size AccidentalGeometry::kDoubleFlatSize = {16, 9};
 
-AccidentalGeometry::AccidentalGeometry(const Accidental& accidental) : _accidental(accidental) {
-    setSize(Size(accidental));
+AccidentalGeometry::AccidentalGeometry(int alter) : _alter(alter) {
+    setSize(Size(alter));
 }
 
-Size AccidentalGeometry::Size(const Accidental& accidental) {
-    switch (accidental.type()) {
+Size AccidentalGeometry::Size(int alter) {
+    switch (alter) {
         case Accidental::TYPE_SHARP:
             return kSharpSize;
             
@@ -33,6 +33,9 @@ Size AccidentalGeometry::Size(const Accidental& accidental) {
             
         case Accidental::TYPE_DOUBLE_FLAT:
             return kDoubleFlatSize;
+
+        default:
+            return mxml::Size{};
     }
 }
 

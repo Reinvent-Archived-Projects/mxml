@@ -32,10 +32,9 @@ void PitchHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kStepTag) == 0)
         _result->setStep(stepFromString(_stringHandler.result()));
     else if (strcmp(qname.localName(), kAlterTag) == 0)
-        _result->setAlter(_doubleHandler.result());
+        _result->setAlter(dom::presentOptional<int>(_doubleHandler.result()));
     else if (strcmp(qname.localName(), kOctaveTag) == 0)
         _result->setOctave(_integerHandler.result());
-    
 }
 
 Pitch::Step PitchHandler::stepFromString(const std::string& string) {

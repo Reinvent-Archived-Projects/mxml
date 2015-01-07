@@ -65,8 +65,6 @@ private:
     const SpanCollection& _spans;
     AttributesManager& _attributesManager;
     
-    std::size_t _measureIndex;
-    
     int _currentTime;
 };
 

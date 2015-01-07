@@ -4,6 +4,7 @@
 #pragma once
 #include "Node.h"
 #include "Optional.h"
+#include "Pitch.h"
 
 namespace mxml {
 namespace dom {
@@ -61,6 +62,11 @@ public:
     void setMode(Mode mode) {
         _mode = mode;
     }
+
+    /**
+     Return the key's chromatic alteration for a particual note step.
+     */
+    int alter(Pitch::Step step) const;
     
 public:
     int _number;

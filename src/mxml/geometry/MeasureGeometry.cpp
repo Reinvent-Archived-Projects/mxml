@@ -29,8 +29,6 @@ const coord_t MeasureGeometry::kVerticalPadding = 40;
 
 MeasureGeometry::MeasureGeometry(const Measure& measure, const PartGeometry& partGeometry, const SpanCollection& spans, AttributesManager& attributesManager)
 : _measure(measure), _partGeometry(partGeometry), _spans(spans), _attributesManager(attributesManager) {
-    _measureIndex = partGeometry.part().indexOfMeasure(&measure);
-    assert(_measureIndex != static_cast<std::size_t>(-1));
     build();
 }
 
@@ -74,7 +72,7 @@ void MeasureGeometry::build() {
         }
     }
 
-    setSize({_spans.width(_measureIndex), Metrics::stavesHeight(_partGeometry.part()) + 2*kVerticalPadding});
+    setSize({_spans.width(_measure.index()), Metrics::stavesHeight(_partGeometry.part()) + 2*kVerticalPadding});
     setContentOffset({0, -kVerticalPadding});
 
     centerLoneRest();
@@ -95,7 +93,7 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
 
         const Span& span = *it;
         Point location;
-        location.x = span.start() + span.width()/2 - _spans.origin(_measureIndex);
+        location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
         location.y = Metrics::staffOrigin(_partGeometry.part(), staff) + Metrics::staffHeight()/2;
         geo->setLocation(location);
         
@@ -117,7 +115,7 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
         geo->setStaff(staff);
 
         Point location;
-        location.x = span.start() + span.width()/2 - _spans.origin(_measureIndex);
+        location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
         location.y = Metrics::staffOrigin(_partGeometry.part(), staff) + Metrics::staffHeight()/2;
         geo->setLocation(location);
         
@@ -125,7 +123,7 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
     }
     
     for (int staff = 1; staff <= _attributesManager.staves(); staff += 1) {
-        const auto& key = _attributesManager.key(_measure, staff, attributes->start());
+        const auto& key = _attributesManager.key(_measure.index(), staff, attributes->start());
         if (!key)
             continue;
         
@@ -134,11 +132,11 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
             continue;
         
         const Span& span = *it;
-        const auto& clef = _attributesManager.clef(_measure, staff, attributes->start());
+        const auto& clef = _attributesManager.clef(_measure.index(), staff, attributes->start());
         std::unique_ptr<KeyGeometry> geo;
         
         if (key->fifths() == 0) {
-            const auto& activeKey = _attributesManager.key(_measure, staff, attributes->start()-1);
+            const auto& activeKey = _attributesManager.key(_measure.index(), staff, attributes->start()-1);
             if (!activeKey)
                 continue;
             
@@ -149,7 +147,7 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
         }
     
         Point location;
-        location.x = span.start() + span.width()/2 - _spans.origin(_measureIndex);
+        location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
         location.y = Metrics::staffOrigin(_partGeometry.part(), staff) + Metrics::staffHeight()/2;
         geo->setLocation(location);
         geo->setStaff(staff);
@@ -167,7 +165,7 @@ void MeasureGeometry::buildBarline(const Barline* barline) {
     assert(it != _spans.end());
 
     const Span& span = *it;
-    geo->setLocation({span.start() - _spans.origin(_measureIndex), 0});
+    geo->setLocation({span.start() - _spans.origin(_measure.index()), 0});
 
     addGeometry(std::move(geo));
 }
@@ -216,9 +214,9 @@ void MeasureGeometry::buildChord(const Chord* chord) {
 
     const Span& span = *it;
     if (chord->firstNote()->grace()) {
-        location.x = span.start() - _spans.origin(_measureIndex) + geo->anchorPoint().x;
+        location.x = span.start() - _spans.origin(_measure.index()) + geo->anchorPoint().x;
     } else {
-        location.x = span.start() + span.eventOffset() - _spans.origin(_measureIndex);
+        location.x = span.start() + span.eventOffset() - _spans.origin(_measure.index());
     }
     geo->setLocation(location);
 
@@ -237,7 +235,7 @@ void MeasureGeometry::buildRest(const Note* note) {
 
     const Span& span = *it;
     Point location;
-    location.x = span.start() + span.eventOffset() - _spans.origin(_measureIndex);
+    location.x = span.start() + span.eventOffset() - _spans.origin(_measure.index());
     location.y = Metrics::noteY(_attributesManager, *note);
     geo->setLocation(location);
     addGeometry(std::move(geo));
@@ -274,7 +272,7 @@ void MeasureGeometry::centerLoneRest() {
     // If there is only a rest in the measure, it should be centered
     auto location = onlyRest->location();
     const Span& span = *_spans.with(&onlyRest->note());
-    auto start = -_spans.origin(_measureIndex) + span.start();
+    auto start = -_spans.origin(_measure.index()) + span.start();
     location.x = start + (size().width - start) / 2 - onlyRest->size().width/2;
     onlyRest->setLocation(location);
 }

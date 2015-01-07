@@ -152,10 +152,6 @@ public:
     }
     void setPitch(std::unique_ptr<Pitch> pitch) {
         _pitch = std::move(pitch);
-        
-        if (_pitch->alter() != 0) {
-            _accidental.reset(new Accidental((Accidental::Type)_pitch->alter()));
-        }
     }
     
     const std::unique_ptr<Rest>& rest() const {
@@ -214,6 +210,19 @@ public:
         _lyrics.push_back(std::move(lyric));
     }
 
+    /**
+     Return the alter value for this note, coming either from an accidental or from the pitch alter value.
+     */
+    Optional<int> alter() const {
+        if (_accidental) {
+            return Optional<int>(_accidental->type(), true);
+        } else if (_pitch && _pitch->alter().isPresent()) {
+           return Optional<int>(_pitch->alter(), true);
+        }
+
+        return Optional<int>();
+    }
+    
     unsigned int midiNumber() const;
     
 private:

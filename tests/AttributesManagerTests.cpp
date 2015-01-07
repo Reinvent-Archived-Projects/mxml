@@ -81,3 +81,44 @@ BOOST_AUTO_TEST_CASE(varyingDivisions) {
     BOOST_CHECK_EQUAL(manager.divisions(2), kModifiedDivisions);
     BOOST_CHECK_EQUAL(manager.divisions(3), kModifiedDivisions);
 }
+
+BOOST_AUTO_TEST_CASE(alters) {
+    static const std::size_t kMeasureIndex = 0;
+    static const int kStaff = 1;
+    static const int kOctave = 4;
+
+    AttributesManager manager;
+
+    // Create a measure defines a key signature and then a couple of alters
+    auto measure1 = std::unique_ptr<dom::Measure>(new dom::Measure{});
+    measure1->setIndex(kMeasureIndex);
+
+    auto attributes1 = std::unique_ptr<dom::Attributes>(new dom::Attributes{});
+    attributes1->setParent(measure1.get());
+    attributes1->setStaves(dom::presentOptional(1));
+    attributes1->setStart(0);
+
+    auto key = std::unique_ptr<dom::Key>(new dom::Key{});
+    key->setFifths(2);
+    attributes1->setKey(1, std::move(key));
+
+    measure1->addNode(std::move(attributes1));
+    manager.addAllAttributes(*measure1);
+
+    manager.addAlter(kMeasureIndex, 1, kStaff, kOctave, dom::Pitch::STEP_C, 0);
+    manager.addAlter(kMeasureIndex, 2, kStaff, kOctave, dom::Pitch::STEP_D, 1);
+
+    // Note C is initially 1 from the key signature and gets modified at time 1 back to 0
+    BOOST_CHECK_EQUAL(manager.alter(kMeasureIndex, 0, kStaff, kOctave, dom::Pitch::STEP_C), 1);
+    BOOST_CHECK_EQUAL(manager.alter(kMeasureIndex, 1, kStaff, kOctave, dom::Pitch::STEP_C), 0);
+    BOOST_CHECK_EQUAL(manager.alter(kMeasureIndex, 2, kStaff, kOctave, dom::Pitch::STEP_C), 0);
+
+    // Note D is initially 0 and gets modified at time 2
+    BOOST_CHECK_EQUAL(manager.alter(kMeasureIndex, 0, kStaff, kOctave, dom::Pitch::STEP_D), 0);
+    BOOST_CHECK_EQUAL(manager.alter(kMeasureIndex, 1, kStaff, kOctave, dom::Pitch::STEP_D), 0);
+    BOOST_CHECK_EQUAL(manager.alter(kMeasureIndex, 2, kStaff, kOctave, dom::Pitch::STEP_D), 1);
+
+    // Key signature modifications should not be preserved across measures
+    BOOST_CHECK_EQUAL(manager.alter(kMeasureIndex + 1, 0, kStaff, kOctave, dom::Pitch::STEP_C), 1);
+    BOOST_CHECK_EQUAL(manager.alter(kMeasureIndex + 1, 0, kStaff, kOctave, dom::Pitch::STEP_D), 0);
+}

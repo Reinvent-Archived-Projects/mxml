@@ -4,6 +4,7 @@
 #pragma once
 #include "InvalidDataError.h"
 #include "Node.h"
+#include "Optional.h"
 
 namespace mxml {
 namespace dom {
@@ -11,9 +12,18 @@ namespace dom {
 class Pitch : public Node {
 public:
     enum Step {
-        STEP_C, STEP_D, STEP_E, STEP_F, STEP_G, STEP_A, STEP_B
+        STEP_C = 0, STEP_D, STEP_E, STEP_F, STEP_G, STEP_A, STEP_B
     };
-    
+
+    /// The total number of steps (7)
+    static const std::size_t kStepCount;
+
+    /// The total number of octaves (10)
+    static const std::size_t kOctaveCount;
+
+    /// The total count of unique pitches (kStepCount*kOctaveCount = 70)
+    static const std::size_t kUniqueCount;
+
 public:
     Pitch() : _step(STEP_C), _alter(), _octave(4) {}
     Pitch(Step step, float alter, int octave)
@@ -33,11 +43,11 @@ public:
     /**
      Chromatic alteration in number of semitones (e.g. -1 for flat, 1 for sharp).
      */
-    float alter() const {
+    Optional<int> alter() const {
         return _alter;
     }
     
-    void setAlter(float alter) {
+    void setAlter(Optional<int> alter) {
         _alter = alter;
     }
     
@@ -53,7 +63,21 @@ public:
             throw InvalidDataError("octave not in valid range");
         _octave = octave;
     }
-    
+
+    /**
+     An index value between 0 and `kUniqueCount - 1`, unique for each combination of octave and step.
+     */
+    std::size_t index() const {
+        return index(_step, _octave);
+    }
+
+    /**
+     An index value between 0 and `kUniqueCount - 1`, unique for each combination of octave and step.
+     */
+    static std::size_t index(Step step, int octave) {
+        return octave * kStepCount + step;
+    }
+
     bool operator==(const Pitch& rhs) const {
         return _step == rhs._step && _octave == rhs._octave;
     }
@@ -74,7 +98,7 @@ public:
     
 private:
     Step _step;
-    float _alter;
+    Optional<int> _alter;
     int _octave;
 };
 

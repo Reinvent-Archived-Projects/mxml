@@ -147,7 +147,7 @@ void SpanFactory::build(const dom::Attributes* attributes, AttributesManager* at
         coord_t width = 0;
         
         const auto& key = attributes->key(staff);
-        const auto& activeKey = attributesManager->key(*measure, staff, attributes->start()-1);
+        const auto& activeKey = attributesManager->key(measure->index(), staff, attributes->start()-1);
         if (activeKey && activeKey->fifths() != 0 && key->fifths() == 0) {
             width = KeyGeometry::keySize(*activeKey).width;
         } else if (key->fifths() != 0) {
@@ -212,8 +212,11 @@ void SpanFactory::build(const dom::Chord* chord) {
     coord_t lyricsWidth = 0;
     for (auto& note : chord->notes()) {
         headWidth = std::max(headWidth, NoteGeometry::Size(*note).width);
-        if (note->accidental())
-            accidentalWidth = AccidentalGeometry::Size(*note->accidental().get()).width;
+
+        //int previousAlter = _attributesManager.alter(note);
+        if (note->alter().isPresent()) // && alter != previousAlter)
+            accidentalWidth = AccidentalGeometry::Size(note->alter()).width;
+
         if (note->stem() == dom::STEM_UP && note->beams().empty() && chord->firstNote()->beams().empty())
             stemWidth = StemGeometry::Size(*note, true).width - StemGeometry::kNoFlagWidth;
         

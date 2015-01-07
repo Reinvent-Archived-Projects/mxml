@@ -5,7 +5,11 @@
 
 namespace mxml {
 
-AttributesManager::AttributesManager() : _attributes(), _staves(0) {}
+const dom::Key AttributesManager::_defaultKey;
+const dom::Clef AttributesManager::_defaultClef;
+const dom::Time AttributesManager::_defaultTime;
+
+AttributesManager::AttributesManager() : _attributes(), _alters(), _staves(0) {}
 
 void AttributesManager::addAllAttributes(const dom::Measure& measure) {
     for (auto& node : measure.nodes()) {
@@ -22,6 +26,27 @@ void AttributesManager::addAttributes(const dom::Attributes& attributes) {
         assert(_staves == 0); // We don't support changing the number of staves mid-song
         _staves = attributes.staves();
     }
+}
+
+void AttributesManager::addAlter(const dom::Note& note) {
+    if (!note.pitch())
+        return;
+
+    auto& pitch = *note.pitch();
+    addAlter(note.measure()->index(), note.start(), note.staff(), pitch.octave(), pitch.step(), note.alter());
+}
+
+void AttributesManager::addAlter(std::size_t measureIndex, dom::time_t time, int staff, int octave, dom::Pitch::Step step, int alterAmount) {
+    Alter alter;
+    alter.measureIndex = measureIndex;
+    alter.time = time;
+
+    alter.staff = staff;
+    alter.octave = octave;
+    alter.step = step;
+
+    alter.amount = alterAmount;
+    _alters.push_back(alter);
 }
 
 const dom::Key* AttributesManager::key(std::size_t measureIndex, int staff, time_t time) const {
@@ -80,6 +105,24 @@ const dom::Time* AttributesManager::time() const {
     }
     
     return time;
+}
+
+int AttributesManager::alter(const dom::Note& note) const {
+    return alter(note.measure()->index(), note.start(), note.staff(), note.pitch()->octave(), note.pitch()->step());
+}
+
+int AttributesManager::alter(std::size_t measureIndex, dom::time_t time, int staff, int octave, dom::Pitch::Step step) const {
+    auto currentKey = key(measureIndex, staff, time);
+    int current = currentKey->alter(step);
+
+    for (auto alter : _alters) {
+        if (alter.measureIndex > measureIndex || (alter.measureIndex == measureIndex && alter.time > time))
+            return current;
+        if (alter.measureIndex == measureIndex && alter.staff == staff && alter.octave == octave && alter.step == step)
+            current = alter.amount;
+    }
+
+    return current;
 }
 
 }
