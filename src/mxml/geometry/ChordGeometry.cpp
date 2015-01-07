@@ -16,7 +16,17 @@ const coord_t ChordGeometry::kFermataSpacing = 11;
 const coord_t ChordGeometry::kDotSpacing = 2;
 
 ChordGeometry::ChordGeometry(const dom::Chord& chord, AttributesManager& attributesManager, const PartGeometry& partGeometry)
-: _chord(chord), _attributesManager(attributesManager), _partGeometry(partGeometry), _notes(), _stem() {
+: MeasureElementGeometry(),
+  _chord(chord),
+  _attributesManager(attributesManager),
+  _partGeometry(partGeometry),
+  _notes(),
+  _stem()
+{
+    auto firstNote = chord.firstNote();
+    if (firstNote)
+        setStaff(firstNote->staff());
+
     build();
 }
 
@@ -63,7 +73,7 @@ Rect ChordGeometry::buildNotes() {
         std::unique_ptr<NoteGeometry> geom(new NoteGeometry(*note));
         Point loc = {0, Metrics::noteY(_attributesManager, *note)};
         geom->setLocation(loc);
-        
+
         _notes.push_back(geom.get());
         addGeometry(std::move(geom));
     }
