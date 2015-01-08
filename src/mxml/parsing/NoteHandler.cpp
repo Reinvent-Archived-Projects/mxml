@@ -70,6 +70,21 @@ void NoteHandler::startElement(const QName& qname, const AttributeMap& attribute
         _result->setRelease(IntegerHandler::parseInteger(release->second));
 }
 
+void NoteHandler::endElement(const lxml::QName& qname, const std::string& contents) {
+    auto& pitch = _result->pitch();
+    if (pitch) {
+        // Avoid alter values outside of the range [-2..2]
+        if (pitch->alter() >= 3) {
+            while (pitch->alter() > 1)
+                increasePitch(*pitch);
+        }
+        if (pitch->alter() <= -3) {
+            while (pitch->alter() < -1)
+                decreasePitch(*pitch);
+        }
+    }
+}
+
 lxml::RecursiveHandler* NoteHandler::startSubElement(const QName& qname) {
     if (strcmp(qname.localName(), kDurationTag) == 0)
         return &_integerHandler;
@@ -174,6 +189,76 @@ dom::Accidental::Type NoteHandler::accidentalTypeFromString(const std::string& s
     if (string == "double-sharp" || string == "sharp-sharp") return dom::Accidental::TYPE_DOUBLE_SHARP;
     if (string == "flat-flat") return dom::Accidental::TYPE_DOUBLE_FLAT;
     throw dom::InvalidDataError("Invalid accidental type " + string);
+}
+
+void NoteHandler::increasePitch(dom::Pitch& pitch) {
+    auto octave = pitch.octave();
+    auto step = pitch.step();
+    auto alter = pitch.alter();
+
+    switch (step) {
+        case dom::Pitch::STEP_C:
+        case dom::Pitch::STEP_D:
+        case dom::Pitch::STEP_F:
+        case dom::Pitch::STEP_G:
+        case dom::Pitch::STEP_A:
+            step = static_cast<dom::Pitch::Step>(step + 1);
+            alter -= 2;
+            break;
+
+        case dom::Pitch::STEP_E:
+        case dom::Pitch::STEP_B:
+            step = static_cast<dom::Pitch::Step>(step + 1);
+            alter -= 1;
+            break;
+
+        default:
+            break;
+    }
+
+    if (step >= dom::Pitch::kStepCount) {
+        octave += 1;
+        step = static_cast<dom::Pitch::Step>(step - dom::Pitch::kStepCount);
+    }
+
+    pitch.setOctave(octave);
+    pitch.setStep(step);
+    pitch.setAlter(dom::presentOptional(alter));
+}
+
+void NoteHandler::decreasePitch(dom::Pitch& pitch) {
+    auto octave = pitch.octave();
+    auto step = pitch.step();
+    auto alter = pitch.alter();
+
+    switch (step) {
+        case dom::Pitch::STEP_D:
+        case dom::Pitch::STEP_E:
+        case dom::Pitch::STEP_G:
+        case dom::Pitch::STEP_A:
+        case dom::Pitch::STEP_B:
+            step = static_cast<dom::Pitch::Step>(step - 1);
+            alter += 2;
+            break;
+
+        case dom::Pitch::STEP_C:
+        case dom::Pitch::STEP_F:
+            step = static_cast<dom::Pitch::Step>(step -1);
+            alter += 1;
+            break;
+
+        default:
+            break;
+    }
+    
+    if (step < 0) {
+        octave -= 1;
+        step = static_cast<dom::Pitch::Step>(step + dom::Pitch::kStepCount);
+    }
+    
+    pitch.setOctave(octave);
+    pitch.setStep(step);
+    pitch.setAlter(dom::presentOptional(alter));
 }
 
 } // namespace mxml

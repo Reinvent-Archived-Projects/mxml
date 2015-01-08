@@ -216,7 +216,7 @@ public:
     Optional<int> alter() const {
         if (_accidental) {
             return Optional<int>(_accidental->type(), true);
-        } else if (_pitch && _pitch->alter().isPresent()) {
+        } else if (_pitch) {
            return Optional<int>(_pitch->alter(), true);
         }
 

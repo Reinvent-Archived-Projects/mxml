@@ -26,7 +26,7 @@ public:
 
 public:
     Pitch() : _step(STEP_C), _alter(), _octave(4) {}
-    Pitch(Step step, float alter, int octave)
+    Pitch(Step step, int alter, int octave)
     : _step(step), _alter(alter), _octave(octave) {}
     
     /**
@@ -43,11 +43,11 @@ public:
     /**
      Chromatic alteration in number of semitones (e.g. -1 for flat, 1 for sharp).
      */
-    Optional<int> alter() const {
+    int alter() const {
         return _alter;
     }
     
-    void setAlter(Optional<int> alter) {
+    void setAlter(int alter) {
         _alter = alter;
     }
     
@@ -64,19 +64,6 @@ public:
         _octave = octave;
     }
 
-    /**
-     An index value between 0 and `kUniqueCount - 1`, unique for each combination of octave and step.
-     */
-    std::size_t index() const {
-        return index(_step, _octave);
-    }
-
-    /**
-     An index value between 0 and `kUniqueCount - 1`, unique for each combination of octave and step.
-     */
-    static std::size_t index(Step step, int octave) {
-        return octave * kStepCount + step;
-    }
 
     bool operator==(const Pitch& rhs) const {
         return _step == rhs._step && _octave == rhs._octave;
@@ -98,7 +85,7 @@ public:
     
 private:
     Step _step;
-    Optional<int> _alter;
+    int _alter;
     int _octave;
 };
 
