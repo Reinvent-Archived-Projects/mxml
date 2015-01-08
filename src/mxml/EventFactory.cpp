@@ -28,6 +28,7 @@ const EventSequence& EventFactory::build() {
         _part = part.get();
         _measureStartTime = 0;
         _time = 0;
+        _eventSequence._attributesManagers.emplace_back();
         for (_measureIndex = 0; _measureIndex < part->measures().size(); _measureIndex += 1) {
             const Measure& measure = *part->measures().at(_measureIndex);
             processMeasure(measure);
@@ -52,7 +53,7 @@ const EventSequence& EventFactory::build() {
     }
 
     for (Event& event : _eventSequence.events()) {
-        divisions = _eventSequence._attributesManager.divisions(event.measureIndex());
+        divisions = _eventSequence._attributesManagers.back().divisions(event.measureIndex());
 
         if (temposNextIter != temposEndIter && temposNextIter->begin <= time) {
             temposIter = temposNextIter;
@@ -72,12 +73,15 @@ const EventSequence& EventFactory::build() {
 }
 
 void EventFactory::processMeasure(const dom::Measure& measure) {
+    auto partIndex = measure.part()->index();
+    auto& attributesManager = _eventSequence._attributesManagers[partIndex];
+
     for (auto& node : measure.nodes()) {
         if (const Barline* barline = dynamic_cast<const Barline*>(node.get())) {
             if (_firstPass)
                 processBarline(*barline);
         } else if (const Attributes* attributes = dynamic_cast<const Attributes*>(node.get())) {
-            _eventSequence._attributesManager.addAttributes(*attributes);
+            attributesManager.addAttributes(*attributes);
         } else if (const Direction* direction = dynamic_cast<const Direction*>(node.get())) {
             processDirection(*direction);
         } else if (const TimedNode* timedNode = dynamic_cast<const TimedNode*>(node.get())) {
@@ -85,7 +89,7 @@ void EventFactory::processMeasure(const dom::Measure& measure) {
         }
     }
     
-    _measureStartTime += Attributes::divisionsPerMeasure(_eventSequence._attributesManager.divisions(), *_eventSequence._attributesManager.time());
+    _measureStartTime += Attributes::divisionsPerMeasure(attributesManager.divisions(), *attributesManager.time());
     _time = _measureStartTime;
 }
 

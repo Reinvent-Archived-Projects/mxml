@@ -32,9 +32,9 @@ lxml::RecursiveHandler* ClefHandler::startSubElement(const QName& qname) {
 
 void ClefHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kSignTag) == 0)
-        _result->setSign(signFromString(_stringHandler.result()));
+        _result->setSign(dom::presentOptional(signFromString(_stringHandler.result())));
     else if (strcmp(qname.localName(), kLineTag) == 0)
-        _result->setLine(_integerHandler.result());
+        _result->setLine(dom::presentOptional(_integerHandler.result()));
 }
 
 Clef::Sign ClefHandler::signFromString(const std::string& string) {

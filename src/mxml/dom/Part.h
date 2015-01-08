@@ -17,6 +17,16 @@ class Part : public Node {
 public:
     Part() : _id(), _name(), _measures() {}
     explicit Part(const std::string& id) : _id(id) {}
+
+    /**
+     The part's index. The first part has index 0.
+     */
+    std::size_t index() const {
+        return _index;
+    }
+    void setIndex(std::size_t i) {
+        _index = i;
+    }
     
     const std::string& id() const {
         return _id;
@@ -56,6 +66,7 @@ public:
     int staves() const;
     
 private:
+    std::size_t _index;
     std::string _id;
     std::string _name;
     std::vector<std::unique_ptr<Measure>> _measures;

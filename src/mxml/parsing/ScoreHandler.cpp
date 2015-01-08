@@ -18,6 +18,7 @@ static const char* kPartTag = "part";
 
 void ScoreHandler::startElement(const QName& qname, const AttributeMap& attributes) {
     _result.reset(new Score());
+    _partIndex = 0;
 }
 
 RecursiveHandler* ScoreHandler::startSubElement(const QName& qname) {
@@ -40,8 +41,10 @@ void ScoreHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     else if (strcmp(qname.localName(), kCreditTag) == 0)
         _result->addCredit(_creditHandler.result());
     else if (strcmp(qname.localName(), kPartTag) == 0) {
-        _partHandler.result()->setParent(_result.get());
-        _result->addPart(_partHandler.result());
+        auto part = _partHandler.result();
+        part->setParent(_result.get());
+        part->setIndex(_partIndex++);
+        _result->addPart(std::move(part));
     }
 }
 

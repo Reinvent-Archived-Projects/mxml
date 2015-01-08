@@ -25,6 +25,8 @@ void AttributesManager::addAttributes(const dom::Attributes& attributes) {
     if (attributes.staves().isPresent()) {
         assert(_staves == 0); // We don't support changing the number of staves mid-song
         _staves = attributes.staves();
+    } else if (_staves == 0) {
+        _staves = 1;
     }
 }
 

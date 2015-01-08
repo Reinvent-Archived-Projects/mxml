@@ -24,6 +24,7 @@ private:
     CreditHandler _creditHandler;
     DefaultsHandler _defaultsHandler;
     PartHandler _partHandler;
+    std::size_t _partIndex;
 };
 
 } // namespace mxml

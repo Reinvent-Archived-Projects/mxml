@@ -186,8 +186,12 @@ public:
     Iterator begin(std::size_t measureIndex) const;
     Iterator end(std::size_t measureIndex) const;
 
+    const AttributesManager& attributesManager(std::size_t partIndex) const {
+        return _attributesManagers[partIndex];
+    }
+
     const AttributesManager& attributesManager() const {
-        return _attributesManager;
+        return _attributesManagers.back();
     }
 
 private:
@@ -196,7 +200,7 @@ private:
     std::vector<Value> _dynamics;
     std::vector<Ending> _endings;
     std::vector<Loop> _loops;
-    AttributesManager _attributesManager;
+    std::vector<AttributesManager> _attributesManagers;
 
     friend class EventFactory;
 };

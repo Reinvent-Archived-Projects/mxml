@@ -17,6 +17,8 @@ using std::vector;
 namespace mxml {
 namespace dom {
 
+class Part;
+
 class Measure : public Node {
 public:
     typedef std::map<int, vector<shared_ptr<TimedNode>>> timed_node_map_t;
@@ -51,7 +53,11 @@ public:
         node->setParent(this);
         _nodes.push_back(std::move(node));
     }
-    
+
+    const Part* part() const {
+        return reinterpret_cast<const Part*>(parent());
+    }
+
 private:
     std::size_t _index;
     std::string _number;
