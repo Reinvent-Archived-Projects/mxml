@@ -7,8 +7,10 @@
 
 namespace mxml {
 
-PartGeometry::PartGeometry(const dom::Part& part, const SpanCollection& spans) : _part(part), _spans(spans) {
-    PartGeometryFactory factory(part, spans);
+PartGeometry::PartGeometry(const dom::Part& part, const ScoreProperties& scoreProperties, const SpanCollection& spans)
+: _part(part)
+{
+    PartGeometryFactory factory(part, scoreProperties, spans);
 }
 
 } // namespace mxml

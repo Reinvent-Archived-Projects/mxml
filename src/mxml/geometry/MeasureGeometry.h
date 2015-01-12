@@ -4,7 +4,7 @@
 #pragma once
 #include "Geometry.h"
 
-#include <mxml/AttributesManager.h>
+#include <mxml/ScoreProperties.h>
 #include <mxml/dom/Attributes.h>
 #include <mxml/dom/Measure.h>
 #include <mxml/dom/Barline.h>
@@ -29,7 +29,7 @@ public:
     MeasureGeometry(const dom::Measure& measure,
                     const PartGeometry& partGeometry,
                     const SpanCollection& spans,
-                    AttributesManager& attributesManager);
+                    const ScoreProperties& scoreProperties);
     
     const dom::Measure& measure() const {
         return _measure;
@@ -63,7 +63,8 @@ private:
     const dom::Measure& _measure;
     const PartGeometry& _partGeometry;
     const SpanCollection& _spans;
-    AttributesManager& _attributesManager;
+    const ScoreProperties& _scoreProperties;
+    std::size_t _partIndex;
     
     int _currentTime;
 };

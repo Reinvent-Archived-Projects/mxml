@@ -25,13 +25,20 @@ static const coord_t kAttributeMargin = 10;
 static const coord_t kRestWidth = 12;
 static const coord_t kNoteMargin = 20;
 
-SpanFactory::SpanFactory(const dom::Score& score, bool naturalSpacing) : _score(score), _currentTime(0), _spans() {
+SpanFactory::SpanFactory(const dom::Score& score, const ScoreProperties& scoreProperties, bool naturalSpacing)
+: _score(score),
+  _scoreProperties(scoreProperties),
+  _currentTime(0),
+  _spans()
+{
     _spans.setNaturalSpacing(naturalSpacing);
 }
     
 const SpanCollection& SpanFactory::build() {
+    _partIndex = 0;
     for (auto& part : _score.parts()) {
         build(part.get());
+        _partIndex += 1;
     }
     removeRedundantSpans();
 
@@ -41,21 +48,18 @@ const SpanCollection& SpanFactory::build() {
 }
 
 void SpanFactory::build(const dom::Part* part) {
-    AttributesManager attributesManager;
-    
     for (_measureIndex = 0; _measureIndex < part->measures().size(); _measureIndex += 1) {
         _currentTime = 0;
-        build(part->measures().at(_measureIndex).get(), &attributesManager);
+        build(part->measures().at(_measureIndex).get());
     }
 }
 
-void SpanFactory::build(const dom::Measure* measure, AttributesManager* attributesManager) {
+void SpanFactory::build(const dom::Measure* measure) {
     for (auto& node : measure->nodes()) {
         if (const dom::Barline* barline = dynamic_cast<const dom::Barline*>(node.get())) {
             build(barline);
         } else if (const dom::Attributes* attributes = dynamic_cast<const dom::Attributes*>(node.get())) {
-            attributesManager->addAttributes(*attributes);
-            build(attributes, attributesManager);
+            build(attributes);
         } else if (const dom::Direction* direction = dynamic_cast<const dom::Direction*>(node.get())) {
             build(direction);
         } else if (const dom::TimedNode* timedNode = dynamic_cast<const dom::TimedNode*>(node.get())) {
@@ -105,7 +109,7 @@ void SpanFactory::build(const dom::Barline* barline) {
     span->addNode(barline);
 }
 
-void SpanFactory::build(const dom::Attributes* attributes, AttributesManager* attributesManager) {
+void SpanFactory::build(const dom::Attributes* attributes) {
     dom::time_t time = _currentTime;
     const dom::Measure* measure = dynamic_cast<const dom::Measure*>(attributes->parent());
     if (attributes == measure->nodes().back().get())
@@ -147,7 +151,7 @@ void SpanFactory::build(const dom::Attributes* attributes, AttributesManager* at
         coord_t width = 0;
         
         const auto& key = attributes->key(staff);
-        const auto& activeKey = attributesManager->key(measure->index(), staff, attributes->start()-1);
+        const auto& activeKey = _scoreProperties.key(_partIndex, _measureIndex, staff, attributes->start()-1);
         if (activeKey && activeKey->fifths() != 0 && key->fifths() == 0) {
             width = KeyGeometry::keySize(*activeKey).width;
         } else if (key->fifths() != 0) {

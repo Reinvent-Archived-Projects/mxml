@@ -3,7 +3,7 @@
 
 #pragma once
 
-#include <mxml/AttributesManager.h>
+#include <mxml/ScoreProperties.h>
 
 #include <mxml/dom/Clef.h>
 #include <mxml/dom/Pitch.h>
@@ -33,14 +33,14 @@ public:
     
     /** Return the y position of a note, relative to the top line of the topmost staff.
      */
-    static coord_t noteY(const AttributesManager& attributesManager, const dom::Note& note);
+    static coord_t noteY(const ScoreProperties& attributesManager, const dom::Note& note);
     
     /**
      Return the vertical (y) position of the note relative to its staff. Positions
      start at the top line of the staff and increase by 10 for every staff
      line going down.
      */
-    static coord_t staffY(const AttributesManager& attributesManager, const dom::Note& note);
+    static coord_t staffY(const ScoreProperties& attributesManager, const dom::Note& note);
 
     /**
      Return the y position of a pitch within the staff for a given clef.

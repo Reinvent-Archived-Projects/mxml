@@ -136,7 +136,7 @@ float EventSequence::Iterator::dynamics() const {
 }
 
 
-EventSequence::EventSequence() {
+EventSequence::EventSequence(const ScoreProperties& scoreProperties) : _scoreProperties(scoreProperties) {
     
 }
 
@@ -177,7 +177,6 @@ void EventSequence::clear() {
     _dynamics.clear();
     _loops.clear();
     _endings.clear();
-    _attributesManagers.clear();
 }
 
 std::size_t EventSequence::index(dom::time_t time) const {

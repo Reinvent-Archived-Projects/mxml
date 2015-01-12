@@ -27,8 +27,16 @@ using namespace dom;
 const coord_t MeasureGeometry::kGraceNoteScale = 0.85;
 const coord_t MeasureGeometry::kVerticalPadding = 40;
 
-MeasureGeometry::MeasureGeometry(const Measure& measure, const PartGeometry& partGeometry, const SpanCollection& spans, AttributesManager& attributesManager)
-: _measure(measure), _partGeometry(partGeometry), _spans(spans), _attributesManager(attributesManager) {
+MeasureGeometry::MeasureGeometry(const Measure& measure,
+                                 const PartGeometry& partGeometry,
+                                 const SpanCollection& spans,
+                                 const ScoreProperties& scoreProperties)
+: _measure(measure),
+  _partGeometry(partGeometry),
+  _spans(spans),
+  _scoreProperties(scoreProperties)
+{
+    _partIndex = measure.part()->index();
     build();
 }
 
@@ -37,7 +45,6 @@ void MeasureGeometry::build() {
     
     for (auto& node : _measure.nodes()) {
         if (const Attributes* attributes = dynamic_cast<const Attributes*>(node.get())) {
-            _attributesManager.addAttributes(*attributes);
             buildAttributes(attributes);
         } else if (const Barline* barline = dynamic_cast<const Barline*>(node.get())) {
             buildBarline(barline);
@@ -79,7 +86,8 @@ void MeasureGeometry::build() {
 }
 
 void MeasureGeometry::buildAttributes(const Attributes* attributes) {
-    for (int staff = 1; staff <= _attributesManager.staves(); staff += 1) {
+    const auto staves = _scoreProperties.staves(_partIndex);
+    for (int staff = 1; staff <= staves; staff += 1) {
         if (!attributes->clef(staff))
             continue;
 
@@ -100,7 +108,7 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
         addGeometry(std::move(geo));
     }
     
-    for (int staff = 1; staff <= _attributesManager.staves(); staff += 1) {
+    for (int staff = 1; staff <= staves; staff += 1) {
         if (!attributes->time())
             continue;
         
@@ -122,8 +130,8 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
         addGeometry(std::move(geo));
     }
     
-    for (int staff = 1; staff <= _attributesManager.staves(); staff += 1) {
-        const auto& key = _attributesManager.key(_measure.index(), staff, attributes->start());
+    for (int staff = 1; staff <= staves; staff += 1) {
+        const auto& key = _scoreProperties.key(_partIndex, _measure.index(), staff, attributes->start());
         if (!key)
             continue;
         
@@ -132,11 +140,11 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
             continue;
         
         const Span& span = *it;
-        const auto& clef = _attributesManager.clef(_measure.index(), staff, attributes->start());
+        const auto& clef = _scoreProperties.clef(_partIndex, _measure.index(), staff, attributes->start());
         std::unique_ptr<KeyGeometry> geo;
         
         if (key->fifths() == 0) {
-            const auto& activeKey = _attributesManager.key(_measure.index(), staff, attributes->start()-1);
+            const auto& activeKey = _scoreProperties.key(_partIndex, _measure.index(), staff, attributes->start()-1);
             if (!activeKey)
                 continue;
             
@@ -198,7 +206,7 @@ void MeasureGeometry::buildChord(const Chord* chord) {
     if (!chord->firstNote()->printObject())
         return;
     
-    std::unique_ptr<ChordGeometry> geo(new ChordGeometry(*chord, _attributesManager, _partGeometry));
+    std::unique_ptr<ChordGeometry> geo(new ChordGeometry(*chord, _scoreProperties, _partGeometry));
 
     Point location = geo->refNoteLocation();
     if (chord->stem() == STEM_UP) {
@@ -236,7 +244,7 @@ void MeasureGeometry::buildRest(const Note* note) {
     const Span& span = *it;
     Point location;
     location.x = span.start() + span.eventOffset() - _spans.origin(_measure.index());
-    location.y = Metrics::noteY(_attributesManager, *note);
+    location.y = Metrics::noteY(_scoreProperties, *note);
     geo->setLocation(location);
     addGeometry(std::move(geo));
 }

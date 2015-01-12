@@ -4,7 +4,7 @@
 #pragma once
 #include "SpanCollection.h"
 
-#include <mxml/AttributesManager.h>
+#include <mxml/ScoreProperties.h>
 #include <mxml/dom/Barline.h>
 #include <mxml/dom/Chord.h>
 #include <mxml/dom/Direction.h>
@@ -18,13 +18,13 @@ namespace mxml {
  */
 class SpanFactory {
 public:
-    SpanFactory(const dom::Score& score, bool naturalSpacing);
+    SpanFactory(const dom::Score& score, const ScoreProperties& scoreProperties, bool naturalSpacing);
     const SpanCollection& build();
     
 private:
     void build(const dom::Part* part);
-    void build(const dom::Measure* measure, AttributesManager* attributesManager);
-    void build(const dom::Attributes* attributes, AttributesManager* attributesManager);
+    void build(const dom::Measure* measure);
+    void build(const dom::Attributes* attributes);
     void build(const dom::Barline* barline);
     void build(const dom::Direction* direction);
     void build(const dom::TimedNode* node);
@@ -39,7 +39,9 @@ private:
 
 private:
     const dom::Score& _score;
+    const ScoreProperties& _scoreProperties;
 
+    std::size_t _partIndex;
     std::size_t _measureIndex;
     int _currentTime;
     

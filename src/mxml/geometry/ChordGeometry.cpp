@@ -15,10 +15,10 @@ const coord_t ChordGeometry::kArticulationSpacing = 1;
 const coord_t ChordGeometry::kFermataSpacing = 11;
 const coord_t ChordGeometry::kDotSpacing = 2;
 
-ChordGeometry::ChordGeometry(const dom::Chord& chord, AttributesManager& attributesManager, const PartGeometry& partGeometry)
+ChordGeometry::ChordGeometry(const dom::Chord& chord, const ScoreProperties& scoreProperties, const PartGeometry& partGeometry)
 : MeasureElementGeometry(),
   _chord(chord),
-  _attributesManager(attributesManager),
+  _scoreProperties(scoreProperties),
   _partGeometry(partGeometry),
   _notes(),
   _stem()
@@ -71,7 +71,7 @@ void ChordGeometry::build() {
 Rect ChordGeometry::buildNotes() {
     for (auto& note : _chord.notes()) {
         std::unique_ptr<NoteGeometry> geom(new NoteGeometry(*note));
-        Point loc = {0, Metrics::noteY(_attributesManager, *note)};
+        Point loc = {0, Metrics::noteY(_scoreProperties, *note)};
         geom->setLocation(loc);
 
         _notes.push_back(geom.get());
@@ -160,11 +160,9 @@ void ChordGeometry::buildAccidental(const NoteGeometry& noteGeom, const Rect& no
     if (!note.pitch())
         return;
 
-    int previousAlter = _attributesManager.alter(note);
+    int previousAlter = _scoreProperties.alter(note);
     if (alter == previousAlter)
         return;
-
-    _attributesManager.addAlter(note);
 
     std::unique_ptr<AccidentalGeometry> accGeom(new AccidentalGeometry(alter));
 

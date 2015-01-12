@@ -25,7 +25,9 @@
 
 namespace mxml {
 
-    PartGeometryFactory::PartGeometryFactory(const dom::Part& part, const SpanCollection& spans) : _part(part), _spans(spans), _partGeometry() {
+    PartGeometryFactory::PartGeometryFactory(const dom::Part& part, const ScoreProperties& scoreProperties, const SpanCollection& spans)
+    : _part(part), _scoreProperties(scoreProperties), _spans(spans), _partGeometry()
+    {
     }
 
     PartGeometryFactory::~PartGeometryFactory() {
@@ -33,11 +35,11 @@ namespace mxml {
     }
 
     std::unique_ptr<PartGeometry> PartGeometryFactory::build() {
-        _partGeometry.reset(new PartGeometry(_part, _spans));
+        _partGeometry.reset(new PartGeometry(_part, _scoreProperties, _spans));
 
         coord_t offset = 0;
         for (auto& measure : _part.measures()) {
-            std::unique_ptr<MeasureGeometry> geo(new MeasureGeometry(*measure, *_partGeometry, _spans, _attributesManager));
+            std::unique_ptr<MeasureGeometry> geo(new MeasureGeometry(*measure, *_partGeometry, _spans, _scoreProperties));
             geo->setHorizontalAnchorPointValues(0, 0);
             geo->setLocation({offset, 0});
             offset += geo->size().width;

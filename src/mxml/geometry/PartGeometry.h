@@ -6,7 +6,7 @@
 #include "MeasureGeometry.h"
 #include "TieGeometry.h"
 
-#include <mxml/AttributesManager.h>
+#include <mxml/ScoreProperties.h>
 #include <mxml/dom/Part.h>
 #include <mxml/dom/Direction.h>
 #include <mxml/dom/Ornaments.h>
@@ -18,7 +18,7 @@ class ChordGeometry;
 
 class PartGeometry : public Geometry {
 public:
-    explicit PartGeometry(const dom::Part& part, const SpanCollection& spans);
+    explicit PartGeometry(const dom::Part& part, const ScoreProperties& scoreProperties, const SpanCollection& spans);
     
     const dom::Part& part() const {
         return _part;
@@ -39,7 +39,6 @@ public:
     
 private:
     const dom::Part& _part;
-    const SpanCollection& _spans;
     
     std::vector<MeasureGeometry*> _measureGeometries;
     std::vector<TieGeometry*> _tieGeometries;

@@ -16,19 +16,24 @@ namespace mxml {
 
 using namespace dom;
 
-EventFactory::EventFactory(const dom::Score& score)
-: _score(score), _measureIndex(0), _time(0), _loopBegin(0),  _endingBegin(0), _eventSequence()
+EventFactory::EventFactory(const dom::Score& score, const ScoreProperties& scoreProperties)
+: _score(score),
+  _scoreProperties(scoreProperties),
+  _measureIndex(0),
+  _time(0),
+  _loopBegin(0),
+  _endingBegin(0),
+  _eventSequence()
 {}
 
-const EventSequence& EventFactory::build() {
-    _eventSequence.clear();
+std::unique_ptr<EventSequence> EventFactory::build() {
+    _eventSequence.reset(new EventSequence(_scoreProperties));
     _firstPass = true;
 
     for (auto& part : _score.parts()) {
         _part = part.get();
         _measureStartTime = 0;
         _time = 0;
-        _eventSequence._attributesManagers.emplace_back();
         for (_measureIndex = 0; _measureIndex < part->measures().size(); _measureIndex += 1) {
             const Measure& measure = *part->measures().at(_measureIndex);
             processMeasure(measure);
@@ -43,8 +48,8 @@ const EventSequence& EventFactory::build() {
     dom::time_t time = 0;
     double wallTime = 0.0;
 
-    auto temposIter = _eventSequence.tempos().begin();
-    auto temposEndIter = _eventSequence.tempos().end();
+    auto temposIter = _eventSequence->tempos().begin();
+    auto temposEndIter = _eventSequence->tempos().end();
     auto temposNextIter = temposIter;
     if (temposIter != temposEndIter) {
         if (temposIter->begin <= time)
@@ -52,8 +57,8 @@ const EventSequence& EventFactory::build() {
         ++temposNextIter;
     }
 
-    for (Event& event : _eventSequence.events()) {
-        divisions = _eventSequence._attributesManagers.back().divisions(event.measureIndex());
+    for (Event& event : _eventSequence->events()) {
+        divisions = _scoreProperties.divisions(event.measureIndex());
 
         if (temposNextIter != temposEndIter && temposNextIter->begin <= time) {
             temposIter = temposNextIter;
@@ -69,19 +74,14 @@ const EventSequence& EventFactory::build() {
         event.setWallTimeDuration(event.maxDuration() * divisionDuration);
     }
 
-    return _eventSequence;
+    return std::move(_eventSequence);
 }
 
 void EventFactory::processMeasure(const dom::Measure& measure) {
-    auto partIndex = measure.part()->index();
-    auto& attributesManager = _eventSequence._attributesManagers[partIndex];
-
     for (auto& node : measure.nodes()) {
         if (const Barline* barline = dynamic_cast<const Barline*>(node.get())) {
             if (_firstPass)
                 processBarline(*barline);
-        } else if (const Attributes* attributes = dynamic_cast<const Attributes*>(node.get())) {
-            attributesManager.addAttributes(*attributes);
         } else if (const Direction* direction = dynamic_cast<const Direction*>(node.get())) {
             processDirection(*direction);
         } else if (const TimedNode* timedNode = dynamic_cast<const TimedNode*>(node.get())) {
@@ -89,7 +89,7 @@ void EventFactory::processMeasure(const dom::Measure& measure) {
         }
     }
     
-    _measureStartTime += Attributes::divisionsPerMeasure(attributesManager.divisions(), *attributesManager.time());
+    _measureStartTime += Attributes::divisionsPerMeasure(_scoreProperties.divisions(measure.index()), *_scoreProperties.time(measure.index()));
     _time = _measureStartTime;
 }
 
@@ -103,7 +103,7 @@ void EventFactory::processBarline(const dom::Barline& barline) {
             loop.begin = _loopBegin;
             loop.end = _time;
             loop.count = 1;
-            _eventSequence.addLoop(loop);
+            _eventSequence->addLoop(loop);
             _loopBegin = _time;
         }
     }
@@ -117,11 +117,11 @@ void EventFactory::processBarline(const dom::Barline& barline) {
             ee.begin = _endingBegin;
             ee.end = _time;
             ee.numbers = ending->numbers();
-            _eventSequence.addEnding(ee);
+            _eventSequence->addEnding(ee);
         }
         
-        if (ending->type() == Ending::DISCONTINUE && !_eventSequence.loops().empty())
-            _eventSequence.loops().back().count = *ending->numbers().rbegin() - 1;
+        if (ending->type() == Ending::DISCONTINUE && !_eventSequence->loops().empty())
+            _eventSequence->loops().back().count = *ending->numbers().rbegin() - 1;
     }
 }
 
@@ -134,7 +134,7 @@ void EventFactory::processDirection(const dom::Direction& direction) {
         EventSequence::Value value;
         value.begin = _time;
         value.value = sound->tempo();
-        _eventSequence.addTempo(value);
+        _eventSequence->addTempo(value);
     }
     
     if (sound->dynamics()) {
@@ -142,7 +142,7 @@ void EventFactory::processDirection(const dom::Direction& direction) {
         value.begin = _time;
         value.part = _part;
         value.value = sound->dynamics().value();
-        _eventSequence.addDynamics(value);
+        _eventSequence->addDynamics(value);
     }
 }
 
@@ -166,15 +166,15 @@ void EventFactory::processChord(const Chord& chord) {
 }
 
 void EventFactory::addNote(const Note& note) {
-    Event* onEvent = _eventSequence.event(_time);
+    Event* onEvent = _eventSequence->event(_time);
     if (!onEvent)
-        onEvent = &_eventSequence.addEvent(Event(_score, _measureIndex, _time));
+        onEvent = &_eventSequence->addEvent(Event(_score, _measureIndex, _time));
     onEvent->setMeasureIndex(_measureIndex);
     onEvent->addOnNote(note);
 
-    Event* offEvent = _eventSequence.event(_time + note.duration());
+    Event* offEvent = _eventSequence->event(_time + note.duration());
     if (!offEvent)
-        offEvent = &_eventSequence.addEvent(Event(_score, _measureIndex, _time + note.duration()));
+        offEvent = &_eventSequence->addEvent(Event(_score, _measureIndex, _time + note.duration()));
     offEvent->addOffNote(note);
 }
 

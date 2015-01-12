@@ -4,7 +4,7 @@
 #pragma once
 #include "Event.h"
 #include <mxml/dom/Sound.h>
-#include <mxml/AttributesManager.h>
+#include <mxml/ScoreProperties.h>
 
 #include <set>
 #include <vector>
@@ -103,7 +103,7 @@ public:
     };
     
 public:
-    EventSequence();
+    EventSequence(const ScoreProperties& scoreProperties);
     
     Event& addEvent(const Event& event);
     void addTempo(const Value& value);
@@ -186,21 +186,19 @@ public:
     Iterator begin(std::size_t measureIndex) const;
     Iterator end(std::size_t measureIndex) const;
 
-    const AttributesManager& attributesManager(std::size_t partIndex) const {
-        return _attributesManagers[partIndex];
-    }
-
-    const AttributesManager& attributesManager() const {
-        return _attributesManagers.back();
+    const ScoreProperties& scoreProperties() const {
+        return _scoreProperties;
     }
 
 private:
+    const ScoreProperties& _scoreProperties;
+    
     std::vector<Event> _events;
     std::vector<Value> _tempos;
     std::vector<Value> _dynamics;
     std::vector<Ending> _endings;
     std::vector<Loop> _loops;
-    std::vector<AttributesManager> _attributesManagers;
+    std::vector<ScoreProperties> _attributesManagers;
 
     friend class EventFactory;
 };

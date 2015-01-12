@@ -3,9 +3,10 @@
 
 #pragma once
 #include "EventSequence.h"
-#include "AttributesManager.h"
+#include "ScoreProperties.h"
 
 #include <map>
+#include <memory>
 
 namespace mxml {
 
@@ -19,9 +20,9 @@ namespace dom {
 
 class EventFactory {
 public:
-    explicit EventFactory(const dom::Score& score);
+    explicit EventFactory(const dom::Score& score, const ScoreProperties& scoreProperties);
 
-    const EventSequence& build();
+    std::unique_ptr<EventSequence> build();
     
 private:
     void processMeasure(const dom::Measure& measure);
@@ -33,6 +34,7 @@ private:
 
 private:
     const dom::Score& _score;
+    const ScoreProperties& _scoreProperties;
     const dom::Part* _part;
 
     std::size_t _measureIndex;
@@ -42,7 +44,7 @@ private:
 
     dom::time_t _loopBegin;
     dom::time_t _endingBegin;
-    EventSequence _eventSequence;
+    std::unique_ptr<EventSequence> _eventSequence;
 };
 
 } // namespace mxml

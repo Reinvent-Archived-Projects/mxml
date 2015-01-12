@@ -10,7 +10,7 @@ using namespace dom;
 const coord_t Metrics::kStaffLineSpacing = 10;
 const std::size_t Metrics::kStaffLineCount = 5;
 
-coord_t Metrics::noteY(const AttributesManager& attributesManager, const dom::Note& note) {
+coord_t Metrics::noteY(const ScoreProperties& attributesManager, const dom::Note& note) {
     const auto& part = static_cast<const dom::Part&>(*note.measure()->parent());
     return staffOrigin(part, note.staff()) + staffY(attributesManager, note);
 }
@@ -28,7 +28,7 @@ coord_t Metrics::staffOrigin(const dom::Part& part, int staffNumber) {
     return (staffNumber - 1) * (staffHeight() + part.staffDistance());
 }
 
-coord_t Metrics::staffY(const AttributesManager& attributesManager, const Note& note) {
+coord_t Metrics::staffY(const ScoreProperties& attributesManager, const Note& note) {
     coord_t y = 20;
     if (note.pitch()) {
         const auto& clef = attributesManager.clef(note);

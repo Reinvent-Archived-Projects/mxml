@@ -3,6 +3,8 @@
 
 #pragma once
 #include "Geometry.h"
+
+#include <mxml/ScoreProperties.h>
 #include <mxml/SpanCollection.h>
 #include <mxml/dom/Score.h>
 
@@ -10,7 +12,7 @@ namespace mxml {
 
 class ScoreGeometry : public Geometry {
 public:
-    ScoreGeometry(const dom::Score& score, bool naturalSpacing = true);
+    ScoreGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, bool naturalSpacing = true);
 
     const dom::Score& score() const {
         return _score;
@@ -21,6 +23,7 @@ public:
 
 private:
     const dom::Score& _score;
+    const ScoreProperties& _scoreProperties;
     SpanCollection _spans;
 };
 

@@ -4,13 +4,13 @@
 #pragma once
 #include "PartGeometry.h"
 
-#include <mxml/AttributesManager.h>
+#include <mxml/ScoreProperties.h>
 #include <mxml/dom/Part.h>
 
 namespace mxml {
     class PartGeometryFactory {
     public:
-        PartGeometryFactory(const dom::Part& part, const SpanCollection& spans);
+        PartGeometryFactory(const dom::Part& part, const ScoreProperties& scoreProperties, const SpanCollection& spans);
         ~PartGeometryFactory();
         
         std::unique_ptr<PartGeometry> build();
@@ -37,6 +37,7 @@ namespace mxml {
 
     private:
         const dom::Part& _part;
+        const ScoreProperties& _scoreProperties;
         const SpanCollection& _spans;
 
         std::unique_ptr<PartGeometry> _partGeometry;
@@ -44,7 +45,5 @@ namespace mxml {
 
         dom::Optional<dom::Ending> _startEnding;
         Point _startEndingLocation;
-        
-        AttributesManager _attributesManager;
     };
 }
