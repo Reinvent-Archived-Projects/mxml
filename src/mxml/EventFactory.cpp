@@ -130,18 +130,18 @@ void EventFactory::processDirection(const dom::Direction& direction) {
         return;
     const auto& sound = direction.sound();
     
-    if (sound->tempo()) {
+    if (sound->tempo) {
         EventSequence::Value value;
         value.begin = _time;
-        value.value = sound->tempo();
+        value.value = sound->tempo;
         _eventSequence->addTempo(value);
     }
     
-    if (sound->dynamics()) {
+    if (sound->dynamics) {
         EventSequence::Value value;
         value.begin = _time;
         value.part = _part;
-        value.value = sound->dynamics().value();
+        value.value = sound->dynamics.value();
         _eventSequence->addDynamics(value);
     }
 }

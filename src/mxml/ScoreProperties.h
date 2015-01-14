@@ -24,12 +24,12 @@ public:
     ScoreProperties(const dom::Score& score);
 
     /**
-     Get active key for the given measure, staff and time.
+     Get active key for the given part, measure, staff and time.
      */
     const dom::Key* key(std::size_t partIndex, std::size_t measureIndex, int staff, time_t time) const;
 
     /**
-     Get active clef for the given measure, staff and time.
+     Get active clef for the given part, measure, staff and time.
      */
     const dom::Clef* clef(std::size_t partIndex, std::size_t measureIndex, int staff, time_t time) const;
 
@@ -39,7 +39,7 @@ public:
     const dom::Clef* clef(const dom::Note& note) const;
 
     /**
-     Get active time signature for the given measure, staff and time.
+     Get active time signature for the given measure.
      */
     const dom::Time* time(std::size_t measureIndex) const;
 
@@ -49,7 +49,8 @@ public:
     int divisions(std::size_t measureIndex) const;
 
     /**
-     Get the number of staves. This method assumes that the staves value gets set once and never changes.
+     Get the number of staves for a given part. This method assumes that the staves value gets set once and never
+     changes.
      */
     int staves(std::size_t partIndex) const;
 
@@ -57,6 +58,10 @@ public:
      Get the chromatic alteration for a particular note.
      */
     int alter(const dom::Note& note) const;
+
+    /**
+     Get the chromatic alteration for a given part, measure, time, staff, octave and step.
+     */
     int alter(std::size_t partIndex, std::size_t measureIndex, dom::time_t time, int staff, int octave, dom::Pitch::Step step) const;
 
 protected:
