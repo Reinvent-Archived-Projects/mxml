@@ -195,7 +195,7 @@ void SpanFactory::build(const dom::TimedNode* node) {
 }
 
 void SpanFactory::build(const dom::Chord* chord) {
-    if (!chord->firstNote()->printObject())
+    if (!chord->firstNote() || !chord->firstNote()->printObject())
         return;
 
     SpanCollection::iterator span;

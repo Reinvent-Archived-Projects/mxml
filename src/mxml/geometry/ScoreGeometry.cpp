@@ -23,6 +23,7 @@ ScoreGeometry::ScoreGeometry(const dom::Score& score, const ScoreProperties& sco
         geom->setVerticalAnchorPointValues(0, 0);
         geom->setLocation({0, offset});
         offset += geom->size().height;
+        _partGeometries.push_back(geom.get());
         addGeometry(std::move(geom));
     }
     

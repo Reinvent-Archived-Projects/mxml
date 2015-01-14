@@ -3,10 +3,12 @@
 
 #pragma once
 #include "Geometry.h"
+#include "PartGeometry.h"
 
 #include <mxml/ScoreProperties.h>
 #include <mxml/SpanCollection.h>
 #include <mxml/dom/Score.h>
+
 
 namespace mxml {
 
@@ -20,11 +22,16 @@ public:
     const SpanCollection& spans() const {
         return _spans;
     }
+    const std::vector<PartGeometry*>& partGeometries() const {
+        return _partGeometries;
+    }
 
 private:
     const dom::Score& _score;
     const ScoreProperties& _scoreProperties;
+
     SpanCollection _spans;
+    std::vector<PartGeometry*> _partGeometries;
 };
 
 } // namespace

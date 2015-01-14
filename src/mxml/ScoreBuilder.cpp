@@ -68,16 +68,25 @@ dom::Chord* ScoreBuilder::addChord(dom::Measure* measure) {
     return raw;
 }
 
-dom::Note* ScoreBuilder::addNote(dom::Chord* chord) {
+dom::Note* ScoreBuilder::addNote(dom::Chord* chord, dom::Note::Type type, dom::time_t start, dom::time_t duration) {
     auto note = std::unique_ptr<dom::Note>(new dom::Note{});
     note->setParent(chord);
+    note->setMeasure(static_cast<const dom::Measure*>(chord->parent()));
+    note->setType(dom::presentOptional(type));
+    note->setStart(start);
+    note->setDuration(dom::presentOptional(duration));
+
     chord->addNote(std::move(note));
     return chord->notes().back().get();
 }
 
-dom::Pitch* ScoreBuilder::setPitch(dom::Note* note) {
+dom::Pitch* ScoreBuilder::setPitch(dom::Note* note, dom::Pitch::Step step, int octave, int alter) {
     auto pitch = std::unique_ptr<dom::Pitch>(new dom::Pitch{});
     pitch->setParent(note);
+    pitch->setOctave(octave);
+    pitch->setStep(step);
+    pitch->setAlter(alter);
+
     note->setPitch(std::move(pitch));
     return note->pitch().get();
 }

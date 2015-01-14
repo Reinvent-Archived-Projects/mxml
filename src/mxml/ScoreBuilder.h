@@ -24,8 +24,8 @@ public:
     dom::Clef* setBassClef(dom::Attributes* attributes, int staff = 2);
 
     dom::Chord* addChord(dom::Measure* measure);
-    dom::Note* addNote(dom::Chord* chord);
-    dom::Pitch* setPitch(dom::Note* note);
+    dom::Note* addNote(dom::Chord* chord, dom::Note::Type type = dom::Note::TYPE_EIGHTH, dom::time_t start = 0, dom::time_t duration = 1);
+    dom::Pitch* setPitch(dom::Note* note, dom::Pitch::Step step, int octave, int alter = 0);
 
     std::unique_ptr<dom::Score> build();
 

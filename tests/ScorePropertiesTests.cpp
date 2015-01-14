@@ -87,24 +87,14 @@ BOOST_AUTO_TEST_CASE(alters) {
     attributes1->setKey(1, std::move(key));
 
     auto chord1 = builder.addChord(measure1);
-    auto note1 = builder.addNote(chord1);
-    note1->setStart(1);
+    auto note1 = builder.addNote(chord1, dom::Note::TYPE_EIGHTH, 1);
     note1->setStaff(kStaff);
-    
-    auto pitch1 = builder.setPitch(note1);
-    pitch1->setOctave(kOctave);
-    pitch1->setStep(dom::Pitch::STEP_C);
-    pitch1->setAlter(0);
+    builder.setPitch(note1, dom::Pitch::STEP_C, kOctave, 0);
 
     auto chord2 = builder.addChord(measure1);
-    auto note2 = builder.addNote(chord2);
-    note2->setStart(2);
+    auto note2 = builder.addNote(chord2, dom::Note::TYPE_EIGHTH, 2);
     note2->setStaff(kStaff);
-
-    auto pitch2 = builder.setPitch(note2);
-    pitch2->setOctave(kOctave);
-    pitch2->setStep(dom::Pitch::STEP_D);
-    pitch2->setAlter(1);
+    builder.setPitch(note2, dom::Pitch::STEP_D, kOctave, 1);
 
     auto score = builder.build();
     ScoreProperties properties(*score);
