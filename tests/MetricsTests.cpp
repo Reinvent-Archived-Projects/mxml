@@ -1,5 +1,5 @@
 
-#include "ScoreFactory.h"
+#include <mxml/ScoreBuilder.h>
 #include <mxml/Metrics.h>
 
 #include <boost/test/unit_test.hpp>
@@ -8,14 +8,19 @@ using namespace mxml;
 using namespace dom;
 
 BOOST_AUTO_TEST_CASE(noteStaffY) {
-    auto score = tests::ScoreFactory::buildScorePiano();
-    auto& part = score->parts().at(0);
-    auto& measure = part->measures().at(0);
+    ScoreBuilder builder;
+    auto part = builder.addPart();
+    auto measure = builder.addMeasure(part);
+    auto attributes = builder.addAttributes(measure);
+    attributes->setStaves(dom::presentOptional(2));
+    builder.setTrebleClef(attributes, 1);
+    builder.setBassClef(attributes, 2);
 
+    auto score = builder.build();
     ScoreProperties scoreProperties(*score);
 
     Note note;
-    note.setMeasure(measure.get());
+    note.setMeasure(measure);
     
     note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::STEP_G, 0, 4)));
     BOOST_CHECK_EQUAL(Metrics::staffY(scoreProperties, note), 30);
@@ -28,15 +33,20 @@ BOOST_AUTO_TEST_CASE(noteStaffY) {
 }
 
 BOOST_AUTO_TEST_CASE(noteStaff2Y) {
-    auto score = tests::ScoreFactory::buildScorePiano();
-    auto& part = score->parts().at(0);
-    auto& measure = part->measures().at(0);
+    ScoreBuilder builder;
+    auto part = builder.addPart();
+    auto measure = builder.addMeasure(part);
+    auto attributes = builder.addAttributes(measure);
+    attributes->setStaves(dom::presentOptional(2));
+    builder.setTrebleClef(attributes, 1);
+    builder.setBassClef(attributes, 2);
 
+    auto score = builder.build();
     ScoreProperties scoreProperties(*score);
     
     Note note;
     note.setStaff(2);
-    note.setMeasure(measure.get());
+    note.setMeasure(measure);
     
     note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::STEP_F, 0, 3)));
     BOOST_CHECK_EQUAL(Metrics::staffY(scoreProperties, note), 10);
@@ -53,14 +63,19 @@ BOOST_AUTO_TEST_CASE(staffOrigin) {
 }
 
 BOOST_AUTO_TEST_CASE(noteY) {
-    auto score = tests::ScoreFactory::buildScorePiano();
-    auto& part = score->parts().at(0);
-    auto& measure = part->measures().at(0);
+    ScoreBuilder builder;
+    auto part = builder.addPart();
+    auto measure = builder.addMeasure(part);
+    auto attributes = builder.addAttributes(measure);
+    attributes->setStaves(dom::presentOptional(2));
+    builder.setTrebleClef(attributes, 1);
+    builder.setBassClef(attributes, 2);
 
+    auto score = builder.build();
     ScoreProperties scoreProperties(*score);
     
     Note note;
-    note.setMeasure(measure.get());
+    note.setMeasure(measure);
     note.setStaff(1);
     note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::STEP_G, 0, 4)));
     BOOST_CHECK_EQUAL(Metrics::noteY(scoreProperties, note), 30);

@@ -71,6 +71,11 @@ public:
             return _clefs[number - 1].get();
         return nullptr;
     }
+    Clef* clef(int number) {
+        if (number > 0 && number <= _clefs.size())
+            return _clefs[number - 1].get();
+        return nullptr;
+    }
     void setClef(int number, std::unique_ptr<Clef>&& clef) {
         assert(number >= 1 && number <= _clefs.size() + 1);
         if (_clefs.size() >= number)
@@ -78,6 +83,11 @@ public:
     }
     
     const Key* key(int number) const {
+        if (number > 0 && number <= _keys.size())
+            return _keys[number - 1].get();
+        return nullptr;
+    }
+    Key* key(int number) {
         if (number > 0 && number <= _keys.size())
             return _keys[number - 1].get();
         return nullptr;
@@ -96,6 +106,9 @@ public:
     }
     
     const Time* time() const {
+        return _time.get();
+    }
+    Time* time() {
         return _time.get();
     }
     void setTime(unique_ptr<Time> time) {

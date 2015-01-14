@@ -9,7 +9,8 @@
 /* Begin PBXBuildFile section */
 		61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 61239A5E1A64866500B3F0A3 /* ScoreProperties.h */; };
 		61239A611A64866500B3F0A3 /* ScoreProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61239A5F1A64866500B3F0A3 /* ScoreProperties.cpp */; };
-		61239A641A64AE2200B3F0A3 /* ScoreFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61239A621A64AE2200B3F0A3 /* ScoreFactory.cpp */; };
+		61239A6E1A65974400B3F0A3 /* ScoreBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */; };
+		61239A6F1A65974400B3F0A3 /* ScoreBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 61239A6D1A65974400B3F0A3 /* ScoreBuilder.h */; };
 		614056B41A5C6228005224C9 /* Identification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614055DC1A5C6228005224C9 /* Identification.cpp */; };
 		614056B91A5C6228005224C9 /* Measure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614055E11A5C6228005224C9 /* Measure.cpp */; };
 		614056BE1A5C6228005224C9 /* Note.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614055E61A5C6228005224C9 /* Note.cpp */; };
@@ -135,8 +136,8 @@
 /* Begin PBXFileReference section */
 		61239A5E1A64866500B3F0A3 /* ScoreProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreProperties.h; sourceTree = "<group>"; };
 		61239A5F1A64866500B3F0A3 /* ScoreProperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreProperties.cpp; sourceTree = "<group>"; };
-		61239A621A64AE2200B3F0A3 /* ScoreFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreFactory.cpp; sourceTree = "<group>"; };
-		61239A631A64AE2200B3F0A3 /* ScoreFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreFactory.h; sourceTree = "<group>"; };
+		61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreBuilder.cpp; sourceTree = "<group>"; };
+		61239A6D1A65974400B3F0A3 /* ScoreBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreBuilder.h; sourceTree = "<group>"; };
 		614055B81A5C61FE005224C9 /* libmxml.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmxml.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		614055CA1A5C6228005224C9 /* Accidental.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Accidental.h; sourceTree = "<group>"; };
 		614055CB1A5C6228005224C9 /* Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appearance.h; sourceTree = "<group>"; };
@@ -448,6 +449,8 @@
 				6140569D1A5C6228005224C9 /* SpanFactory.h */,
 				6140569E1A5C6228005224C9 /* StringUtility.cpp */,
 				6140569F1A5C6228005224C9 /* StringUtility.h */,
+				61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */,
+				61239A6D1A65974400B3F0A3 /* ScoreBuilder.h */,
 			);
 			name = mxml;
 			path = src/mxml;
@@ -677,8 +680,6 @@
 			isa = PBXGroup;
 			children = (
 				614057841A5C625A005224C9 /* main.cpp */,
-				61239A621A64AE2200B3F0A3 /* ScoreFactory.cpp */,
-				61239A631A64AE2200B3F0A3 /* ScoreFactory.h */,
 				614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */,
 				614057821A5C625A005224C9 /* EventFactoryTests.cpp */,
 				614057831A5C625A005224C9 /* GeometryTests.cpp */,
@@ -724,6 +725,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */,
+				61239A6F1A65974400B3F0A3 /* ScoreBuilder.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -889,6 +891,7 @@
 				6140572F1A5C6228005224C9 /* CreditWordsHandler.cpp in Sources */,
 				6140576B1A5C6228005224C9 /* TurnHandler.cpp in Sources */,
 				614057471A5C6228005224C9 /* MordentHandler.cpp in Sources */,
+				61239A6E1A65974400B3F0A3 /* ScoreBuilder.cpp in Sources */,
 				614056F81A5C6228005224C9 /* LyricGeometry.cpp in Sources */,
 				614057451A5C6228005224C9 /* MeasureHandler.cpp in Sources */,
 				614057011A5C6228005224C9 /* OrnamentsGeometry.cpp in Sources */,
@@ -900,7 +903,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				614057901A5C625A005224C9 /* ParsingTests.cpp in Sources */,
-				61239A641A64AE2200B3F0A3 /* ScoreFactory.cpp in Sources */,
 				614057C01A5CAA47005224C9 /* ScorePropertiesTests.cpp in Sources */,
 				614057BE1A5C79EF005224C9 /* KeyTests.cpp in Sources */,
 				6140578F1A5C625A005224C9 /* NoteTests.cpp in Sources */,
