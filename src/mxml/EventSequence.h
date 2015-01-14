@@ -80,9 +80,6 @@ public:
             return _loopNumber;
         }
         
-        float tempo() const;
-        float dynamics() const;
-        
         bool operator==(const Iterator& it) const {
             return _eventSequence == it._eventSequence && _index == it._index && _loopNumber == it._loopNumber;
         }
@@ -106,8 +103,6 @@ public:
     EventSequence(const ScoreProperties& scoreProperties);
     
     Event& addEvent(const Event& event);
-    void addTempo(const Value& value);
-    void addDynamics(const Value& value);
     void addEnding(const Ending& ending);
     void addLoop(const Loop& loop);
     void clear();
@@ -117,18 +112,6 @@ public:
     }
     std::vector<Event>& events() {
         return _events;
-    }
-    const std::vector<Value>& tempos() const {
-        return _tempos;
-    }
-    std::vector<Value>& tempos() {
-        return _tempos;
-    }
-    const std::vector<Value>& dynamics() const {
-        return _dynamics;
-    }
-    std::vector<Value>& dynamics() {
-        return _dynamics;
     }
     const std::vector<Ending>& endings() const {
         return _endings;
@@ -163,14 +146,6 @@ public:
      */
     const Event* lastEvent(std::size_t measureIndex) const;
     
-    /** Return a pointer to the tempo for the given event time, 0 if there is no tempo defined.
-     */
-    const float* tempo(dom::time_t time) const;
-    
-    /** Return a pointer to the dynamics for the given event time, 0 if there are no dynamics defined.
-     */
-    const float* dynamics(dom::time_t time) const;
-    
     /** Return the loop contatining the given event time, 0 if the event at that index is not part of a loop.
      */
     const Loop* loop(dom::time_t time) const;
@@ -194,8 +169,6 @@ private:
     const ScoreProperties& _scoreProperties;
     
     std::vector<Event> _events;
-    std::vector<Value> _tempos;
-    std::vector<Value> _dynamics;
     std::vector<Ending> _endings;
     std::vector<Loop> _loops;
     std::vector<ScoreProperties> _attributesManagers;

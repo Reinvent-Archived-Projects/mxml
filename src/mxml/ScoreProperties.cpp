@@ -29,6 +29,8 @@ void ScoreProperties::process(std::size_t partIndex, const dom::Measure& measure
             process(partIndex, measureIndex, *attributes);
         else if (auto chord = dynamic_cast<const dom::Chord*>(node.get()))
             process(partIndex, measureIndex, *chord);
+        else if (auto direction = dynamic_cast<const dom::Direction*>(node.get()))
+            process(partIndex, measureIndex, *direction);
     }
 }
 
@@ -46,6 +48,19 @@ void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, c
     } else if (_staves[partIndex] == 0) {
         _staves[partIndex] = 1;
     }
+}
+
+void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Direction& direction) {
+    if (!direction.sound())
+        return;
+
+    SoundRef ref;
+    ref.partIndex = partIndex;
+    ref.measureIndex = measureIndex;
+    ref.staff = direction.staff();
+    ref.time = direction.start();
+    ref.sound = direction.sound().get();
+    _sounds.insert(ref);
 }
 
 void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Chord& chord) {
@@ -119,7 +134,7 @@ int ScoreProperties::alter(const dom::Note& note) const {
     return alter(partIndex, measureIndex, note.start(), note.staff(), note.pitch()->octave(), note.pitch()->step());
 }
 
-int ScoreProperties::alter(std::size_t partIndex, std::size_t measureIndex, dom::time_t time, int staff, int octave, dom::Pitch::Step step) const {
+int ScoreProperties::alter(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time, int octave, dom::Pitch::Step step) const {
     auto currentKey = key(partIndex, measureIndex, staff, time);
     int current = currentKey->alter(step);
 
@@ -130,6 +145,40 @@ int ScoreProperties::alter(std::size_t partIndex, std::size_t measureIndex, dom:
             current = ref.pitch->alter();
     }
 
+    return current;
+}
+
+float ScoreProperties::tempo(std::size_t measureIndex, dom::time_t time) const {
+    float current = 60.0;
+    for (auto& ref : _sounds) {
+        if (ref.measureIndex > measureIndex || (ref.measureIndex == measureIndex && ref.time > time))
+            return current;
+        if (ref.sound->tempo.isPresent())
+            current = ref.sound->tempo.value();
+    }
+    return current;
+}
+
+float ScoreProperties::dynamics(const dom::Note& note) const {
+    if (note.dynamics().isPresent() && note.dynamics().value() > 0)
+        return note.dynamics();
+
+    auto measure = note.measure();
+    auto part = static_cast<const mxml::dom::Part*>(measure->parent());
+    return dynamics(part->index(), measure->index(), note.staff(), note.start());
+}
+
+float ScoreProperties::dynamics(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time) const {
+    float current = 100.0;
+    for (auto& ref : _sounds) {
+        if (ref.measureIndex > measureIndex || (ref.measureIndex == measureIndex && ref.time > time))
+            return current;
+
+        if (ref.staff.isPresent() && ref.staff != staff)
+            continue;
+        if (ref.partIndex == partIndex && ref.sound->dynamics.isPresent())
+            current = ref.sound->dynamics.value();
+    }
     return current;
 }
 

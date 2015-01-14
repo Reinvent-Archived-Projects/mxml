@@ -40,7 +40,7 @@ void DirectionHandler::endSubElement(const QName& qname, RecursiveHandler* parse
     using dom::presentOptional;
 
     if (strcmp(qname.localName(), kStaffTag) == 0)
-        _result->setStaff(_integerHandler.result());
+        _result->setStaff(dom::presentOptional(_integerHandler.result()));
     else if (strcmp(qname.localName(), kOffsetTag) == 0)
         _result->setOffset(presentOptional((float)_doubleHandler.result()));
     else if (strcmp(qname.localName(), kDirectionTypeTag) == 0)

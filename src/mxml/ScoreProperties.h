@@ -3,7 +3,9 @@
 
 #pragma once
 #include <mxml/dom/Attributes.h>
+#include <mxml/dom/Direction.h>
 #include <mxml/dom/Score.h>
+#include <mxml/dom/Sound.h>
 
 #include <algorithm>
 #include <map>
@@ -62,7 +64,22 @@ public:
     /**
      Get the chromatic alteration for a given part, measure, time, staff, octave and step.
      */
-    int alter(std::size_t partIndex, std::size_t measureIndex, dom::time_t time, int staff, int octave, dom::Pitch::Step step) const;
+    int alter(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time, int octave, dom::Pitch::Step step) const;
+
+    /**
+     Get the tempo at the given measure and time.
+     */
+    float tempo(std::size_t measureIndex, dom::time_t time) const;
+
+    /**
+     Get the dynamics for the given note.
+     */
+    float dynamics(const dom::Note& note) const;
+    
+    /**
+     Get the dynamics at the given part, measure, staff and time.
+     */
+    float dynamics(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time) const;
 
 protected:
     struct AttributesRef {
@@ -129,9 +146,41 @@ protected:
         }
     };
 
+    struct SoundRef {
+        std::size_t partIndex;
+        std::size_t measureIndex;
+        dom::time_t time;
+        dom::Optional<int> staff;
+        const dom::Sound* sound;
+
+        bool operator==(const SoundRef& rhs) const {
+            return partIndex == rhs.partIndex && measureIndex == rhs.measureIndex && time == rhs.time && sound == rhs.sound;
+        }
+        bool operator<(const SoundRef& rhs) const {
+            if (measureIndex < rhs.measureIndex)
+                return true;
+            if (measureIndex > rhs.measureIndex)
+                return false;
+
+            if (time < rhs.time)
+                return true;
+            if (time > rhs.time)
+                return false;
+
+            if (partIndex < rhs.partIndex)
+                return true;
+            if (partIndex > rhs.partIndex)
+                return false;
+
+            return sound < rhs.sound;
+        }
+
+    };
+
 protected:
     void process(std::size_t partIndex, const dom::Measure& measure);
     void process(std::size_t partIndex, std::size_t measureIndex, const dom::Attributes& attributes);
+    void process(std::size_t partIndex, std::size_t measureIndex, const dom::Direction& direction);
     void process(std::size_t partIndex, std::size_t measureIndex, const dom::Chord& chord);
     void process(std::size_t partIndex, std::size_t measureIndex, const dom::Note& note);
 
@@ -207,6 +256,7 @@ protected:
 private:
     std::set<AttributesRef> _attributes;
     std::set<PitchRef> _pitches;
+    std::set<SoundRef> _sounds;
     std::vector<int> _staves;
 
     static const dom::Key _defaultKey;

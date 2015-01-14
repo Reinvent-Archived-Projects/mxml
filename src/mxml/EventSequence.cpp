@@ -117,24 +117,6 @@ const Event* EventSequence::Iterator::operator->() const {
     return &_eventSequence->events().at(_index);
 }
 
-//const dom::Attributes* EventSequence::Iterator::attributes() const {
-//    return _eventSequence->attributes(_time);
-//}
-
-float EventSequence::Iterator::tempo() const {
-    const float* val = _eventSequence->tempo(_time);
-    if (!val)
-        return 60;
-    return *val;
-}
-
-float EventSequence::Iterator::dynamics() const {
-    const float* val = _eventSequence->dynamics(_time);
-    if (!val)
-        return 100;
-    return *val;
-}
-
 
 EventSequence::EventSequence(const ScoreProperties& scoreProperties) : _scoreProperties(scoreProperties) {
     
@@ -147,16 +129,6 @@ Event& EventSequence::addEvent(const Event& event) {
     assert(it == _events.end() || it->time() > event.time());
     
     return *_events.insert(it, event);
-}
-
-void EventSequence::addTempo(const Value& value) {
-    auto it = std::upper_bound(_tempos.begin(), _tempos.end(), value);
-    _tempos.insert(it, value);
-}
-
-void EventSequence::addDynamics(const Value& value) {
-    auto it = std::upper_bound(_dynamics.begin(), _dynamics.end(), value);
-    _dynamics.insert(it, value);
 }
 
 void EventSequence::addEnding(const Ending& ending) {
@@ -173,8 +145,6 @@ void EventSequence::addLoop(const Loop& loop) {
 
 void EventSequence::clear() {
     _events.clear();
-    _tempos.clear();
-    _dynamics.clear();
     _loops.clear();
     _endings.clear();
 }
@@ -227,24 +197,6 @@ const Event* EventSequence::lastEvent(std::size_t measureIndex) const {
         return nullptr;
     
     return &*it;
-}
-
-const float* EventSequence::tempo(dom::time_t time) const {
-    auto it = std::find_if(_tempos.rbegin(), _tempos.rend(), [time](const Value& value) {
-        return time >= value.begin;
-    });
-    if (it != _tempos.rend())
-        return &it->value;
-    return 0;
-}
-
-const float* EventSequence::dynamics(dom::time_t time) const {
-    auto it = std::find_if(_dynamics.rbegin(), _dynamics.rend(), [time](const Value& value) {
-        return time >= value.begin;
-    });
-    if (it != _dynamics.rend())
-        return &it->value;
-    return 0;
 }
 
 const EventSequence::Loop* EventSequence::loop(dom::time_t time) const {

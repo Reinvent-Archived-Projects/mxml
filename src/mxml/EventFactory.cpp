@@ -48,23 +48,9 @@ std::unique_ptr<EventSequence> EventFactory::build() {
     dom::time_t time = 0;
     double wallTime = 0.0;
 
-    auto temposIter = _eventSequence->tempos().begin();
-    auto temposEndIter = _eventSequence->tempos().end();
-    auto temposNextIter = temposIter;
-    if (temposIter != temposEndIter) {
-        if (temposIter->begin <= time)
-            tempo = temposIter->value;
-        ++temposNextIter;
-    }
-
     for (Event& event : _eventSequence->events()) {
         divisions = _scoreProperties.divisions(event.measureIndex());
-
-        if (temposNextIter != temposEndIter && temposNextIter->begin <= time) {
-            temposIter = temposNextIter;
-            ++temposNextIter;
-            tempo = temposIter->value;
-        }
+        tempo = _scoreProperties.tempo(event.measureIndex(), event.time());
 
         double divisionDuration = 60.0 / (divisions * tempo);
         wallTime += divisionDuration * static_cast<double>(event.time() - time);
@@ -82,8 +68,6 @@ void EventFactory::processMeasure(const dom::Measure& measure) {
         if (const Barline* barline = dynamic_cast<const Barline*>(node.get())) {
             if (_firstPass)
                 processBarline(*barline);
-        } else if (const Direction* direction = dynamic_cast<const Direction*>(node.get())) {
-            processDirection(*direction);
         } else if (const TimedNode* timedNode = dynamic_cast<const TimedNode*>(node.get())) {
             processTimedNode(*timedNode);
         }
@@ -122,27 +106,6 @@ void EventFactory::processBarline(const dom::Barline& barline) {
         
         if (ending->type() == Ending::DISCONTINUE && !_eventSequence->loops().empty())
             _eventSequence->loops().back().count = *ending->numbers().rbegin() - 1;
-    }
-}
-
-void EventFactory::processDirection(const dom::Direction& direction) {
-    if (!direction.sound())
-        return;
-    const auto& sound = direction.sound();
-    
-    if (sound->tempo) {
-        EventSequence::Value value;
-        value.begin = _time;
-        value.value = sound->tempo;
-        _eventSequence->addTempo(value);
-    }
-    
-    if (sound->dynamics) {
-        EventSequence::Value value;
-        value.begin = _time;
-        value.part = _part;
-        value.value = sound->dynamics.value();
-        _eventSequence->addDynamics(value);
     }
 }
 

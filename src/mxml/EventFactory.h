@@ -27,7 +27,6 @@ public:
 private:
     void processMeasure(const dom::Measure& measure);
     void processBarline(const dom::Barline& node);
-    void processDirection(const dom::Direction& node);
     void processTimedNode(const dom::TimedNode& node);
     void processChord(const dom::Chord& chord);
     void addNote(const dom::Note& note);

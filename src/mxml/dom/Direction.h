@@ -29,10 +29,10 @@ public:
         _type = std::move(type);
     }
     
-    int staff() const {
+    Optional<int> staff() const {
         return _staff;
     }
-    void setStaff(int staff) {
+    void setStaff(Optional<int> staff) {
         _staff = staff;
     }
     
@@ -60,7 +60,7 @@ public:
 private:
     Optional<Placement> _placement;
     std::unique_ptr<DirectionType> _type;
-    int _staff;
+    Optional<int> _staff;
     time_t _start;
     Optional<float> _offset;
     std::unique_ptr<Sound> _sound;

@@ -100,16 +100,16 @@ BOOST_AUTO_TEST_CASE(alters) {
     ScoreProperties properties(*score);
     
     // Note C is initially 1 from the key signature and gets modified at time 1 back to 0
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, 0, kStaff, kOctave, dom::Pitch::STEP_C), 1);
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, 1, kStaff, kOctave, dom::Pitch::STEP_C), 0);
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, 2, kStaff, kOctave, dom::Pitch::STEP_C), 0);
+    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, kStaff, 0, kOctave, dom::Pitch::STEP_C), 1);
+    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, kStaff, 1, kOctave, dom::Pitch::STEP_C), 0);
+    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, kStaff, 2, kOctave, dom::Pitch::STEP_C), 0);
 
     // Note D is initially 0 and gets modified at time 2
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, 0, kStaff, kOctave, dom::Pitch::STEP_D), 0);
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, 1, kStaff, kOctave, dom::Pitch::STEP_D), 0);
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, 2, kStaff, kOctave, dom::Pitch::STEP_D), 1);
+    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, kStaff, 0, kOctave, dom::Pitch::STEP_D), 0);
+    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, kStaff, 1, kOctave, dom::Pitch::STEP_D), 0);
+    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, kStaff, 2, kOctave, dom::Pitch::STEP_D), 1);
 
     // Key signature modifications should not be preserved across measures
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex + 1, 0, kStaff, kOctave, dom::Pitch::STEP_C), 1);
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex + 1, 0, kStaff, kOctave, dom::Pitch::STEP_D), 0);
+    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex + 1, kStaff, 0, kOctave, dom::Pitch::STEP_C), 1);
+    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex + 1, kStaff, 0, kOctave, dom::Pitch::STEP_D), 0);
 }

@@ -24,9 +24,9 @@ using namespace mxml;
     
      BOOST_CHECK_EQUAL(events->events().size(), 2857);
     
-     BOOST_CHECK_EQUAL(*events->tempo(0), 160);
-     BOOST_CHECK_EQUAL(*events->tempo(6359), 160);
-     BOOST_CHECK_CLOSE(*events->tempo(6360), 80, 0.01);
+     BOOST_CHECK_EQUAL(scoreProperties.tempo(0, 0), 160);
+     BOOST_CHECK_CLOSE(scoreProperties.tempo(13, 240), 80, 0.01);
+     BOOST_CHECK_EQUAL(scoreProperties.tempo(14, 0), 160);
     
      BOOST_CHECK_EQUAL(events->loops().size(), 1);
      BOOST_CHECK_EQUAL(events->loops()[0].begin, 480);
