@@ -27,6 +27,7 @@ static const char* kPedalTag = "pedal";
 static const char* kWedgeTag = "wedge";
 static const char* kWordsTag = "words";
 static const char* kSegnoTag = "segno";
+static const char* kCodaTag = "coda";
 
 void DynamicsHandler::startElement(const QName& qname, const AttributeMap& attributes) {
     using lxml::DoubleHandler;
@@ -189,6 +190,8 @@ lxml::RecursiveHandler* DirectionTypeHandler::startSubElement(const QName& qname
         return &_wordsHandler;
     else if (strcmp(qname.localName(), kSegnoTag) == 0)
         return &_segnoHandler;
+    else if (strcmp(qname.localName(), kCodaTag) == 0)
+        return &_codaHandler;
     return 0;
 }
 
@@ -203,6 +206,8 @@ void DirectionTypeHandler::endSubElement(const QName& qname, RecursiveHandler* p
         _result = _wordsHandler.result();
     else if (strcmp(qname.localName(), kSegnoTag) == 0)
         _result = _segnoHandler.result();
+    else if (strcmp(qname.localName(), kCodaTag) == 0)
+        _result = _codaHandler.result();
 }
 
 } // namespace mxml

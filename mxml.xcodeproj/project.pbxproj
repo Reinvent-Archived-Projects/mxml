@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0008689A1A68430400BAA13D /* CodaGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 000868981A68430400BAA13D /* CodaGeometry.cpp */; };
+		0008689B1A68430400BAA13D /* CodaGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 000868991A68430400BAA13D /* CodaGeometry.h */; };
 		00094EF91A6746340053C615 /* WordsGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00094EF71A6746340053C615 /* WordsGeometry.cpp */; };
 		00094EFA1A6746340053C615 /* WordsGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 00094EF81A6746340053C615 /* WordsGeometry.h */; };
 		00094EFD1A67464A0053C615 /* SegnoGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00094EFB1A67464A0053C615 /* SegnoGeometry.cpp */; };
@@ -137,6 +139,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		000868981A68430400BAA13D /* CodaGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CodaGeometry.cpp; sourceTree = "<group>"; };
+		000868991A68430400BAA13D /* CodaGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CodaGeometry.h; sourceTree = "<group>"; };
 		00094EF71A6746340053C615 /* WordsGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WordsGeometry.cpp; sourceTree = "<group>"; };
 		00094EF81A6746340053C615 /* WordsGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordsGeometry.h; sourceTree = "<group>"; };
 		00094EFB1A67464A0053C615 /* SegnoGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SegnoGeometry.cpp; sourceTree = "<group>"; };
@@ -538,6 +542,8 @@
 				6140560F1A5C6228005224C9 /* ChordGeometry.h */,
 				614056101A5C6228005224C9 /* ClefGeometry.cpp */,
 				614056111A5C6228005224C9 /* ClefGeometry.h */,
+				000868981A68430400BAA13D /* CodaGeometry.cpp */,
+				000868991A68430400BAA13D /* CodaGeometry.h */,
 				614056121A5C6228005224C9 /* CollisionHandler.cpp */,
 				614056131A5C6228005224C9 /* CollisionHandler.h */,
 				614056161A5C6228005224C9 /* DotGeometry.cpp */,
@@ -733,6 +739,7 @@
 			files = (
 				61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */,
 				00094EFE1A67464A0053C615 /* SegnoGeometry.h in Headers */,
+				0008689B1A68430400BAA13D /* CodaGeometry.h in Headers */,
 				61239A6F1A65974400B3F0A3 /* ScoreBuilder.h in Headers */,
 				00094EFA1A6746340053C615 /* WordsGeometry.h in Headers */,
 			);
@@ -886,6 +893,7 @@
 				6140576D1A5C6228005224C9 /* UnpitchedHandler.cpp in Sources */,
 				614057721A5C6228005224C9 /* SpanFactory.cpp in Sources */,
 				614056DD1A5C6228005224C9 /* AccidentalGeometry.cpp in Sources */,
+				0008689A1A68430400BAA13D /* CodaGeometry.cpp in Sources */,
 				6140573F1A5C6228005224C9 /* IdentificationHandler.cpp in Sources */,
 				614056F31A5C6228005224C9 /* Geometry.cpp in Sources */,
 				614057241A5C6228005224C9 /* BackupHandler.cpp in Sources */,

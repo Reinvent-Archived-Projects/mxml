@@ -54,6 +54,13 @@ public:
     }
 };
 
+class CodaHandler : public lxml::BaseRecursiveHandler<unique_ptr<dom::Coda>> {
+public:
+    void startElement(const lxml::QName& qname, const AttributeMap& attributes) {
+        _result.reset(new dom::Coda());
+    }
+};
+
 class DirectionTypeHandler : public lxml::BaseRecursiveHandler<unique_ptr<dom::DirectionType>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
@@ -67,6 +74,7 @@ private:
     WedgeHandler _wedgeHandler;
     WordsHandler _wordsHandler;
     SegnoHandler _segnoHandler;
+    CodaHandler _codaHandler;
 };
 
 } // namespace mxml

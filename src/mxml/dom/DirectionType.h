@@ -78,5 +78,12 @@ public:
     }
 };
 
+class Coda : public DirectionType {
+public:
+    bool span() const {
+        return false;
+    }
+};
+
 } // namespace dom
 } // namespace mxml

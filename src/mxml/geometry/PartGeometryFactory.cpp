@@ -3,6 +3,7 @@
 
 #include "BarlineGeometry.h"
 #include "ChordGeometry.h"
+#include "CodaGeometry.h"
 #include "CollisionHandler.h"
 #include "EndingGeometry.h"
 #include "MeasureGeometry.h"
@@ -88,6 +89,11 @@ namespace mxml {
 
         if (dynamic_cast<const dom::Pedal*>(direction.type())) {
             buildPedal(measureGeom, direction);
+            return;
+        }
+        
+        if (dynamic_cast<const dom::Coda*>(direction.type())) {
+            buildCoda(measureGeom, direction);
             return;
         }
         
@@ -338,7 +344,7 @@ namespace mxml {
         _partGeometry->addGeometry(std::move(wordsGeom));
     }
     
-    void PartGeometryFactory::buildSegno(const MeasureGeometry&  measureGeom, const dom::Direction& direction) {
+    void PartGeometryFactory::buildSegno(const MeasureGeometry& measureGeom, const dom::Direction& direction) {
         const dom::Segno& segno = dynamic_cast<const dom::Segno&>(*direction.type());
         std::unique_ptr<SegnoGeometry> segnoGeom(new SegnoGeometry(segno));
         
@@ -351,6 +357,21 @@ namespace mxml {
         
         _partGeometry->_directionGeometries.push_back(segnoGeom.get());
         _partGeometry->addGeometry(std::move(segnoGeom));
+    }
+    
+    void PartGeometryFactory::buildCoda(const MeasureGeometry& measureGeom, const dom::Direction& direction) {
+        const dom::Coda& coda = dynamic_cast<const dom::Coda&>(*direction.type());
+        std::unique_ptr<CodaGeometry> codaGeom(new CodaGeometry(coda));
+        
+        Point location;
+        const Span& span = *measureGeom.spans().with(&direction);
+        location.x = span.start();
+        codaGeom->setLocation(location);
+        
+        placeDirection(*codaGeom);
+        
+        _partGeometry->_directionGeometries.push_back(codaGeom.get());
+        _partGeometry->addGeometry(std::move(codaGeom));
     }
 
 }
