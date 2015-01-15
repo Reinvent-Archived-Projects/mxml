@@ -7,16 +7,26 @@
 
 namespace mxml {
 
-class DirectionGeometry : public PlacementGeometry {
+class WordsGeometry : public PlacementGeometry {
 public:
-    explicit DirectionGeometry(const dom::Direction& direction);
+    static const Size kSegnoSize;
+    
+public:
+    explicit WordsGeometry(const dom::Direction& direction);
     
     const dom::Direction& direction() const {
         return _direction;
     }
     
+    bool dynamics() const {
+        return _dynamics;
+    }
+    
+    const std::string* contents() const;
+    
 private:
     const dom::Direction& _direction;
+    bool _dynamics;
 };
 
 } // namespace mxml

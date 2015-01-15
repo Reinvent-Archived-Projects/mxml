@@ -31,6 +31,9 @@ namespace mxml {
 
         void buildEndings();
         void buildEndings(const MeasureGeometry& measureGeom, const BarlineGeometry& barlineGeom);
+        
+        void buildWords(const MeasureGeometry&  measureGeom, const dom::Direction& direction);
+        void buildSegno(const MeasureGeometry&  measureGeom, const dom::Direction& direction);
 
         void placeDirection(PlacementGeometry& geometry);
         void swapPlacement(PlacementGeometry& geometry);

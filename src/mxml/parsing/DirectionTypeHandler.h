@@ -47,6 +47,13 @@ public:
     void endElement(const lxml::QName& qname, const std::string& contents);
 };
 
+class SegnoHandler : public lxml::BaseRecursiveHandler<unique_ptr<dom::Segno>> {
+public:
+    void startElement(const lxml::QName& qname, const AttributeMap& attributes) {
+        _result.reset(new dom::Segno());
+    }
+};
+
 class DirectionTypeHandler : public lxml::BaseRecursiveHandler<unique_ptr<dom::DirectionType>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
@@ -59,6 +66,7 @@ private:
     PedalHandler _pedalHandler;
     WedgeHandler _wedgeHandler;
     WordsHandler _wordsHandler;
+    SegnoHandler _segnoHandler;
 };
 
 } // namespace mxml

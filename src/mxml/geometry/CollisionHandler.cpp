@@ -7,7 +7,7 @@
 #include "ArticulationGeometry.h"
 #include "BeamGeometry.h"
 #include "ClefGeometry.h"
-#include "DirectionGeometry.h"
+#include "WordsGeometry.h"
 #include "DotGeometry.h"
 #include "EndingGeometry.h"
 #include "FermataGeometry.h"
@@ -224,7 +224,7 @@ namespace mxml {
         typeOrder[std::type_index(typeid(SpanDirectionGeometry))] = 5;
         typeOrder[std::type_index(typeid(OrnamentsGeometry))] = 6;
         typeOrder[std::type_index(typeid(PedalGeometry))] = 7;
-        typeOrder[std::type_index(typeid(DirectionGeometry))] = 8;
+        typeOrder[std::type_index(typeid(WordsGeometry))] = 8;
     }
 
     bool CollisionHandler::GeometryTypeComparator::operator()(const Geometry* g1, const Geometry* g2) {

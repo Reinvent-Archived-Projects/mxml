@@ -71,5 +71,12 @@ private:
     std::string _contents;
 };
 
+class Segno : public DirectionType {
+public:
+    bool span() const {
+        return false;
+    }
+};
+
 } // namespace dom
 } // namespace mxml

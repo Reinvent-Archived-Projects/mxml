@@ -4,10 +4,11 @@
 #include "BarlineGeometry.h"
 #include "ChordGeometry.h"
 #include "CollisionHandler.h"
-#include "DirectionGeometry.h"
 #include "EndingGeometry.h"
 #include "MeasureGeometry.h"
 #include "LyricGeometry.h"
+#include "SegnoGeometry.h"
+#include "WordsGeometry.h"
 #include "LyricGeometryFactory.h"
 #include "OrnamentsGeometry.h"
 #include "PartGeometryFactory.h"
@@ -89,38 +90,17 @@ namespace mxml {
             buildPedal(measureGeom, direction);
             return;
         }
-
-        std::unique_ptr<DirectionGeometry> dirGeom(new DirectionGeometry(direction));
-
-        Point location;
-        const Span& span = *measureGeom.spans().with(&direction);
-        if (dirGeom->size().width > 2*NoteGeometry::kQuarterWidth) {
-            location.x = span.start() - span.leftMargin()/2;
-        } else {
-            location.x = span.start();
+        
+        if (dynamic_cast<const dom::Segno*>(direction.type())) {
+            buildSegno(measureGeom, direction);
+            return;
         }
-        dirGeom->setLocation(location);
-
-        // Better placement defaults if the placement is not specified
-        dom::Placement placement = direction.placement();
-        if (!direction.placement().isPresent()) {
-            if (dynamic_cast<const dom::Dynamics*>(direction.type())) {
-                if (direction.staff() == 1)
-                    placement = dom::PLACEMENT_BELOW;
-                else
-                    placement = dom::PLACEMENT_ABOVE;
-            } else if (dynamic_cast<const dom::Words*>(direction.type())) {
-                if (direction.staff() == 1)
-                    placement = dom::PLACEMENT_ABOVE;
-                else
-                    placement = dom::PLACEMENT_BELOW;
-            }
-            dirGeom->setPlacement(placement);
+        
+        if (dynamic_cast<const dom::Words*>(direction.type()) ||
+            dynamic_cast<const dom::Dynamics*>(direction.type()) ) {
+            buildWords(measureGeom, direction);
+            return;
         }
-        placeDirection(*dirGeom);
-
-        _partGeometry->_directionGeometries.push_back(dirGeom.get());
-        _partGeometry->addGeometry(std::move(dirGeom));
     }
 
     void PartGeometryFactory::placeDirection(PlacementGeometry& geometry) {
@@ -323,4 +303,54 @@ namespace mxml {
             _startEndingLocation.y = measureGeom.origin().y + MeasureGeometry::kVerticalPadding - EndingGeometry::kHeight - 10;
         }
     }
+    
+    void PartGeometryFactory::buildWords(const MeasureGeometry& measureGeom, const dom::Direction& direction) {
+        std::unique_ptr<WordsGeometry> wordsGeom(new WordsGeometry(direction));
+        
+        Point location;
+        const Span& span = *measureGeom.spans().with(&direction);
+        if (wordsGeom->size().width > 2*NoteGeometry::kQuarterWidth) {
+            location.x = span.start() - span.leftMargin()/2;
+        } else {
+            location.x = span.start();
+        }
+        wordsGeom->setLocation(location);
+        
+        // Better placement defaults if the placement is not specified
+        dom::Placement placement = direction.placement();
+        if (!direction.placement().isPresent()) {
+            if (wordsGeom->dynamics()) {
+                if (direction.staff() == 1)
+                    placement = dom::PLACEMENT_BELOW;
+                else
+                    placement = dom::PLACEMENT_ABOVE;
+            } else {
+                if (direction.staff() == 1)
+                    placement = dom::PLACEMENT_ABOVE;
+                else
+                    placement = dom::PLACEMENT_BELOW;
+            }
+            wordsGeom->setPlacement(placement);
+        }
+        placeDirection(*wordsGeom);
+        
+        _partGeometry->_directionGeometries.push_back(wordsGeom.get());
+        _partGeometry->addGeometry(std::move(wordsGeom));
+    }
+    
+    void PartGeometryFactory::buildSegno(const MeasureGeometry&  measureGeom, const dom::Direction& direction) {
+        const dom::Segno& segno = dynamic_cast<const dom::Segno&>(*direction.type());
+        std::unique_ptr<SegnoGeometry> segnoGeom(new SegnoGeometry(segno));
+        
+        Point location;
+        const Span& span = *measureGeom.spans().with(&direction);
+        location.x = span.start();
+        segnoGeom->setLocation(location);
+        
+        placeDirection(*segnoGeom);
+        
+        _partGeometry->_directionGeometries.push_back(segnoGeom.get());
+        _partGeometry->addGeometry(std::move(segnoGeom));
+    }
+
 }

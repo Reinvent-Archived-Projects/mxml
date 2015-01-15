@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00094EF91A6746340053C615 /* WordsGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00094EF71A6746340053C615 /* WordsGeometry.cpp */; };
+		00094EFA1A6746340053C615 /* WordsGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 00094EF81A6746340053C615 /* WordsGeometry.h */; };
+		00094EFD1A67464A0053C615 /* SegnoGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00094EFB1A67464A0053C615 /* SegnoGeometry.cpp */; };
+		00094EFE1A67464A0053C615 /* SegnoGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 00094EFC1A67464A0053C615 /* SegnoGeometry.h */; };
 		61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 61239A5E1A64866500B3F0A3 /* ScoreProperties.h */; };
 		61239A611A64866500B3F0A3 /* ScoreProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61239A5F1A64866500B3F0A3 /* ScoreProperties.cpp */; };
 		61239A6E1A65974400B3F0A3 /* ScoreBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */; };
@@ -25,7 +29,6 @@
 		614056E51A5C6228005224C9 /* ChordGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6140560E1A5C6228005224C9 /* ChordGeometry.cpp */; };
 		614056E71A5C6228005224C9 /* ClefGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056101A5C6228005224C9 /* ClefGeometry.cpp */; };
 		614056E91A5C6228005224C9 /* CollisionHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056121A5C6228005224C9 /* CollisionHandler.cpp */; };
-		614056EB1A5C6228005224C9 /* DirectionGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056141A5C6228005224C9 /* DirectionGeometry.cpp */; };
 		614056ED1A5C6228005224C9 /* DotGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056161A5C6228005224C9 /* DotGeometry.cpp */; };
 		614056EF1A5C6228005224C9 /* EndingGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056181A5C6228005224C9 /* EndingGeometry.cpp */; };
 		614056F11A5C6228005224C9 /* FermataGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6140561A1A5C6228005224C9 /* FermataGeometry.cpp */; };
@@ -134,6 +137,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		00094EF71A6746340053C615 /* WordsGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = WordsGeometry.cpp; sourceTree = "<group>"; };
+		00094EF81A6746340053C615 /* WordsGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordsGeometry.h; sourceTree = "<group>"; };
+		00094EFB1A67464A0053C615 /* SegnoGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SegnoGeometry.cpp; sourceTree = "<group>"; };
+		00094EFC1A67464A0053C615 /* SegnoGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SegnoGeometry.h; sourceTree = "<group>"; };
 		61239A5E1A64866500B3F0A3 /* ScoreProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreProperties.h; sourceTree = "<group>"; };
 		61239A5F1A64866500B3F0A3 /* ScoreProperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreProperties.cpp; sourceTree = "<group>"; };
 		61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreBuilder.cpp; sourceTree = "<group>"; };
@@ -212,8 +219,6 @@
 		614056111A5C6228005224C9 /* ClefGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClefGeometry.h; sourceTree = "<group>"; };
 		614056121A5C6228005224C9 /* CollisionHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionHandler.cpp; sourceTree = "<group>"; };
 		614056131A5C6228005224C9 /* CollisionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionHandler.h; sourceTree = "<group>"; };
-		614056141A5C6228005224C9 /* DirectionGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DirectionGeometry.cpp; sourceTree = "<group>"; };
-		614056151A5C6228005224C9 /* DirectionGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionGeometry.h; sourceTree = "<group>"; };
 		614056161A5C6228005224C9 /* DotGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DotGeometry.cpp; sourceTree = "<group>"; };
 		614056171A5C6228005224C9 /* DotGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DotGeometry.h; sourceTree = "<group>"; };
 		614056181A5C6228005224C9 /* EndingGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EndingGeometry.cpp; sourceTree = "<group>"; };
@@ -535,14 +540,16 @@
 				614056111A5C6228005224C9 /* ClefGeometry.h */,
 				614056121A5C6228005224C9 /* CollisionHandler.cpp */,
 				614056131A5C6228005224C9 /* CollisionHandler.h */,
-				614056141A5C6228005224C9 /* DirectionGeometry.cpp */,
-				614056151A5C6228005224C9 /* DirectionGeometry.h */,
 				614056161A5C6228005224C9 /* DotGeometry.cpp */,
 				614056171A5C6228005224C9 /* DotGeometry.h */,
 				614056181A5C6228005224C9 /* EndingGeometry.cpp */,
 				614056191A5C6228005224C9 /* EndingGeometry.h */,
 				6140561A1A5C6228005224C9 /* FermataGeometry.cpp */,
 				6140561B1A5C6228005224C9 /* FermataGeometry.h */,
+				00094EFB1A67464A0053C615 /* SegnoGeometry.cpp */,
+				00094EFC1A67464A0053C615 /* SegnoGeometry.h */,
+				00094EF71A6746340053C615 /* WordsGeometry.cpp */,
+				00094EF81A6746340053C615 /* WordsGeometry.h */,
 				6140561C1A5C6228005224C9 /* Geometry.cpp */,
 				6140561D1A5C6228005224C9 /* Geometry.h */,
 				6140561E1A5C6228005224C9 /* KeyGeometry.cpp */,
@@ -725,7 +732,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */,
+				00094EFE1A67464A0053C615 /* SegnoGeometry.h in Headers */,
 				61239A6F1A65974400B3F0A3 /* ScoreBuilder.h in Headers */,
+				00094EFA1A6746340053C615 /* WordsGeometry.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -810,6 +819,7 @@
 				614057201A5C6228005224C9 /* ArticulationHandler.cpp in Sources */,
 				614057351A5C6228005224C9 /* DirectionTypeHandler.cpp in Sources */,
 				614057151A5C6228005224C9 /* StemGeometry.cpp in Sources */,
+				00094EFD1A67464A0053C615 /* SegnoGeometry.cpp in Sources */,
 				614057261A5C6228005224C9 /* BarlineHandler.cpp in Sources */,
 				6140574B1A5C6228005224C9 /* NoteHandler.cpp in Sources */,
 				614056E51A5C6228005224C9 /* ChordGeometry.cpp in Sources */,
@@ -826,7 +836,6 @@
 				614057431A5C6228005224C9 /* LyricHandler.cpp in Sources */,
 				614057071A5C6228005224C9 /* PedalGeometry.cpp in Sources */,
 				614056D71A5C6228005224C9 /* Event.cpp in Sources */,
-				614056EB1A5C6228005224C9 /* DirectionGeometry.cpp in Sources */,
 				614056E91A5C6228005224C9 /* CollisionHandler.cpp in Sources */,
 				614057591A5C6228005224C9 /* ScalingHandler.cpp in Sources */,
 				614057611A5C6228005224C9 /* StaffLayoutHandler.cpp in Sources */,
@@ -837,6 +846,7 @@
 				614056D91A5C6228005224C9 /* EventFactory.cpp in Sources */,
 				6140571A1A5C6228005224C9 /* TieGeometryFactory.cpp in Sources */,
 				614056E71A5C6228005224C9 /* ClefGeometry.cpp in Sources */,
+				00094EF91A6746340053C615 /* WordsGeometry.cpp in Sources */,
 				614057AA1A5C62CF005224C9 /* IntegerHandler.cpp in Sources */,
 				614057131A5C6228005224C9 /* SpanDirectionGeometryFactory.cpp in Sources */,
 				6140574F1A5C6228005224C9 /* PartHandler.cpp in Sources */,
