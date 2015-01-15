@@ -2,6 +2,8 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #include "ScoreProperties.h"
+#include "LoopFactory.h"
+#include "JumpFactory.h"
 
 #include <mxml/dom/Chord.h>
 
@@ -20,6 +22,12 @@ ScoreProperties::ScoreProperties(const dom::Score& score) : _attributes(), _pitc
             process(partIndex, *measure);
         }
     }
+
+    LoopFactory loopFactory(score);
+    _loops = loopFactory.build();
+
+    JumpFactory jumpFactory(score);
+    _jumps = jumpFactory.build();
 }
 
 void ScoreProperties::process(std::size_t partIndex, const dom::Measure& measure) {

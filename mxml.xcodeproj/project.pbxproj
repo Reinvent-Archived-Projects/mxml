@@ -17,6 +17,12 @@
 		61239A611A64866500B3F0A3 /* ScoreProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61239A5F1A64866500B3F0A3 /* ScoreProperties.cpp */; };
 		61239A6E1A65974400B3F0A3 /* ScoreBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */; };
 		61239A6F1A65974400B3F0A3 /* ScoreBuilder.h in Headers */ = {isa = PBXBuildFile; fileRef = 61239A6D1A65974400B3F0A3 /* ScoreBuilder.h */; };
+		61239A7C1A67385400B3F0A3 /* Loop.h in Headers */ = {isa = PBXBuildFile; fileRef = 61239A7A1A67385400B3F0A3 /* Loop.h */; };
+		61239BA01A67426C00B3F0A3 /* JumpFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 61239AD51A67426C00B3F0A3 /* JumpFactory.h */; };
+		61239BA11A67426C00B3F0A3 /* JumpFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61239AD61A67426C00B3F0A3 /* JumpFactory.cpp */; };
+		61239C1D1A67429100B3F0A3 /* Jump.h in Headers */ = {isa = PBXBuildFile; fileRef = 61239C1B1A67429100B3F0A3 /* Jump.h */; };
+		61239C201A6742A100B3F0A3 /* LoopFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61239C1E1A6742A100B3F0A3 /* LoopFactory.cpp */; };
+		61239C211A6742A100B3F0A3 /* LoopFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 61239C1F1A6742A100B3F0A3 /* LoopFactory.h */; };
 		614056B41A5C6228005224C9 /* Identification.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614055DC1A5C6228005224C9 /* Identification.cpp */; };
 		614056B91A5C6228005224C9 /* Measure.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614055E11A5C6228005224C9 /* Measure.cpp */; };
 		614056BE1A5C6228005224C9 /* Note.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614055E61A5C6228005224C9 /* Note.cpp */; };
@@ -114,6 +120,7 @@
 		614057BC1A5C7629005224C9 /* Key.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614057BB1A5C7629005224C9 /* Key.cpp */; };
 		614057BE1A5C79EF005224C9 /* KeyTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614057BD1A5C79EF005224C9 /* KeyTests.cpp */; };
 		614057C01A5CAA47005224C9 /* ScorePropertiesTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */; };
+		61C8502F1A6843EB00031100 /* LoopsAndJumpsTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61C8502D1A6843EB00031100 /* LoopsAndJumpsTests.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -149,6 +156,12 @@
 		61239A5F1A64866500B3F0A3 /* ScoreProperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreProperties.cpp; sourceTree = "<group>"; };
 		61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreBuilder.cpp; sourceTree = "<group>"; };
 		61239A6D1A65974400B3F0A3 /* ScoreBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreBuilder.h; sourceTree = "<group>"; };
+		61239A7A1A67385400B3F0A3 /* Loop.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Loop.h; sourceTree = "<group>"; };
+		61239AD51A67426C00B3F0A3 /* JumpFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JumpFactory.h; sourceTree = "<group>"; };
+		61239AD61A67426C00B3F0A3 /* JumpFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JumpFactory.cpp; sourceTree = "<group>"; };
+		61239C1B1A67429100B3F0A3 /* Jump.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Jump.h; sourceTree = "<group>"; };
+		61239C1E1A6742A100B3F0A3 /* LoopFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoopFactory.cpp; sourceTree = "<group>"; };
+		61239C1F1A6742A100B3F0A3 /* LoopFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoopFactory.h; sourceTree = "<group>"; };
 		614055B81A5C61FE005224C9 /* libmxml.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmxml.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		614055CA1A5C6228005224C9 /* Accidental.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Accidental.h; sourceTree = "<group>"; };
 		614055CB1A5C6228005224C9 /* Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appearance.h; sourceTree = "<group>"; };
@@ -391,6 +404,9 @@
 		614057BB1A5C7629005224C9 /* Key.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Key.cpp; sourceTree = "<group>"; };
 		614057BD1A5C79EF005224C9 /* KeyTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeyTests.cpp; sourceTree = "<group>"; };
 		614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScorePropertiesTests.cpp; sourceTree = "<group>"; };
+		61C8502C1A68439D00031100 /* repeats.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = repeats.xml; sourceTree = "<group>"; };
+		61C8502D1A6843EB00031100 /* LoopsAndJumpsTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoopsAndJumpsTests.cpp; sourceTree = "<group>"; };
+		61C850301A68464600031100 /* loops.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = loops.xml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -447,10 +463,18 @@
 				614056021A5C6228005224C9 /* EventFactory.h */,
 				614056031A5C6228005224C9 /* EventSequence.cpp */,
 				614056041A5C6228005224C9 /* EventSequence.h */,
+				61239C1B1A67429100B3F0A3 /* Jump.h */,
+				61239AD61A67426C00B3F0A3 /* JumpFactory.cpp */,
+				61239AD51A67426C00B3F0A3 /* JumpFactory.h */,
+				61239A7A1A67385400B3F0A3 /* Loop.h */,
+				61239C1E1A6742A100B3F0A3 /* LoopFactory.cpp */,
+				61239C1F1A6742A100B3F0A3 /* LoopFactory.h */,
 				614056471A5C6228005224C9 /* Metrics.cpp */,
 				614056481A5C6228005224C9 /* Metrics.h */,
-				61239A5E1A64866500B3F0A3 /* ScoreProperties.h */,
+				61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */,
+				61239A6D1A65974400B3F0A3 /* ScoreBuilder.h */,
 				61239A5F1A64866500B3F0A3 /* ScoreProperties.cpp */,
+				61239A5E1A64866500B3F0A3 /* ScoreProperties.h */,
 				614056991A5C6228005224C9 /* Span.h */,
 				6140569A1A5C6228005224C9 /* SpanCollection.cpp */,
 				6140569B1A5C6228005224C9 /* SpanCollection.h */,
@@ -458,8 +482,6 @@
 				6140569D1A5C6228005224C9 /* SpanFactory.h */,
 				6140569E1A5C6228005224C9 /* StringUtility.cpp */,
 				6140569F1A5C6228005224C9 /* StringUtility.h */,
-				61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */,
-				61239A6D1A65974400B3F0A3 /* ScoreBuilder.h */,
 			);
 			name = mxml;
 			path = src/mxml;
@@ -697,11 +719,14 @@
 				614057821A5C625A005224C9 /* EventFactoryTests.cpp */,
 				614057831A5C625A005224C9 /* GeometryTests.cpp */,
 				614057BD1A5C79EF005224C9 /* KeyTests.cpp */,
+				61C8502D1A6843EB00031100 /* LoopsAndJumpsTests.cpp */,
 				614057851A5C625A005224C9 /* MeasureGeometryTests.cpp */,
 				614057861A5C625A005224C9 /* MetricsTests.cpp */,
 				614057881A5C625A005224C9 /* NoteTests.cpp */,
 				614057891A5C625A005224C9 /* ParsingTests.cpp */,
+				61C850301A68464600031100 /* loops.xml */,
 				614057871A5C625A005224C9 /* moonlight.xml */,
+				61C8502C1A68439D00031100 /* repeats.xml */,
 			);
 			path = tests;
 			sourceTree = "<group>";
@@ -737,11 +762,15 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61239C1D1A67429100B3F0A3 /* Jump.h in Headers */,
+				61239C211A6742A100B3F0A3 /* LoopFactory.h in Headers */,
+				61239BA01A67426C00B3F0A3 /* JumpFactory.h in Headers */,
 				61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */,
 				00094EFE1A67464A0053C615 /* SegnoGeometry.h in Headers */,
 				0008689B1A68430400BAA13D /* CodaGeometry.h in Headers */,
 				61239A6F1A65974400B3F0A3 /* ScoreBuilder.h in Headers */,
 				00094EFA1A6746340053C615 /* WordsGeometry.h in Headers */,
+				61239A7C1A67385400B3F0A3 /* Loop.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -845,12 +874,14 @@
 				614056D71A5C6228005224C9 /* Event.cpp in Sources */,
 				614056E91A5C6228005224C9 /* CollisionHandler.cpp in Sources */,
 				614057591A5C6228005224C9 /* ScalingHandler.cpp in Sources */,
+				61239C201A6742A100B3F0A3 /* LoopFactory.cpp in Sources */,
 				614057611A5C6228005224C9 /* StaffLayoutHandler.cpp in Sources */,
 				614057181A5C6228005224C9 /* TieGeometry.cpp in Sources */,
 				614057111A5C6228005224C9 /* SpanDirectionGeometry.cpp in Sources */,
 				6140573B1A5C6228005224C9 /* FermataHandler.cpp in Sources */,
 				614057B51A5C62CF005224C9 /* StringHandler.cpp in Sources */,
 				614056D91A5C6228005224C9 /* EventFactory.cpp in Sources */,
+				61239BA11A67426C00B3F0A3 /* JumpFactory.cpp in Sources */,
 				6140571A1A5C6228005224C9 /* TieGeometryFactory.cpp in Sources */,
 				614056E71A5C6228005224C9 /* ClefGeometry.cpp in Sources */,
 				00094EF91A6746340053C615 /* WordsGeometry.cpp in Sources */,
@@ -927,6 +958,7 @@
 				6140578D1A5C625A005224C9 /* MeasureGeometryTests.cpp in Sources */,
 				6140578A1A5C625A005224C9 /* EventFactoryTests.cpp in Sources */,
 				6140578C1A5C625A005224C9 /* main.cpp in Sources */,
+				61C8502F1A6843EB00031100 /* LoopsAndJumpsTests.cpp in Sources */,
 				6140578B1A5C625A005224C9 /* GeometryTests.cpp in Sources */,
 				6140578E1A5C625A005224C9 /* MetricsTests.cpp in Sources */,
 			);

@@ -47,19 +47,19 @@ void SoundHandler::startElement(const QName& qname, const AttributeMap& attribut
 
     auto segno = attributes.find(kSegnoAttribute);
     if (segno != attributes.end())
-        _result->segno = segno->second;
+        _result->segno = presentOptional(segno->second);
 
     auto dalsegno = attributes.find(kDalSegnoAttribute);
     if (dalsegno != attributes.end())
-        _result->dalsegno = dalsegno->second;
+        _result->dalsegno = presentOptional(dalsegno->second);
 
     auto coda = attributes.find(kCodaAttribute);
     if (coda != attributes.end())
-        _result->coda = coda->second;
+        _result->coda = presentOptional(coda->second);
 
     auto tocoda = attributes.find(kToCodaAttribute);
     if (tocoda != attributes.end())
-        _result->tocoda = tocoda->second;
+        _result->tocoda = presentOptional(tocoda->second);
 
     auto divisions = attributes.find(kDivisionsAttribute);
     if (divisions != attributes.end())
@@ -71,11 +71,11 @@ void SoundHandler::startElement(const QName& qname, const AttributeMap& attribut
 
     auto fine = attributes.find(kFineAttribute);
     if (fine != attributes.end())
-        _result->fine = fine->second;
+        _result->fine = presentOptional(fine->second);
 
     auto timeOnly = attributes.find(kTimeOnlyAttribute);
     if (timeOnly != attributes.end())
-        _result->timeOnly = timeOnly->second;
+        _result->timeOnly = presentOptional(timeOnly->second);
 
     auto pizzicato = attributes.find(kPizzicatoAttribute);
     if (pizzicato != attributes.end() && pizzicato->second == "yes")

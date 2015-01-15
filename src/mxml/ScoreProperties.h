@@ -2,6 +2,9 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
+#include "Jump.h"
+#include "Loop.h"
+
 #include <mxml/dom/Attributes.h>
 #include <mxml/dom/Direction.h>
 #include <mxml/dom/Score.h>
@@ -81,6 +84,9 @@ public:
      */
     float dynamics(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time) const;
 
+    const std::vector<Loop>& loops() const { return _loops; }
+    const std::vector<Jump>& jumps() const { return _jumps; }
+    
 protected:
     struct AttributesRef {
         std::size_t partIndex;
@@ -257,6 +263,8 @@ private:
     std::set<AttributesRef> _attributes;
     std::set<PitchRef> _pitches;
     std::set<SoundRef> _sounds;
+    std::vector<Loop> _loops;
+    std::vector<Jump> _jumps;
     std::vector<int> _staves;
 
     static const dom::Key _defaultKey;
