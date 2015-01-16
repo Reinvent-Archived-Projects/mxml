@@ -16,7 +16,7 @@ TieGeometryFactory::TieGeometryFactory(const PartGeometry& partGeometry) : _part
     
 }
 
-vector<unique_ptr<TieGeometry>>&& TieGeometryFactory::buildTieGeometries(const vector<unique_ptr<Geometry>>& geometries) {
+std::vector<std::unique_ptr<TieGeometry>>&& TieGeometryFactory::buildTieGeometries(const std::vector<std::unique_ptr<Geometry>>& geometries) {
     _tieGeometries.clear();
     _tieStartGeometries.clear();
     _slurStartGeometries.clear();
@@ -24,7 +24,7 @@ vector<unique_ptr<TieGeometry>>&& TieGeometryFactory::buildTieGeometries(const v
     return std::move(_tieGeometries);
 }
 
-void TieGeometryFactory::createGeometries(const vector<unique_ptr<Geometry>>& geometries) {
+void TieGeometryFactory::createGeometries(const std::vector<std::unique_ptr<Geometry>>& geometries) {
     for (auto& geom : geometries) {
         if (auto measure = dynamic_cast<MeasureGeometry*>(geom.get())) {
             createGeometries(measure->geometries());
@@ -36,13 +36,13 @@ void TieGeometryFactory::createGeometries(const vector<unique_ptr<Geometry>>& ge
     }
 }
 
-void TieGeometryFactory::createGeometriesFromNotes(const vector<unique_ptr<NoteGeometry>>& notes) {
+void TieGeometryFactory::createGeometriesFromNotes(const std::vector<std::unique_ptr<NoteGeometry>>& notes) {
     for (auto& note : notes) {
         createGeometryFromNote(*note);
     }
 }
 
-void TieGeometryFactory::createGeometriesFromNotes(const vector<NoteGeometry*>& notes) {
+void TieGeometryFactory::createGeometriesFromNotes(const std::vector<NoteGeometry*>& notes) {
     for (auto& note : notes) {
         createGeometryFromNote(*note);
     }

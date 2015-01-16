@@ -16,15 +16,13 @@
 
 namespace mxml {
 
-using std::unique_ptr;
-
-class DynamicsHandler : public lxml::BaseRecursiveHandler<unique_ptr<dom::Dynamics>> {
+class DynamicsHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Dynamics>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     RecursiveHandler* startSubElement(const lxml::QName& qname);
 };
 
-class WedgeHandler : public lxml::BaseRecursiveHandler<unique_ptr<dom::Wedge>> {
+class WedgeHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Wedge>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     
@@ -34,34 +32,34 @@ private:
     lxml::IntegerHandler _integerHandler;
 };
 
-class PedalHandler : public lxml::BaseRecursiveHandler<unique_ptr<dom::Pedal>> {
+class PedalHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Pedal>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
 
     static dom::StartStopContinue typeFromString(const std::string& string);
 };
 
-class WordsHandler : public lxml::BaseRecursiveHandler<unique_ptr<dom::Words>> {
+class WordsHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Words>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     void endElement(const lxml::QName& qname, const std::string& contents);
 };
 
-class SegnoHandler : public lxml::BaseRecursiveHandler<unique_ptr<dom::Segno>> {
+class SegnoHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Segno>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes) {
         _result.reset(new dom::Segno());
     }
 };
 
-class CodaHandler : public lxml::BaseRecursiveHandler<unique_ptr<dom::Coda>> {
+class CodaHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Coda>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes) {
         _result.reset(new dom::Coda());
     }
 };
 
-class DirectionTypeHandler : public lxml::BaseRecursiveHandler<unique_ptr<dom::DirectionType>> {
+class DirectionTypeHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::DirectionType>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     

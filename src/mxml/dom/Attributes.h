@@ -11,7 +11,6 @@
 #include <cassert>
 #include <vector>
 
-using std::unique_ptr;
 
 namespace mxml {
 namespace dom {
@@ -92,7 +91,7 @@ public:
             return _keys[number - 1].get();
         return nullptr;
     }
-    void setKey(int number, unique_ptr<Key> key) {
+    void setKey(int number, std::unique_ptr<Key> key) {
         assert(number >= 1 && number <= _keys.size() + 1);
         if (_keys.size() >= number)
             _keys[number - 1] = std::move(key);
@@ -111,7 +110,7 @@ public:
     Time* time() {
         return _time.get();
     }
-    void setTime(unique_ptr<Time> time) {
+    void setTime(std::unique_ptr<Time> time) {
         _time = std::move(time);
     }
     
@@ -125,9 +124,9 @@ public:
 private:
     Optional<int> _divisions;
     Optional<int> _staves;
-    std::vector<unique_ptr<Clef>> _clefs;
-    std::vector<unique_ptr<Key>> _keys;
-    unique_ptr<Time> _time;
+    std::vector<std::unique_ptr<Clef>> _clefs;
+    std::vector<std::unique_ptr<Key>> _keys;
+    std::unique_ptr<Time> _time;
     time_t _start;
 };
 

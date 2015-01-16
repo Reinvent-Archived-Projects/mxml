@@ -13,12 +13,8 @@
 #include <memory>
 #include <vector>
 
-namespace mxml {
 
-using std::map;
-using std::pair;
-using std::unique_ptr;
-using std::vector;
+namespace mxml {
 
 class TieGeometryFactory {
 public:
@@ -27,12 +23,12 @@ public:
 public:
     explicit TieGeometryFactory(const PartGeometry& partGeometry);
     
-    vector<unique_ptr<TieGeometry>>&& buildTieGeometries(const vector<unique_ptr<Geometry>>& geometries);
+    std::vector<std::unique_ptr<TieGeometry>>&& buildTieGeometries(const std::vector<std::unique_ptr<Geometry>>& geometries);
     
 private:
-    void createGeometries(const vector<unique_ptr<Geometry>>& geometries);
-    void createGeometriesFromNotes(const vector<unique_ptr<NoteGeometry>>& notes);
-    void createGeometriesFromNotes(const vector<NoteGeometry*>& notes);
+    void createGeometries(const std::vector<std::unique_ptr<Geometry>>& geometries);
+    void createGeometriesFromNotes(const std::vector<std::unique_ptr<NoteGeometry>>& notes);
+    void createGeometriesFromNotes(const std::vector<NoteGeometry*>& notes);
     void createGeometryFromNote(const NoteGeometry& noteGeometry);
     std::unique_ptr<TieGeometry> buildTieGeometry(const NoteGeometry* startGeom, const NoteGeometry* stopGeom, const dom::Optional<dom::Placement>& placement);
     std::unique_ptr<TieGeometry> buildSlurGeometry(const NoteGeometry* startGeom, const NoteGeometry* stopGeom, const dom::Optional<dom::Placement>& placement);
@@ -40,8 +36,8 @@ private:
 private:
     const PartGeometry& _partGeometry;
 
-    vector<unique_ptr<TieGeometry>> _tieGeometries;
-    map<std::pair<int, int>, const NoteGeometry*> _slurStartGeometries;
+    std::vector<std::unique_ptr<TieGeometry>> _tieGeometries;
+    std::map<std::pair<int, int>, const NoteGeometry*> _slurStartGeometries;
     
     typedef std::pair<int, const dom::Pitch*> PitchKey;
     struct PitchComparator {
@@ -61,7 +57,7 @@ private:
             return a.second->octave() < b.second->octave();
         }
     };
-    map<PitchKey, const NoteGeometry*, PitchComparator> _tieStartGeometries;
+    std::map<PitchKey, const NoteGeometry*, PitchComparator> _tieStartGeometries;
 };
 
 } // namespace mxml

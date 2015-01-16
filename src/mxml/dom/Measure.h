@@ -10,9 +10,6 @@
 #include <string>
 #include <vector>
 
-using std::shared_ptr;
-using std::unique_ptr;
-using std::vector;
 
 namespace mxml {
 namespace dom {
@@ -21,7 +18,7 @@ class Part;
 
 class Measure : public Node {
 public:
-    typedef std::map<int, vector<shared_ptr<TimedNode>>> timed_node_map_t;
+    typedef std::map<int, std::vector<std::shared_ptr<TimedNode>>> timed_node_map_t;
     
 public:
     Measure();
@@ -46,10 +43,10 @@ public:
         _number = number;
     }
     
-    const std::vector<unique_ptr<Node>>& nodes() const {
+    const std::vector<std::unique_ptr<Node>>& nodes() const {
         return _nodes;
     }
-    void addNode(unique_ptr<Node>&& node) {
+    void addNode(std::unique_ptr<Node>&& node) {
         node->setParent(this);
         _nodes.push_back(std::move(node));
     }
@@ -61,7 +58,7 @@ public:
 private:
     std::size_t _index;
     std::string _number;
-    vector<unique_ptr<Node>> _nodes;
+    std::vector<std::unique_ptr<Node>> _nodes;
 };
 
 } // namespace dom

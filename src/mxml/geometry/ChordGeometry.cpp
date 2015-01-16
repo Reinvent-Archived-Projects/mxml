@@ -274,7 +274,7 @@ void ChordGeometry::buildStem() {
         return;
     
     bool flags = note->beams().empty() && _chord.firstNote()->beams().empty();
-    unique_ptr<StemGeometry> stem(new StemGeometry(*note, flags));
+    std::unique_ptr<StemGeometry> stem(new StemGeometry(*note, flags));
     _stem = stem.get();
     addGeometry(std::move(stem));
     
