@@ -4,6 +4,7 @@
 #include "LoopFactory.h"
 
 #include <mxml/dom/Barline.h>
+#include <cassert>
 
 
 namespace mxml {
@@ -19,6 +20,7 @@ std::vector<Loop> LoopFactory::build() {
     for (auto& part : _score.parts()) {
         std::size_t measureIndex = 0;
         for (auto& measure : part->measures()) {
+            assert(measure->index() == measureIndex);
             for (auto& node : measure->nodes()) {
                 if (const dom::Barline* barline = dynamic_cast<const dom::Barline*>(node.get()))
                     process(measureIndex, *barline);

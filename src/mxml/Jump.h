@@ -13,6 +13,10 @@ struct Jump {
     Jump() = default;
     Jump(std::size_t from, std::size_t to) : from(from), to(to) {}
 
+    bool forward() const {
+        return to > from;
+    }
+    
     bool operator==(const Jump& rhs) const {
         return from == rhs.from && to == rhs.to;
     }

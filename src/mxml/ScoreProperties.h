@@ -29,6 +29,11 @@ public:
     ScoreProperties(const dom::Score& score);
 
     /**
+     Get the number of measures in the score.
+     */
+    std::size_t measureCount() const { return _measureCount; }
+
+    /**
      Get active key for the given part, measure, staff and time.
      */
     const dom::Key* key(std::size_t partIndex, std::size_t measureIndex, int staff, time_t time) const;
@@ -86,7 +91,17 @@ public:
 
     const std::vector<Loop>& loops() const { return _loops; }
     const std::vector<Jump>& jumps() const { return _jumps; }
-    
+
+    /**
+     Get the loop that contains the given measure, if any.
+     */
+    const Loop* loop(std::size_t measureIndex) const;
+
+    /**
+     Get the jumps from the given measure, if any.
+     */
+    std::vector<Jump> jumps(std::size_t measureIndex) const;
+
 protected:
     struct AttributesRef {
         std::size_t partIndex;
@@ -266,6 +281,7 @@ private:
     std::vector<Loop> _loops;
     std::vector<Jump> _jumps;
     std::vector<int> _staves;
+    std::size_t _measureCount;
 
     static const dom::Key _defaultKey;
     static const dom::Clef _defaultClef;

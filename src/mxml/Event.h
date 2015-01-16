@@ -11,7 +11,7 @@ class Event {
 public:
     Event() = default;
     explicit Event(const dom::Score& score);
-    Event(const dom::Score& score, std::size_t measureIndex, int time);
+    Event(const dom::Score& score, std::size_t measureIndex, dom::time_t measureTime, dom::time_t absoluteTime);
     Event(const Event& event) = default;
     
     const dom::Score& score() const {
@@ -28,11 +28,18 @@ public:
         _measureIndex = measureIndex;
     }
     
-    dom::time_t time() const {
-        return _time;
+    dom::time_t measureTime() const {
+        return _measureTime;
     }
-    void setTime(dom::time_t time) {
-        _time = time;
+    void setMeasureTime(dom::time_t time) {
+        _measureTime = time;
+    }
+
+    dom::time_t absoluteTime() const {
+        return _absoluteTime;
+    }
+    void setAbsoluteTime(dom::time_t time) {
+        _absoluteTime = time;
     }
 
     double wallTime() const {
@@ -54,7 +61,13 @@ public:
     const std::vector<const dom::Note*>& onNotes() const {
         return _onNotes;
     }
+    std::vector<const dom::Note*>& onNotes() {
+        return _onNotes;
+    }
     const std::vector<const dom::Note*>& offNotes() const {
+        return _offNotes;
+    }
+    std::vector<const dom::Note*>& offNotes() {
         return _offNotes;
     }
     
@@ -66,14 +79,15 @@ public:
     }
     
     bool operator<(const Event& rhs) const {
-        return _time < rhs._time;
+        return _absoluteTime < rhs._absoluteTime;
     }
     
 private:
     const dom::Score* _score;
 
     std::size_t _measureIndex;
-    dom::time_t _time;
+    dom::time_t _measureTime;
+    dom::time_t _absoluteTime;
 
     double _wallTime;
     double _wallTimeDuration;

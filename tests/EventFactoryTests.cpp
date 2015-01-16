@@ -21,14 +21,11 @@ using namespace mxml;
 
      EventFactory factory(score, scoreProperties);
      auto events = factory.build();
-    
-     BOOST_CHECK_EQUAL(events->events().size(), 2857);
+
+     // Total number of events including repeats
+     BOOST_CHECK_EQUAL(events->events().size(), 3711);
     
      BOOST_CHECK_EQUAL(scoreProperties.tempo(0, 0), 160);
      BOOST_CHECK_CLOSE(scoreProperties.tempo(13, 240), 80, 0.01);
      BOOST_CHECK_EQUAL(scoreProperties.tempo(14, 0), 160);
-    
-     BOOST_CHECK_EQUAL(events->loops().size(), 1);
-     BOOST_CHECK_EQUAL(events->loops()[0].begin, 480);
-     BOOST_CHECK_EQUAL(events->loops()[0].count, 1);
  }

@@ -14,13 +14,27 @@ const dom::Key ScoreProperties::_defaultKey;
 const dom::Clef ScoreProperties::_defaultClef;
 const dom::Time ScoreProperties::_defaultTime;
 
-ScoreProperties::ScoreProperties(const dom::Score& score) : _attributes(), _pitches(), _staves(0) {
+ScoreProperties::ScoreProperties(const dom::Score& score)
+: _attributes(),
+  _pitches(),
+  _sounds(),
+  _loops(),
+  _jumps(),
+  _staves(0),
+  _measureCount(0)
+{
     _staves.resize(score.parts().size(), 0);
+    std::size_t measureCount;
     for (auto& part : score.parts()) {
         auto partIndex = part->index();
+        measureCount = 0;
         for (auto& measure : part->measures()) {
             process(partIndex, *measure);
+            measureCount += 1;
         }
+
+        if (measureCount > _measureCount)
+            _measureCount = measureCount;
     }
 
     LoopFactory loopFactory(score);
@@ -188,6 +202,24 @@ float ScoreProperties::dynamics(std::size_t partIndex, std::size_t measureIndex,
             current = ref.sound->dynamics.value();
     }
     return current;
+}
+
+const Loop* ScoreProperties::loop(std::size_t measureIndex) const {
+    auto it = std::find_if(_loops.begin(), _loops.end(), [&](const Loop& loop) {
+        return loop.begin() <= measureIndex && loop.end() > measureIndex;
+    });
+    if (it == _loops.end())
+        return nullptr;
+    return &*it;
+}
+
+std::vector<Jump> ScoreProperties::jumps(std::size_t measureIndex) const {
+    std::vector<Jump> jumps;
+    for (auto& jump : _jumps) {
+        if (jump.from + 1 == measureIndex)
+            jumps.push_back(jump);
+    }
+    return jumps;
 }
 
 }

@@ -6,14 +6,18 @@
 namespace mxml {
 
 Event::Event(const dom::Score& score)
-: _score(&score), _measureIndex(), _time()
-{
-}
+: _score(&score),
+  _measureIndex(),
+  _measureTime(),
+  _absoluteTime()
+{}
 
-Event::Event(const dom::Score& score, std::size_t measureIndex, int time)
-: _score(&score), _measureIndex(measureIndex), _time(time)
-{
-}
+Event::Event(const dom::Score& score, std::size_t measureIndex, dom::time_t measureTime, dom::time_t absoluteTime)
+: _score(&score),
+  _measureIndex(measureIndex),
+  _measureTime(measureTime),
+  _absoluteTime(absoluteTime)
+{}
 
 dom::time_t Event::maxDuration() const {
     auto it = std::max_element(_onNotes.begin(), _onNotes.end(), [](const dom::Note* n1, const dom::Note* n2) {

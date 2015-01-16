@@ -5,108 +5,26 @@
 
 #include <algorithm>
 
+
 namespace mxml {
 
-EventSequence::Iterator::Iterator(const EventSequence& eventSequence, std::size_t index, dom::time_t time, int loopNumber)
-: _eventSequence(&eventSequence), _index(index), _time(time), _loopNumber(loopNumber)
+EventSequence::Iterator::Iterator(const EventSequence& eventSequence, std::size_t index)
+: _eventSequence(&eventSequence), _index(index)
 {
 }
 
 EventSequence::Iterator& EventSequence::Iterator::operator++() {
-    std::size_t prevIndex = _index;
-    dom::time_t prevTime = _time;
-    
     _index += 1;
-    updateTime();
-    
-    updateNext(prevTime, prevIndex);
-    
+    if (_index > _eventSequence->events().size())
+        _index = _eventSequence->events().size();
     return *this;
 }
 
 EventSequence::Iterator& EventSequence::Iterator::operator--() {
-    std::size_t prevIndex = _index;
-    dom::time_t prevTime = _time;
-
     _index -= 1;
-    updateTime();
-
-    updatePrev(prevTime, prevIndex);
-    
+    if (_index > _eventSequence->events().size())
+        _index = _eventSequence->events().size();
     return *this;
-}
-
-void EventSequence::Iterator::updateTime() {
-    if (_index < _eventSequence->events().size())
-        _time = _eventSequence->events().at(_index).time();
-}
-
-void EventSequence::Iterator::updatePrev(dom::time_t prevTime, std::size_t prevIndex) {
-    if (_index >= _eventSequence->events().size()) {
-        *this = _eventSequence->end();
-        return;
-    }
-
-    const Loop* prevLoop = _eventSequence->loop(prevTime);
-    const Loop* loop = _eventSequence->loop(_time);
-
-    // Loop
-    if (prevLoop && prevLoop != loop && _loopNumber > 1) {
-        _loopNumber -= 1;
-        _index = _eventSequence->index(prevLoop->end - 1);
-        updateTime();
-        updatePrev(prevTime, prevIndex);
-        return;
-    }
-
-    const Ending* ending = _eventSequence->ending(_time);
-
-    // Skip ending
-    if (ending && ending->numbers.count(_loopNumber) == 0) {
-        _index = _eventSequence->index(ending->begin - 1);
-        updateTime();
-        updatePrev(prevTime, prevIndex);
-        return;
-    }
-    
-    // Start new loop
-    if (loop && prevLoop != loop) {
-        _loopNumber = loop->count;
-    }
-}
-
-void EventSequence::Iterator::updateNext(dom::time_t prevTime, std::size_t prevIndex) {
-    if (_index >= _eventSequence->events().size()) {
-        *this = _eventSequence->end();
-        return;
-    }
-    
-    const Loop* prevLoop = _eventSequence->loop(prevTime);
-    const Loop* loop = _eventSequence->loop(_time);
-    
-    // Loop
-    if (prevLoop && prevLoop != loop && _loopNumber <= prevLoop->count) {
-        _loopNumber += 1;
-        _index = _eventSequence->index(prevLoop->begin);
-        updateTime();
-        updateNext(prevTime, prevIndex);
-        return;
-    }
-    
-    const Ending* ending = _eventSequence->ending(_time);
-    
-    // Skip ending
-    if (ending && ending->numbers.count(_loopNumber) == 0) {
-        _index = _eventSequence->index(ending->end);
-        updateTime();
-        updateNext(prevTime, prevIndex);
-        return;
-    }
-    
-    // Start new loop
-    if (loop && prevLoop != loop) {
-        _loopNumber = 1;
-    }
 }
 
 const Event& EventSequence::Iterator::operator*() const {
@@ -124,46 +42,47 @@ EventSequence::EventSequence(const ScoreProperties& scoreProperties) : _scorePro
 
 Event& EventSequence::addEvent(const Event& event) {
     auto it = std::lower_bound(_events.begin(), _events.end(), event);
-    
-    // There should be no overlapping events
-    assert(it == _events.end() || it->time() > event.time());
-    
-    return *_events.insert(it, event);
-}
+    if (it != _events.end() && it->absoluteTime() == event.absoluteTime()) {
+        auto& oldEvent = *it;
 
-void EventSequence::addEnding(const Ending& ending) {
-    assert(ending.begin < ending.end);
-    auto it = std::upper_bound(_endings.begin(), _endings.end(), ending);
-    _endings.insert(it, ending);
-}
+        // Event already exists, merge
+        oldEvent.setMeasureIndex(event.measureIndex());
+        oldEvent.setMeasureTime(event.measureTime());
+        oldEvent.onNotes().insert(oldEvent.onNotes().end(), event.onNotes().begin(), event.onNotes().end());
+        oldEvent.offNotes().insert(oldEvent.offNotes().end(), event.offNotes().begin(), event.offNotes().end());
 
-void EventSequence::addLoop(const Loop& loop) {
-    assert(loop.begin < loop.end);
-    auto it = std::upper_bound(_loops.begin(), _loops.end(), loop);
-    _loops.insert(it, loop);
+        return oldEvent;
+    } else {
+        return *_events.insert(it, event);
+    }
 }
 
 void EventSequence::clear() {
     _events.clear();
-    _loops.clear();
-    _endings.clear();
 }
 
 std::size_t EventSequence::index(dom::time_t time) const {
     auto it = std::lower_bound(_events.begin(), _events.end(), time, [](const Event& event, dom::time_t time) {
-        return event.time() < time;
+        return event.absoluteTime() < time;
     });
-    if (it == _events.end() || it->time() != time)
+    if (it == _events.end() || it->absoluteTime() != time)
         return static_cast<std::size_t>(-1);
     
     return it - _events.begin();
 }
 
+std::size_t EventSequence::measureIndex(dom::time_t time) const {
+    auto e = event(time);
+    if (!e)
+        return static_cast<std::size_t>(-1);
+    return e->measureIndex();
+}
+
 const Event* EventSequence::event(dom::time_t time) const {
     auto it = std::lower_bound(_events.begin(), _events.end(), time, [](const Event& event, dom::time_t time) {
-        return event.time() < time;
+        return event.absoluteTime() < time;
     });
-    if (it == _events.end() || it->time() != time)
+    if (it == _events.end() || it->absoluteTime() != time)
         return nullptr;
     
     return &*it;
@@ -171,9 +90,9 @@ const Event* EventSequence::event(dom::time_t time) const {
 
 Event* EventSequence::event(dom::time_t time) {
     auto it = std::lower_bound(_events.begin(), _events.end(), time, [](const Event& event, dom::time_t time) {
-        return event.time() < time;
+        return event.absoluteTime() < time;
     });
-    if (it == _events.end() || it->time() != time)
+    if (it == _events.end() || it->absoluteTime() != time)
         return nullptr;
     
     return &*it;
@@ -199,38 +118,26 @@ const Event* EventSequence::lastEvent(std::size_t measureIndex) const {
     return &*it;
 }
 
-const EventSequence::Loop* EventSequence::loop(dom::time_t time) const {
-    auto it = std::find_if(_loops.begin(), _loops.end(), [time](const Loop& loop) {
-        return time >= loop.begin && time < loop.end;
-    });
-    if (it != _loops.end())
-        return &*it;
-    return 0;
-}
-
-const EventSequence::Ending* EventSequence::ending(dom::time_t time) const {
-    auto it = std::find_if(_endings.begin(), _endings.end(), [time](const Ending& ending) {
-        return time >= ending.begin && time < ending.end;
-    });
-    if (it != _endings.end())
-        return &*it;
-    return 0;
-}
-
 EventSequence::Iterator EventSequence::begin() const {
-    return Iterator(*this, 0, 0, 1);
+    return Iterator(*this, 0);
 }
 
 EventSequence::Iterator EventSequence::end() const {
-    return Iterator(*this, _events.size(), 0, 1);
+    return Iterator(*this, _events.size());
 }
 
 EventSequence::Iterator EventSequence::begin(std::size_t measureIndex) const {
-    return Iterator(*this, 0, 0, 1);
+    auto it = std::find_if(_events.begin(), _events.end(), [measureIndex](const Event& event) {
+        return event.measureIndex() == measureIndex;
+    });
+    if (it == _events.end())
+        return end();
+    
+    return Iterator(*this, it - _events.begin());
 }
 
 EventSequence::Iterator EventSequence::end(std::size_t measureIndex) const {
-    return Iterator(*this, _events.size(), 0, 1);
+    return begin(measureIndex + 1);
 }
 
 } // namespace mxml

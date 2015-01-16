@@ -7,6 +7,8 @@
 
 #include <map>
 #include <memory>
+#include <vector>
+
 
 namespace mxml {
 
@@ -31,6 +33,15 @@ private:
     void processChord(const dom::Chord& chord);
     void addNote(const dom::Note& note);
 
+    /**
+     Return the event in the current measure for the given measure time and absolute time, creates a new event if
+     necessary.
+     */
+    Event& event(dom::time_t measureTime, dom::time_t absoluteTime);
+
+    std::unique_ptr<EventSequence> unroll();
+    void fillWallTimes(EventSequence& eventSequence);
+
 private:
     const dom::Score& _score;
     const ScoreProperties& _scoreProperties;
@@ -39,11 +50,8 @@ private:
     std::size_t _measureIndex;
     dom::time_t _measureStartTime;
     dom::time_t _time;
-    bool _firstPass;
 
-    dom::time_t _loopBegin;
-    dom::time_t _endingBegin;
-    std::unique_ptr<EventSequence> _eventSequence;
+    std::map<std::pair<std::size_t, dom::time_t>, Event> _events;
 };
 
 } // namespace mxml
