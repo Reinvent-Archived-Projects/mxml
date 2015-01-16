@@ -186,11 +186,7 @@ void EventFactory::fillWallTimes(EventSequence& eventSequence) {
     dom::time_t time = 0;
     double wallTime = 0.0;
 
-    std::size_t mi = 0;
     for (auto& event : eventSequence.events()) {
-        if (event.measureIndex() < mi)
-            mi = mi;
-        mi =event.measureIndex();
         divisions = _scoreProperties.divisions(event.measureIndex());
         tempo = _scoreProperties.tempo(event.measureIndex(), event.measureTime());
 
