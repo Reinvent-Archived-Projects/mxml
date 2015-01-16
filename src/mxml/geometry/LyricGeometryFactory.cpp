@@ -13,7 +13,7 @@ namespace mxml {
     void LyricGeometryFactory::build() {
         computeNotesBounds();
         
-        for (auto measure: _partGeometry.measureGeometries()) {
+        for (auto& measure: _partGeometry.measureGeometries()) {
             for (auto& geom : measure->geometries()) {
                 if (const ChordGeometry* chord = dynamic_cast<const ChordGeometry*>(geom.get()))
                     build(*measure, *chord);
@@ -28,7 +28,7 @@ namespace mxml {
         _notesBounds.size.height = Metrics::staffHeight() + Metrics::kStaffLineSpacing;
 
         // Get the bounding box of all notes on this part to place lyrics below that
-        for (auto measure: _partGeometry.measureGeometries()) {
+        for (auto& measure: _partGeometry.measureGeometries()) {
             for (auto& geom : measure->geometries()) {
                 auto chord = dynamic_cast<ChordGeometry*>(geom.get());
                 if (!chord)
@@ -41,7 +41,7 @@ namespace mxml {
     }
     
     void LyricGeometryFactory::build(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom) {
-        for (auto noteGeom : chordGeom.notes()) {
+        for (auto& noteGeom : chordGeom.notes()) {
             for (auto& lyric : noteGeom->note().lyrics()) {
                 build(measureGeom, chordGeom, *lyric);
             }

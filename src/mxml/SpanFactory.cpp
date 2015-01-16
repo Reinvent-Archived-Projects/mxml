@@ -289,7 +289,7 @@ SpanCollection::iterator SpanFactory::graceNoteSpan(const dom::Chord* chord) {
     // Get grace note span matching the count
     std::size_t n = 0;
     for (auto it = range.first; it != range.second; ++it) {
-        for (auto node : it->nodes()) {
+        for (auto& node : it->nodes()) {
             const dom::Chord* chord = dynamic_cast<const dom::Chord*>(node);
             if (!chord)
                 continue;
@@ -364,7 +364,7 @@ bool SpanFactory::isAttributeOnlySpan(const Span& span) {
     if (span.event())
         return false;
 
-    for (auto node : span.nodes()) {
+    for (auto& node : span.nodes()) {
         if (!dynamic_cast<const dom::Clef*>(node) && !dynamic_cast<const dom::Time*>(node) && !dynamic_cast<const dom::Key*>(node)) {
             return false;
         }

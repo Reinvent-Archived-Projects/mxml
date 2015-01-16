@@ -282,7 +282,7 @@ void ChordGeometry::buildStem() {
     bool first = true;
     Point topLocation;
     Point bottomLocation;
-    for (auto note : _notes) {
+    for (auto& note : _notes) {
         if (first || note->location().y < topLocation.y)
             topLocation = note->location();
         if (first || note->location().y > bottomLocation.y)

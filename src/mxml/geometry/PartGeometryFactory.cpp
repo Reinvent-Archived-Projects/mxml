@@ -73,7 +73,7 @@ namespace mxml {
     }
 
     void PartGeometryFactory::buildDirections() {
-        for (auto measure: _partGeometry->_measureGeometries) {
+        for (auto& measure: _partGeometry->_measureGeometries) {
             for (auto& node : measure->measure().nodes()) {
                 if (const dom::Direction* direction = dynamic_cast<const dom::Direction*>(node.get()))
                     buildDirection(*measure, *direction);
@@ -223,7 +223,7 @@ namespace mxml {
     }
 
     void PartGeometryFactory::buildOrnaments() {
-        for (auto measure: _partGeometry->_measureGeometries) {
+        for (auto& measure: _partGeometry->_measureGeometries) {
             for (auto& geom : measure->geometries()) {
                 if (const ChordGeometry* chord = dynamic_cast<const ChordGeometry*>(geom.get()))
                     buildOrnaments(*measure, *chord);
@@ -277,7 +277,7 @@ namespace mxml {
     }
 
     void PartGeometryFactory::buildEndings() {
-        for (auto measure: _partGeometry->_measureGeometries) {
+        for (auto& measure: _partGeometry->_measureGeometries) {
             for (auto& geom : measure->geometries()) {
                 if (const BarlineGeometry* barline = dynamic_cast<const BarlineGeometry*>(geom.get()))
                     buildEndings(*measure, *barline);
