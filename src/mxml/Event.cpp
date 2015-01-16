@@ -9,14 +9,16 @@ Event::Event(const dom::Score& score)
 : _score(&score),
   _measureIndex(),
   _measureTime(),
-  _absoluteTime()
+  _absoluteTime(),
+  _beatMark()
 {}
 
 Event::Event(const dom::Score& score, std::size_t measureIndex, dom::time_t measureTime, dom::time_t absoluteTime)
 : _score(&score),
   _measureIndex(measureIndex),
   _measureTime(measureTime),
-  _absoluteTime(absoluteTime)
+  _absoluteTime(absoluteTime),
+  _beatMark()
 {}
 
 dom::time_t Event::maxDuration() const {

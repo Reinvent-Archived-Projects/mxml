@@ -37,9 +37,21 @@ private:
      Return the event in the current measure for the given measure time and absolute time, creates a new event if
      necessary.
      */
-    Event& event(dom::time_t measureTime, dom::time_t absoluteTime);
+    Event& event(std::size_t measureIndex, dom::time_t measureTime, dom::time_t absoluteTime);
 
+    /**
+     Fill in beat mark events for every measure according to the time signature.
+     */
+    void setBeatMarks();
+
+    /**
+     Unroll all loops and jumps to create a linear event sequence.
+     */
     std::unique_ptr<EventSequence> unroll();
+
+    /**
+     Fill the event wall times in seconds from the tempo values.
+     */
     void fillWallTimes(EventSequence& eventSequence);
 
 private:
@@ -47,7 +59,6 @@ private:
     const ScoreProperties& _scoreProperties;
     const dom::Part* _part;
 
-    std::size_t _measureIndex;
     dom::time_t _measureStartTime;
     dom::time_t _time;
 

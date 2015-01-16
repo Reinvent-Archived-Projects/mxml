@@ -48,6 +48,7 @@ Event& EventSequence::addEvent(const Event& event) {
         // Event already exists, merge
         oldEvent.setMeasureIndex(event.measureIndex());
         oldEvent.setMeasureTime(event.measureTime());
+        oldEvent.setBeatMark(oldEvent.isBeatMark() || event.isBeatMark());
         oldEvent.onNotes().insert(oldEvent.onNotes().end(), event.onNotes().begin(), event.onNotes().end());
         oldEvent.offNotes().insert(oldEvent.offNotes().end(), event.offNotes().begin(), event.offNotes().end());
 

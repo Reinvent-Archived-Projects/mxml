@@ -19,7 +19,6 @@ using namespace dom;
 EventFactory::EventFactory(const dom::Score& score, const ScoreProperties& scoreProperties)
 : _score(score),
   _scoreProperties(scoreProperties),
-  _measureIndex(0),
   _time(0)
 {}
 
@@ -28,12 +27,13 @@ std::unique_ptr<EventSequence> EventFactory::build() {
         _part = part.get();
         _measureStartTime = 0;
         _time = 0;
-        for (_measureIndex = 0; _measureIndex < part->measures().size(); _measureIndex += 1) {
-            const Measure& measure = *part->measures().at(_measureIndex);
+        for (std::size_t measureIndex = 0; measureIndex < part->measures().size(); measureIndex += 1) {
+            const Measure& measure = *part->measures().at(measureIndex);
             processMeasure(measure);
         }
     }
 
+    setBeatMarks();
     auto eventSequence = unroll();
     fillWallTimes(*eventSequence);
 
@@ -46,9 +46,11 @@ void EventFactory::processMeasure(const dom::Measure& measure) {
             processTimedNode(*timedNode);
         }
     }
-    
-    _measureStartTime += Attributes::divisionsPerMeasure(_scoreProperties.divisions(measure.index()), *_scoreProperties.time(measure.index()));
-    _time = _measureStartTime;
+
+    auto nextTime = _measureStartTime + Attributes::divisionsPerMeasure(_scoreProperties.divisions(measure.index()), *_scoreProperties.time(measure.index()));
+    if (_time > nextTime)
+        _time = nextTime;
+    _measureStartTime = _time;
 }
 
 void EventFactory::processTimedNode(const TimedNode& node) {
@@ -71,30 +73,49 @@ void EventFactory::processChord(const Chord& chord) {
 }
 
 void EventFactory::addNote(const Note& note) {
-    auto& onEvent = event(note.start(), _time);
+    auto measureIndex = note.measure()->index();
+
+    auto& onEvent = event(measureIndex, note.start(), _time);
     onEvent.addOnNote(note);
 
-    auto& offEvent = event(note.start() + note.duration(), _time + note.duration());
+    auto& offEvent = event(measureIndex, note.start() + note.duration(), _time + note.duration());
     offEvent.addOffNote(note);
 }
 
-Event& EventFactory::event(dom::time_t measureTime, dom::time_t absoluteTime) {
-    auto it = _events.find(std::make_pair(_measureIndex, measureTime));
+Event& EventFactory::event(std::size_t measureIndex, dom::time_t measureTime, dom::time_t absoluteTime) {
+    auto it = _events.find(std::make_pair(measureIndex, measureTime));
     if (it != _events.end())
         return it->second;
 
     auto event = Event{_score};
-    event.setMeasureIndex(_measureIndex);
+    event.setMeasureIndex(measureIndex);
     event.setMeasureTime(measureTime);
     event.setAbsoluteTime(absoluteTime);
-    it = _events.insert(std::make_pair(std::make_pair(_measureIndex, measureTime), event)).first;
+    it = _events.insert(std::make_pair(std::make_pair(measureIndex, measureTime), event)).first;
     return it->second;
+}
+
+void EventFactory::setBeatMarks() {
+    dom::time_t absoluteTime = 0;
+    for (std::size_t measureIndex = 0; measureIndex < _scoreProperties.measureCount(); measureIndex += 1) {
+        auto divisions = _scoreProperties.divisions(measureIndex);
+        auto time = _scoreProperties.time(measureIndex);
+        auto divisionsPerBeat = Attributes::divisionsPerBeat(divisions, *time);
+        auto divisionsPerMeasure = divisionsPerBeat * time->beats();
+
+        for (dom::time_t time = 0; time < divisionsPerMeasure; time += divisionsPerBeat) {
+            auto& e = event(measureIndex, time, absoluteTime);
+            e.setBeatMark(true);
+            absoluteTime += divisionsPerBeat;
+        }
+    }
 }
 
 std::unique_ptr<EventSequence> EventFactory::unroll() {
     auto eventSequence = std::unique_ptr<EventSequence>(new EventSequence(_scoreProperties));
 
     std::size_t measureIndex = 0;
+    dom::time_t measureStartTime = 0;
     dom::time_t time = 0;
 
     std::map<Loop, std::size_t> loopCounts;
@@ -144,12 +165,15 @@ std::unique_ptr<EventSequence> EventFactory::unroll() {
             auto second = _events.upper_bound(std::make_pair(measureIndex, measureDuration));
             for (auto it = first; it != second; ++it) {
                 auto event = it->second;
-                event.setAbsoluteTime(time + event.measureTime());
+                time = measureStartTime + event.measureTime();
+                event.setAbsoluteTime(time);
                 eventSequence->addEvent(event);
             }
             
             measureIndex += 1;
-            time += Attributes::divisionsPerMeasure(_scoreProperties.divisions(measureIndex), *_scoreProperties.time(measureIndex));
+            if (time > measureStartTime + measureDuration)
+                time = measureStartTime + measureDuration;
+            measureStartTime = time;
         }
     }
 

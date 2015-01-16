@@ -42,6 +42,13 @@ public:
         _absoluteTime = time;
     }
 
+    bool isBeatMark() const {
+        return _beatMark;
+    }
+    void setBeatMark(bool value) {
+        _beatMark = value;
+    }
+
     double wallTime() const {
         return _wallTime;
     }
@@ -88,6 +95,7 @@ private:
     std::size_t _measureIndex;
     dom::time_t _measureTime;
     dom::time_t _absoluteTime;
+    bool _beatMark;
 
     double _wallTime;
     double _wallTimeDuration;
