@@ -102,6 +102,11 @@ public:
      */
     std::vector<Jump> jumps(std::size_t measureIndex) const;
 
+    /**
+     Get the size of the octave shift for the given part, measure, staff and time.
+     */
+    int octaveShift(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time) const;
+
 protected:
     struct AttributesRef {
         std::size_t partIndex;
@@ -198,6 +203,42 @@ protected:
 
     };
 
+    struct DirectionRef {
+        std::size_t partIndex;
+        std::size_t measureIndex;
+        dom::time_t time;
+        dom::Optional<int> staff;
+        const dom::Direction* direction;
+
+        bool operator==(const DirectionRef& rhs) const {
+            return partIndex == rhs.partIndex && measureIndex == rhs.measureIndex && time == rhs.time && staff == rhs.staff && direction == rhs.direction;
+        }
+        bool operator<(const DirectionRef& rhs) const {
+            if (measureIndex < rhs.measureIndex)
+                return true;
+            if (measureIndex > rhs.measureIndex)
+                return false;
+
+            if (time < rhs.time)
+                return true;
+            if (time > rhs.time)
+                return false;
+
+            if (partIndex < rhs.partIndex)
+                return true;
+            if (partIndex > rhs.partIndex)
+                return false;
+
+            if (staff.value() < rhs.staff.value())
+                return true;
+            if (staff.value() > rhs.staff.value())
+                return false;
+
+            return direction < rhs.direction;
+        }
+        
+    };
+
 protected:
     void process(std::size_t partIndex, const dom::Measure& measure);
     void process(std::size_t partIndex, std::size_t measureIndex, const dom::Attributes& attributes);
@@ -276,6 +317,7 @@ protected:
 
 private:
     std::set<AttributesRef> _attributes;
+    std::set<DirectionRef> _directions;
     std::set<PitchRef> _pitches;
     std::set<SoundRef> _sounds;
     std::vector<Loop> _loops;

@@ -121,6 +121,10 @@
 		614057BE1A5C79EF005224C9 /* KeyTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614057BD1A5C79EF005224C9 /* KeyTests.cpp */; };
 		614057C01A5CAA47005224C9 /* ScorePropertiesTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */; };
 		61C8502F1A6843EB00031100 /* LoopsAndJumpsTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61C8502D1A6843EB00031100 /* LoopsAndJumpsTests.cpp */; };
+		61C8504F1A6D79CC00031100 /* OctaveShiftHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61C8504D1A6D79CC00031100 /* OctaveShiftHandler.cpp */; };
+		61C850501A6D79CC00031100 /* OctaveShiftHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C8504E1A6D79CC00031100 /* OctaveShiftHandler.h */; };
+		61C850571A6D838500031100 /* OctaveShiftGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61C850551A6D838500031100 /* OctaveShiftGeometry.cpp */; };
+		61C850581A6D838500031100 /* OctaveShiftGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C850561A6D838500031100 /* OctaveShiftGeometry.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -407,6 +411,11 @@
 		61C8502C1A68439D00031100 /* repeats.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = repeats.xml; sourceTree = "<group>"; };
 		61C8502D1A6843EB00031100 /* LoopsAndJumpsTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoopsAndJumpsTests.cpp; sourceTree = "<group>"; };
 		61C850301A68464600031100 /* loops.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = loops.xml; sourceTree = "<group>"; };
+		61C8504C1A6D775100031100 /* OctaveShift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OctaveShift.h; sourceTree = "<group>"; };
+		61C8504D1A6D79CC00031100 /* OctaveShiftHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OctaveShiftHandler.cpp; sourceTree = "<group>"; };
+		61C8504E1A6D79CC00031100 /* OctaveShiftHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OctaveShiftHandler.h; sourceTree = "<group>"; };
+		61C850551A6D838500031100 /* OctaveShiftGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OctaveShiftGeometry.cpp; sourceTree = "<group>"; };
+		61C850561A6D838500031100 /* OctaveShiftGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OctaveShiftGeometry.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -521,6 +530,7 @@
 				614055E51A5C6228005224C9 /* Notations.h */,
 				614055E61A5C6228005224C9 /* Note.cpp */,
 				614055E71A5C6228005224C9 /* Note.h */,
+				61C8504C1A6D775100031100 /* OctaveShift.h */,
 				614055E81A5C6228005224C9 /* Optional.h */,
 				614055E91A5C6228005224C9 /* Ornaments.h */,
 				614055EA1A5C6228005224C9 /* Part.cpp */,
@@ -574,10 +584,6 @@
 				614056191A5C6228005224C9 /* EndingGeometry.h */,
 				6140561A1A5C6228005224C9 /* FermataGeometry.cpp */,
 				6140561B1A5C6228005224C9 /* FermataGeometry.h */,
-				00094EFB1A67464A0053C615 /* SegnoGeometry.cpp */,
-				00094EFC1A67464A0053C615 /* SegnoGeometry.h */,
-				00094EF71A6746340053C615 /* WordsGeometry.cpp */,
-				00094EF81A6746340053C615 /* WordsGeometry.h */,
 				6140561C1A5C6228005224C9 /* Geometry.cpp */,
 				6140561D1A5C6228005224C9 /* Geometry.h */,
 				6140561E1A5C6228005224C9 /* KeyGeometry.cpp */,
@@ -592,6 +598,8 @@
 				614056271A5C6228005224C9 /* MeasureGeometry.h */,
 				614056281A5C6228005224C9 /* NoteGeometry.cpp */,
 				614056291A5C6228005224C9 /* NoteGeometry.h */,
+				61C850551A6D838500031100 /* OctaveShiftGeometry.cpp */,
+				61C850561A6D838500031100 /* OctaveShiftGeometry.h */,
 				6140562A1A5C6228005224C9 /* OrnamentsGeometry.cpp */,
 				6140562B1A5C6228005224C9 /* OrnamentsGeometry.h */,
 				6140562C1A5C6228005224C9 /* PartGeometry.cpp */,
@@ -607,6 +615,8 @@
 				614056361A5C6228005224C9 /* RestGeometry.h */,
 				614056371A5C6228005224C9 /* ScoreGeometry.cpp */,
 				614056381A5C6228005224C9 /* ScoreGeometry.h */,
+				00094EFB1A67464A0053C615 /* SegnoGeometry.cpp */,
+				00094EFC1A67464A0053C615 /* SegnoGeometry.h */,
 				614056391A5C6228005224C9 /* Size.h */,
 				6140563A1A5C6228005224C9 /* SpanDirectionGeometry.cpp */,
 				6140563B1A5C6228005224C9 /* SpanDirectionGeometry.h */,
@@ -621,6 +631,8 @@
 				614056441A5C6228005224C9 /* TieGeometryFactory.h */,
 				614056451A5C6228005224C9 /* TimeSignatureGeometry.cpp */,
 				614056461A5C6228005224C9 /* TimeSignatureGeometry.h */,
+				00094EF71A6746340053C615 /* WordsGeometry.cpp */,
+				00094EF81A6746340053C615 /* WordsGeometry.h */,
 			);
 			path = geometry;
 			sourceTree = "<group>";
@@ -673,6 +685,8 @@
 				614056741A5C6228005224C9 /* NotationsHandler.h */,
 				614056751A5C6228005224C9 /* NoteHandler.cpp */,
 				614056761A5C6228005224C9 /* NoteHandler.h */,
+				61C8504D1A6D79CC00031100 /* OctaveShiftHandler.cpp */,
+				61C8504E1A6D79CC00031100 /* OctaveShiftHandler.h */,
 				614056771A5C6228005224C9 /* OrnamentsHandler.cpp */,
 				614056781A5C6228005224C9 /* OrnamentsHandler.h */,
 				614056791A5C6228005224C9 /* PartHandler.cpp */,
@@ -762,8 +776,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61C850501A6D79CC00031100 /* OctaveShiftHandler.h in Headers */,
 				61239C1D1A67429100B3F0A3 /* Jump.h in Headers */,
 				61239C211A6742A100B3F0A3 /* LoopFactory.h in Headers */,
+				61C850581A6D838500031100 /* OctaveShiftGeometry.h in Headers */,
 				61239BA01A67426C00B3F0A3 /* JumpFactory.h in Headers */,
 				61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */,
 				00094EFE1A67464A0053C615 /* SegnoGeometry.h in Headers */,
@@ -900,6 +916,7 @@
 				614057411A5C6228005224C9 /* KeyHandler.cpp in Sources */,
 				614056B41A5C6228005224C9 /* Identification.cpp in Sources */,
 				614056EF1A5C6228005224C9 /* EndingGeometry.cpp in Sources */,
+				61C850571A6D838500031100 /* OctaveShiftGeometry.cpp in Sources */,
 				614057571A5C6228005224C9 /* RestHandler.cpp in Sources */,
 				6140570E1A5C6228005224C9 /* ScoreGeometry.cpp in Sources */,
 				614056F51A5C6228005224C9 /* KeyGeometry.cpp in Sources */,
@@ -913,6 +930,7 @@
 				614056E31A5C6228005224C9 /* BeamGeometry.cpp in Sources */,
 				614056DB1A5C6228005224C9 /* EventSequence.cpp in Sources */,
 				6140575B1A5C6228005224C9 /* ScoreHandler.cpp in Sources */,
+				61C8504F1A6D79CC00031100 /* OctaveShiftHandler.cpp in Sources */,
 				6140575F1A5C6228005224C9 /* SoundHandler.cpp in Sources */,
 				6140575D1A5C6228005224C9 /* SlurHandler.cpp in Sources */,
 				6140572D1A5C6228005224C9 /* CreditHandler.cpp in Sources */,

@@ -11,12 +11,14 @@
 #include "SegnoGeometry.h"
 #include "WordsGeometry.h"
 #include "LyricGeometryFactory.h"
+#include "OctaveShiftGeometry.h"
 #include "OrnamentsGeometry.h"
 #include "PartGeometryFactory.h"
 #include "PedalGeometry.h"
 #include "SpanDirectionGeometry.h"
 #include "TieGeometryFactory.h"
 
+#include <mxml/dom/OctaveShift.h>
 #include <mxml/dom/Pedal.h>
 #include <mxml/dom/Wedge.h>
 
@@ -89,6 +91,11 @@ namespace mxml {
 
         if (dynamic_cast<const dom::Pedal*>(direction.type())) {
             buildPedal(measureGeom, direction);
+            return;
+        }
+
+        if (dynamic_cast<const dom::OctaveShift*>(direction.type())) {
+            buildOctaveShift(measureGeom, direction);
             return;
         }
         
@@ -216,6 +223,45 @@ namespace mxml {
         startLocation.y = stopLocation.y = Metrics::staffOrigin(_part, staff) + Metrics::staffHeight() + _part.staffDistance()/2 - Metrics::stavesHeight(_part)/2;
 
         std::unique_ptr<PlacementGeometry> geo(new PedalGeometry(startDirection, startLocation, stopDirection, stopLocation));
+        geo->setLocation(startLocation);
+
+        _partGeometry->_directionGeometries.push_back(geo.get());
+        _partGeometry->addGeometry(std::move(geo));
+    }
+
+    void PartGeometryFactory::buildOctaveShift(const MeasureGeometry& measureGeom, const dom::Direction& direction) {
+        using dom::OctaveShift;
+
+        const OctaveShift& octaveShift = dynamic_cast<const OctaveShift&>(*direction.type());
+        if (octaveShift.type == OctaveShift::STOP) {
+            auto it = std::find_if(_openSpanDirections.rbegin(), _openSpanDirections.rend(), [&](std::pair<const MeasureGeometry*, const dom::Direction*> pair) {
+                if (auto os = dynamic_cast<const OctaveShift*>(pair.second->type()))
+                    return pair.second->staff() == direction.staff() && os->number == octaveShift.number;
+                return false;
+            });
+
+            if (it != _openSpanDirections.rend()) {
+                buildOctaveShift(*it->first, *it->second, measureGeom,direction);
+                _openSpanDirections.erase(it.base() - 1);
+            }
+        } else if (octaveShift.type != OctaveShift::CONTINUE) {
+            _openSpanDirections.push_back(std::make_pair(&measureGeom, &direction));
+        }
+    }
+
+    void PartGeometryFactory::buildOctaveShift(const MeasureGeometry& startMeasureGeom, const dom::Direction& startDirection,
+                                               const MeasureGeometry& stopMeasureGeom, const dom::Direction& stopDirection) {
+        const Span& startSpan = *startMeasureGeom.spans().with(&startDirection);
+        Point startLocation;
+        startLocation.x = startSpan.start() + startSpan.eventOffset();
+
+        const Span& stopSpan = *stopMeasureGeom.spans().with(&stopDirection);
+        Point stopLocation;
+        stopLocation.x = stopSpan.start() + stopSpan.eventOffset();
+
+        startLocation.y = stopLocation.y = startMeasureGeom.origin().y - OctaveShiftGeometry::k8vaSize.height - 10;
+
+        std::unique_ptr<PlacementGeometry> geo(new OctaveShiftGeometry(startDirection, startLocation, stopDirection, stopLocation));
         geo->setLocation(startLocation);
 
         _partGeometry->_directionGeometries.push_back(geo.get());

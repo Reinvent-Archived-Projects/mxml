@@ -14,6 +14,9 @@
 
 #include <memory>
 
+#include "OctaveShiftHandler.h"
+
+
 namespace mxml {
 
 class DynamicsHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Dynamics>> {
@@ -73,6 +76,7 @@ private:
     WordsHandler _wordsHandler;
     SegnoHandler _segnoHandler;
     CodaHandler _codaHandler;
+    OctaveShiftHandler _octaveShiftHandler;
 };
 
 } // namespace mxml

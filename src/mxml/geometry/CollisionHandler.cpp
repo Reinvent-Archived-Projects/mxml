@@ -15,6 +15,7 @@
 #include "KeyGeometry.h"
 #include "LyricGeometry.h"
 #include "NoteGeometry.h"
+#include "OctaveShiftGeometry.h"
 #include "OrnamentsGeometry.h"
 #include "PedalGeometry.h"
 #include "RestGeometry.h"
@@ -225,6 +226,7 @@ namespace mxml {
         typeOrder[std::type_index(typeid(RestGeometry))] = 4;
         typeOrder[std::type_index(typeid(SpanDirectionGeometry))] = 5;
         typeOrder[std::type_index(typeid(OrnamentsGeometry))] = 6;
+        typeOrder[std::type_index(typeid(OctaveShiftGeometry))] = 7;
         typeOrder[std::type_index(typeid(PedalGeometry))] = 7;
         typeOrder[std::type_index(typeid(SegnoGeometry))] = 8;
         typeOrder[std::type_index(typeid(CodaGeometry))] = 8;

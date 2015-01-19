@@ -10,9 +10,9 @@ using namespace dom;
 const coord_t Metrics::kStaffLineSpacing = 10;
 const std::size_t Metrics::kStaffLineCount = 5;
 
-coord_t Metrics::noteY(const ScoreProperties& attributesManager, const dom::Note& note) {
+coord_t Metrics::noteY(const ScoreProperties& scoreProperties, const dom::Note& note) {
     const auto& part = static_cast<const dom::Part&>(*note.measure()->parent());
-    return staffOrigin(part, note.staff()) + staffY(attributesManager, note);
+    return staffOrigin(part, note.staff()) + staffY(scoreProperties, note);
 }
 
 coord_t Metrics::staffHeight() {
@@ -28,23 +28,28 @@ coord_t Metrics::staffOrigin(const dom::Part& part, int staffNumber) {
     return (staffNumber - 1) * (staffHeight() + part.staffDistance());
 }
 
-coord_t Metrics::staffY(const ScoreProperties& attributesManager, const Note& note) {
+coord_t Metrics::staffY(const ScoreProperties& scoreProperties, const Note& note) {
     coord_t y = 20;
     if (note.pitch()) {
-        const auto& clef = attributesManager.clef(note);
+        const auto& clef = scoreProperties.clef(note);
         
         if (clef == nullptr) {
-            attributesManager.clef(note);
+            scoreProperties.clef(note);
         }
         
         y = staffY(*clef, *note.pitch());
     } else if (note.rest()) {
-        const auto& clef = attributesManager.clef(note);
+        const auto& clef = scoreProperties.clef(note);
         y = staffY(*clef, *note.rest());
     } else if (note.defaultY().isPresent()) {
         y = note.defaultY();
     }
-    return y * kStaffLineSpacing / 10;
+
+    auto measure = note.measure();
+    auto part = measure->part();
+    int shift = scoreProperties.octaveShift(part->index(), measure->index(), note.staff(), note.start());
+    
+    return -shift * kStaffLineSpacing/2 + y * kStaffLineSpacing / 10;
 }
 
 coord_t Metrics::staffY(const Clef& clef, const Pitch& pitch) {

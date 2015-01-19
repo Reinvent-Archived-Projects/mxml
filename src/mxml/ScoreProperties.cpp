@@ -6,6 +6,7 @@
 #include "JumpFactory.h"
 
 #include <mxml/dom/Chord.h>
+#include <mxml/dom/OctaveShift.h>
 
 
 namespace mxml {
@@ -73,16 +74,23 @@ void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, c
 }
 
 void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Direction& direction) {
-    if (!direction.sound())
-        return;
-
-    SoundRef ref;
+    DirectionRef ref;
     ref.partIndex = partIndex;
     ref.measureIndex = measureIndex;
     ref.staff = direction.staff();
     ref.time = direction.start();
-    ref.sound = direction.sound().get();
-    _sounds.insert(ref);
+    ref.direction = &direction;
+    _directions.insert(ref);
+
+    if (direction.sound()) {
+        SoundRef ref;
+        ref.partIndex = partIndex;
+        ref.measureIndex = measureIndex;
+        ref.staff = direction.staff();
+        ref.time = direction.start();
+        ref.sound = direction.sound().get();
+        _sounds.insert(ref);
+    }
 }
 
 void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Chord& chord) {
@@ -220,6 +228,29 @@ std::vector<Jump> ScoreProperties::jumps(std::size_t measureIndex) const {
             jumps.push_back(jump);
     }
     return jumps;
+}
+
+int ScoreProperties::octaveShift(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time) const {
+    int current = 0;
+    for (auto& ref : _directions) {
+        if (ref.measureIndex > measureIndex || (ref.measureIndex == measureIndex && ref.time > time))
+            return current;
+
+        if (ref.staff.isPresent() && ref.staff != staff)
+            continue;
+        if (ref.partIndex != partIndex)
+            continue;
+
+        auto octaveShift = dynamic_cast<const dom::OctaveShift*>(ref.direction->type());
+        if (!octaveShift)
+            continue;
+
+        if (octaveShift->type == dom::OctaveShift::STOP || octaveShift->size == 0)
+            current = 0;
+        else
+            current = (octaveShift->type == dom::OctaveShift::DOWN ? -1: 1) * (octaveShift->size - 1);
+    }
+    return current;
 }
 
 }

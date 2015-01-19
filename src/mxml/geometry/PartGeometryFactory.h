@@ -24,7 +24,9 @@ namespace mxml {
         void buildPedal(const MeasureGeometry& measureGeom, const dom::Direction& direction);
         void buildPedal(const MeasureGeometry& startMeasureGeom, const dom::Direction& startDirection,
                         const MeasureGeometry& stopMeasureGeom, const dom::Direction& stopDirection);
-
+        void buildOctaveShift(const MeasureGeometry& measureGeom, const dom::Direction& direction);
+        void buildOctaveShift(const MeasureGeometry& startMeasureGeom, const dom::Direction& startDirection,
+                              const MeasureGeometry& stopMeasureGeom, const dom::Direction& stopDirection);
         void buildOrnaments();
         void buildOrnaments(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom);
         void buildOrnament(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom, const dom::Ornaments& ornaments);
