@@ -361,7 +361,7 @@ void SpanFactory::removeRedundantSpans() {
 }
 
 bool SpanFactory::isAttributeOnlySpan(const Span& span) {
-    if (span.event())
+    if (span.event() || span.nodes().size() == 0)
         return false;
 
     for (auto& node : span.nodes()) {
