@@ -13,7 +13,7 @@ namespace dom {
 
 class Lyric : public Node {
 public:
-    Lyric() : _number(1), _name(), _placement(PLACEMENT_BELOW), _printObject(true) {}
+    Lyric() : _number(1), _name(), _placement(kPlacementBelow), _printObject(true) {}
 
     int number() const {
         return _number;

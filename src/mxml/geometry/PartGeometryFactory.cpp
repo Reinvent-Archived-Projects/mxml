@@ -120,7 +120,7 @@ namespace mxml {
         auto location = geometry.location();
         auto& part = _partGeometry->part();
         
-        if (geometry.placement() == dom::PLACEMENT_ABOVE) {
+        if (geometry.placement() == dom::kPlacementAbove) {
             location.y = Metrics::staffOrigin(part, geometry.staff()) - Metrics::kStaffLineSpacing;
             geometry.setVerticalAnchorPointValues(1, 0);
         } else {
@@ -136,7 +136,7 @@ namespace mxml {
         using dom::Wedge;
 
         const Wedge& wedge = dynamic_cast<const Wedge&>(*direction.type());
-        if (wedge.type() == Wedge::TYPE_STOP) {
+        if (wedge.type() == Wedge::kStop) {
             auto it = std::find_if(_openSpanDirections.rbegin(), _openSpanDirections.rend(), [wedge](std::pair<const MeasureGeometry*, const dom::Direction*> pair) {
                 if (const Wedge* startWedge = dynamic_cast<const Wedge*>(pair.second->type()))
                     return startWedge->number() == wedge.number();
@@ -147,7 +147,7 @@ namespace mxml {
                 buildWedge(*it->first, *it->second, measureGeom,direction);
                 _openSpanDirections.erase(it.base() - 1);
             }
-        } else if (wedge.type() != Wedge::TYPE_CONTINUE) {
+        } else if (wedge.type() != Wedge::kContinue) {
             _openSpanDirections.push_back(std::make_pair(&measureGeom, &direction));
         }
     }
@@ -166,16 +166,16 @@ namespace mxml {
         dom::Placement placement = startDirection.placement();
         if (!startDirection.placement().isPresent()) {
             if (staff == 1)
-                placement = dom::PLACEMENT_BELOW;
+                placement = dom::kPlacementBelow;
             else
-                placement = dom::PLACEMENT_ABOVE;
+                placement = dom::kPlacementAbove;
         }
         
         auto& part = _partGeometry->part();
         
-        if (placement == dom::PLACEMENT_ABOVE) {
+        if (placement == dom::kPlacementAbove) {
             startLocation.y = stopLocation.y = Metrics::staffOrigin(part, staff) - _part.staffDistance()/2;
-        } else if (placement == dom::PLACEMENT_BELOW) {
+        } else if (placement == dom::kPlacementBelow) {
             startLocation.y = stopLocation.y = Metrics::staffOrigin(part, staff) + Metrics::staffHeight() + _part.staffDistance()/2;
         }
         startLocation.y -= Metrics::stavesHeight(part)/2;
@@ -193,7 +193,7 @@ namespace mxml {
         using dom::Pedal;
 
         const Pedal& pedal = dynamic_cast<const Pedal&>(*direction.type());
-        if (pedal.type() == dom::TYPE_STOP) {
+        if (pedal.type() == dom::kStop) {
             auto it = std::find_if(_openSpanDirections.rbegin(), _openSpanDirections.rend(), [&direction](std::pair<const MeasureGeometry*, const dom::Direction*> pair) {
                 if (dynamic_cast<const Pedal*>(pair.second->type()))
                     return pair.second->staff() == direction.staff();
@@ -204,7 +204,7 @@ namespace mxml {
                 buildPedal(*it->first, *it->second, measureGeom,direction);
                 _openSpanDirections.erase(it.base() - 1);
             }
-        } else if (pedal.type() != dom::TYPE_CONTINUE) {
+        } else if (pedal.type() != dom::kContinue) {
             _openSpanDirections.push_back(std::make_pair(&measureGeom, &direction));
         }
     }
@@ -307,7 +307,7 @@ namespace mxml {
         Rect frame = _partGeometry->convertToGeometry(geo->frame(), &measureGeom);
         auto collidingGeom = measureGeom.collidingGeometry(frame);
         if (collidingGeom) {
-            if (placement->placement() == dom::PLACEMENT_ABOVE) {
+            if (placement->placement() == dom::kPlacementAbove) {
                 Point origin = _partGeometry->convertFromGeometry(collidingGeom->origin(), &measureGeom);
                 location.y = origin.y - geo->size().height/2 - 4;
                 geo->setLocation(location);
@@ -373,14 +373,14 @@ namespace mxml {
         if (!direction.placement().isPresent()) {
             if (wordsGeom->dynamics()) {
                 if (direction.staff() == 1)
-                    placement = dom::PLACEMENT_BELOW;
+                    placement = dom::kPlacementBelow;
                 else
-                    placement = dom::PLACEMENT_ABOVE;
+                    placement = dom::kPlacementAbove;
             } else {
                 if (direction.staff() == 1)
-                    placement = dom::PLACEMENT_ABOVE;
+                    placement = dom::kPlacementAbove;
                 else
-                    placement = dom::PLACEMENT_BELOW;
+                    placement = dom::kPlacementBelow;
             }
             wordsGeom->setPlacement(placement);
         }

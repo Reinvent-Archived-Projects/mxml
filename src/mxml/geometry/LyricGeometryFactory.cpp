@@ -56,7 +56,7 @@ namespace mxml {
         Point location;
         location.x = span.start() + span.eventOffset();
 
-        if (geometry->placement() == dom::PLACEMENT_ABOVE) {
+        if (geometry->placement() == dom::kPlacementAbove) {
             location.y = _notesBounds.min().y;
             geometry->setVerticalAnchorPointValues(1, 0);
         } else {
@@ -65,7 +65,7 @@ namespace mxml {
         }
 
         if (lyric.number() > 1) {
-            if (geometry->placement() == dom::PLACEMENT_ABOVE)
+            if (geometry->placement() == dom::kPlacementAbove)
                 location.y -= (lyric.number() - 1) * geometry->size().height;
             else
                 location.y += (lyric.number() - 1) * geometry->size().height;

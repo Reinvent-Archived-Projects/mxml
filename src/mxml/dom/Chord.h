@@ -46,7 +46,7 @@ public:
     bool isBeamContinue() const {
         if (_notes.empty() || firstNote()->beams().empty())
             return false;
-        return firstNote()->beams().front()->type() == Beam::TYPE_CONTINUE;
+        return firstNote()->beams().front()->type() == Beam::kContinue;
     }
     
     bool isBeamEnd() const {

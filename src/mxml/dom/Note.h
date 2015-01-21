@@ -52,7 +52,7 @@ public:
       _chord(false),
       _grace(false),
       _printObject(true),
-      _stem(STEM_UP),
+      _stem(kStemUp),
       _staff(1)
     {}
     

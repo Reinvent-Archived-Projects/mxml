@@ -10,7 +10,7 @@ namespace dom {
 
 class Slur : public Node {
 public:
-    Slur() : _number(1), _type(), _placement(PLACEMENT_BELOW), _orientation(ORIENTATION_UNDER) {}
+    Slur() : _number(1), _type(), _placement(kPlacementBelow), _orientation(kOrientationUnder) {}
     
     int number() const {
         return _number;

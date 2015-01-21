@@ -109,9 +109,9 @@ Wedge::Type WedgeHandler::typeFromString(const std::string& string) {
     if (string == "diminuendo")
         return Wedge::TYPE_DIMINUENDO;
     if (string == "stop")
-        return Wedge::TYPE_STOP;
+        return Wedge::kStop;
     if (string == "continue")
-        return Wedge::TYPE_CONTINUE;
+        return Wedge::kContinue;
     return Wedge::TYPE_CRESCENDO;
 }
 
@@ -146,13 +146,13 @@ void PedalHandler::startElement(const lxml::QName& qname, const AttributeMap& at
 
 dom::StartStopContinue PedalHandler::typeFromString(const std::string& string) {
     if (string == "start")
-        return dom::TYPE_START;
+        return dom::kStart;
     if (string == "stop")
-        return dom::TYPE_STOP;
+        return dom::kStop;
     if (string == "continue")
-        return dom::TYPE_CONTINUE;
+        return dom::kContinue;
     if (string == "change")
-        return dom::TYPE_CHANGE;
+        return dom::kChange;
     throw dom::InvalidDataError("Invalid type " + string);
 }
 

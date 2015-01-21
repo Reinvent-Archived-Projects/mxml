@@ -2,11 +2,17 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
-#include <lxml/BaseRecursiveHandler.h>
-#include "ScalingHandler.h"
-#include "StafflayoutHandler.h"
+#include <memory>
 
+#include <lxml/BaseRecursiveHandler.h>
 #include <mxml/dom/Defaults.h>
+
+#include "AppearanceHandler.h"
+#include "PageLayoutHandler.h"
+#include "ScalingHandler.h"
+#include "StaffLayoutHandler.h"
+#include "SystemLayoutHandler.h"
+
 
 namespace mxml {
 
@@ -15,10 +21,13 @@ public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     RecursiveHandler* startSubElement(const lxml::QName& qname);
     void endSubElement(const lxml::QName& qname, RecursiveHandler* parser);
-    
+
 private:
+    AppearanceHandler _appearanceHandler;
+    PageLayoutHandler _pageLayoutHandler;
     ScalingHandler _scalingHandler;
     StaffLayoutHandler _staffLayoutHandler;
+    SystemLayoutHandler _systemLayoutHandler;
 };
 
 } // namespace mxml

@@ -12,8 +12,8 @@ public:
     enum Type {
         TYPE_CRESCENDO,
         TYPE_DIMINUENDO,
-        TYPE_STOP,
-        TYPE_CONTINUE
+        kStop,
+        kContinue
     };
     
 public:

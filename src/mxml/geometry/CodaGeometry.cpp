@@ -7,7 +7,7 @@ namespace mxml {
 const Size CodaGeometry::kCodaSize = {24, 28};
 
 CodaGeometry::CodaGeometry(const dom::Coda& coda)
-: PlacementGeometry(dom::Optional<dom::Placement>(dom::PLACEMENT_ABOVE, true), 1)
+: PlacementGeometry(dom::Optional<dom::Placement>(dom::kPlacementAbove, true), 1)
 {
     setSize(kCodaSize);
 }

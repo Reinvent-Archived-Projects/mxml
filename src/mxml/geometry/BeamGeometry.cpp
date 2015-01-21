@@ -24,7 +24,7 @@ Point BeamGeometry::stemTip(const ChordGeometry* chordGeom) const {
     coord_t slope = (_beamEnd.y - _beamBegin.y) / (_beamEnd.x - _beamBegin.x);
     
     Point point;
-    if (chordGeom->chord().stem() == dom::STEM_UP || chordGeom->chord().stem() == dom::STEM_DOUBLE) {
+    if (chordGeom->chord().stem() == dom::kStemUp || chordGeom->chord().stem() == dom::kStemDouble) {
         point.x = chordGeom->location().x + NoteGeometry::kQuarterWidth/2 - kStemLineWidth/2;
     } else {
         point.x = chordGeom->location().x - NoteGeometry::kQuarterWidth/2 + kStemLineWidth/2;
@@ -53,7 +53,7 @@ void BeamGeometry::recomputeFrame() {
     setHorizontalAnchorPointValues(0, location().x - frame.origin.x);
 
     const ChordGeometry* chordGeom = _chords.front();
-    if (chordGeom->stem() && (chordGeom->stem()->note().stem() == dom::STEM_UP || chordGeom->stem()->note().stem() == dom::STEM_DOUBLE))
+    if (chordGeom->stem() && (chordGeom->stem()->note().stem() == dom::kStemUp || chordGeom->stem()->note().stem() == dom::kStemDouble))
         setVerticalAnchorPointValues(1, -(frame.size.height - (location().y - frame.origin.y)));
     else
         setVerticalAnchorPointValues(0, location().y - frame.origin.y);
@@ -67,10 +67,10 @@ void BeamGeometry::build() {
     const ChordGeometry* last = _chords.back();
 
     // Chose beam placement
-    if (first->stem() && (first->stem()->note().stem() == dom::STEM_UP || first->stem()->note().stem() == dom::STEM_DOUBLE))
-        _placement = dom::PLACEMENT_BELOW;
+    if (first->stem() && (first->stem()->note().stem() == dom::kStemUp || first->stem()->note().stem() == dom::kStemDouble))
+        _placement = dom::kPlacementBelow;
     else
-        _placement = dom::PLACEMENT_ABOVE;
+        _placement = dom::kPlacementAbove;
 
     Point firstLocation = first->convertToGeometry(first->refNoteLocation(), first->parentGeometry());
     Point lastLocation = last->convertToGeometry(last->refNoteLocation(), last->parentGeometry());
@@ -92,7 +92,7 @@ void BeamGeometry::build() {
             max_y = location.y;
     }
 
-    if (first->chord().stem() == dom::STEM_UP || first->chord().stem() == dom::STEM_DOUBLE) {
+    if (first->chord().stem() == dom::kStemUp || first->chord().stem() == dom::kStemDouble) {
         _beamBegin.x = firstLocation.x + NoteGeometry::kQuarterWidth/2 - kStemLineWidth;
         _beamBegin.y = first->frame().min().y;
     } else {
@@ -100,7 +100,7 @@ void BeamGeometry::build() {
         _beamBegin.y = first->frame().max().y;
     }
     
-    if (last->chord().stem() == dom::STEM_UP || last->chord().stem() == dom::STEM_DOUBLE) {
+    if (last->chord().stem() == dom::kStemUp || last->chord().stem() == dom::kStemDouble) {
         _beamEnd.x = lastLocation.x + NoteGeometry::kQuarterWidth/2;
         _beamEnd.y = last->frame().min().y;
     } else {
@@ -129,7 +129,7 @@ void BeamGeometry::build() {
         const dom::Chord& chord = chordGeom->chord();
         const coord_t beamsWidth = chord.firstNote()->beams().size() * (kBeamLineWidth + kBeamLineSpacing);
 
-        if (chord.stem() == dom::STEM_UP || chord.stem() == dom::STEM_DOUBLE) {
+        if (chord.stem() == dom::kStemUp || chord.stem() == dom::kStemDouble) {
             coord_t beamx = chordGeom->frame().origin.x + chordGeom->size().width - kStemLineWidth/2;
             coord_t beamy = _beamEnd.y - slope * (_beamEnd.x - beamx) - kBeamLineWidth/2;
             coord_t maxy = chordGeom->notesFrame().min().y - kMinStem - beamsWidth;
@@ -153,13 +153,13 @@ void BeamGeometry::build() {
 
         coord_t beamx;
         coord_t beamy = 0;
-        if (chord.stem() == dom::STEM_UP || chord.stem() == dom::STEM_DOUBLE) {
+        if (chord.stem() == dom::kStemUp || chord.stem() == dom::kStemDouble) {
             beamx = chordGeom->location().x + NoteGeometry::kQuarterWidth/2 - kStemLineWidth/2;
-            if (_placement == dom::PLACEMENT_ABOVE)
+            if (_placement == dom::kPlacementAbove)
                 beamy = -beamsWidth;
         } else {
             beamx = chordGeom->location().x - NoteGeometry::kQuarterWidth/2 + kStemLineWidth/2;
-            if (_placement == dom::PLACEMENT_BELOW)
+            if (_placement == dom::kPlacementBelow)
                 beamy = beamsWidth;
         }
         beamy += _beamEnd.y - slope * (_beamEnd.x - beamx);

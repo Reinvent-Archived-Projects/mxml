@@ -30,7 +30,7 @@ LyricGeometry::LyricGeometry(const dom::Lyric& lyric, int staff)
     setSize({static_cast<coord_t>(width(lyric)), 23});
 
     setHorizontalAnchorPointValues(0.5, 0);
-    if (lyric.placement() == dom::PLACEMENT_ABOVE)
+    if (lyric.placement() == dom::kPlacementAbove)
         setVerticalAnchorPointValues(1, 0);
     else
         setVerticalAnchorPointValues(0, 0);

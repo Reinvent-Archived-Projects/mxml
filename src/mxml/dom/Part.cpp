@@ -18,21 +18,18 @@ const Measure* Part::measureWithNumber(const std::string& number) const {
     return it->get();
 }
 
-std::size_t Part::indexOfMeasure(const Measure* measure) const {
-    auto it = std::find_if(_measures.begin(), _measures.end(), [measure](const std::unique_ptr<Measure>& m) {
-        return m.get() == measure;
-    });
-    if (it == _measures.end())
-        return static_cast<std::size_t>(-1);
-    return it - _measures.begin();
-}
-
 float Part::staffDistance() const {
     float defaultStaffDistance = 65;
     
-    const auto score = dynamic_cast<const Score*>(parent());
-    if (score && score->defaults() && score->defaults()->staffLayout())
-        defaultStaffDistance = score->defaults()->staffLayout()->staffDistance();
+    const auto& score = dynamic_cast<const Score*>(parent());
+    if (score) {
+        const auto& defaults = score->defaults();
+        if (defaults) {
+            auto staffDistance = defaults->staffDistance();
+            if (staffDistance)
+                defaultStaffDistance = staffDistance;
+        }
+    }
     
     if (_measures.empty())
         return defaultStaffDistance;
@@ -44,14 +41,13 @@ float Part::staffDistance() const {
         if (print)
             break;
     }
-    if (!print || !print->staffLayout())
-        return defaultStaffDistance;
-    
-    const auto& staffLayout = print->staffLayout();
-    if (!staffLayout->staffDistance().isPresent())
-        return defaultStaffDistance;
-    
-    return staffLayout->staffDistance().value();
+    if (print) {
+        auto staffDistance = print->staffDistance();
+        if (staffDistance)
+            return staffDistance;
+    }
+
+    return defaultStaffDistance;
 }
 
 int Part::staves() const {

@@ -68,7 +68,7 @@ void MeasureGeometry::build() {
         
         const auto& beam = note->beams().front();
         if (beam->type() == Beam::TYPE_BEGIN) {
-        } else if (beam->type() == Beam::TYPE_CONTINUE) {
+        } else if (beam->type() == Beam::kContinue) {
         } else if (beam->type() == Beam::TYPE_END) {
             std::unique_ptr<BeamGeometry> beamGeom(new BeamGeometry(chords));
             ChordGeometry* firstChordGeom = chords.front();
@@ -209,7 +209,7 @@ void MeasureGeometry::buildChord(const Chord* chord) {
     std::unique_ptr<ChordGeometry> geo(new ChordGeometry(*chord, _scoreProperties, _partGeometry));
 
     Point location = geo->refNoteLocation();
-    if (chord->stem() == STEM_UP) {
+    if (chord->stem() == kStemUp) {
         geo->setHorizontalAnchorPointValues(0, location.x - geo->contentOffset().x);
         geo->setVerticalAnchorPointValues(1, -(geo->size().height - (location.y - geo->contentOffset().y)));
     } else {

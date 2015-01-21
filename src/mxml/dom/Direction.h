@@ -13,7 +13,7 @@ namespace dom {
 
 class Direction : public Node {
 public:
-    Direction() : _placement(absentOptional(PLACEMENT_ABOVE)), _type(), _staff(1), _start(0), _offset() {}
+    Direction() : _placement(absentOptional(kPlacementAbove)), _type(), _staff(1), _start(0), _offset() {}
     
     Optional<Placement> placement() const {
         return _placement;

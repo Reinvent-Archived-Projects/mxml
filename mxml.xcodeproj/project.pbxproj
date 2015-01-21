@@ -125,6 +125,28 @@
 		61C850501A6D79CC00031100 /* OctaveShiftHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C8504E1A6D79CC00031100 /* OctaveShiftHandler.h */; };
 		61C850571A6D838500031100 /* OctaveShiftGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61C850551A6D838500031100 /* OctaveShiftGeometry.cpp */; };
 		61C850581A6D838500031100 /* OctaveShiftGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C850561A6D838500031100 /* OctaveShiftGeometry.h */; };
+		61C850881A6EE39300031100 /* PositionFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61C850861A6EE39300031100 /* PositionFactory.cpp */; };
+		61C850891A6EE39300031100 /* PositionFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C850871A6EE39300031100 /* PositionFactory.h */; };
+		61C8508C1A6EE64300031100 /* SystemLayoutHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61C8508A1A6EE64300031100 /* SystemLayoutHandler.cpp */; };
+		61C8508D1A6EE64300031100 /* SystemLayoutHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C8508B1A6EE64300031100 /* SystemLayoutHandler.h */; };
+		61F072CD1A6EEB48002CA9CA /* SystemDividersHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F072CB1A6EEB48002CA9CA /* SystemDividersHandler.cpp */; };
+		61F072CE1A6EEB48002CA9CA /* SystemDividersHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F072CC1A6EEB48002CA9CA /* SystemDividersHandler.h */; };
+		61F072D11A6EEE03002CA9CA /* TypeFactories.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F072CF1A6EEE03002CA9CA /* TypeFactories.cpp */; };
+		61F072D21A6EEE03002CA9CA /* TypeFactories.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F072D01A6EEE03002CA9CA /* TypeFactories.h */; };
+		61F072D51A6F0212002CA9CA /* SystemMarginsHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F072D31A6F0212002CA9CA /* SystemMarginsHandler.cpp */; };
+		61F072D61A6F0212002CA9CA /* SystemMarginsHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F072D41A6F0212002CA9CA /* SystemMarginsHandler.h */; };
+		61F072D91A6F02FE002CA9CA /* PageLayoutHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F072D71A6F02FE002CA9CA /* PageLayoutHandler.cpp */; };
+		61F072DA1A6F02FE002CA9CA /* PageLayoutHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F072D81A6F02FE002CA9CA /* PageLayoutHandler.h */; };
+		61F072DD1A6F0431002CA9CA /* PageMarginsHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F072DB1A6F0431002CA9CA /* PageMarginsHandler.cpp */; };
+		61F072DE1A6F0431002CA9CA /* PageMarginsHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F072DC1A6F0431002CA9CA /* PageMarginsHandler.h */; };
+		61F072E11A6F0CB3002CA9CA /* AppearanceHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F072DF1A6F0CB3002CA9CA /* AppearanceHandler.cpp */; };
+		61F072E21A6F0CB3002CA9CA /* AppearanceHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F072E01A6F0CB3002CA9CA /* AppearanceHandler.h */; };
+		61F072E51A6F0F4C002CA9CA /* GenericNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F072E31A6F0F4C002CA9CA /* GenericNode.cpp */; };
+		61F072E61A6F0F4C002CA9CA /* GenericNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F072E41A6F0F4C002CA9CA /* GenericNode.h */; };
+		61F072E91A6F1183002CA9CA /* GenericNodeHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F072E71A6F1183002CA9CA /* GenericNodeHandler.cpp */; };
+		61F072EA1A6F1183002CA9CA /* GenericNodeHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F072E81A6F1183002CA9CA /* GenericNodeHandler.h */; };
+		61F072ED1A6F1BEE002CA9CA /* FormattedTextHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F072EB1A6F1BEE002CA9CA /* FormattedTextHandler.cpp */; };
+		61F072EE1A6F1BEE002CA9CA /* FormattedTextHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F072EC1A6F1BEE002CA9CA /* FormattedTextHandler.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -210,7 +232,6 @@
 		614055F21A5C6228005224C9 /* Score.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Score.h; sourceTree = "<group>"; };
 		614055F31A5C6228005224C9 /* Slur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Slur.h; sourceTree = "<group>"; };
 		614055F41A5C6228005224C9 /* Sound.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sound.h; sourceTree = "<group>"; };
-		614055F51A5C6228005224C9 /* StaffLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StaffLayout.h; sourceTree = "<group>"; };
 		614055F61A5C6228005224C9 /* Syllabic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Syllabic.h; sourceTree = "<group>"; };
 		614055F71A5C6228005224C9 /* Tie.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tie.h; sourceTree = "<group>"; };
 		614055F81A5C6228005224C9 /* Tied.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tied.h; sourceTree = "<group>"; };
@@ -416,6 +437,33 @@
 		61C8504E1A6D79CC00031100 /* OctaveShiftHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OctaveShiftHandler.h; sourceTree = "<group>"; };
 		61C850551A6D838500031100 /* OctaveShiftGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OctaveShiftGeometry.cpp; sourceTree = "<group>"; };
 		61C850561A6D838500031100 /* OctaveShiftGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OctaveShiftGeometry.h; sourceTree = "<group>"; };
+		61C850801A6DD7CE00031100 /* PageLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PageLayout.h; sourceTree = "<group>"; };
+		61C850811A6DD91700031100 /* PageMargins.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PageMargins.h; sourceTree = "<group>"; };
+		61C850831A6DDC0F00031100 /* SystemLayout.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SystemLayout.h; sourceTree = "<group>"; };
+		61C850841A6DDE1400031100 /* Position.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Position.h; sourceTree = "<group>"; };
+		61C850851A6DE4BB00031100 /* FormattedText.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FormattedText.h; sourceTree = "<group>"; };
+		61C850861A6EE39300031100 /* PositionFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PositionFactory.cpp; sourceTree = "<group>"; };
+		61C850871A6EE39300031100 /* PositionFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PositionFactory.h; sourceTree = "<group>"; };
+		61C8508A1A6EE64300031100 /* SystemLayoutHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemLayoutHandler.cpp; sourceTree = "<group>"; };
+		61C8508B1A6EE64300031100 /* SystemLayoutHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemLayoutHandler.h; sourceTree = "<group>"; };
+		61F072CB1A6EEB48002CA9CA /* SystemDividersHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemDividersHandler.cpp; sourceTree = "<group>"; };
+		61F072CC1A6EEB48002CA9CA /* SystemDividersHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemDividersHandler.h; sourceTree = "<group>"; };
+		61F072CF1A6EEE03002CA9CA /* TypeFactories.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TypeFactories.cpp; sourceTree = "<group>"; };
+		61F072D01A6EEE03002CA9CA /* TypeFactories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TypeFactories.h; sourceTree = "<group>"; };
+		61F072D31A6F0212002CA9CA /* SystemMarginsHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemMarginsHandler.cpp; sourceTree = "<group>"; };
+		61F072D41A6F0212002CA9CA /* SystemMarginsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemMarginsHandler.h; sourceTree = "<group>"; };
+		61F072D71A6F02FE002CA9CA /* PageLayoutHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PageLayoutHandler.cpp; sourceTree = "<group>"; };
+		61F072D81A6F02FE002CA9CA /* PageLayoutHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageLayoutHandler.h; sourceTree = "<group>"; };
+		61F072DB1A6F0431002CA9CA /* PageMarginsHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PageMarginsHandler.cpp; sourceTree = "<group>"; };
+		61F072DC1A6F0431002CA9CA /* PageMarginsHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageMarginsHandler.h; sourceTree = "<group>"; };
+		61F072DF1A6F0CB3002CA9CA /* AppearanceHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AppearanceHandler.cpp; sourceTree = "<group>"; };
+		61F072E01A6F0CB3002CA9CA /* AppearanceHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppearanceHandler.h; sourceTree = "<group>"; };
+		61F072E31A6F0F4C002CA9CA /* GenericNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericNode.cpp; sourceTree = "<group>"; };
+		61F072E41A6F0F4C002CA9CA /* GenericNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericNode.h; sourceTree = "<group>"; };
+		61F072E71A6F1183002CA9CA /* GenericNodeHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GenericNodeHandler.cpp; sourceTree = "<group>"; };
+		61F072E81A6F1183002CA9CA /* GenericNodeHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericNodeHandler.h; sourceTree = "<group>"; };
+		61F072EB1A6F1BEE002CA9CA /* FormattedTextHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FormattedTextHandler.cpp; sourceTree = "<group>"; };
+		61F072EC1A6F1BEE002CA9CA /* FormattedTextHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormattedTextHandler.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -516,6 +564,7 @@
 				614055D81A5C6228005224C9 /* EmptyPlacement.h */,
 				614055D91A5C6228005224C9 /* Ending.h */,
 				614055DA1A5C6228005224C9 /* Fermata.h */,
+				61C850851A6DE4BB00031100 /* FormattedText.h */,
 				614055DB1A5C6228005224C9 /* Forward.h */,
 				614055DC1A5C6228005224C9 /* Identification.cpp */,
 				614055DD1A5C6228005224C9 /* Identification.h */,
@@ -533,11 +582,14 @@
 				61C8504C1A6D775100031100 /* OctaveShift.h */,
 				614055E81A5C6228005224C9 /* Optional.h */,
 				614055E91A5C6228005224C9 /* Ornaments.h */,
+				61C850801A6DD7CE00031100 /* PageLayout.h */,
+				61C850811A6DD91700031100 /* PageMargins.h */,
 				614055EA1A5C6228005224C9 /* Part.cpp */,
 				614055EB1A5C6228005224C9 /* Part.h */,
 				614055EC1A5C6228005224C9 /* Pedal.h */,
 				614057B91A5C7293005224C9 /* Pitch.cpp */,
 				614055ED1A5C6228005224C9 /* Pitch.h */,
+				61C850841A6DDE1400031100 /* Position.h */,
 				614055EE1A5C6228005224C9 /* Print.h */,
 				614055EF1A5C6228005224C9 /* Repeat.h */,
 				614055F01A5C6228005224C9 /* Rest.h */,
@@ -545,8 +597,8 @@
 				614055F21A5C6228005224C9 /* Score.h */,
 				614055F31A5C6228005224C9 /* Slur.h */,
 				614055F41A5C6228005224C9 /* Sound.h */,
-				614055F51A5C6228005224C9 /* StaffLayout.h */,
 				614055F61A5C6228005224C9 /* Syllabic.h */,
+				61C850831A6DDC0F00031100 /* SystemLayout.h */,
 				614055F71A5C6228005224C9 /* Tie.h */,
 				614055F81A5C6228005224C9 /* Tied.h */,
 				614055F91A5C6228005224C9 /* Time.h */,
@@ -640,6 +692,8 @@
 		614056491A5C6228005224C9 /* parsing */ = {
 			isa = PBXGroup;
 			children = (
+				61F072DF1A6F0CB3002CA9CA /* AppearanceHandler.cpp */,
+				61F072E01A6F0CB3002CA9CA /* AppearanceHandler.h */,
 				6140564A1A5C6228005224C9 /* ArticulationHandler.cpp */,
 				6140564B1A5C6228005224C9 /* ArticulationHandler.h */,
 				6140564C1A5C6228005224C9 /* AttributesHandler.cpp */,
@@ -671,6 +725,10 @@
 				614056661A5C6228005224C9 /* FermataHandler.h */,
 				614056671A5C6228005224C9 /* ForwardHandler.cpp */,
 				614056681A5C6228005224C9 /* ForwardHandler.h */,
+				61F072E31A6F0F4C002CA9CA /* GenericNode.cpp */,
+				61F072E41A6F0F4C002CA9CA /* GenericNode.h */,
+				61F072E71A6F1183002CA9CA /* GenericNodeHandler.cpp */,
+				61F072E81A6F1183002CA9CA /* GenericNodeHandler.h */,
 				614056691A5C6228005224C9 /* IdentificationHandler.cpp */,
 				6140566A1A5C6228005224C9 /* IdentificationHandler.h */,
 				6140566B1A5C6228005224C9 /* KeyHandler.cpp */,
@@ -689,10 +747,16 @@
 				61C8504E1A6D79CC00031100 /* OctaveShiftHandler.h */,
 				614056771A5C6228005224C9 /* OrnamentsHandler.cpp */,
 				614056781A5C6228005224C9 /* OrnamentsHandler.h */,
+				61F072D71A6F02FE002CA9CA /* PageLayoutHandler.cpp */,
+				61F072D81A6F02FE002CA9CA /* PageLayoutHandler.h */,
+				61F072DB1A6F0431002CA9CA /* PageMarginsHandler.cpp */,
+				61F072DC1A6F0431002CA9CA /* PageMarginsHandler.h */,
 				614056791A5C6228005224C9 /* PartHandler.cpp */,
 				6140567A1A5C6228005224C9 /* PartHandler.h */,
 				6140567B1A5C6228005224C9 /* PitchHandler.cpp */,
 				6140567C1A5C6228005224C9 /* PitchHandler.h */,
+				61C850861A6EE39300031100 /* PositionFactory.cpp */,
+				61C850871A6EE39300031100 /* PositionFactory.h */,
 				6140567D1A5C6228005224C9 /* PrintHandler.cpp */,
 				6140567E1A5C6228005224C9 /* PrintHandler.h */,
 				6140567F1A5C6228005224C9 /* RepeatHandler.cpp */,
@@ -711,6 +775,12 @@
 				6140568C1A5C6228005224C9 /* StaffLayoutHandler.h */,
 				6140568D1A5C6228005224C9 /* SyllabicHandler.cpp */,
 				6140568E1A5C6228005224C9 /* SyllabicHandler.h */,
+				61F072CB1A6EEB48002CA9CA /* SystemDividersHandler.cpp */,
+				61F072CC1A6EEB48002CA9CA /* SystemDividersHandler.h */,
+				61C8508A1A6EE64300031100 /* SystemLayoutHandler.cpp */,
+				61C8508B1A6EE64300031100 /* SystemLayoutHandler.h */,
+				61F072D31A6F0212002CA9CA /* SystemMarginsHandler.cpp */,
+				61F072D41A6F0212002CA9CA /* SystemMarginsHandler.h */,
 				6140568F1A5C6228005224C9 /* TiedHandler.cpp */,
 				614056901A5C6228005224C9 /* TiedHandler.h */,
 				614056911A5C6228005224C9 /* TieHandler.cpp */,
@@ -719,8 +789,12 @@
 				614056941A5C6228005224C9 /* TimeHandler.h */,
 				614056951A5C6228005224C9 /* TurnHandler.cpp */,
 				614056961A5C6228005224C9 /* TurnHandler.h */,
+				61F072CF1A6EEE03002CA9CA /* TypeFactories.cpp */,
+				61F072D01A6EEE03002CA9CA /* TypeFactories.h */,
 				614056971A5C6228005224C9 /* UnpitchedHandler.cpp */,
 				614056981A5C6228005224C9 /* UnpitchedHandler.h */,
+				61F072EB1A6F1BEE002CA9CA /* FormattedTextHandler.cpp */,
+				61F072EC1A6F1BEE002CA9CA /* FormattedTextHandler.h */,
 			);
 			path = parsing;
 			sourceTree = "<group>";
@@ -776,10 +850,21 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61F072D61A6F0212002CA9CA /* SystemMarginsHandler.h in Headers */,
 				61C850501A6D79CC00031100 /* OctaveShiftHandler.h in Headers */,
+				61F072E61A6F0F4C002CA9CA /* GenericNode.h in Headers */,
+				61F072DE1A6F0431002CA9CA /* PageMarginsHandler.h in Headers */,
 				61239C1D1A67429100B3F0A3 /* Jump.h in Headers */,
+				61F072E21A6F0CB3002CA9CA /* AppearanceHandler.h in Headers */,
 				61239C211A6742A100B3F0A3 /* LoopFactory.h in Headers */,
+				61F072EA1A6F1183002CA9CA /* GenericNodeHandler.h in Headers */,
+				61C8508D1A6EE64300031100 /* SystemLayoutHandler.h in Headers */,
+				61F072EE1A6F1BEE002CA9CA /* FormattedTextHandler.h in Headers */,
 				61C850581A6D838500031100 /* OctaveShiftGeometry.h in Headers */,
+				61C850891A6EE39300031100 /* PositionFactory.h in Headers */,
+				61F072CE1A6EEB48002CA9CA /* SystemDividersHandler.h in Headers */,
+				61F072D21A6EEE03002CA9CA /* TypeFactories.h in Headers */,
+				61F072DA1A6F02FE002CA9CA /* PageLayoutHandler.h in Headers */,
 				61239BA01A67426C00B3F0A3 /* JumpFactory.h in Headers */,
 				61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */,
 				00094EFE1A67464A0053C615 /* SegnoGeometry.h in Headers */,
@@ -875,7 +960,10 @@
 				614057261A5C6228005224C9 /* BarlineHandler.cpp in Sources */,
 				6140574B1A5C6228005224C9 /* NoteHandler.cpp in Sources */,
 				614056E51A5C6228005224C9 /* ChordGeometry.cpp in Sources */,
+				61C850881A6EE39300031100 /* PositionFactory.cpp in Sources */,
 				6140574D1A5C6228005224C9 /* OrnamentsHandler.cpp in Sources */,
+				61C8508C1A6EE64300031100 /* SystemLayoutHandler.cpp in Sources */,
+				61F072CD1A6EEB48002CA9CA /* SystemDividersHandler.cpp in Sources */,
 				614056E11A5C6228005224C9 /* BarlineGeometry.cpp in Sources */,
 				614057BA1A5C7293005224C9 /* Pitch.cpp in Sources */,
 				614057291A5C6228005224C9 /* BeamHandler.cpp in Sources */,
@@ -891,6 +979,7 @@
 				614056E91A5C6228005224C9 /* CollisionHandler.cpp in Sources */,
 				614057591A5C6228005224C9 /* ScalingHandler.cpp in Sources */,
 				61239C201A6742A100B3F0A3 /* LoopFactory.cpp in Sources */,
+				61F072E11A6F0CB3002CA9CA /* AppearanceHandler.cpp in Sources */,
 				614057611A5C6228005224C9 /* StaffLayoutHandler.cpp in Sources */,
 				614057181A5C6228005224C9 /* TieGeometry.cpp in Sources */,
 				614057111A5C6228005224C9 /* SpanDirectionGeometry.cpp in Sources */,
@@ -912,10 +1001,12 @@
 				614056ED1A5C6228005224C9 /* DotGeometry.cpp in Sources */,
 				614056FD1A5C6228005224C9 /* MeasureGeometry.cpp in Sources */,
 				6140573D1A5C6228005224C9 /* ForwardHandler.cpp in Sources */,
+				61F072DD1A6F0431002CA9CA /* PageMarginsHandler.cpp in Sources */,
 				614056F11A5C6228005224C9 /* FermataGeometry.cpp in Sources */,
 				614057411A5C6228005224C9 /* KeyHandler.cpp in Sources */,
 				614056B41A5C6228005224C9 /* Identification.cpp in Sources */,
 				614056EF1A5C6228005224C9 /* EndingGeometry.cpp in Sources */,
+				61F072D91A6F02FE002CA9CA /* PageLayoutHandler.cpp in Sources */,
 				61C850571A6D838500031100 /* OctaveShiftGeometry.cpp in Sources */,
 				614057571A5C6228005224C9 /* RestHandler.cpp in Sources */,
 				6140570E1A5C6228005224C9 /* ScoreGeometry.cpp in Sources */,
@@ -925,6 +1016,7 @@
 				614057BC1A5C7629005224C9 /* Key.cpp in Sources */,
 				614056FF1A5C6228005224C9 /* NoteGeometry.cpp in Sources */,
 				614057031A5C6228005224C9 /* PartGeometry.cpp in Sources */,
+				61F072ED1A6F1BEE002CA9CA /* FormattedTextHandler.cpp in Sources */,
 				614056B91A5C6228005224C9 /* Measure.cpp in Sources */,
 				614057701A5C6228005224C9 /* SpanCollection.cpp in Sources */,
 				614056E31A5C6228005224C9 /* BeamGeometry.cpp in Sources */,
@@ -939,12 +1031,16 @@
 				61239A611A64866500B3F0A3 /* ScoreProperties.cpp in Sources */,
 				614057A81A5C62CF005224C9 /* DoubleHandler.cpp in Sources */,
 				6140570C1A5C6228005224C9 /* RestGeometry.cpp in Sources */,
+				61F072D51A6F0212002CA9CA /* SystemMarginsHandler.cpp in Sources */,
 				6140576D1A5C6228005224C9 /* UnpitchedHandler.cpp in Sources */,
 				614057721A5C6228005224C9 /* SpanFactory.cpp in Sources */,
+				61F072E91A6F1183002CA9CA /* GenericNodeHandler.cpp in Sources */,
 				614056DD1A5C6228005224C9 /* AccidentalGeometry.cpp in Sources */,
 				0008689A1A68430400BAA13D /* CodaGeometry.cpp in Sources */,
+				61F072E51A6F0F4C002CA9CA /* GenericNode.cpp in Sources */,
 				6140573F1A5C6228005224C9 /* IdentificationHandler.cpp in Sources */,
 				614056F31A5C6228005224C9 /* Geometry.cpp in Sources */,
+				61F072D11A6EEE03002CA9CA /* TypeFactories.cpp in Sources */,
 				614057241A5C6228005224C9 /* BackupHandler.cpp in Sources */,
 				614057AD1A5C62CF005224C9 /* lxml.cpp in Sources */,
 				614057221A5C6228005224C9 /* AttributesHandler.cpp in Sources */,

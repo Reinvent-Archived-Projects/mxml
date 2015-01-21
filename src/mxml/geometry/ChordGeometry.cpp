@@ -46,7 +46,7 @@ Rect ChordGeometry::notesFrame() const {
 void ChordGeometry::extendStem(coord_t coordinate) {
     coord_t dy;
     Rect f = frame();
-    if (_chord.stem() == dom::STEM_UP || _chord.stem() == dom::STEM_DOUBLE) {
+    if (_chord.stem() == dom::kStemUp || _chord.stem() == dom::kStemDouble) {
         dy = f.min().y - coordinate;
     } else {
         dy = coordinate - f.max().y;
@@ -82,7 +82,7 @@ Rect ChordGeometry::buildNotes() {
     dom::Stem stem = _chord.stem();
     std::vector<NoteGeometry*> sorted = _notes;
     std::sort(sorted.begin(), sorted.end(), [stem](const NoteGeometry* g1, const NoteGeometry* g2) {
-        if (stem == dom::STEM_UP)
+        if (stem == dom::kStemUp)
             return g1->location().y < g2->location().y;
         else
             return g1->location().y > g2->location().y;
@@ -97,7 +97,7 @@ Rect ChordGeometry::buildNotes() {
         for (std::size_t j = i + 1; j < sorted.size(); j += 1) {
             NoteGeometry* noteGeom = sorted[j];
             if (loc.x == noteGeom->location().x && std::abs(loc.y - noteGeom->location().y) < Metrics::kStaffLineSpacing) {
-                if (stem == dom::STEM_UP)
+                if (stem == dom::kStemUp)
                     loc.x += geom->size().width;
                 else
                     loc.x -= geom->size().width;
@@ -133,7 +133,7 @@ void ChordGeometry::buildDot(const NoteGeometry& noteGeom) {
     
     coord_t staffY = dotLocation.y - Metrics::staffOrigin(_partGeometry.part(), note.staff());
     if ((int)staffY % 10 == 0) {
-        if (note.dot()->placement() == dom::PLACEMENT_ABOVE)
+        if (note.dot()->placement() == dom::kPlacementAbove)
             dotLocation.y -= 5;
         else
             dotLocation.y += 5;
@@ -200,9 +200,9 @@ void ChordGeometry::buildArticulation(const dom::Articulation& articulation, Rec
     
     bool above;
     if (articulation.placement().isPresent()) {
-        above = articulation.placement() == dom::PLACEMENT_ABOVE;
+        above = articulation.placement() == dom::kPlacementAbove;
     } else {
-        above = _chord.stem() != dom::STEM_UP && _chord.stem() != dom::STEM_DOUBLE;
+        above = _chord.stem() != dom::kStemUp && _chord.stem() != dom::kStemDouble;
     }
     
     Size size = geom->size();
@@ -270,7 +270,7 @@ void ChordGeometry::buildFermata(const dom::Fermata& fermata, Rect& notesFrame) 
 
 void ChordGeometry::buildStem() {
     const dom::Note* note = _chord.firstNote();
-    if (note->type() > dom::Note::TYPE_HALF || (note->stem() != dom::STEM_UP && note->stem() != dom::STEM_DOWN))
+    if (note->type() > dom::Note::TYPE_HALF || (note->stem() != dom::kStemUp && note->stem() != dom::kStemDown))
         return;
     
     bool flags = note->beams().empty() && _chord.firstNote()->beams().empty();
@@ -292,7 +292,7 @@ void ChordGeometry::buildStem() {
     
     // Set the location of the stem
     Point stemLocation;
-    if (_chord.stem() == dom::STEM_UP) {
+    if (_chord.stem() == dom::kStemUp) {
         stemLocation = {_refNoteLocation.x, topLocation.y};
     } else {
         stemLocation = {_refNoteLocation.x, bottomLocation.y};
@@ -300,7 +300,7 @@ void ChordGeometry::buildStem() {
     _stem->setLocation(stemLocation);
 
     _stem->setHorizontalAnchorPointValues(0, NoteGeometry::kQuarterWidth/2);
-    if (_chord.stem() == dom::STEM_UP) {
+    if (_chord.stem() == dom::kStemUp) {
         _stem->setVerticalAnchorPointValues(1, -NoteGeometry::kHeight/2);
     } else {
         _stem->setVerticalAnchorPointValues(0, NoteGeometry::kHeight/2);

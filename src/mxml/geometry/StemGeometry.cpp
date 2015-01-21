@@ -16,7 +16,7 @@ const coord_t StemGeometry::kDefaultHeight = 34;
 const coord_t StemGeometry::kVerticalOffset = 1;
 
 StemGeometry::StemGeometry(const Note& note, bool showFlags) : _note(note), _showFlags(showFlags) {
-    assert(note.stem() == dom::STEM_UP || note.stem() == dom::STEM_DOWN);
+    assert(note.stem() == dom::kStemUp || note.stem() == dom::kStemDown);
     setSize(Size(note, showFlags));
     setStaff(note.staff());
 }
@@ -28,7 +28,7 @@ void StemGeometry::setShowFlags(bool show) {
 
 Size StemGeometry::Size(const Note& note, bool flags) {
     coord_t width = NoteGeometry::kQuarterWidth;
-    if (flags && note.type() <= Note::TYPE_EIGHTH && (note.stem() == dom::STEM_DOUBLE || note.stem() == dom::STEM_UP))
+    if (flags && note.type() <= Note::TYPE_EIGHTH && (note.stem() == dom::kStemDouble || note.stem() == dom::kStemUp))
         width += kFlagWidth - kNoFlagWidth;
     
     coord_t height = 0;

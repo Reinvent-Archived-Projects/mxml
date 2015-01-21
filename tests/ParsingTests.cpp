@@ -87,7 +87,7 @@ BOOST_AUTO_TEST_CASE(parseMusicXML) {
     BOOST_CHECK_EQUAL(note.pitch()->octave(), 6);
     BOOST_CHECK_EQUAL(note.duration(), 36);
     BOOST_CHECK_EQUAL(note.type(), dom::Note::TYPE_QUARTER);
-    BOOST_CHECK_EQUAL(note.stem(), dom::STEM_DOWN);
+    BOOST_CHECK_EQUAL(note.stem(), dom::kStemDown);
     BOOST_CHECK_EQUAL(note.staff(), 1);
     BOOST_CHECK(note.dot());
 }

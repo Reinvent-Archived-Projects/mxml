@@ -11,7 +11,7 @@
 namespace mxml {
     class OctaveShiftHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::OctaveShift>> {
     public:
-        void startElement(const lxml::QName& qname, const AttributeMap& attributes);\
+        void startElement(const lxml::QName& qname, const AttributeMap& attributes);
 
         static dom::OctaveShift::Type typeFromString(const std::string& string);
 

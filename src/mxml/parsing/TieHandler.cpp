@@ -21,9 +21,9 @@ void TieHandler::startElement(const QName& qname, const AttributeMap& attributes
 
 dom::StartStopContinue TieHandler::typeFromString(const std::string& string) {
     if (string == "start")
-        return dom::TYPE_START;
+        return dom::kContinue;
     else if (string == "stop")
-        return dom::TYPE_STOP;
+        return dom::kStop;
     throw dom::InvalidDataError("Invalid tie type " + string);
 }
 

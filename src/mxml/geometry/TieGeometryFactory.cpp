@@ -57,9 +57,9 @@ void TieGeometryFactory::createGeometryFromNote(const NoteGeometry& noteGeometry
     
     for (auto& tie : notations->ties()) {
         auto key = std::make_pair(note.staff(), note.pitch().get());
-        if (tie->type() == dom::TYPE_START) {
+        if (tie->type() == dom::kContinue) {
             _tieStartGeometries[key] = &noteGeometry;
-        } else if (tie->type() == dom::TYPE_STOP) {
+        } else if (tie->type() == dom::kStop) {
             auto startGeom = _tieStartGeometries.find(key);
             if (startGeom != _tieStartGeometries.end()) {
                 _tieGeometries.push_back(std::move(buildTieGeometry(startGeom->second, &noteGeometry, tie->placement())));
@@ -70,9 +70,9 @@ void TieGeometryFactory::createGeometryFromNote(const NoteGeometry& noteGeometry
     
     for (auto& slur : notations->slurs()) {
         auto key = std::make_pair(note.staff(), slur->number());
-        if (slur->type() == dom::TYPE_START) {
+        if (slur->type() == dom::kContinue) {
             _slurStartGeometries[key] = &noteGeometry;
-        } else if (slur->type() == dom::TYPE_STOP) {
+        } else if (slur->type() == dom::kStop) {
             auto startGeom = _slurStartGeometries.find(key);
             if (startGeom != _slurStartGeometries.end()) {
                 _tieGeometries.push_back(std::move(buildSlurGeometry(startGeom->second, &noteGeometry, slur->placement())));
@@ -96,12 +96,12 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometry(const NoteGeom
         coord_t stopStaffY = stopLocation.y - Metrics::staffOrigin(_partGeometry.part(), stop->note().staff());
         coord_t avgy = (startStaffY + stopStaffY) / 2;
         if (avgy < Metrics::staffHeight()/2)
-            tieGeom->setPlacement(absentOptional(dom::PLACEMENT_ABOVE));
+            tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));
         else
-            tieGeom->setPlacement(absentOptional(dom::PLACEMENT_BELOW));
+            tieGeom->setPlacement(absentOptional(dom::kPlacementBelow));
     }
     
-    if (tieGeom->placement().value() == dom::PLACEMENT_BELOW) {
+    if (tieGeom->placement().value() == dom::kPlacementBelow) {
         startLocation.y = start->frame().max().y;
         stopLocation.y = stop->frame().max().y;
     } else {
@@ -129,9 +129,9 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
         coord_t stopStaffY = stopLocation.y - Metrics::staffOrigin(_partGeometry.part(), stop->note().staff());
         coord_t avgy = (startStaffY + stopStaffY) / 2;
         if (avgy < Metrics::staffHeight()/2)
-            tieGeom->setPlacement(absentOptional(dom::PLACEMENT_ABOVE));
+            tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));
         else
-            tieGeom->setPlacement(absentOptional(dom::PLACEMENT_BELOW));
+            tieGeom->setPlacement(absentOptional(dom::kPlacementBelow));
     }
     
     const ChordGeometry& startChordGeom = static_cast<const ChordGeometry&>(*start->parentGeometry());
@@ -140,7 +140,7 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
     Rect startNotesFrame = startChordGeom.notesFrame();
     Rect stopNotesFrame = stopChordGeom.notesFrame();
     
-    if (tieGeom->placement().value() == dom::PLACEMENT_BELOW) {
+    if (tieGeom->placement().value() == dom::kPlacementBelow) {
         startLocation.y = startNotesFrame.max().y + kTieSpacing;
         stopLocation.y = stopNotesFrame.max().y + kTieSpacing;
     } else {
@@ -153,10 +153,10 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
         ChordGeometry* chordGeom = (ChordGeometry*)start->parentGeometry();
         Rect stemFrame = chordGeom->stem()->frame();
         
-        if (tieGeom->placement().value() == dom::PLACEMENT_BELOW && start->note().stem() == dom::STEM_DOWN) {
+        if (tieGeom->placement().value() == dom::kPlacementBelow && start->note().stem() == dom::kStemDown) {
             startLocation.x = stemFrame.min().x + StemGeometry::kNoFlagWidth;
             startLocation.y = stemFrame.max().y + 2*kTieSpacing;
-        } else if (tieGeom->placement().value() == dom::PLACEMENT_ABOVE && start->note().stem() == dom::STEM_UP) {
+        } else if (tieGeom->placement().value() == dom::kPlacementAbove && start->note().stem() == dom::kStemUp) {
             startLocation.x = stemFrame.max().x - StemGeometry::kNoFlagWidth;
             startLocation.y = stemFrame.min().y - 2*kTieSpacing;
         }
@@ -165,10 +165,10 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
         ChordGeometry* chordGeom = (ChordGeometry*)stop->parentGeometry();
         Rect stemFrame = chordGeom->stem()->frame();
         
-        if (tieGeom->placement().value() == dom::PLACEMENT_BELOW && stop->note().stem() == dom::STEM_DOWN) {
+        if (tieGeom->placement().value() == dom::kPlacementBelow && stop->note().stem() == dom::kStemDown) {
             stopLocation.x = stemFrame.min().x + StemGeometry::kNoFlagWidth;
             stopLocation.y = stemFrame.max().y + 2*kTieSpacing;
-        } else if (tieGeom->placement().value() == dom::PLACEMENT_ABOVE && stop->note().stem() == dom::STEM_UP) {
+        } else if (tieGeom->placement().value() == dom::kPlacementAbove && stop->note().stem() == dom::kStemUp) {
             stopLocation.x = stemFrame.max().x - StemGeometry::kNoFlagWidth;
             stopLocation.y = stemFrame.min().y - 2*kTieSpacing;
         }

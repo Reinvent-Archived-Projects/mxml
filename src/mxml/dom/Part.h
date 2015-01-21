@@ -52,7 +52,6 @@ public:
         return _measures;
     }
     const Measure* measureWithNumber(const std::string& number) const;
-    std::size_t indexOfMeasure(const Measure* measure) const;
     void addMeasure(std::unique_ptr<Measure>&& measure) {
         _measures.push_back(std::move(measure));
     }

@@ -11,7 +11,7 @@ namespace dom {
 
 class Pedal : public DirectionType {
 public:
-    Pedal() : _type(TYPE_START), _line(false), _sign(true) {}
+    Pedal() : _type(kStart), _line(false), _sign(true) {}
 
     bool span() const {
         return true;

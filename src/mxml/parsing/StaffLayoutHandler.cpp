@@ -2,34 +2,32 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #include "StaffLayoutHandler.h"
+#include <lxml/IntegerHandler.h>
 
 namespace mxml {
-
-using dom::StaffLayout;
-using lxml::QName;
 
 static const char* kNumberAttribute = "number";
 static const char* kStaffDistanceTag = "staff-distance";
 
-void StaffLayoutHandler::startElement(const QName& qname, const lxml::RecursiveHandler::AttributeMap& attributes) {
-    _result.reset(new StaffLayout());
+void StaffLayoutHandler::startElement(const lxml::QName& qname, const lxml::RecursiveHandler::AttributeMap& attributes) {
+    _result = StaffLayout{};
     
     auto number = attributes.find(kNumberAttribute);
     if (number != attributes.end())
-        _result->setNumber(lxml::IntegerHandler::parseInteger(number->second));
+        _result.number = lxml::IntegerHandler::parseInteger(number->second);
 }
 
-lxml::RecursiveHandler* StaffLayoutHandler::startSubElement(const QName& qname) {
+lxml::RecursiveHandler* StaffLayoutHandler::startSubElement(const lxml::QName& qname) {
     if (strcmp(qname.localName(), kStaffDistanceTag) == 0)
         return &_doubleHandler;
     return 0;
 }
 
-void StaffLayoutHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
-    using dom::presentOptional;
-    
-    if (strcmp(qname.localName(), kStaffDistanceTag) == 0)
-        _result->setStaffDistance(presentOptional((float)_doubleHandler.result()));
+void StaffLayoutHandler::endSubElement(const lxml::QName& qname, RecursiveHandler* parser) {
+    if (strcmp(qname.localName(), kStaffDistanceTag) == 0) {
+        auto value = static_cast<dom::tenths_t>(_doubleHandler.result());
+        _result.staffDistance = value;
+    }
 }
 
 } // namespace mxml

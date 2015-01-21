@@ -37,27 +37,27 @@ void SlurHandler::startElement(const QName& qname, const AttributeMap& attribute
 
 dom::StartStopContinue SlurHandler::typeFromString(const std::string& string) {
     if (string == "start")
-        return dom::TYPE_START;
+        return dom::kContinue;
     else if (string == "continue")
-        return dom::TYPE_CONTINUE;
+        return dom::kContinue;
     else if (string == "stop")
-        return dom::TYPE_STOP;
+        return dom::kStop;
     throw dom::InvalidDataError("Invalid slur type " + string);
 }
 
 dom::Placement SlurHandler::placementFromString(const std::string& string) {
     if (string == "above")
-        return dom::PLACEMENT_ABOVE;
+        return dom::kPlacementAbove;
     else if (string == "below")
-        return dom::PLACEMENT_BELOW;
+        return dom::kPlacementBelow;
     throw dom::InvalidDataError("Invalid slur placement " + string);
 }
 
 dom::Orientation SlurHandler::orientationFromString(const std::string& string) {
     if (string == "over")
-        return dom::ORIENTATION_OVER;
+        return dom::kOrientationOver;
     else if (string == "under")
-        return dom::ORIENTATION_UNDER;
+        return dom::kOrientationUnder;
     throw dom::InvalidDataError("Invalid slur orientation " + string);
 }
 

@@ -175,10 +175,10 @@ Note::Type NoteHandler::typeFromString(const std::string& string) {
 }
 
 dom::Stem NoteHandler::stemFromString(const std::string& string) {
-    if (string == "none") return dom::STEM_NONE;
-    if (string == "up") return dom::STEM_UP;
-    if (string == "down") return dom::STEM_DOWN;
-    if (string == "double") return dom::STEM_DOUBLE;
+    if (string == "none") return dom::kStemNone;
+    if (string == "up") return dom::kStemUp;
+    if (string == "down") return dom::kStemDown;
+    if (string == "double") return dom::kStemDouble;
     throw dom::InvalidDataError("Invalid note stem " + string);
 }
 

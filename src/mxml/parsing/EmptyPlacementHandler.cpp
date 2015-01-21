@@ -22,9 +22,9 @@ void EmptyPlacementHandler::startElement(const QName& qname, const AttributeMap&
 
 Placement EmptyPlacementHandler::placementFromString(const std::string& string) {
     if (string == "above")
-        return dom::PLACEMENT_ABOVE;
+        return dom::kPlacementAbove;
     else if (string == "below")
-        return dom::PLACEMENT_BELOW;
+        return dom::kPlacementBelow;
     throw dom::InvalidDataError("Invalid placement " + string);
 }
 
