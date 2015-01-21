@@ -31,11 +31,11 @@ void EndingHandler::endElement(const QName& qname, const std::string& contents) 
 
 Ending::Type EndingHandler::typeFromString(const std::string& string) {
     if (string == "start")
-        return Ending::START;
+        return Ending::kStart;
     else if (string == "stop")
-        return Ending::STOP;
+        return Ending::kStop;
     else if (string == "discontinue")
-        return Ending::DISCONTINUE;
+        return Ending::kDiscontinue;
     throw dom::InvalidDataError("Invalid ending type " + string);
 }
 

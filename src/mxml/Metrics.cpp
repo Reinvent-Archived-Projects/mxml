@@ -41,8 +41,8 @@ coord_t Metrics::staffY(const ScoreProperties& scoreProperties, const Note& note
     } else if (note.rest()) {
         const auto& clef = scoreProperties.clef(note);
         y = staffY(*clef, *note.rest());
-    } else if (note.defaultY().isPresent()) {
-        y = note.defaultY();
+    } else if (note.position.defaultY.isPresent()) {
+        y = note.position.defaultY;
     }
 
     auto measure = note.measure();

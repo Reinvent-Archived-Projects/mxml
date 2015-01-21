@@ -13,7 +13,6 @@ public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
     void endElement(const lxml::QName& qname, const std::string& contents);
     
-    static dom::CreditWords::Justify justifyFromString(const std::string& string);
     static dom::CreditWords::FontStyle fontStyleFromString(const std::string& string);
     static dom::CreditWords::FontWeight fontWeightFromString(const std::string& string);
 };

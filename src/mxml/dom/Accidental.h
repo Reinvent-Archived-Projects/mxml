@@ -3,34 +3,34 @@
 
 #pragma once
 #include "Node.h"
+#include "Position.h"
+
 
 namespace mxml {
 namespace dom {
 
-class Accidental : public Node {
+/**
+ The accidental type represents actual notated accidentals. Editorial and cautionary indications are indicated by
+ attributes. Values for these attributes are "no" if not present. Specific graphic display such as parentheses,
+ brackets, and size are controlled by the level-display attribute group.
+ */
+struct Accidental : public Node {
 public:
     enum Type : int {
-        TYPE_DOUBLE_FLAT = -2,
-        TYPE_FLAT,
-        TYPE_NATURAL,
-        TYPE_SHARP,
-        TYPE_DOUBLE_SHARP
+        kTypeDoubleFlat = -2,
+        kTypeFlat,
+        kTypeNatural,
+        kTypeSharp,
+        kTypeDoubleSharp
     };
     
 public:
-    Accidental() : _type(TYPE_SHARP) {}
-    Accidental(Type type) : _type(type) {}
-    Accidental(const Accidental& rhs) : _type(rhs.type()) {}
+    Accidental() : type(kTypeSharp) {}
+    Accidental(Type type) : type(type) {}
     
-    Type type() const {
-        return _type;
-    }
-    void setType(Type type) {
-        _type = type;
-    }
-    
-private:
-    Type _type;
+public:
+    Type type;
+    Position poition;
 };
 
 } // namespace dom

@@ -4,6 +4,7 @@
 #pragma once
 #include "Node.h"
 #include "Optional.h"
+#include "Position.h"
 
 #include <string>
 
@@ -12,29 +13,14 @@ namespace dom {
 
 class DirectionType : public Node {
 public:
-    DirectionType() : _defaultX(), _defaultY() {}
+    DirectionType() = default;
     virtual ~DirectionType() = default;
-    
-    const Optional<float>& defaultX() const {
-        return _defaultX;
-    }
-    void setDefaultX(const Optional<float>& defaultX) {
-        _defaultX = defaultX;
-    }
-    
-    const Optional<float>& defaultY() const {
-        return _defaultY;
-    }
-    void setDefaultY(const Optional<float>& defaultY) {
-        _defaultY = defaultY;
-    }
     
     /** Return true if this direction type has start and stop elements. */
     virtual bool span() const = 0;
     
-private:
-    Optional<float> _defaultX;
-    Optional<float> _defaultY;
+public:
+    Position position;
 };
 
 class Dynamics : public DirectionType {

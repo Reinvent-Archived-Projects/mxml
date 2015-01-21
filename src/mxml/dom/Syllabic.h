@@ -10,14 +10,14 @@ namespace dom {
 class Syllabic : public Node {
 public:
     enum Type {
-        Single,
-        Begin,
-        End,
-        Middle
+        kSingle,
+        kBegin,
+        kEnd,
+        kMiddle
     };
 
 public:
-    Syllabic() : _type(Single) {}
+    Syllabic() : _type(kSingle) {}
 
     Type type() const {
         return _type;

@@ -19,19 +19,19 @@ AccidentalGeometry::AccidentalGeometry(int alter) : _alter(alter) {
 
 Size AccidentalGeometry::Size(int alter) {
     switch (alter) {
-        case Accidental::TYPE_SHARP:
+        case Accidental::kTypeSharp:
             return kSharpSize;
             
-        case Accidental::TYPE_FLAT:
+        case Accidental::kTypeFlat:
             return kFlatSize;
             
-        case Accidental::TYPE_NATURAL:
+        case Accidental::kTypeNatural:
             return kNaturalSize;
             
-        case Accidental::TYPE_DOUBLE_SHARP:
+        case Accidental::kTypeDoubleSharp:
             return kDoubleSharpSize;
             
-        case Accidental::TYPE_DOUBLE_FLAT:
+        case Accidental::kTypeDoubleFlat:
             return kDoubleFlatSize;
 
         default:

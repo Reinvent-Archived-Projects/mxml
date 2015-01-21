@@ -190,7 +190,6 @@
 		61239C1F1A6742A100B3F0A3 /* LoopFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoopFactory.h; sourceTree = "<group>"; };
 		614055B81A5C61FE005224C9 /* libmxml.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libmxml.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		614055CA1A5C6228005224C9 /* Accidental.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Accidental.h; sourceTree = "<group>"; };
-		614055CB1A5C6228005224C9 /* Appearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Appearance.h; sourceTree = "<group>"; };
 		614055CC1A5C6228005224C9 /* Articulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Articulation.h; sourceTree = "<group>"; };
 		614055CD1A5C6228005224C9 /* Attributes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Attributes.h; sourceTree = "<group>"; };
 		614055CE1A5C6228005224C9 /* Backup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Backup.h; sourceTree = "<group>"; };
@@ -548,7 +547,6 @@
 			isa = PBXGroup;
 			children = (
 				614055CA1A5C6228005224C9 /* Accidental.h */,
-				614055CB1A5C6228005224C9 /* Appearance.h */,
 				614055CC1A5C6228005224C9 /* Articulation.h */,
 				614055CD1A5C6228005224C9 /* Attributes.h */,
 				614055CE1A5C6228005224C9 /* Backup.h */,

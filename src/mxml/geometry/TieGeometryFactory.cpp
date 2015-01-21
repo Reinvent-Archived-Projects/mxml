@@ -149,7 +149,7 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
     }
     
     // Avoid collisions with beamed sets
-    if (!start->note().beams().empty() && start->note().beams().front()->type() != dom::Beam::TYPE_END) {
+    if (!start->note().beams().empty() && start->note().beams().front()->type() != dom::Beam::kTypeEnd) {
         ChordGeometry* chordGeom = (ChordGeometry*)start->parentGeometry();
         Rect stemFrame = chordGeom->stem()->frame();
         
@@ -161,7 +161,7 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
             startLocation.y = stemFrame.min().y - 2*kTieSpacing;
         }
     }
-    if (!stop->note().beams().empty() && stop->note().beams().front()->type() != dom::Beam::TYPE_BEGIN) {
+    if (!stop->note().beams().empty() && stop->note().beams().front()->type() != dom::Beam::kTypeBegin) {
         ChordGeometry* chordGeom = (ChordGeometry*)stop->parentGeometry();
         Rect stemFrame = chordGeom->stem()->frame();
         

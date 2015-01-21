@@ -32,13 +32,13 @@ void OctaveShiftHandler::startElement(const lxml::QName& qname, const AttributeM
 
 OctaveShift::Type OctaveShiftHandler::typeFromString(const std::string& string) {
     if (string == "up")
-        return OctaveShift::UP;
+        return OctaveShift::kUp;
     else if (string == "down")
-        return OctaveShift::DOWN;
+        return OctaveShift::kDown;
     else if (string == "stop")
-        return OctaveShift::STOP;
+        return OctaveShift::kStop;
     else if (string == "continue")
-        return OctaveShift::CONTINUE;
+        return OctaveShift::kContinue;
 
     throw dom::InvalidDataError("Invalid octave-shift type " + string);
 }

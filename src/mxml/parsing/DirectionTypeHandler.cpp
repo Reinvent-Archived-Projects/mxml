@@ -1,12 +1,17 @@
 //  Created by Alejandro Isaza on 2014-03-20.
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
-#include "DirectionTypeHandler.h"
 #include <lxml/DoubleHandler.h>
 #include <mxml/dom/InvalidDataError.h>
 #include <cstring>
 
+#include "DirectionTypeHandler.h"
+#include "PositionFactory.h"
+
+
 namespace mxml {
+
+using namespace parsing;
 
 using dom::Dynamics;
 using dom::Pedal;
@@ -14,8 +19,6 @@ using dom::Wedge;
 using dom::Words;
 using lxml::QName;
 
-static const char* kDefaultXAttribute = "default-x";
-static const char* kDefaultYAttribute = "default-y";
 static const char* kTypeAttribute = "type";
 static const char* kNumberAttribute = "number";
 static const char* kSpreadAttribute = "spread";
@@ -31,18 +34,8 @@ static const char* kCodaTag = "coda";
 static const char* kOctaveShiftTag = "octave-shift";
 
 void DynamicsHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    using lxml::DoubleHandler;
-    using dom::presentOptional;
-
-    _result.reset(new Dynamics());
-    
-    auto defaultX = attributes.find(QName(kDefaultXAttribute, 0, 0));
-    if (defaultX != attributes.end())
-        _result->setDefaultX(presentOptional((float)DoubleHandler::parseDouble(defaultX->second)));
-    
-    auto defaultY = attributes.find(QName(kDefaultYAttribute, 0, 0));
-    if (defaultY != attributes.end())
-        _result->setDefaultY(presentOptional((float)DoubleHandler::parseDouble(defaultY->second)));
+    _result.reset(new Dynamics{});
+    _result->position = PositionFactory::buildFromAttributes(attributes);
 }
 
 lxml::RecursiveHandler* DynamicsHandler::startSubElement(const QName& qname) {
@@ -80,16 +73,9 @@ void WedgeHandler::startElement(const QName& qname, const AttributeMap& attribut
     using dom::presentOptional;
     using lxml::DoubleHandler;
 
-    _result.reset(new Wedge());
-    
-    auto defaultX = attributes.find(kDefaultXAttribute);
-    if (defaultX != attributes.end())
-        _result->setDefaultX(presentOptional((float)DoubleHandler::parseDouble(defaultX->second)));
-    
-    auto defaultY = attributes.find(kDefaultYAttribute);
-    if (defaultY != attributes.end())
-        _result->setDefaultY(presentOptional((float)DoubleHandler::parseDouble(defaultY->second)));
-    
+    _result.reset(new Wedge{});
+    _result->position = PositionFactory::buildFromAttributes(attributes);
+
     auto type = attributes.find(kTypeAttribute);
     if (type != attributes.end())
         _result->setType(typeFromString(type->second));
@@ -105,14 +91,14 @@ void WedgeHandler::startElement(const QName& qname, const AttributeMap& attribut
 
 Wedge::Type WedgeHandler::typeFromString(const std::string& string) {
     if (string == "crescendo")
-        return Wedge::TYPE_CRESCENDO;
+        return Wedge::kTypeCrescendo;
     if (string == "diminuendo")
-        return Wedge::TYPE_DIMINUENDO;
+        return Wedge::kTypeDiminuendo;
     if (string == "stop")
         return Wedge::kStop;
     if (string == "continue")
         return Wedge::kContinue;
-    return Wedge::TYPE_CRESCENDO;
+    return Wedge::kTypeCrescendo;
 }
 
 
@@ -121,15 +107,8 @@ void PedalHandler::startElement(const lxml::QName& qname, const AttributeMap& at
     using lxml::DoubleHandler;
     using lxml::StringHandler;
 
-    _result.reset(new Pedal());
-
-    auto defaultX = attributes.find(kDefaultXAttribute);
-    if (defaultX != attributes.end())
-        _result->setDefaultX(presentOptional((float)DoubleHandler::parseDouble(defaultX->second)));
-
-    auto defaultY = attributes.find(kDefaultYAttribute);
-    if (defaultY != attributes.end())
-        _result->setDefaultY(presentOptional((float)DoubleHandler::parseDouble(defaultY->second)));
+    _result.reset(new Pedal{});
+    _result->position = PositionFactory::buildFromAttributes(attributes);
 
     auto type = attributes.find(kTypeAttribute);
     if (type != attributes.end())
@@ -157,18 +136,8 @@ dom::StartStopContinue PedalHandler::typeFromString(const std::string& string) {
 }
 
 void WordsHandler::startElement(const QName& qname, const AttributeMap& attributes) {
-    using dom::presentOptional;
-    using lxml::DoubleHandler;
-
-    _result.reset(new Words());
-    
-    auto defaultX = attributes.find(QName(kDefaultXAttribute, 0, 0));
-    if (defaultX != attributes.end())
-        _result->setDefaultX(presentOptional((float)DoubleHandler::parseDouble(defaultX->second)));
-    
-    auto defaultY = attributes.find(QName(kDefaultYAttribute, 0, 0));
-    if (defaultY != attributes.end())
-        _result->setDefaultY(presentOptional((float)DoubleHandler::parseDouble(defaultY->second)));
+    _result.reset(new Words{});
+    _result->position = PositionFactory::buildFromAttributes(attributes);
 }
 
 void WordsHandler::endElement(const QName& qname, const std::string& contents) {

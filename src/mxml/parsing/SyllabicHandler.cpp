@@ -18,13 +18,13 @@ void SyllabicHandler::endElement(const lxml::QName& qname, const std::string& co
 
 dom::Syllabic::Type SyllabicHandler::typeFromString(const std::string& string) {
     if (string == "single")
-        return dom::Syllabic::Single;
+        return dom::Syllabic::kSingle;
     else if (string == "begin")
-        return dom::Syllabic::Begin;
+        return dom::Syllabic::kBegin;
     else if (string == "end")
-        return dom::Syllabic::End;
+        return dom::Syllabic::kEnd;
     else if (string == "middle")
-        return dom::Syllabic::Middle;
+        return dom::Syllabic::kMiddle;
     throw dom::InvalidDataError("Invalid syllabic type " + string);
 }
 

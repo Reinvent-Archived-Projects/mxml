@@ -10,6 +10,7 @@
 #include "Notations.h"
 #include "Optional.h"
 #include "Pitch.h"
+#include "Position.h"
 #include "Rest.h"
 #include "Tie.h"
 #include "TimedNode.h"
@@ -46,12 +47,10 @@ public:
     
 public:
     Note()
-    : _defaultX(),
-      _defaultY(),
+    : printObject(true),
       _type(absentOptional(TYPE_QUARTER)),
       _chord(false),
       _grace(false),
-      _printObject(true),
       _stem(kStemUp),
       _staff(1)
     {}
@@ -61,20 +60,6 @@ public:
     }
     void setMeasure(const Measure* measure) {
         _measure = measure;
-    }
-
-    const Optional<float>& defaultX() const {
-        return _defaultX;
-    }
-    void setDefaultX(const Optional<float>& x) {
-        _defaultX = x;
-    }
-    
-    const Optional<float>& defaultY() const {
-        return _defaultY;
-    }
-    void setDefaultY(const Optional<float>& y) {
-        _defaultY = y;
     }
     
     Optional<Type> type() const {
@@ -96,13 +81,6 @@ public:
     }
     void setGrace(bool grace) {
         _grace = grace;
-    }
-    
-    bool printObject() const {
-        return _printObject;
-    }
-    void setPrintObject(bool print) {
-        _printObject = print;
     }
     
     Stem stem() const {
@@ -215,7 +193,7 @@ public:
      */
     Optional<int> alter() const {
         if (_accidental) {
-            return Optional<int>(_accidental->type(), true);
+            return Optional<int>(_accidental->type, true);
         } else if (_pitch) {
            return Optional<int>(_pitch->alter(), true);
         }
@@ -224,16 +202,16 @@ public:
     }
     
     unsigned int midiNumber() const;
-    
+
+public:
+    Position position;
+    bool printObject;
+
 private:
     const Measure* _measure;
-
-    Optional<float> _defaultX;
-    Optional<float> _defaultY;
     
     bool _chord;
     bool _grace;
-    bool _printObject;
     Stem _stem;
     int _staff;
     

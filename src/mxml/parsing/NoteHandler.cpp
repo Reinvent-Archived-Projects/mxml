@@ -2,17 +2,19 @@
 //  Copyright (c) 2014 Venture Media Labs Inc. All rights reserved.
 
 #include "NoteHandler.h"
+#include "PositionFactory.h"
+#include "TypeFactories.h"
+
 #include <mxml/dom/InvalidDataError.h>
 #include <cstring>
 
 namespace mxml {
 
+using namespace parsing;
+
 using dom::Note;
 using lxml::QName;
 
-static const char* kDefaultXAttribute = "default-x";
-static const char* kDefaultYAttribute = "default-y";
-static const char* kPrintObjectAttribute = "print-object";
 static const char* kDynamicsAttribute = "dynamics";
 static const char* kEndDynamicsAttribute = "end-dynamics";
 static const char* kAttackAttribute = "attack";
@@ -40,18 +42,8 @@ void NoteHandler::startElement(const QName& qname, const AttributeMap& attribute
     using lxml::IntegerHandler;
 
     _result.reset(new Note());
-    
-    auto defaultX = attributes.find(kDefaultXAttribute);
-    if (defaultX != attributes.end())
-        _result->setDefaultX(presentOptional((float)DoubleHandler::parseDouble(defaultX->second)));
-    
-    auto defaultY = attributes.find(kDefaultYAttribute);
-    if (defaultY != attributes.end())
-        _result->setDefaultY(presentOptional((float)DoubleHandler::parseDouble(defaultY->second)));
-    
-    auto printObject = attributes.find(kPrintObjectAttribute);
-    if (printObject != attributes.end())
-        _result->setPrintObject(printObject->second == "yes" ? true : false);
+    _result->position = PositionFactory::buildFromAttributes(attributes);
+    _result->printObject = PrintObjectFactory::buildFromAttributes(attributes);
 
     auto dynamics = attributes.find(kDynamicsAttribute);
     if (dynamics != attributes.end())
@@ -183,11 +175,11 @@ dom::Stem NoteHandler::stemFromString(const std::string& string) {
 }
 
 dom::Accidental::Type NoteHandler::accidentalTypeFromString(const std::string& string) {
-    if (string == "sharp") return dom::Accidental::TYPE_SHARP;
-    if (string == "flat") return dom::Accidental::TYPE_FLAT;
-    if (string == "natural") return dom::Accidental::TYPE_NATURAL;
-    if (string == "double-sharp" || string == "sharp-sharp") return dom::Accidental::TYPE_DOUBLE_SHARP;
-    if (string == "flat-flat") return dom::Accidental::TYPE_DOUBLE_FLAT;
+    if (string == "sharp") return dom::Accidental::kTypeSharp;
+    if (string == "flat") return dom::Accidental::kTypeFlat;
+    if (string == "natural") return dom::Accidental::kTypeNatural;
+    if (string == "double-sharp" || string == "sharp-sharp") return dom::Accidental::kTypeDoubleSharp;
+    if (string == "flat-flat") return dom::Accidental::kTypeDoubleFlat;
     throw dom::InvalidDataError("Invalid accidental type " + string);
 }
 

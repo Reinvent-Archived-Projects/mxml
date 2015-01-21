@@ -10,11 +10,11 @@ namespace dom {
 class Beam : public Node {
 public:
     enum Type {
-        TYPE_BEGIN,
+        kTypeBegin,
         kContinue,
-        TYPE_END,
-        TYPE_FORWARD_HOOK,
-        TYPE_BACKWARD_HOOK
+        kTypeEnd,
+        kTypeForwardHook,
+        kTypeBackwardHook
     };
     
 public:

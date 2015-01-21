@@ -40,7 +40,7 @@ public:
     bool isBeamStart() const {
         if (_notes.empty() || firstNote()->beams().empty())
             return false;
-        return firstNote()->beams().front()->type() == Beam::TYPE_BEGIN;
+        return firstNote()->beams().front()->type() == Beam::kTypeBegin;
     }
     
     bool isBeamContinue() const {
@@ -52,7 +52,7 @@ public:
     bool isBeamEnd() const {
         if (_notes.empty() || firstNote()->beams().empty())
             return false;
-        return firstNote()->beams().front()->type() == Beam::TYPE_END;
+        return firstNote()->beams().front()->type() == Beam::kTypeEnd;
     }
     
     bool hasBeam() const {

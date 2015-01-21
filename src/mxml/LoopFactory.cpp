@@ -57,7 +57,7 @@ void LoopFactory::process(std::size_t measureIndex, const dom::Barline& barline)
             loop->setCount(std::max(loop->count(), maxNumber));
         }
 
-        if (ending->type() == dom::Ending::START) {
+        if (ending->type() == dom::Ending::kStart) {
             _endingBegin = measureIndex;
         } else {
             for (std::size_t i = 0; i <= loop->count(); i += 1) {

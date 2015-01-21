@@ -13,9 +13,9 @@ namespace dom {
 class Ending : public Node {
 public:
     enum Type {
-        START,
-        STOP,
-        DISCONTINUE
+        kStart,
+        kStop,
+        kDiscontinue
     };
     
 public:

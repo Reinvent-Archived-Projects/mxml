@@ -195,7 +195,7 @@ void SpanFactory::build(const dom::TimedNode* node) {
 }
 
 void SpanFactory::build(const dom::Chord* chord) {
-    if (!chord->firstNote() || !chord->firstNote()->printObject())
+    if (!chord->firstNote() || !chord->firstNote()->printObject)
         return;
 
     SpanCollection::iterator span;
@@ -312,7 +312,7 @@ SpanCollection::iterator SpanFactory::graceNoteSpan(const dom::Chord* chord) {
 void SpanFactory::build(const dom::Note* note) {
     assert (note->rest());
     
-    if (!note->printObject())
+    if (!note->printObject)
         return;
         
     auto span = _spans.eventSpan(_measureIndex, _currentTime);

@@ -233,7 +233,7 @@ namespace mxml {
         using dom::OctaveShift;
 
         const OctaveShift& octaveShift = dynamic_cast<const OctaveShift&>(*direction.type());
-        if (octaveShift.type == OctaveShift::STOP) {
+        if (octaveShift.type == OctaveShift::kStop) {
             auto it = std::find_if(_openSpanDirections.rbegin(), _openSpanDirections.rend(), [&](std::pair<const MeasureGeometry*, const dom::Direction*> pair) {
                 if (auto os = dynamic_cast<const OctaveShift*>(pair.second->type()))
                     return pair.second->staff() == direction.staff() && os->number == octaveShift.number;
@@ -244,7 +244,7 @@ namespace mxml {
                 buildOctaveShift(*it->first, *it->second, measureGeom,direction);
                 _openSpanDirections.erase(it.base() - 1);
             }
-        } else if (octaveShift.type != OctaveShift::CONTINUE) {
+        } else if (octaveShift.type != OctaveShift::kContinue) {
             _openSpanDirections.push_back(std::make_pair(&measureGeom, &direction));
         }
     }
@@ -338,7 +338,7 @@ namespace mxml {
         
         auto& ending = barline.ending();
 
-        if ((ending->type() == dom::Ending::STOP || ending->type() == dom::Ending::DISCONTINUE) && _startEnding.isPresent()) {
+        if ((ending->type() == dom::Ending::kStop || ending->type() == dom::Ending::kDiscontinue) && _startEnding.isPresent()) {
             Point stopLocation;
             stopLocation.x = measureGeom.frame().max().x - 1;
             stopLocation.y = measureGeom.origin().y + MeasureGeometry::kVerticalPadding - EndingGeometry::kHeight - 10;
@@ -349,7 +349,7 @@ namespace mxml {
             _partGeometry->addGeometry(std::move(endingGeom));
 
             _startEnding.reset();
-        } else if (ending->type() == dom::Ending::START) {
+        } else if (ending->type() == dom::Ending::kStart) {
             _startEnding.setPresentValue(*ending);
             _startEndingLocation = measureGeom.location();
             _startEndingLocation.y = measureGeom.origin().y + MeasureGeometry::kVerticalPadding - EndingGeometry::kHeight - 10;

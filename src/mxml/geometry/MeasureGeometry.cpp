@@ -67,9 +67,9 @@ void MeasureGeometry::build() {
         chords.push_back(chordGeom);
         
         const auto& beam = note->beams().front();
-        if (beam->type() == Beam::TYPE_BEGIN) {
+        if (beam->type() == Beam::kTypeBegin) {
         } else if (beam->type() == Beam::kContinue) {
-        } else if (beam->type() == Beam::TYPE_END) {
+        } else if (beam->type() == Beam::kTypeEnd) {
             std::unique_ptr<BeamGeometry> beamGeom(new BeamGeometry(chords));
             ChordGeometry* firstChordGeom = chords.front();
             beamGeom->setLocation(firstChordGeom->location());
@@ -203,7 +203,7 @@ void MeasureGeometry::buildTimedNode(const TimedNode* node)  {
 }
 
 void MeasureGeometry::buildChord(const Chord* chord) {
-    if (!chord->firstNote()->printObject())
+    if (!chord->firstNote()->printObject)
         return;
     
     std::unique_ptr<ChordGeometry> geo(new ChordGeometry(*chord, _scoreProperties, _partGeometry));
@@ -233,7 +233,7 @@ void MeasureGeometry::buildChord(const Chord* chord) {
 
 void MeasureGeometry::buildRest(const Note* note) {
     assert (note->rest());
-    if (!note->printObject())
+    if (!note->printObject)
         return;
     
     std::unique_ptr<RestGeometry> geo(new RestGeometry(*note));

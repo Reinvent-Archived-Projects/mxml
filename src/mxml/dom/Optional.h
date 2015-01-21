@@ -8,12 +8,10 @@ namespace mxml {
 namespace dom {
 
 /**
- When using XML it is often necessary to know if a particular attribute or
- element was missing from the XML file. This class stores both a value and
- a flag to determine if the value was present in the source or if it is
- just a default or inherited value. This can also be achievied with only
- pointers but this approach has the advantage of not having to deal with
- ownership of the pointer and still being able to store a default value.
+ When using XML it is often necessary to know if a particular attribute or element was missing from the XML file. This
+ class stores both a value and a flag to determine if the value was present in the source or if it is just a default or
+ inherited value. This can also be achievied with only pointers but this approach has the advantage of not having to
+ deal with ownership of the pointer and still being able to store a default value.
  */
 template <typename T>
 class Optional {

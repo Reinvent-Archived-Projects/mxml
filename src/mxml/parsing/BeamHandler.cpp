@@ -25,15 +25,15 @@ void BeamHandler::endElement(const QName& qname, const std::string& contents) {
 
 Beam::Type BeamHandler::typeFromString(const std::string& string) {
     if (string == "begin")
-        return Beam::TYPE_BEGIN;
+        return Beam::kTypeBegin;
     if (string == "continue")
         return Beam::kContinue;
     if (string == "end")
-        return Beam::TYPE_END;
+        return Beam::kTypeEnd;
     if (string == "forward hook")
-        return Beam::TYPE_FORWARD_HOOK;
+        return Beam::kTypeForwardHook;
     if (string == "backward hook")
-        return Beam::TYPE_BACKWARD_HOOK;
+        return Beam::kTypeBackwardHook;
     return Beam::kContinue;
 }
 

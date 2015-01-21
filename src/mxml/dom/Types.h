@@ -49,8 +49,6 @@ enum HAlign {
     kHAlignRight
 };
 
-typedef int time_t;
-
 /**
  The valign type is used to indicate vertical alignment to the top, middle, bottom, or baseline of the text. Defaults
  are implementation-dependent.
@@ -72,6 +70,11 @@ enum Justify {
     kJustifyCenter,
     kJustifyRight
 };
+
+/**
+ The time type is an integer representing the measure time in divisions.
+ */
+typedef int time_t;
 
 /**
  The tenths type is a number representing tenths of interline staff space (positive or negative). Both integer and
