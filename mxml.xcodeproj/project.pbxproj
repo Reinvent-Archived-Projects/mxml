@@ -13,6 +13,14 @@
 		00094EFA1A6746340053C615 /* WordsGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 00094EF81A6746340053C615 /* WordsGeometry.h */; };
 		00094EFD1A67464A0053C615 /* SegnoGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00094EFB1A67464A0053C615 /* SegnoGeometry.cpp */; };
 		00094EFE1A67464A0053C615 /* SegnoGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 00094EFC1A67464A0053C615 /* SegnoGeometry.h */; };
+		0022ADFD1A7082C300139992 /* CollisionHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0022ADF51A7082C300139992 /* CollisionHandler.cpp */; };
+		0022ADFE1A7082C300139992 /* CollisionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 0022ADF61A7082C300139992 /* CollisionHandler.h */; };
+		0022ADFF1A7082C300139992 /* CollisionResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 0022ADF71A7082C300139992 /* CollisionResolver.h */; };
+		0022AE001A7082C300139992 /* CollisionResolver.hh in Headers */ = {isa = PBXBuildFile; fileRef = 0022ADF81A7082C300139992 /* CollisionResolver.hh */; };
+		0022AE011A7082C300139992 /* HorizontalResolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0022ADF91A7082C300139992 /* HorizontalResolver.cpp */; };
+		0022AE021A7082C300139992 /* HorizontalResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 0022ADFA1A7082C300139992 /* HorizontalResolver.h */; };
+		0022AE031A7082C300139992 /* VerticalResolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0022ADFB1A7082C300139992 /* VerticalResolver.cpp */; };
+		0022AE041A7082C300139992 /* VerticalResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 0022ADFC1A7082C300139992 /* VerticalResolver.h */; };
 		61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 61239A5E1A64866500B3F0A3 /* ScoreProperties.h */; };
 		61239A611A64866500B3F0A3 /* ScoreProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61239A5F1A64866500B3F0A3 /* ScoreProperties.cpp */; };
 		61239A6E1A65974400B3F0A3 /* ScoreBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */; };
@@ -36,7 +44,6 @@
 		614056E31A5C6228005224C9 /* BeamGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6140560C1A5C6228005224C9 /* BeamGeometry.cpp */; };
 		614056E51A5C6228005224C9 /* ChordGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6140560E1A5C6228005224C9 /* ChordGeometry.cpp */; };
 		614056E71A5C6228005224C9 /* ClefGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056101A5C6228005224C9 /* ClefGeometry.cpp */; };
-		614056E91A5C6228005224C9 /* CollisionHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056121A5C6228005224C9 /* CollisionHandler.cpp */; };
 		614056ED1A5C6228005224C9 /* DotGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056161A5C6228005224C9 /* DotGeometry.cpp */; };
 		614056EF1A5C6228005224C9 /* EndingGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056181A5C6228005224C9 /* EndingGeometry.cpp */; };
 		614056F11A5C6228005224C9 /* FermataGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6140561A1A5C6228005224C9 /* FermataGeometry.cpp */; };
@@ -178,6 +185,14 @@
 		00094EF81A6746340053C615 /* WordsGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WordsGeometry.h; sourceTree = "<group>"; };
 		00094EFB1A67464A0053C615 /* SegnoGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SegnoGeometry.cpp; sourceTree = "<group>"; };
 		00094EFC1A67464A0053C615 /* SegnoGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SegnoGeometry.h; sourceTree = "<group>"; };
+		0022ADF51A7082C300139992 /* CollisionHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionHandler.cpp; sourceTree = "<group>"; };
+		0022ADF61A7082C300139992 /* CollisionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionHandler.h; sourceTree = "<group>"; };
+		0022ADF71A7082C300139992 /* CollisionResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionResolver.h; sourceTree = "<group>"; };
+		0022ADF81A7082C300139992 /* CollisionResolver.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = CollisionResolver.hh; sourceTree = "<group>"; };
+		0022ADF91A7082C300139992 /* HorizontalResolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HorizontalResolver.cpp; sourceTree = "<group>"; };
+		0022ADFA1A7082C300139992 /* HorizontalResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HorizontalResolver.h; sourceTree = "<group>"; };
+		0022ADFB1A7082C300139992 /* VerticalResolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalResolver.cpp; sourceTree = "<group>"; };
+		0022ADFC1A7082C300139992 /* VerticalResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalResolver.h; sourceTree = "<group>"; };
 		61239A5E1A64866500B3F0A3 /* ScoreProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreProperties.h; sourceTree = "<group>"; };
 		61239A5F1A64866500B3F0A3 /* ScoreProperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreProperties.cpp; sourceTree = "<group>"; };
 		61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreBuilder.cpp; sourceTree = "<group>"; };
@@ -258,8 +273,6 @@
 		6140560F1A5C6228005224C9 /* ChordGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChordGeometry.h; sourceTree = "<group>"; };
 		614056101A5C6228005224C9 /* ClefGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClefGeometry.cpp; sourceTree = "<group>"; };
 		614056111A5C6228005224C9 /* ClefGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClefGeometry.h; sourceTree = "<group>"; };
-		614056121A5C6228005224C9 /* CollisionHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CollisionHandler.cpp; sourceTree = "<group>"; };
-		614056131A5C6228005224C9 /* CollisionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CollisionHandler.h; sourceTree = "<group>"; };
 		614056161A5C6228005224C9 /* DotGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DotGeometry.cpp; sourceTree = "<group>"; };
 		614056171A5C6228005224C9 /* DotGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DotGeometry.h; sourceTree = "<group>"; };
 		614056181A5C6228005224C9 /* EndingGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EndingGeometry.cpp; sourceTree = "<group>"; };
@@ -486,6 +499,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0022ADF41A7082C300139992 /* collisions */ = {
+			isa = PBXGroup;
+			children = (
+				0022ADF51A7082C300139992 /* CollisionHandler.cpp */,
+				0022ADF61A7082C300139992 /* CollisionHandler.h */,
+				0022ADF71A7082C300139992 /* CollisionResolver.h */,
+				0022ADF81A7082C300139992 /* CollisionResolver.hh */,
+				0022ADF91A7082C300139992 /* HorizontalResolver.cpp */,
+				0022ADFA1A7082C300139992 /* HorizontalResolver.h */,
+				0022ADFB1A7082C300139992 /* VerticalResolver.cpp */,
+				0022ADFC1A7082C300139992 /* VerticalResolver.h */,
+			);
+			path = collisions;
+			sourceTree = "<group>";
+		};
 		614055AF1A5C61FE005224C9 = {
 			isa = PBXGroup;
 			children = (
@@ -612,6 +640,7 @@
 		614056051A5C6228005224C9 /* geometry */ = {
 			isa = PBXGroup;
 			children = (
+				0022ADF41A7082C300139992 /* collisions */,
 				614056061A5C6228005224C9 /* AccidentalGeometry.cpp */,
 				614056071A5C6228005224C9 /* AccidentalGeometry.h */,
 				614056081A5C6228005224C9 /* ArticulationGeometry.cpp */,
@@ -626,8 +655,6 @@
 				614056111A5C6228005224C9 /* ClefGeometry.h */,
 				000868981A68430400BAA13D /* CodaGeometry.cpp */,
 				000868991A68430400BAA13D /* CodaGeometry.h */,
-				614056121A5C6228005224C9 /* CollisionHandler.cpp */,
-				614056131A5C6228005224C9 /* CollisionHandler.h */,
 				614056161A5C6228005224C9 /* DotGeometry.cpp */,
 				614056171A5C6228005224C9 /* DotGeometry.h */,
 				614056181A5C6228005224C9 /* EndingGeometry.cpp */,
@@ -848,7 +875,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0022AE001A7082C300139992 /* CollisionResolver.hh in Headers */,
 				61F072D61A6F0212002CA9CA /* SystemMarginsHandler.h in Headers */,
+				0022ADFE1A7082C300139992 /* CollisionHandler.h in Headers */,
 				61C850501A6D79CC00031100 /* OctaveShiftHandler.h in Headers */,
 				61F072E61A6F0F4C002CA9CA /* GenericNode.h in Headers */,
 				61F072DE1A6F0431002CA9CA /* PageMarginsHandler.h in Headers */,
@@ -862,11 +891,14 @@
 				61C850891A6EE39300031100 /* PositionFactory.h in Headers */,
 				61F072CE1A6EEB48002CA9CA /* SystemDividersHandler.h in Headers */,
 				61F072D21A6EEE03002CA9CA /* TypeFactories.h in Headers */,
+				0022ADFF1A7082C300139992 /* CollisionResolver.h in Headers */,
 				61F072DA1A6F02FE002CA9CA /* PageLayoutHandler.h in Headers */,
 				61239BA01A67426C00B3F0A3 /* JumpFactory.h in Headers */,
 				61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */,
+				0022AE041A7082C300139992 /* VerticalResolver.h in Headers */,
 				00094EFE1A67464A0053C615 /* SegnoGeometry.h in Headers */,
 				0008689B1A68430400BAA13D /* CodaGeometry.h in Headers */,
+				0022AE021A7082C300139992 /* HorizontalResolver.h in Headers */,
 				61239A6F1A65974400B3F0A3 /* ScoreBuilder.h in Headers */,
 				00094EFA1A6746340053C615 /* WordsGeometry.h in Headers */,
 				61239A7C1A67385400B3F0A3 /* Loop.h in Headers */,
@@ -974,11 +1006,11 @@
 				614057431A5C6228005224C9 /* LyricHandler.cpp in Sources */,
 				614057071A5C6228005224C9 /* PedalGeometry.cpp in Sources */,
 				614056D71A5C6228005224C9 /* Event.cpp in Sources */,
-				614056E91A5C6228005224C9 /* CollisionHandler.cpp in Sources */,
 				614057591A5C6228005224C9 /* ScalingHandler.cpp in Sources */,
 				61239C201A6742A100B3F0A3 /* LoopFactory.cpp in Sources */,
 				61F072E11A6F0CB3002CA9CA /* AppearanceHandler.cpp in Sources */,
 				614057611A5C6228005224C9 /* StaffLayoutHandler.cpp in Sources */,
+				0022AE031A7082C300139992 /* VerticalResolver.cpp in Sources */,
 				614057181A5C6228005224C9 /* TieGeometry.cpp in Sources */,
 				614057111A5C6228005224C9 /* SpanDirectionGeometry.cpp in Sources */,
 				6140573B1A5C6228005224C9 /* FermataHandler.cpp in Sources */,
@@ -1013,9 +1045,11 @@
 				614057491A5C6228005224C9 /* NotationsHandler.cpp in Sources */,
 				614057BC1A5C7629005224C9 /* Key.cpp in Sources */,
 				614056FF1A5C6228005224C9 /* NoteGeometry.cpp in Sources */,
+				0022AE011A7082C300139992 /* HorizontalResolver.cpp in Sources */,
 				614057031A5C6228005224C9 /* PartGeometry.cpp in Sources */,
 				61F072ED1A6F1BEE002CA9CA /* FormattedTextHandler.cpp in Sources */,
 				614056B91A5C6228005224C9 /* Measure.cpp in Sources */,
+				0022ADFD1A7082C300139992 /* CollisionHandler.cpp in Sources */,
 				614057701A5C6228005224C9 /* SpanCollection.cpp in Sources */,
 				614056E31A5C6228005224C9 /* BeamGeometry.cpp in Sources */,
 				614056DB1A5C6228005224C9 /* EventSequence.cpp in Sources */,
@@ -1204,7 +1238,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/boost/1.56.0/lib,
+					/usr/local/Cellar/boost/1.57.0/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1215,7 +1249,7 @@
 			buildSettings = {
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/boost/1.56.0/lib,
+					/usr/local/Cellar/boost/1.57.0/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

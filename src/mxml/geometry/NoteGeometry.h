@@ -6,6 +6,8 @@
 #include <mxml/dom/Note.h>
 
 namespace mxml {
+    
+class TieGeometry;
 
 class NoteGeometry : public MeasureElementGeometry {
 public:
@@ -22,8 +24,12 @@ public:
     
     static Size Size(const dom::Note& note);
     
+    const TieGeometry* tieGeometry() const;
+    void setTieGeometry(const TieGeometry* tieGeometry);
+    
 private:
     const dom::Note& _note;
+    const TieGeometry *_tieGeometry;
 };
 
 } // namespace mxml

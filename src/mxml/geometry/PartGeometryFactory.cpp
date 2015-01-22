@@ -4,7 +4,6 @@
 #include "BarlineGeometry.h"
 #include "ChordGeometry.h"
 #include "CodaGeometry.h"
-#include "CollisionHandler.h"
 #include "EndingGeometry.h"
 #include "MeasureGeometry.h"
 #include "LyricGeometry.h"
@@ -23,6 +22,8 @@
 #include <mxml/dom/Wedge.h>
 
 #include <mxml/Metrics.h>
+
+#include <mxml/geometry/collisions/CollisionHandler.h>
 
 #include <typeindex>
 #include <typeinfo>

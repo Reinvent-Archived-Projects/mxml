@@ -78,18 +78,18 @@ public:
 
 /** Determine if the reciever intersects another rectangle.
  */
-inline bool intersect(const Rect& r1, const Rect& r2) {
-    coord_t minx1 = r1.center().x - r1.size.width/2;
-    coord_t minx2 = r2.center().x - r2.size.width/2;
-    coord_t maxx1 = r1.center().x + r1.size.width/2;
-    coord_t maxx2 = r2.center().x + r2.size.width/2;
+inline bool intersect(const Rect& r1, const Rect& r2, float deltax = 0, float deltay = 0) {
+    coord_t minx1 = r1.center().x - r1.size.width/2 + deltax/2;
+    coord_t minx2 = r2.center().x - r2.size.width/2 + deltax/2;
+    coord_t maxx1 = r1.center().x + r1.size.width/2 - deltax/2;
+    coord_t maxx2 = r2.center().x + r2.size.width/2 - deltax/2;
     if (minx1 > maxx2 || maxx1 < minx2)
         return false;
     
-    coord_t miny1 = r1.center().y - r1.size.height/2;
-    coord_t miny2 = r2.center().y - r2.size.height/2;
-    coord_t maxy1 = r1.center().y + r1.size.height/2;
-    coord_t maxy2 = r2.center().y + r2.size.height/2;
+    coord_t miny1 = r1.center().y - r1.size.height/2 + deltay/2;
+    coord_t miny2 = r2.center().y - r2.size.height/2 + deltay/2;
+    coord_t maxy1 = r1.center().y + r1.size.height/2 - deltay/2;
+    coord_t maxy2 = r2.center().y + r2.size.height/2 - deltay/2;
     if (miny1 > maxy2 || maxy1 < miny2)
         return false;
     

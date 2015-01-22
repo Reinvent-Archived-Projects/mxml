@@ -31,25 +31,25 @@ void TieGeometryFactory::createGeometries(const std::vector<std::unique_ptr<Geom
         } else if (auto chordGeom = dynamic_cast<ChordGeometry*>(geom.get())) {
             createGeometriesFromNotes(chordGeom->notes());
         } else if (auto noteGeom = dynamic_cast<NoteGeometry*>(geom.get())) {
-            createGeometryFromNote(*noteGeom);
+            createGeometryFromNote(noteGeom);
         }
     }
 }
 
 void TieGeometryFactory::createGeometriesFromNotes(const std::vector<std::unique_ptr<NoteGeometry>>& notes) {
     for (auto& note : notes) {
-        createGeometryFromNote(*note);
+        createGeometryFromNote(note.get());
     }
 }
 
 void TieGeometryFactory::createGeometriesFromNotes(const std::vector<NoteGeometry*>& notes) {
     for (auto& note : notes) {
-        createGeometryFromNote(*note);
+        createGeometryFromNote(note);
     }
 }
 
-void TieGeometryFactory::createGeometryFromNote(const NoteGeometry& noteGeometry) {
-    const dom::Note& note = noteGeometry.note();
+void TieGeometryFactory::createGeometryFromNote(NoteGeometry* noteGeometry) {
+    const dom::Note& note = noteGeometry->note();
     if (!note.notations())
         return;
     
@@ -58,11 +58,15 @@ void TieGeometryFactory::createGeometryFromNote(const NoteGeometry& noteGeometry
     for (auto& tie : notations->ties()) {
         auto key = std::make_pair(note.staff(), note.pitch().get());
         if (tie->type() == dom::kContinue) {
-            _tieStartGeometries[key] = &noteGeometry;
+            _tieStartGeometries[key] = noteGeometry;
         } else if (tie->type() == dom::kStop) {
             auto startGeom = _tieStartGeometries.find(key);
             if (startGeom != _tieStartGeometries.end()) {
-                _tieGeometries.push_back(std::move(buildTieGeometry(startGeom->second, &noteGeometry, tie->placement())));
+                std::unique_ptr<TieGeometry> tieGeom = buildTieGeometry(startGeom->second, noteGeometry, tie->placement());
+                startGeom->second->setTieGeometry(tieGeom.get());
+                noteGeometry->setTieGeometry(tieGeom.get());
+                
+                _tieGeometries.push_back(std::move(tieGeom));
                 _tieStartGeometries.erase(startGeom);
             }
         }
@@ -71,11 +75,15 @@ void TieGeometryFactory::createGeometryFromNote(const NoteGeometry& noteGeometry
     for (auto& slur : notations->slurs()) {
         auto key = std::make_pair(note.staff(), slur->number());
         if (slur->type() == dom::kContinue) {
-            _slurStartGeometries[key] = &noteGeometry;
+            _slurStartGeometries[key] = noteGeometry;
         } else if (slur->type() == dom::kStop) {
             auto startGeom = _slurStartGeometries.find(key);
             if (startGeom != _slurStartGeometries.end()) {
-                _tieGeometries.push_back(std::move(buildSlurGeometry(startGeom->second, &noteGeometry, slur->placement())));
+                std::unique_ptr<TieGeometry> slurGeom = buildSlurGeometry(startGeom->second, noteGeometry, slur->placement());
+                _tieGeometries.push_back(std::move(slurGeom));
+                startGeom->second->setTieGeometry(slurGeom.get());
+                noteGeometry->setTieGeometry(slurGeom.get());
+                
                 _slurStartGeometries.erase(startGeom);
             }
         }

@@ -29,7 +29,7 @@ private:
     void createGeometries(const std::vector<std::unique_ptr<Geometry>>& geometries);
     void createGeometriesFromNotes(const std::vector<std::unique_ptr<NoteGeometry>>& notes);
     void createGeometriesFromNotes(const std::vector<NoteGeometry*>& notes);
-    void createGeometryFromNote(const NoteGeometry& noteGeometry);
+    void createGeometryFromNote(NoteGeometry* noteGeometry);
     std::unique_ptr<TieGeometry> buildTieGeometry(const NoteGeometry* startGeom, const NoteGeometry* stopGeom, const dom::Optional<dom::Placement>& placement);
     std::unique_ptr<TieGeometry> buildSlurGeometry(const NoteGeometry* startGeom, const NoteGeometry* stopGeom, const dom::Optional<dom::Placement>& placement);
     
@@ -37,7 +37,7 @@ private:
     const PartGeometry& _partGeometry;
 
     std::vector<std::unique_ptr<TieGeometry>> _tieGeometries;
-    std::map<std::pair<int, int>, const NoteGeometry*> _slurStartGeometries;
+    std::map<std::pair<int, int>, NoteGeometry*> _slurStartGeometries;
     
     typedef std::pair<int, const dom::Pitch*> PitchKey;
     struct PitchComparator {
@@ -57,7 +57,7 @@ private:
             return a.second->octave() < b.second->octave();
         }
     };
-    std::map<PitchKey, const NoteGeometry*, PitchComparator> _tieStartGeometries;
+    std::map<PitchKey, NoteGeometry*, PitchComparator> _tieStartGeometries;
 };
 
 } // namespace mxml
