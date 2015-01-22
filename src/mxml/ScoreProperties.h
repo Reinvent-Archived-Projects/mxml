@@ -4,6 +4,7 @@
 #pragma once
 #include "Jump.h"
 #include "Loop.h"
+#include "System.h"
 
 #include <mxml/dom/Attributes.h>
 #include <mxml/dom/Direction.h>
@@ -106,6 +107,11 @@ public:
      Get the size of the octave shift for the given part, measure, staff and time.
      */
     int octaveShift(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time) const;
+
+    /**
+     Get the system index for the given measure index.
+     */
+    std::size_t systemIndex(std::size_t measureIndex) const;
 
 protected:
     struct AttributesRef {
@@ -243,6 +249,7 @@ protected:
     void process(std::size_t partIndex, const dom::Measure& measure);
     void process(std::size_t partIndex, std::size_t measureIndex, const dom::Attributes& attributes);
     void process(std::size_t partIndex, std::size_t measureIndex, const dom::Direction& direction);
+    void process(std::size_t partIndex, std::size_t measureIndex, const dom::Print& print);
     void process(std::size_t partIndex, std::size_t measureIndex, const dom::Chord& chord);
     void process(std::size_t partIndex, std::size_t measureIndex, const dom::Note& note);
 
@@ -322,6 +329,7 @@ private:
     std::set<SoundRef> _sounds;
     std::vector<Loop> _loops;
     std::vector<Jump> _jumps;
+    std::vector<System> _systems;
     std::vector<int> _staves;
     std::size_t _measureCount;
 

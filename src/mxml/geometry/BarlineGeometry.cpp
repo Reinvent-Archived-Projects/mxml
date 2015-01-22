@@ -17,7 +17,7 @@ const coord_t BarlineGeometry::kDotDiameter = 4;
 BarlineGeometry::BarlineGeometry(const Barline& barline, const PartGeometry& partGeometry) : _barline(barline), _partGeometry(partGeometry) {
     Size size;
     size.width = Width(_barline);
-    size.height = Metrics::stavesHeight(_partGeometry.part());
+    size.height = _partGeometry.stavesHeight();
     if (_barline.style() == Barline::TICK)
         size.height = Metrics::kStaffLineSpacing;
     else if (_barline.style() == Barline::SHORT)

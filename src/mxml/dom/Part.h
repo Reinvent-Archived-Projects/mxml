@@ -56,14 +56,6 @@ public:
         _measures.push_back(std::move(measure));
     }
     
-    /** Get the staff distance for the part. Staff distance can be defined under either the defaults element on the score or the print element for a particular measure. Even though it doesn't make sense to have different staff distances for different measures. This method looks for the presence of the value on the deaults element of the score and on the first measure element. A definition in a measure takes presedence over a definition in defaults.
-     */
-    float staffDistance() const;
-    
-    /** Get the number of staves in the part.
-     */
-    int staves() const;
-    
 private:
     std::size_t _index;
     std::string _id;

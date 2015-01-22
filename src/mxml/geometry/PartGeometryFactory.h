@@ -10,7 +10,7 @@
 namespace mxml {
     class PartGeometryFactory {
     public:
-        PartGeometryFactory(const dom::Part& part, const ScoreProperties& scoreProperties, const SpanCollection& spans);
+        PartGeometryFactory(const dom::Part& part, const ScoreProperties& scoreProperties, const ScrollMetrics& metrics, const SpanCollection& spans);
         ~PartGeometryFactory();
         
         std::unique_ptr<PartGeometry> build();
@@ -44,6 +44,7 @@ namespace mxml {
     private:
         const dom::Part& _part;
         const ScoreProperties& _scoreProperties;
+        const ScrollMetrics& _metrics;
         const SpanCollection& _spans;
 
         std::unique_ptr<PartGeometry> _partGeometry;

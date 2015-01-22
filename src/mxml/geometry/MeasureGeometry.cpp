@@ -79,7 +79,7 @@ void MeasureGeometry::build() {
         }
     }
 
-    setSize({_spans.width(_measure.index()), Metrics::stavesHeight(_partGeometry.part()) + 2*kVerticalPadding});
+    setSize({_spans.width(_measure.index()), _partGeometry.stavesHeight() + 2*kVerticalPadding});
     setContentOffset({0, -kVerticalPadding});
 
     centerLoneRest();
@@ -102,7 +102,7 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
         const Span& span = *it;
         Point location;
         location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
-        location.y = Metrics::staffOrigin(_partGeometry.part(), staff) + Metrics::staffHeight()/2;
+        location.y = _partGeometry.staffOrigin(staff) + Metrics::staffHeight()/2;
         geo->setLocation(location);
         
         addGeometry(std::move(geo));
@@ -124,7 +124,7 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
 
         Point location;
         location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
-        location.y = Metrics::staffOrigin(_partGeometry.part(), staff) + Metrics::staffHeight()/2;
+        location.y = _partGeometry.staffOrigin(staff) + Metrics::staffHeight()/2;
         geo->setLocation(location);
         
         addGeometry(std::move(geo));
@@ -156,7 +156,7 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
     
         Point location;
         location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
-        location.y = Metrics::staffOrigin(_partGeometry.part(), staff) + Metrics::staffHeight()/2;
+        location.y = _partGeometry.staffOrigin(staff) + Metrics::staffHeight()/2;
         geo->setLocation(location);
         geo->setStaff(staff);
         
@@ -244,7 +244,7 @@ void MeasureGeometry::buildRest(const Note* note) {
     const Span& span = *it;
     Point location;
     location.x = span.start() + span.eventOffset() - _spans.origin(_measure.index());
-    location.y = Metrics::noteY(_scoreProperties, *note);
+    location.y = _partGeometry.noteY(*note);
     geo->setLocation(location);
     addGeometry(std::move(geo));
 }

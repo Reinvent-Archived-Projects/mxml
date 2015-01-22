@@ -14,7 +14,7 @@ namespace mxml {
 
 class ScoreGeometry : public Geometry {
 public:
-    ScoreGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, bool naturalSpacing = true);
+    ScoreGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, const ScrollMetrics& metrics, bool naturalSpacing = true);
 
     const dom::Score& score() const {
         return _score;
@@ -29,7 +29,8 @@ public:
 private:
     const dom::Score& _score;
     const ScoreProperties& _scoreProperties;
-
+    const ScrollMetrics& _metrics;
+    
     SpanCollection _spans;
     std::vector<PartGeometry*> _partGeometries;
 };

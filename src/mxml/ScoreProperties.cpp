@@ -36,6 +36,11 @@ ScoreProperties::ScoreProperties(const dom::Score& score)
 
         if (measureCount > _measureCount)
             _measureCount = measureCount;
+
+        if (!_systems.empty()) {
+            auto& lastSystem = _systems.back();
+            lastSystem.measureEnd = measureCount;
+        }
     }
 
     LoopFactory loopFactory(score);
@@ -54,6 +59,8 @@ void ScoreProperties::process(std::size_t partIndex, const dom::Measure& measure
             process(partIndex, measureIndex, *chord);
         else if (auto direction = dynamic_cast<const dom::Direction*>(node.get()))
             process(partIndex, measureIndex, *direction);
+        else if (auto print = dynamic_cast<const dom::Print*>(node.get()))
+            process(partIndex, measureIndex, *print);
     }
 }
 
@@ -91,6 +98,18 @@ void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, c
         ref.sound = direction.sound().get();
         _sounds.insert(ref);
     }
+}
+
+void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Print& print) {
+    if (!_systems.empty()) {
+        auto& lastSystem = _systems.back();
+        lastSystem.measureEnd = measureIndex;
+    }
+
+    System system;
+    system.print = &print;
+    system.measureBegin = measureIndex;
+    _systems.push_back(system);
 }
 
 void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Chord& chord) {
@@ -251,6 +270,15 @@ int ScoreProperties::octaveShift(std::size_t partIndex, std::size_t measureIndex
             current = (octaveShift->type == dom::OctaveShift::kDown ? -1: 1) * (octaveShift->size - 1);
     }
     return current;
+}
+
+std::size_t ScoreProperties::systemIndex(std::size_t measureIndex) const {
+    auto it = std::lower_bound(_systems.begin(), _systems.end(), measureIndex, [](const System& system, std::size_t measureIndex) {
+        return system.measureEnd < measureIndex + 1;
+    });
+    if (it == _systems.end() || it->measureBegin > measureIndex)
+        return static_cast<std::size_t>(-1);
+    return it - _systems.begin();
 }
 
 }

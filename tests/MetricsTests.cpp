@@ -1,6 +1,6 @@
 
 #include <mxml/ScoreBuilder.h>
-#include <mxml/Metrics.h>
+#include <mxml/ScrollMetrics.h>
 
 #include <boost/test/unit_test.hpp>
 
@@ -18,18 +18,19 @@ BOOST_AUTO_TEST_CASE(noteStaffY) {
 
     auto score = builder.build();
     ScoreProperties scoreProperties(*score);
+    ScrollMetrics metrics(*score, scoreProperties);
 
     Note note;
     note.setMeasure(measure);
-    
+
     note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::STEP_G, 0, 4)));
-    BOOST_CHECK_EQUAL(Metrics::staffY(scoreProperties, note), 30);
+    BOOST_CHECK_EQUAL(metrics.staffY(note), 30);
     
     note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::STEP_G, 0, 5)));
-    BOOST_CHECK_EQUAL(Metrics::staffY(scoreProperties, note), -5);
+    BOOST_CHECK_EQUAL(metrics.staffY(note), -5);
     
     note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::STEP_G, 0, 3)));
-    BOOST_CHECK_EQUAL(Metrics::staffY(scoreProperties, note), 65);
+    BOOST_CHECK_EQUAL(metrics.staffY(note), 65);
 }
 
 BOOST_AUTO_TEST_CASE(noteStaff2Y) {
@@ -43,23 +44,34 @@ BOOST_AUTO_TEST_CASE(noteStaff2Y) {
 
     auto score = builder.build();
     ScoreProperties scoreProperties(*score);
+    ScrollMetrics metrics(*score, scoreProperties);
     
     Note note;
     note.setStaff(2);
     note.setMeasure(measure);
     
     note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::STEP_F, 0, 3)));
-    BOOST_CHECK_EQUAL(Metrics::staffY(scoreProperties, note), 10);
+    BOOST_CHECK_EQUAL(metrics.staffY(note), 10);
     
     note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::STEP_C, 0, 3)));
-    BOOST_CHECK_EQUAL(Metrics::staffY(scoreProperties, note), 25);
+    BOOST_CHECK_EQUAL(metrics.staffY(note), 25);
 }
 
 BOOST_AUTO_TEST_CASE(staffOrigin) {
-    Part part;
+    ScoreBuilder builder;
+    auto part = builder.addPart();
+    auto measure = builder.addMeasure(part);
+    auto attributes = builder.addAttributes(measure);
+    attributes->setStaves(dom::presentOptional(2));
+    builder.setTrebleClef(attributes, 1);
+    builder.setBassClef(attributes, 2);
+
+    auto score = builder.build();
+    ScoreProperties scoreProperties(*score);
+    ScrollMetrics metrics(*score, scoreProperties);
     
-    BOOST_CHECK_EQUAL(Metrics::staffOrigin(part, 1), 0);
-    BOOST_CHECK_EQUAL(Metrics::staffOrigin(part, 2), Metrics::staffHeight() + 65);
+    BOOST_CHECK_EQUAL(metrics.staffOrigin(0, 1), 0);
+    BOOST_CHECK_EQUAL(metrics.staffOrigin(0, 2), Metrics::staffHeight() + 65);
 }
 
 BOOST_AUTO_TEST_CASE(noteY) {
@@ -73,14 +85,15 @@ BOOST_AUTO_TEST_CASE(noteY) {
 
     auto score = builder.build();
     ScoreProperties scoreProperties(*score);
+    ScrollMetrics metrics(*score, scoreProperties);
     
     Note note;
     note.setMeasure(measure);
     note.setStaff(1);
     note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::STEP_G, 0, 4)));
-    BOOST_CHECK_EQUAL(Metrics::noteY(scoreProperties, note), 30);
+    BOOST_CHECK_EQUAL(metrics.noteY(note), 30);
     
     note.setStaff(2);
     note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::STEP_F, 0, 3)));
-    BOOST_CHECK_EQUAL(Metrics::noteY(scoreProperties, note), Metrics::staffHeight() + 65 + 10);
+    BOOST_CHECK_EQUAL(metrics.noteY(note), Metrics::staffHeight() + 65 + 10);
 }

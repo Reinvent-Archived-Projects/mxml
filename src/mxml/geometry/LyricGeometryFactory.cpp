@@ -71,7 +71,7 @@ namespace mxml {
                 location.y += (lyric.number() - 1) * geometry->size().height;
         }
 
-        location.y -= Metrics::stavesHeight(_partGeometry.part())/2;
+        location.y -= _partGeometry.stavesHeight()/2;
         geometry->setLocation(location);
 
         _partGeometry.directionGeometries().push_back(geometry.get());

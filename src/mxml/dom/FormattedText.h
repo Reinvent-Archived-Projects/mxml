@@ -5,6 +5,8 @@
 #include "Optional.h"
 #include "Position.h"
 
+#include <string>
+
 
 namespace mxml {
 namespace dom {

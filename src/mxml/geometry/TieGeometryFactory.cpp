@@ -100,8 +100,8 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometry(const NoteGeom
     stopLocation.x = stop->frame().min().x;
     
     if (!placement.isPresent()) {
-        coord_t startStaffY = startLocation.y - Metrics::staffOrigin(_partGeometry.part(), start->note().staff());
-        coord_t stopStaffY = stopLocation.y - Metrics::staffOrigin(_partGeometry.part(), stop->note().staff());
+        coord_t startStaffY = startLocation.y - _partGeometry.staffOrigin(start->note().staff());
+        coord_t stopStaffY = stopLocation.y - _partGeometry.staffOrigin(stop->note().staff());
         coord_t avgy = (startStaffY + stopStaffY) / 2;
         if (avgy < Metrics::staffHeight()/2)
             tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));
@@ -133,8 +133,8 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
     stopLocation.x -= kTieSpacing;
     
     if (!placement.isPresent()) {
-        coord_t startStaffY = startLocation.y - Metrics::staffOrigin(_partGeometry.part(), start->note().staff());
-        coord_t stopStaffY = stopLocation.y - Metrics::staffOrigin(_partGeometry.part(), stop->note().staff());
+        coord_t startStaffY = startLocation.y - _partGeometry.staffOrigin(start->note().staff());
+        coord_t stopStaffY = stopLocation.y - _partGeometry.staffOrigin(stop->note().staff());
         coord_t avgy = (startStaffY + stopStaffY) / 2;
         if (avgy < Metrics::staffHeight()/2)
             tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));

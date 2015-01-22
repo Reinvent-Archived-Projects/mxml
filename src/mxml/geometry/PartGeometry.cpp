@@ -7,10 +7,18 @@
 
 namespace mxml {
 
-PartGeometry::PartGeometry(const dom::Part& part, const ScoreProperties& scoreProperties, const SpanCollection& spans)
-: _part(part)
+PartGeometry::PartGeometry(const dom::Part& part, const ScoreProperties& scoreProperties, const ScrollMetrics& metrics, const SpanCollection& spans)
+: _part(part),
+  _scoreProperties(scoreProperties),
+  _metrics(metrics)
 {
-    PartGeometryFactory factory(part, scoreProperties, spans);
+    _staves = scoreProperties.staves(part.index());
+    _staffDistance = metrics.staffDistance(part.index());
+    PartGeometryFactory factory(part, scoreProperties, metrics, spans);
 }
 
+dom::tenths_t PartGeometry::noteY(const dom::Note& note) const {
+    return staffOrigin(note.staff()) + _metrics.staffY(note);
+}
+    
 } // namespace mxml

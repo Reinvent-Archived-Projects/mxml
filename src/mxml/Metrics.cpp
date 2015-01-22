@@ -7,52 +7,76 @@ namespace mxml {
 
 using namespace dom;
     
-const coord_t Metrics::kStaffLineSpacing = 10;
+const dom::tenths_t Metrics::kStaffLineSpacing = 10;
 const std::size_t Metrics::kStaffLineCount = 5;
 
-coord_t Metrics::noteY(const ScoreProperties& scoreProperties, const dom::Note& note) {
-    const auto& part = static_cast<const dom::Part&>(*note.measure()->parent());
-    return staffOrigin(part, note.staff()) + staffY(scoreProperties, note);
+Metrics::Metrics(const dom::Score& score, const ScoreProperties& scoreProperties)
+: _score(score),
+  _scoreProperties(scoreProperties),
+  _prints(),
+  _systemCount(),
+  _pageCount()
+{
+    for (auto& part : score.parts()) {
+        auto partIndex = part->index();
+
+        _systemCount = 0;
+        _pageCount = 0;
+        for (auto& measure : part->measures())
+            process(partIndex, *measure);
+    }
 }
 
-coord_t Metrics::staffHeight() {
+void Metrics::process(std::size_t partIndex, const dom::Measure& measure) {
+    auto measureIndex = measure.index();
+    for (auto& node : measure.nodes()) {
+        if (auto print = dynamic_cast<const dom::Print*>(node.get()))
+            process(partIndex, measureIndex, *print);
+    }
+}
+
+void Metrics::process(std::size_t partIndex, std::size_t measureIndex, const dom::Print& print) {
+    if (print.newSystem && measureIndex != 0)
+        _systemCount += 1;
+    if (print.newPage && measureIndex != 0)
+        _pageCount += 1;
+
+    PrintRef ref;
+    ref.systemIndex = _systemCount;
+    ref.partIndex = partIndex;
+    ref.measureIndex = measureIndex;
+    ref.print = &print;
+    _prints.insert(ref);
+}
+
+dom::tenths_t Metrics::staffHeight() {
     return (kStaffLineCount - 1) * kStaffLineSpacing;
 }
 
-coord_t Metrics::stavesHeight(const dom::Part& part) {
-    coord_t staffDistance = part.staffDistance();
-    return (staffHeight() + staffDistance) * part.staves() - staffDistance;
+dom::tenths_t Metrics::stavesHeight(std::size_t staves, dom::tenths_t staffDistance) {
+    return (Metrics::staffHeight() + staffDistance) * staves - staffDistance;
 }
 
-coord_t Metrics::staffOrigin(const dom::Part& part, int staffNumber) {
-    return (staffNumber - 1) * (staffHeight() + part.staffDistance());
-}
+dom::tenths_t Metrics::staffY(const Note& note) const {
+    auto& clef = *_scoreProperties.clef(note);
 
-coord_t Metrics::staffY(const ScoreProperties& scoreProperties, const Note& note) {
-    coord_t y = 20;
+    dom::tenths_t y = 20;
     if (note.pitch()) {
-        const auto& clef = scoreProperties.clef(note);
-        
-        if (clef == nullptr) {
-            scoreProperties.clef(note);
-        }
-        
-        y = staffY(*clef, *note.pitch());
+        y = staffY(clef, *note.pitch());
     } else if (note.rest()) {
-        const auto& clef = scoreProperties.clef(note);
-        y = staffY(*clef, *note.rest());
+        y = staffY(clef, *note.rest());
     } else if (note.position.defaultY.isPresent()) {
         y = note.position.defaultY;
     }
 
     auto measure = note.measure();
     auto part = measure->part();
-    int shift = scoreProperties.octaveShift(part->index(), measure->index(), note.staff(), note.start());
+    int shift = _scoreProperties.octaveShift(part->index(), measure->index(), note.staff(), note.start());
     
     return -shift * kStaffLineSpacing/2 + y * kStaffLineSpacing / 10;
 }
 
-coord_t Metrics::staffY(const Clef& clef, const Pitch& pitch) {
+dom::tenths_t Metrics::staffY(const Clef& clef, const Pitch& pitch) {
     switch (clef.sign().value()) {
         case Clef::SIGN_G: return staffYInGClef(pitch.step(), pitch.octave());
         case Clef::SIGN_F: return staffYInFClef(pitch.step(), pitch.octave());
@@ -61,7 +85,7 @@ coord_t Metrics::staffY(const Clef& clef, const Pitch& pitch) {
     }
 }
 
-coord_t Metrics::staffY(const Clef& clef, const Rest& rest) {
+dom::tenths_t Metrics::staffY(const Clef& clef, const Rest& rest) {
     if (!rest.displayStep().isPresent() || !rest.displayOctave().isPresent())
         return 20;
     
@@ -73,8 +97,8 @@ coord_t Metrics::staffY(const Clef& clef, const Rest& rest) {
     }
 }
 
-coord_t Metrics::staffYInGClef(Pitch::Step step, int octave) {
-    coord_t y;
+dom::tenths_t Metrics::staffYInGClef(Pitch::Step step, int octave) {
+    dom::tenths_t y;
     switch (step) {
         case Pitch::STEP_C: y = 50; break;
         case Pitch::STEP_D: y = 45; break;
@@ -88,8 +112,8 @@ coord_t Metrics::staffYInGClef(Pitch::Step step, int octave) {
     return y - (octave - 4) * 35;
 }
 
-coord_t Metrics::staffYInCClef(Pitch::Step step, int octave) {
-    coord_t y;
+dom::tenths_t Metrics::staffYInCClef(Pitch::Step step, int octave) {
+    dom::tenths_t y;
     switch (step) {
         case Pitch::STEP_C: y = 20; break;
         case Pitch::STEP_D: y = 15; break;
@@ -103,8 +127,8 @@ coord_t Metrics::staffYInCClef(Pitch::Step step, int octave) {
     return y - (octave - 5) * 35;
 }
 
-coord_t Metrics::staffYInFClef(Pitch::Step step, int octave) {
-    coord_t y;
+dom::tenths_t Metrics::staffYInFClef(Pitch::Step step, int octave) {
+    dom::tenths_t y;
     switch (step) {
         case Pitch::STEP_C: y = 25; break;
         case Pitch::STEP_D: y = 20; break;

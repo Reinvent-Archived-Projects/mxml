@@ -71,7 +71,7 @@ void ChordGeometry::build() {
 Rect ChordGeometry::buildNotes() {
     for (auto& note : _chord.notes()) {
         std::unique_ptr<NoteGeometry> geom(new NoteGeometry(*note));
-        Point loc = {0, Metrics::noteY(_scoreProperties, *note)};
+        Point loc{0, _partGeometry.noteY(*note)};
         geom->setLocation(loc);
 
         _notes.push_back(geom.get());
@@ -131,7 +131,7 @@ void ChordGeometry::buildDot(const NoteGeometry& noteGeom) {
     Point dotLocation = noteGeom.location();
     dotLocation.x += noteGeom.size().width/2 + dotGeom->anchorPoint().x + kDotSpacing;
     
-    coord_t staffY = dotLocation.y - Metrics::staffOrigin(_partGeometry.part(), note.staff());
+    coord_t staffY = dotLocation.y - _partGeometry.staffOrigin(note.staff());
     if ((int)staffY % 10 == 0) {
         if (note.dot()->placement() == dom::kPlacementAbove)
             dotLocation.y -= 5;
@@ -211,10 +211,10 @@ void ChordGeometry::buildArticulation(const dom::Articulation& articulation, Rec
     location.x = notesFrame.center().x;
     if (above) {
         location.y = notesFrame.origin.y - size.height/2 - kArticulationSpacing;
-        staffY = notesFrame.origin.y - Metrics::staffOrigin(_partGeometry.part(), staff);
+        staffY = notesFrame.origin.y - _partGeometry.staffOrigin(staff);
     } else {
         location.y = notesFrame.max().y + size.height/2 + kArticulationSpacing;
-        staffY = notesFrame.max().y - Metrics::staffOrigin(_partGeometry.part(), staff);
+        staffY = notesFrame.max().y - _partGeometry.staffOrigin(staff);
     }
 
     // Add extra spacing if there is a staff line between the note and the articulation
@@ -227,7 +227,7 @@ void ChordGeometry::buildArticulation(const dom::Articulation& articulation, Rec
 
     // Avoid placing the on a staff line
     bool intersectsStaffLine = false;
-    coord_t y = Metrics::staffOrigin(_partGeometry.part(), staff);
+    coord_t y = _partGeometry.staffOrigin(staff);
     for (int i = 1; i <= Metrics::kStaffLineCount; i += 1) {
         if (location.y - size.height/2 < y && location.y + size.height/2 > y) {
             intersectsStaffLine = true;

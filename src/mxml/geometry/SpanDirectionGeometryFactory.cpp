@@ -15,7 +15,7 @@ SpanDirectionGeometryFactory::SpanDirectionGeometryFactory(const PartGeometry& p
 SpanDirectionGeometryFactory::CollectionType&& SpanDirectionGeometryFactory::buildTieGeometries(const CollectionType& geometries) {
     _geometries.clear();
     _startGeometries.clear();
-    _origin = {0, -Metrics::stavesHeight(_partGeometry.part())/2};
+    _origin = {0, -_partGeometry.stavesHeight()/2};
     createGeometries(geometries);
     return std::move(_geometries);
 }

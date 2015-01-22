@@ -8,16 +8,17 @@
 
 namespace mxml {
 
-ScoreGeometry::ScoreGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, bool naturalSpacing)
+ScoreGeometry::ScoreGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, const ScrollMetrics& metrics, bool naturalSpacing)
 : _score(score),
-  _scoreProperties(scoreProperties)
+  _scoreProperties(scoreProperties),
+  _metrics(metrics)
 {
     SpanFactory spanFactory(_score, _scoreProperties, naturalSpacing);
     _spans = spanFactory.build();
 
     coord_t offset = 0;
     for (auto& part : _score.parts()) {
-        PartGeometryFactory factory(*part, _scoreProperties, _spans);
+        PartGeometryFactory factory(*part, _scoreProperties, _metrics, _spans);
         std::unique_ptr<PartGeometry> geom = factory.build();
         geom->setHorizontalAnchorPointValues(0, 0);
         geom->setVerticalAnchorPointValues(0, 0);

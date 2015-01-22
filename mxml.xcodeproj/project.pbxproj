@@ -154,6 +154,12 @@
 		61F072EA1A6F1183002CA9CA /* GenericNodeHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F072E81A6F1183002CA9CA /* GenericNodeHandler.h */; };
 		61F072ED1A6F1BEE002CA9CA /* FormattedTextHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F072EB1A6F1BEE002CA9CA /* FormattedTextHandler.cpp */; };
 		61F072EE1A6F1BEE002CA9CA /* FormattedTextHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F072EC1A6F1BEE002CA9CA /* FormattedTextHandler.h */; };
+		61F073771A707934002CA9CA /* PageMetrics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F073751A707934002CA9CA /* PageMetrics.cpp */; };
+		61F073781A707934002CA9CA /* PageMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F073761A707934002CA9CA /* PageMetrics.h */; };
+		61F0737B1A70799F002CA9CA /* ScrollMetrics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F073791A70799F002CA9CA /* ScrollMetrics.cpp */; };
+		61F0737C1A70799F002CA9CA /* ScrollMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F0737A1A70799F002CA9CA /* ScrollMetrics.h */; };
+		61F0737F1A708398002CA9CA /* System.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F0737D1A708398002CA9CA /* System.cpp */; };
+		61F073801A708398002CA9CA /* System.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F0737E1A708398002CA9CA /* System.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -476,6 +482,12 @@
 		61F072E81A6F1183002CA9CA /* GenericNodeHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GenericNodeHandler.h; sourceTree = "<group>"; };
 		61F072EB1A6F1BEE002CA9CA /* FormattedTextHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FormattedTextHandler.cpp; sourceTree = "<group>"; };
 		61F072EC1A6F1BEE002CA9CA /* FormattedTextHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FormattedTextHandler.h; sourceTree = "<group>"; };
+		61F073751A707934002CA9CA /* PageMetrics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PageMetrics.cpp; sourceTree = "<group>"; };
+		61F073761A707934002CA9CA /* PageMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageMetrics.h; sourceTree = "<group>"; };
+		61F073791A70799F002CA9CA /* ScrollMetrics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScrollMetrics.cpp; sourceTree = "<group>"; };
+		61F0737A1A70799F002CA9CA /* ScrollMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollMetrics.h; sourceTree = "<group>"; };
+		61F0737D1A708398002CA9CA /* System.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = System.cpp; sourceTree = "<group>"; };
+		61F0737E1A708398002CA9CA /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -555,6 +567,10 @@
 				61239C1F1A6742A100B3F0A3 /* LoopFactory.h */,
 				614056471A5C6228005224C9 /* Metrics.cpp */,
 				614056481A5C6228005224C9 /* Metrics.h */,
+				61F073751A707934002CA9CA /* PageMetrics.cpp */,
+				61F073761A707934002CA9CA /* PageMetrics.h */,
+				61F073791A70799F002CA9CA /* ScrollMetrics.cpp */,
+				61F0737A1A70799F002CA9CA /* ScrollMetrics.h */,
 				61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */,
 				61239A6D1A65974400B3F0A3 /* ScoreBuilder.h */,
 				61239A5F1A64866500B3F0A3 /* ScoreProperties.cpp */,
@@ -566,6 +582,8 @@
 				6140569D1A5C6228005224C9 /* SpanFactory.h */,
 				6140569E1A5C6228005224C9 /* StringUtility.cpp */,
 				6140569F1A5C6228005224C9 /* StringUtility.h */,
+				61F0737D1A708398002CA9CA /* System.cpp */,
+				61F0737E1A708398002CA9CA /* System.h */,
 			);
 			name = mxml;
 			path = src/mxml;
@@ -881,6 +899,7 @@
 				61C850501A6D79CC00031100 /* OctaveShiftHandler.h in Headers */,
 				61F072E61A6F0F4C002CA9CA /* GenericNode.h in Headers */,
 				61F072DE1A6F0431002CA9CA /* PageMarginsHandler.h in Headers */,
+				61F0737C1A70799F002CA9CA /* ScrollMetrics.h in Headers */,
 				61239C1D1A67429100B3F0A3 /* Jump.h in Headers */,
 				61F072E21A6F0CB3002CA9CA /* AppearanceHandler.h in Headers */,
 				61239C211A6742A100B3F0A3 /* LoopFactory.h in Headers */,
@@ -897,11 +916,13 @@
 				61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */,
 				0022AE041A7082C300139992 /* VerticalResolver.h in Headers */,
 				00094EFE1A67464A0053C615 /* SegnoGeometry.h in Headers */,
+				61F073801A708398002CA9CA /* System.h in Headers */,
 				0008689B1A68430400BAA13D /* CodaGeometry.h in Headers */,
 				0022AE021A7082C300139992 /* HorizontalResolver.h in Headers */,
 				61239A6F1A65974400B3F0A3 /* ScoreBuilder.h in Headers */,
 				00094EFA1A6746340053C615 /* WordsGeometry.h in Headers */,
 				61239A7C1A67385400B3F0A3 /* Loop.h in Headers */,
+				61F073781A707934002CA9CA /* PageMetrics.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -995,6 +1016,7 @@
 				61C8508C1A6EE64300031100 /* SystemLayoutHandler.cpp in Sources */,
 				61F072CD1A6EEB48002CA9CA /* SystemDividersHandler.cpp in Sources */,
 				614056E11A5C6228005224C9 /* BarlineGeometry.cpp in Sources */,
+				61F0737F1A708398002CA9CA /* System.cpp in Sources */,
 				614057BA1A5C7293005224C9 /* Pitch.cpp in Sources */,
 				614057291A5C6228005224C9 /* BeamHandler.cpp in Sources */,
 				6140571E1A5C6228005224C9 /* Metrics.cpp in Sources */,
@@ -1039,6 +1061,7 @@
 				61F072D91A6F02FE002CA9CA /* PageLayoutHandler.cpp in Sources */,
 				61C850571A6D838500031100 /* OctaveShiftGeometry.cpp in Sources */,
 				614057571A5C6228005224C9 /* RestHandler.cpp in Sources */,
+				61F073771A707934002CA9CA /* PageMetrics.cpp in Sources */,
 				6140570E1A5C6228005224C9 /* ScoreGeometry.cpp in Sources */,
 				614056F51A5C6228005224C9 /* KeyGeometry.cpp in Sources */,
 				6140571C1A5C6228005224C9 /* TimeSignatureGeometry.cpp in Sources */,
@@ -1083,6 +1106,7 @@
 				614056C21A5C6228005224C9 /* Part.cpp in Sources */,
 				614057671A5C6228005224C9 /* TieHandler.cpp in Sources */,
 				614057311A5C6228005224C9 /* DefaultsHandler.cpp in Sources */,
+				61F0737B1A70799F002CA9CA /* ScrollMetrics.cpp in Sources */,
 				6140572F1A5C6228005224C9 /* CreditWordsHandler.cpp in Sources */,
 				6140576B1A5C6228005224C9 /* TurnHandler.cpp in Sources */,
 				614057471A5C6228005224C9 /* MordentHandler.cpp in Sources */,
@@ -1238,7 +1262,7 @@
 				);
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/boost/1.57.0/lib,
+					/usr/local/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1249,7 +1273,7 @@
 			buildSettings = {
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/usr/local/Cellar/boost/1.57.0/lib,
+					/usr/local/lib,
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
