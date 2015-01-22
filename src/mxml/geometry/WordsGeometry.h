@@ -9,9 +9,6 @@ namespace mxml {
 
 class WordsGeometry : public PlacementGeometry {
 public:
-    static const Size kSegnoSize;
-    
-public:
     explicit WordsGeometry(const dom::Direction& direction);
     
     const dom::Direction& direction() const {
