@@ -11,7 +11,7 @@ public:
     ScrollMetrics(const dom::Score& score, const ScoreProperties& scoreProperties);
 
     /**
-     Get the staff distance in a part. This will be the maximal staff distance betweeen all systems.
+     Get the staff distance in a part.
      */
     dom::tenths_t staffDistance(std::size_t partIndex) const;
 

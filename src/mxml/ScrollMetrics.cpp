@@ -19,18 +19,8 @@ dom::tenths_t ScrollMetrics::staffDistance(std::size_t partIndex) const {
             distance = defaults->staffDistance();
     }
 
-    // Find the maximal distance from all the `print` elements
-    for (auto& ref : _prints) {
-        if (ref.partIndex != partIndex)
-            continue;
-
-        auto& print = *ref.print;
-        if (print.staffDistance()) {
-            auto& systemLayout = print.systemLayout.value();
-            if (systemLayout.systemDistance)
-                distance = std::max(distance, systemLayout.systemDistance.value());
-        }
-    }
+    // We should consider finding the maximal distance from all the `print` elements, but this will sometimes make the
+    // space between the staves too large
 
     return distance;
 }

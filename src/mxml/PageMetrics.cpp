@@ -4,11 +4,6 @@
 
 namespace mxml {
 
-using namespace dom;
-
-const dom::tenths_t Metrics::kStaffLineSpacing = 10;
-const std::size_t Metrics::kStaffLineCount = 5;
-
 PageMetrics::PageMetrics(const dom::Score& score, const ScoreProperties& scoreProperties)
 : Metrics(score, scoreProperties)
 {
