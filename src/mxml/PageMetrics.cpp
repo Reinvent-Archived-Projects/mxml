@@ -4,12 +4,13 @@
 
 namespace mxml {
 
-PageMetrics::PageMetrics(const dom::Score& score, const ScoreProperties& scoreProperties)
-: Metrics(score, scoreProperties)
+PageMetrics::PageMetrics(const dom::Score& score, const ScoreProperties& scoreProperties, std::size_t systemIndex, std::size_t partIndex)
+: Metrics(score, scoreProperties, partIndex),
+  _systemIndex(systemIndex)
 {
 }
 
-dom::tenths_t PageMetrics::systemDistance(std::size_t systemIndex) const {
+dom::tenths_t PageMetrics::systemDistance() const {
     dom::tenths_t distance = 80;
 
     // Get default system distance from the `defaults` element
@@ -23,9 +24,9 @@ dom::tenths_t PageMetrics::systemDistance(std::size_t systemIndex) const {
     }
 
     for (auto& ref : _prints) {
-        if (ref.systemIndex < systemIndex)
+        if (ref.systemIndex < _systemIndex)
             continue;
-        if (ref.systemIndex > systemIndex)
+        if (ref.systemIndex > _systemIndex)
             break;
 
         auto& print = *ref.print;
@@ -39,7 +40,7 @@ dom::tenths_t PageMetrics::systemDistance(std::size_t systemIndex) const {
     return distance;
 }
 
-dom::tenths_t PageMetrics::staffDistance(std::size_t systemIndex, std::size_t partIndex) const {
+dom::tenths_t PageMetrics::staffDistance() const {
     dom::tenths_t distance = 65;
 
     // Get default staff distance from the `defaults` element
@@ -50,13 +51,10 @@ dom::tenths_t PageMetrics::staffDistance(std::size_t systemIndex, std::size_t pa
     }
 
     for (auto& ref : _prints) {
-        if (ref.systemIndex < systemIndex)
+        if (ref.systemIndex < _systemIndex)
             continue;
-        if (ref.systemIndex > systemIndex)
+        if (ref.systemIndex > _systemIndex)
             break;
-
-        if (ref.partIndex != partIndex)
-            continue;
 
         auto& print = *ref.print;
         if (print.staffDistance()) {
@@ -67,21 +65,6 @@ dom::tenths_t PageMetrics::staffDistance(std::size_t systemIndex, std::size_t pa
     }
 
     return distance;
-}
-
-dom::tenths_t PageMetrics::stavesHeight(std::size_t systemIndex, std::size_t partIndex) const {
-    return Metrics::stavesHeight(_scoreProperties.staves(partIndex), staffDistance(systemIndex, partIndex));
-}
-
-dom::tenths_t PageMetrics::staffOrigin(std::size_t systemIndex, std::size_t partIndex, int staffNumber) const {
-    return (staffNumber - 1) * (staffHeight() + staffDistance(systemIndex, partIndex));
-}
-
-dom::tenths_t PageMetrics::noteY(const dom::Note& note) const {
-    auto measureIndex = note.measure()->index();
-    auto systemIndex = _scoreProperties.systemIndex(measureIndex);
-    auto partIndex = note.measure()->part()->index();
-    return staffOrigin(systemIndex, partIndex, note.staff()) + staffY(note);
 }
 
 }

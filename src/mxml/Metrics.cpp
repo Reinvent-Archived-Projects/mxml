@@ -10,32 +10,28 @@ using namespace dom;
 const dom::tenths_t Metrics::kStaffLineSpacing = 10;
 const std::size_t Metrics::kStaffLineCount = 5;
 
-Metrics::Metrics(const dom::Score& score, const ScoreProperties& scoreProperties)
+Metrics::Metrics(const dom::Score& score, const ScoreProperties& scoreProperties, std::size_t partIndex)
 : _score(score),
   _scoreProperties(scoreProperties),
   _prints(),
-  _systemCount(),
-  _pageCount()
+  _systemCount(0),
+  _pageCount(0),
+  _partIndex(partIndex)
 {
-    for (auto& part : score.parts()) {
-        auto partIndex = part->index();
-
-        _systemCount = 0;
-        _pageCount = 0;
-        for (auto& measure : part->measures())
-            process(partIndex, *measure);
-    }
+    auto& part = score.parts().at(partIndex);
+    for (auto& measure : part->measures())
+        process(*measure);
 }
 
-void Metrics::process(std::size_t partIndex, const dom::Measure& measure) {
+void Metrics::process(const dom::Measure& measure) {
     auto measureIndex = measure.index();
     for (auto& node : measure.nodes()) {
         if (auto print = dynamic_cast<const dom::Print*>(node.get()))
-            process(partIndex, measureIndex, *print);
+            process(measureIndex, *print);
     }
 }
 
-void Metrics::process(std::size_t partIndex, std::size_t measureIndex, const dom::Print& print) {
+void Metrics::process(std::size_t measureIndex, const dom::Print& print) {
     if (print.newSystem && measureIndex != 0)
         _systemCount += 1;
     if (print.newPage && measureIndex != 0)
@@ -43,18 +39,33 @@ void Metrics::process(std::size_t partIndex, std::size_t measureIndex, const dom
 
     PrintRef ref;
     ref.systemIndex = _systemCount;
-    ref.partIndex = partIndex;
     ref.measureIndex = measureIndex;
     ref.print = &print;
     _prints.insert(ref);
+}
+
+std::size_t Metrics::staves() const {
+    return _scoreProperties.staves(_partIndex);
 }
 
 dom::tenths_t Metrics::staffHeight() {
     return (kStaffLineCount - 1) * kStaffLineSpacing;
 }
 
+dom::tenths_t Metrics::stavesHeight() const {
+    return stavesHeight(staves(), staffDistance());
+}
+
 dom::tenths_t Metrics::stavesHeight(std::size_t staves, dom::tenths_t staffDistance) {
     return (Metrics::staffHeight() + staffDistance) * staves - staffDistance;
+}
+
+dom::tenths_t Metrics::staffOrigin(int staffNumber) const {
+    return (staffNumber - 1) * (staffHeight() + staffDistance());
+}
+
+dom::tenths_t Metrics::noteY(const dom::Note& note) const {
+    return staffOrigin(note.staff()) + staffY(note);
 }
 
 dom::tenths_t Metrics::staffY(const Note& note) const {

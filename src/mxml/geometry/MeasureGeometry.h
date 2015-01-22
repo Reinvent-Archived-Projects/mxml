@@ -4,6 +4,7 @@
 #pragma once
 #include "Geometry.h"
 
+#include <mxml/Metrics.h>
 #include <mxml/ScoreProperties.h>
 #include <mxml/dom/Attributes.h>
 #include <mxml/dom/Measure.h>
@@ -27,27 +28,26 @@ public:
 
 public:
     MeasureGeometry(const dom::Measure& measure,
-                    const PartGeometry& partGeometry,
                     const SpanCollection& spans,
-                    const ScoreProperties& scoreProperties);
+                    const ScoreProperties& scoreProperties,
+                    const Metrics& metrics);
     
     const dom::Measure& measure() const {
         return _measure;
-    }
-    const PartGeometry& partGeometry() const {
-        return _partGeometry;
     }
     
     const SpanCollection& spans() const {
         return _spans;
     }
 
+    const Metrics& metrics() const {
+        return _metrics;
+    }
+    
     bool naturalSpacing() const {
         return _spans.naturalSpacing();
     }
     
-    /**
-     */
     void build();
     
 private:
@@ -61,11 +61,11 @@ private:
     
 private:
     const dom::Measure& _measure;
-    const PartGeometry& _partGeometry;
     const SpanCollection& _spans;
     const ScoreProperties& _scoreProperties;
-    std::size_t _partIndex;
-    
+    const Metrics& _metrics;
+    const std::size_t _partIndex;
+
     int _currentTime;
 };
 

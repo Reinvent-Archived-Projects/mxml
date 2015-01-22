@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_CASE(noteStaffY) {
 
     auto score = builder.build();
     ScoreProperties scoreProperties(*score);
-    ScrollMetrics metrics(*score, scoreProperties);
+    ScrollMetrics metrics(*score, scoreProperties, 0);
 
     Note note;
     note.setMeasure(measure);
@@ -44,7 +44,7 @@ BOOST_AUTO_TEST_CASE(noteStaff2Y) {
 
     auto score = builder.build();
     ScoreProperties scoreProperties(*score);
-    ScrollMetrics metrics(*score, scoreProperties);
+    ScrollMetrics metrics(*score, scoreProperties, 0);
     
     Note note;
     note.setStaff(2);
@@ -68,10 +68,10 @@ BOOST_AUTO_TEST_CASE(staffOrigin) {
 
     auto score = builder.build();
     ScoreProperties scoreProperties(*score);
-    ScrollMetrics metrics(*score, scoreProperties);
+    ScrollMetrics metrics(*score, scoreProperties, 0);
     
-    BOOST_CHECK_EQUAL(metrics.staffOrigin(0, 1), 0);
-    BOOST_CHECK_EQUAL(metrics.staffOrigin(0, 2), Metrics::staffHeight() + 65);
+    BOOST_CHECK_EQUAL(metrics.staffOrigin(1), 0);
+    BOOST_CHECK_EQUAL(metrics.staffOrigin(2), Metrics::staffHeight() + 65);
 }
 
 BOOST_AUTO_TEST_CASE(noteY) {
@@ -85,7 +85,7 @@ BOOST_AUTO_TEST_CASE(noteY) {
 
     auto score = builder.build();
     ScoreProperties scoreProperties(*score);
-    ScrollMetrics metrics(*score, scoreProperties);
+    ScrollMetrics metrics(*score, scoreProperties, 0);
     
     Note note;
     note.setMeasure(measure);

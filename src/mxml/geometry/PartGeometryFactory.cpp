@@ -48,7 +48,7 @@ std::unique_ptr<PartGeometry> PartGeometryFactory::build() {
 
     coord_t offset = 0;
     for (auto& measure : _part.measures()) {
-        std::unique_ptr<MeasureGeometry> geo(new MeasureGeometry(*measure, *_partGeometry, _spans, _scoreProperties));
+        std::unique_ptr<MeasureGeometry> geo(new MeasureGeometry(*measure, _spans, _scoreProperties, _metrics));
         geo->setHorizontalAnchorPointValues(0, 0);
         geo->setLocation({offset, 0});
         offset += geo->size().width;

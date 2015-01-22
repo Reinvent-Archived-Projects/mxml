@@ -9,6 +9,7 @@
 #include "NoteGeometry.h"
 #include "StemGeometry.h"
 
+#include <mxml/Metrics.h>
 #include <mxml/ScoreProperties.h>
 #include <mxml/dom/Chord.h>
 
@@ -26,14 +27,10 @@ public:
     static const coord_t kDotSpacing;
     
 public:
-    ChordGeometry(const dom::Chord& chord, const ScoreProperties& scoreProperties, const PartGeometry& partGeometry);
+    ChordGeometry(const dom::Chord& chord, const ScoreProperties& scoreProperties, const Metrics& metrics);
     
     const dom::Chord& chord() const {
         return _chord;
-    }
-    
-    const PartGeometry& partGeometry() const {
-        return _partGeometry;
     }
     
     bool showFlags() const {
@@ -81,8 +78,8 @@ private:
     
 private:
     const dom::Chord& _chord;
-    const PartGeometry& _partGeometry;
     const ScoreProperties& _scoreProperties;
+    const Metrics& _metrics;
     
     std::vector<NoteGeometry*> _notes;
     StemGeometry* _stem;

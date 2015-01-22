@@ -14,10 +14,10 @@ const coord_t BarlineGeometry::kHeavyLineWidth = 2;
 const coord_t BarlineGeometry::kLineSpacing = 2;
 const coord_t BarlineGeometry::kDotDiameter = 4;
 
-BarlineGeometry::BarlineGeometry(const Barline& barline, const PartGeometry& partGeometry) : _barline(barline), _partGeometry(partGeometry) {
+BarlineGeometry::BarlineGeometry(const Barline& barline, const Metrics& metrics) : _barline(barline), _metrics(metrics) {
     Size size;
     size.width = Width(_barline);
-    size.height = _partGeometry.stavesHeight();
+    size.height = metrics.stavesHeight();
     if (_barline.style() == Barline::TICK)
         size.height = Metrics::kStaffLineSpacing;
     else if (_barline.style() == Barline::SHORT)

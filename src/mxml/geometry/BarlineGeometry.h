@@ -3,7 +3,7 @@
 
 #pragma once
 #include "Geometry.h"
-#include "PartGeometry.h"
+#include <mxml/Metrics.h>
 #include <mxml/dom/Barline.h>
 
 namespace mxml {
@@ -16,20 +16,20 @@ public:
     static const coord_t kDotDiameter;
     
 public:
-    BarlineGeometry(const dom::Barline& barline, const PartGeometry& partGeometry);
+    BarlineGeometry(const dom::Barline& barline, const Metrics& metrics);
     
     const dom::Barline& barline() const {
         return _barline;
     }
-    const PartGeometry& partGeometry() const {
-        return _partGeometry;
+    const Metrics& metrics() const {
+        return _metrics;
     }
     
     static coord_t Width(const dom::Barline& barline);
     
 private:
     const dom::Barline& _barline;
-    const PartGeometry& _partGeometry;
+    const Metrics& _metrics;
 };
 
 } // namespace mxml

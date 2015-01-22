@@ -18,7 +18,20 @@ public:
     static const std::size_t kStaffLineCount;
 
 public:
-    Metrics(const dom::Score& score, const ScoreProperties& scoreProperties);
+    Metrics(const dom::Score& score, const ScoreProperties& scoreProperties, std::size_t partIndex);
+
+    const dom::Score& score() const {
+        return _score;
+    }
+
+    std::size_t partIndex() const {
+        return _partIndex;
+    }
+
+    /**
+     Get the number of staves in this part.
+     */
+    std::size_t staves() const;
 
     /**
      Get the height of a single staff in tenths. This is always 40.
@@ -26,20 +39,38 @@ public:
     static dom::tenths_t staffHeight();
 
     /**
-     Get the height in tenths of a number staves, given their staff distance.
+     Get the staff distance in a part.
      */
-    static dom::tenths_t stavesHeight(std::size_t staves, dom::tenths_t staffDistance);
+    virtual dom::tenths_t staffDistance() const = 0;
+
+    /**
+     Get the height in tenths of all staves in a part. This does not include padding above the top staff or
+     below the bottom staff, therefore it is smaller than the geometry's height.
+     */
+    dom::tenths_t stavesHeight() const;
+
+    /**
+     Return the y position, in tenths, of the top line of a staff relative to the top line of the topmost staff.
+     The origin of staff 1 is awlays 0.
+     */
+    dom::tenths_t staffOrigin(int staffNumber) const;
 
     /**
      Return the y position of a note, relative to the top line of the topmost staff.
      */
-    virtual dom::tenths_t noteY(const dom::Note& note) const = 0;
+    dom::tenths_t noteY(const dom::Note& note) const;
 
     /**
      Return the vertical (y) position of the note relative to its staff. Positions start at the top line of the staff
      and increase by 10 for every staff line going down.
      */
     dom::tenths_t staffY(const dom::Note& note) const;
+
+public:
+    /**
+     Get the height in tenths of a number staves, given their staff distance.
+     */
+    static dom::tenths_t stavesHeight(std::size_t staves, dom::tenths_t staffDistance);
 
     /**
      Return the y position of a pitch within the staff for a given clef.
@@ -54,11 +85,10 @@ protected:
     struct PrintRef {
         std::size_t systemIndex;
         std::size_t measureIndex;
-        std::size_t partIndex;
         const dom::Print* print;
 
         bool operator==(const PrintRef& rhs) const {
-            return systemIndex == rhs.systemIndex && measureIndex == rhs.measureIndex && partIndex == rhs.partIndex && print == rhs.print;
+            return systemIndex == rhs.systemIndex && measureIndex == rhs.measureIndex && print == rhs.print;
         }
         bool operator<(const PrintRef& rhs) const {
             if (systemIndex < rhs.systemIndex)
@@ -71,18 +101,13 @@ protected:
             if (measureIndex > rhs.measureIndex)
                 return false;
 
-            if (partIndex < rhs.partIndex)
-                return true;
-            if (partIndex > rhs.partIndex)
-                return false;
-
             return print < rhs.print;
         }
     };
 
 protected:
-    void process(std::size_t partIndex, const dom::Measure& measure);
-    void process(std::size_t partIndex, std::size_t measureIndex, const dom::Print& print);
+    void process(const dom::Measure& measure);
+    void process(std::size_t measureIndex, const dom::Print& print);
 
 protected:
     const dom::Score& _score;
@@ -91,6 +116,8 @@ protected:
     std::set<PrintRef> _prints;
     std::size_t _systemCount;
     std::size_t _pageCount;
+
+    std::size_t _partIndex;
 };
 
 }

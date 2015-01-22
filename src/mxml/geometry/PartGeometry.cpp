@@ -1,9 +1,8 @@
 //  Created by Alejandro Isaza on 2014-05-05.
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
-
 #include "PartGeometry.h"
-#include "PartGeometryFactory.h"
+
 
 namespace mxml {
 
@@ -13,8 +12,7 @@ PartGeometry::PartGeometry(const dom::Part& part, const ScoreProperties& scorePr
   _metrics(metrics)
 {
     _staves = scoreProperties.staves(part.index());
-    _staffDistance = metrics.staffDistance(part.index());
-    PartGeometryFactory factory(part, scoreProperties, metrics, spans);
+    _staffDistance = metrics.staffDistance();
 }
 
 dom::tenths_t PartGeometry::noteY(const dom::Note& note) const {

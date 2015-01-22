@@ -15,9 +15,8 @@
 #include "RestGeometry.h"
 #include "TimeSignatureGeometry.h"
 
-#include "../dom/Backup.h"
-#include "../dom/Forward.h"
-
+#include <mxml/dom/Backup.h>
+#include <mxml/dom/Forward.h>
 #include <mxml/Metrics.h>
 
 namespace mxml {
@@ -28,15 +27,15 @@ const coord_t MeasureGeometry::kGraceNoteScale = 0.85;
 const coord_t MeasureGeometry::kVerticalPadding = 40;
 
 MeasureGeometry::MeasureGeometry(const Measure& measure,
-                                 const PartGeometry& partGeometry,
                                  const SpanCollection& spans,
-                                 const ScoreProperties& scoreProperties)
+                                 const ScoreProperties& scoreProperties,
+                                 const Metrics& metrics)
 : _measure(measure),
-  _partGeometry(partGeometry),
   _spans(spans),
-  _scoreProperties(scoreProperties)
+  _scoreProperties(scoreProperties),
+  _metrics(metrics),
+  _partIndex(metrics.partIndex())
 {
-    _partIndex = measure.part()->index();
     build();
 }
 
@@ -79,14 +78,14 @@ void MeasureGeometry::build() {
         }
     }
 
-    setSize({_spans.width(_measure.index()), _partGeometry.stavesHeight() + 2*kVerticalPadding});
+    setSize({_spans.width(_measure.index()), _metrics.stavesHeight() + 2*kVerticalPadding});
     setContentOffset({0, -kVerticalPadding});
 
     centerLoneRest();
 }
 
 void MeasureGeometry::buildAttributes(const Attributes* attributes) {
-    const auto staves = _scoreProperties.staves(_partIndex);
+    const auto staves = _metrics.staves();
     for (int staff = 1; staff <= staves; staff += 1) {
         if (!attributes->clef(staff))
             continue;
@@ -102,7 +101,7 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
         const Span& span = *it;
         Point location;
         location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
-        location.y = _partGeometry.staffOrigin(staff) + Metrics::staffHeight()/2;
+        location.y = _metrics.staffOrigin(staff) + Metrics::staffHeight()/2;
         geo->setLocation(location);
         
         addGeometry(std::move(geo));
@@ -124,7 +123,7 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
 
         Point location;
         location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
-        location.y = _partGeometry.staffOrigin(staff) + Metrics::staffHeight()/2;
+        location.y = _metrics.staffOrigin(staff) + Metrics::staffHeight()/2;
         geo->setLocation(location);
         
         addGeometry(std::move(geo));
@@ -156,7 +155,7 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
     
         Point location;
         location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
-        location.y = _partGeometry.staffOrigin(staff) + Metrics::staffHeight()/2;
+        location.y = _metrics.staffOrigin(staff) + Metrics::staffHeight()/2;
         geo->setLocation(location);
         geo->setStaff(staff);
         
@@ -165,7 +164,7 @@ void MeasureGeometry::buildAttributes(const Attributes* attributes) {
 }
 
 void MeasureGeometry::buildBarline(const Barline* barline) {
-    std::unique_ptr<BarlineGeometry> geo(new BarlineGeometry(*barline, _partGeometry));
+    std::unique_ptr<BarlineGeometry> geo(new BarlineGeometry(*barline, _metrics));
     geo->setVerticalAnchorPointValues(0, 0);
     geo->setHorizontalAnchorPointValues(0, 0);
 
@@ -206,7 +205,7 @@ void MeasureGeometry::buildChord(const Chord* chord) {
     if (!chord->firstNote()->printObject)
         return;
     
-    std::unique_ptr<ChordGeometry> geo(new ChordGeometry(*chord, _scoreProperties, _partGeometry));
+    std::unique_ptr<ChordGeometry> geo(new ChordGeometry(*chord, _scoreProperties, _metrics));
 
     Point location = geo->refNoteLocation();
     if (chord->stem() == kStemUp) {
@@ -244,7 +243,7 @@ void MeasureGeometry::buildRest(const Note* note) {
     const Span& span = *it;
     Point location;
     location.x = span.start() + span.eventOffset() - _spans.origin(_measure.index());
-    location.y = _partGeometry.noteY(*note);
+    location.y = _metrics.noteY(*note);
     geo->setLocation(location);
     addGeometry(std::move(geo));
 }
