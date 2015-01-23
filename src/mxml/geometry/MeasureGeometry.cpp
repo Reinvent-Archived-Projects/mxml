@@ -11,7 +11,6 @@
 #include "ClefGeometry.h"
 #include "KeyGeometry.h"
 #include "NoteGeometry.h"
-#include "PartGeometry.h"
 #include "RestGeometry.h"
 #include "TimeSignatureGeometry.h"
 

@@ -15,8 +15,6 @@
 
 namespace mxml {
 
-class PartGeometry;
-
 class ChordGeometry : public MeasureElementGeometry {
 public:
     static const coord_t kStemWidth;

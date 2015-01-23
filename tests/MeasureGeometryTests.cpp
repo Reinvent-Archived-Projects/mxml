@@ -1,5 +1,4 @@
 #include <mxml/geometry/MeasureGeometry.h>
-#include <mxml/geometry/PartGeometry.h>
 #include <mxml/SpanFactory.h>
 #include <mxml/Metrics.h>
 #include <boost/test/unit_test.hpp>

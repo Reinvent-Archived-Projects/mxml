@@ -19,8 +19,6 @@
 
 namespace mxml {
 
-class PartGeometry;
-
 class MeasureGeometry : public Geometry {
 public:
     static const coord_t kGraceNoteScale;

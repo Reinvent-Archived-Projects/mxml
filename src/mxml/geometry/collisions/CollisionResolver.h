@@ -2,7 +2,8 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
-#include <mxml/geometry/PartGeometry.h>
+#include <mxml/geometry/Geometry.h>
+#include <mxml/Metrics.h>
 
 #include <memory>
 #include <typeindex>

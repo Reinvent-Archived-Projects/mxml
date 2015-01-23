@@ -3,7 +3,6 @@
 
 #include "KeyGeometry.h"
 #include "AccidentalGeometry.h"
-#include "PartGeometry.h"
 
 #include <mxml/Metrics.h>
 

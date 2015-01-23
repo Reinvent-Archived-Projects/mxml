@@ -2,7 +2,6 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #include "ChordGeometry.h"
-#include "PartGeometry.h"
 #include "FermataGeometry.h"
 
 #include <mxml/Metrics.h>

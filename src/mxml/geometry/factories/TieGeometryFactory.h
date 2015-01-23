@@ -5,7 +5,6 @@
 #include "Geometry.h"
 #include "NoteGeometry.h"
 #include "TieGeometry.h"
-#include "PartGeometry.h"
 
 #include <mxml/dom/Note.h>
 
