@@ -248,39 +248,43 @@ void MeasureGeometry::buildRest(const Note* note) {
 }
 
 void MeasureGeometry::centerLoneRest() {
-    RestGeometry* onlyRest = nullptr;
+    std::map<int, RestGeometry*> staffRests;
+    
     for (auto& geometry : geometries()) {
         NoteGeometry* note = dynamic_cast<NoteGeometry*>(geometry.get());
         if (note) {
-            onlyRest = nullptr;
-            break;
+            staffRests[note->note().staff()-1] = nullptr;
+            continue;
         }
-
+        
         ChordGeometry* chord = dynamic_cast<ChordGeometry*>(geometry.get());
         if (chord) {
-            onlyRest = nullptr;
-            break;
+            staffRests[chord->chord().firstNote()->staff() - 1] = nullptr;
+            continue;
         }
-
+        
         RestGeometry* rest = dynamic_cast<RestGeometry*>(geometry.get());
         if (rest) {
-            if (onlyRest) {
-                onlyRest = nullptr;
-                break;
+            const int staff = rest->note().staff() - 1;
+            if (staffRests.find(staff) != staffRests.end()) {
+                staffRests[staff] = nullptr;
             } else {
-                onlyRest = rest;
+                staffRests[staff] = rest;
             }
         }
     }
-    if (!onlyRest)
-        return;
-
-    // If there is only a rest in the measure, it should be centered
-    auto location = onlyRest->location();
-    const Span& span = *_spans.with(&onlyRest->note());
-    auto start = -_spans.origin(_measure.index()) + span.start();
-    location.x = start + (size().width - start) / 2 - onlyRest->size().width/2;
-    onlyRest->setLocation(location);
+    
+    // If there is only a Rest on this Measures Staff, center it
+    for (auto& staffRest : staffRests) {
+        RestGeometry* rest = staffRest.second;
+        if (rest) {
+            auto location = rest->location();
+            const Span& span = *_spans.with(&rest->note());
+            auto start = -_spans.origin(_measure.index()) + span.start();
+            location.x = start + (size().width - start) / 2 - rest->size().width/2;
+            rest->setLocation(location);
+        }
+    }
 }
 
 } // namespace mxml
