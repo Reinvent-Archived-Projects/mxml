@@ -20,7 +20,7 @@ namespace mxml {
     
     class HorizontalResolver : public CollisionResolver<HorizontalTypeComparator> {
     public:
-        HorizontalResolver(const PartGeometry& partGeometry);
+        HorizontalResolver(const Geometry& geometry, const Metrics& metrics);
         
     protected:
         void resolveCollision(const CollisionPair& pair);

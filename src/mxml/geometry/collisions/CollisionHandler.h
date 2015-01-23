@@ -10,7 +10,7 @@ namespace mxml {
     class CollisionHandler {
 
     public:
-        CollisionHandler(const PartGeometry& partGeometry);
+        CollisionHandler(const Geometry& geometry, const Metrics& metrics);
 
         /**
          Resolve all collisions in the set of geometries.

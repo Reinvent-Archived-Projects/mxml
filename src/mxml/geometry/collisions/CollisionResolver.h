@@ -12,106 +12,108 @@
 
 namespace mxml {
 
-    class NoteGeometry;
-    class RestGeometry;
-    
-    template <typename Comparator>
-    class CollisionResolver {
-    protected:
-        /**
-         Collision pair.
-         */
-        class CollisionPair {
-        public:
-            CollisionPair(Geometry* first, Geometry* second) : _firstGeometry(first), _secondGeometry(second) {}
+class NoteGeometry;
+class RestGeometry;
 
-            Geometry* firstGeometry() const {
-                return _firstGeometry;
-            }
-            Geometry* secondGeometry() const {
-                return _secondGeometry;
-            }
-
-            bool operator==(const CollisionPair& rhs) const {
-                return _firstGeometry == rhs._firstGeometry && _secondGeometry == rhs._secondGeometry;
-            }
-
-        private:
-            Geometry* _firstGeometry;
-            Geometry* _secondGeometry;
-        };
-
-        /**
-         Comparator used to sort collisions
-         */
-        class CollisionPairComparator : std::binary_function<const CollisionPair&, const CollisionPair&, bool> {
-        public:
-            bool operator()(const CollisionPair& g1, const CollisionPair& g2);
-
-        private:
-            Comparator _geometryComparator;
-        };
-
-        /**
-         Comparator used to sort geometries by x position
-         */
-        class GeometryXComparator : std::binary_function<const Geometry*, const Geometry*, bool> {
-        public:
-            bool operator()(const Geometry* g1, const Geometry* g2);
-        };
-
+template <typename Comparator>
+class CollisionResolver {
+protected:
+    /**
+     Collision pair.
+     */
+    class CollisionPair {
     public:
-        CollisionResolver(const PartGeometry& partGeometry);
-        
-        /**
-         Resolve all collisions in the set of geometries.
-         */
-        void resolveCollisions();
-        
-    protected:
-        /**
-         Add a vector of geometries to the set of geometries that are going be checked for collisions.
-         */
-        void addAllGeometries(const std::vector<std::unique_ptr<Geometry>>& geometries);
-        
-        /**
-         Add a geometry to the set of geometries that are going be checked for collisions.
-         
-         @param geometry The geometry to add.
-         */
-        void addGeometry(Geometry* geometry);
-        
-        void addAllCollisions();
-        bool addAllCollisions(Geometry* geometry);
-        
-        /**
-         Check if two given geometries are colliding.
-         */
-        virtual bool colliding(const Geometry* g1, const Geometry* g2) const;
-        
-        /**
-         Check if this collision pair can be resolved.
-         
-         @param pair The collision pair to check.
-         */
-        bool canResolveCollision(const CollisionPair& pair) const;
+        CollisionPair(Geometry* first, Geometry* second) : _firstGeometry(first), _secondGeometry(second) {}
 
-        /**
-         Remove all pending collisions involving this geometry
-         
-         @param geometry The geometry to remove collisions for.
-         */
-        void removeCollisions(const Geometry *geometry);
-        
-        virtual void resolveCollision(const CollisionPair& pair) = 0;
-        virtual bool isImmovable(const Geometry* geometry) const = 0;
-        
-    protected:
-        const PartGeometry& _partGeometry;
-        std::multiset<Geometry*, GeometryXComparator> _geometries;
-        std::multiset<CollisionPair, CollisionPairComparator> _collisionPairs;
-        Comparator _geometryTypeComparator;
+        Geometry* firstGeometry() const {
+            return _firstGeometry;
+        }
+        Geometry* secondGeometry() const {
+            return _secondGeometry;
+        }
+
+        bool operator==(const CollisionPair& rhs) const {
+            return _firstGeometry == rhs._firstGeometry && _secondGeometry == rhs._secondGeometry;
+        }
+
+    private:
+        Geometry* _firstGeometry;
+        Geometry* _secondGeometry;
     };
+
+    /**
+     Comparator used to sort collisions
+     */
+    class CollisionPairComparator : std::binary_function<const CollisionPair&, const CollisionPair&, bool> {
+    public:
+        bool operator()(const CollisionPair& g1, const CollisionPair& g2);
+
+    private:
+        Comparator _geometryComparator;
+    };
+
+    /**
+     Comparator used to sort geometries by x position
+     */
+    class GeometryXComparator : std::binary_function<const Geometry*, const Geometry*, bool> {
+    public:
+        bool operator()(const Geometry* g1, const Geometry* g2);
+    };
+
+public:
+    CollisionResolver(const Geometry& geometry, const Metrics& metrics);
+    
+    /**
+     Resolve all collisions in the set of geometries.
+     */
+    void resolveCollisions();
+    
+protected:
+    /**
+     Add a vector of geometries to the set of geometries that are going be checked for collisions.
+     */
+    void addAllGeometries(const std::vector<std::unique_ptr<Geometry>>& geometries);
+    
+    /**
+     Add a geometry to the set of geometries that are going be checked for collisions.
+     
+     @param geometry The geometry to add.
+     */
+    void addGeometry(Geometry* geometry);
+    
+    void addAllCollisions();
+    bool addAllCollisions(Geometry* geometry);
+    
+    /**
+     Check if two given geometries are colliding.
+     */
+    virtual bool colliding(const Geometry* g1, const Geometry* g2) const;
+    
+    /**
+     Check if this collision pair can be resolved.
+     
+     @param pair The collision pair to check.
+     */
+    bool canResolveCollision(const CollisionPair& pair) const;
+
+    /**
+     Remove all pending collisions involving this geometry
+     
+     @param geometry The geometry to remove collisions for.
+     */
+    void removeCollisions(const Geometry *geometry);
+    
+    virtual void resolveCollision(const CollisionPair& pair) = 0;
+    virtual bool isImmovable(const Geometry* geometry) const = 0;
+    
+protected:
+    const Geometry& _geometry;
+    const Metrics& _metrics;
+    
+    std::multiset<Geometry*, GeometryXComparator> _geometries;
+    std::multiset<CollisionPair, CollisionPairComparator> _collisionPairs;
+    Comparator _geometryTypeComparator;
+};
     
 }
 

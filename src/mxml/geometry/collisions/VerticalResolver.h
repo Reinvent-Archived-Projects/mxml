@@ -21,7 +21,7 @@ namespace mxml {
     
     class VerticalResolver : public CollisionResolver<VerticalTypeComparator> {
     public:
-        VerticalResolver(const PartGeometry& partGeometry);
+        VerticalResolver(const Geometry& geometry, const Metrics& metrics);
         
     protected:
         void resolveCollision(const CollisionPair& pair);

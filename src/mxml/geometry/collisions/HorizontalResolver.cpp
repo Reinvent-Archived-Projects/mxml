@@ -32,7 +32,7 @@ namespace mxml {
         return g1->center().y < g2->center().y;
     }
     
-    HorizontalResolver::HorizontalResolver(const PartGeometry& partGeometry) : CollisionResolver(partGeometry) {
+    HorizontalResolver::HorizontalResolver(const Geometry& geometry, const Metrics& metrics) : CollisionResolver(geometry, metrics) {
     }
     
     void HorizontalResolver::resolveCollision(const CollisionPair& pair) {
@@ -69,8 +69,8 @@ namespace mxml {
         
         // When resoliving a note collision we need to move the parent geometry
         ChordGeometry *chordGeometry = (ChordGeometry *)n2->parentGeometry();
-        Rect f1 = _partGeometry.convertFromGeometry(n1->frame(), n1->parentGeometry());
-        Rect f2 = _partGeometry.convertFromGeometry(chordGeometry->frame(), chordGeometry->parentGeometry());
+        Rect f1 = _geometry.convertFromGeometry(n1->frame(), n1->parentGeometry());
+        Rect f2 = _geometry.convertFromGeometry(chordGeometry->frame(), chordGeometry->parentGeometry());
         f2.origin.x = f1.origin.x + f1.size.width;
         chordGeometry->setFrame(chordGeometry->parentGeometry()->convertFromRoot(f2));
         
@@ -78,8 +78,8 @@ namespace mxml {
     }
     
     bool HorizontalResolver::colliding(const Geometry* g1, const Geometry* g2) const {
-        Rect f1 = _partGeometry.convertFromGeometry(g1->frame(), g1->parentGeometry());
-        Rect f2 = _partGeometry.convertFromGeometry(g2->frame(), g2->parentGeometry());
+        Rect f1 = _geometry.convertFromGeometry(g1->frame(), g1->parentGeometry());
+        Rect f2 = _geometry.convertFromGeometry(g2->frame(), g2->parentGeometry());
         return intersect(f1, f2, 0, std::min(f1.size.height/2, f2.size.height/2));
     }
     

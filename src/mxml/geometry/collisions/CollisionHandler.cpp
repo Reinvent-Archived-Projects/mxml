@@ -5,11 +5,14 @@
 
 namespace mxml {
 
-    CollisionHandler::CollisionHandler(const PartGeometry& partGeometry) : _verticalResolver(partGeometry), _horizontalResolver(partGeometry) {
-    }
-    
-    void CollisionHandler::resolveCollisions() {
-        _verticalResolver.resolveCollisions();
-        _horizontalResolver.resolveCollisions();
-    }
+CollisionHandler::CollisionHandler(const Geometry& geometry, const Metrics& metrics)
+: _verticalResolver(geometry, metrics),
+  _horizontalResolver(geometry, metrics)
+{}
+
+void CollisionHandler::resolveCollisions() {
+    _verticalResolver.resolveCollisions();
+    _horizontalResolver.resolveCollisions();
 }
+
+} // namespace mxml

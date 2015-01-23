@@ -12,8 +12,10 @@ namespace mxml {
 
 const coord_t TieGeometryFactory::kTieSpacing = 2;
 
-TieGeometryFactory::TieGeometryFactory(const PartGeometry& partGeometry) : _partGeometry(partGeometry) {
-    
+TieGeometryFactory::TieGeometryFactory(const Geometry& parentGeometry, const Metrics& metrics)
+: _parentGeometry(parentGeometry),
+  _metrics(metrics)
+{
 }
 
 std::vector<std::unique_ptr<TieGeometry>>&& TieGeometryFactory::buildTieGeometries(const std::vector<std::unique_ptr<Geometry>>& geometries) {
@@ -100,8 +102,8 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometry(const NoteGeom
     stopLocation.x = stop->frame().min().x;
     
     if (!placement.isPresent()) {
-        coord_t startStaffY = startLocation.y - _partGeometry.staffOrigin(start->note().staff());
-        coord_t stopStaffY = stopLocation.y - _partGeometry.staffOrigin(stop->note().staff());
+        coord_t startStaffY = startLocation.y - _metrics.staffOrigin(start->note().staff());
+        coord_t stopStaffY = stopLocation.y - _metrics.staffOrigin(stop->note().staff());
         coord_t avgy = (startStaffY + stopStaffY) / 2;
         if (avgy < Metrics::staffHeight()/2)
             tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));
@@ -117,8 +119,8 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometry(const NoteGeom
         stopLocation.y = stop->frame().min().y;
     }
     
-    tieGeom->setStartLocation(_partGeometry.convertFromGeometry(startLocation, start->parentGeometry()));
-    tieGeom->setStopLocation(_partGeometry.convertFromGeometry(stopLocation, stop->parentGeometry()));
+    tieGeom->setStartLocation(_parentGeometry.convertFromGeometry(startLocation, start->parentGeometry()));
+    tieGeom->setStopLocation(_parentGeometry.convertFromGeometry(stopLocation, stop->parentGeometry()));
     
     return tieGeom;
 }
@@ -133,8 +135,8 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
     stopLocation.x -= kTieSpacing;
     
     if (!placement.isPresent()) {
-        coord_t startStaffY = startLocation.y - _partGeometry.staffOrigin(start->note().staff());
-        coord_t stopStaffY = stopLocation.y - _partGeometry.staffOrigin(stop->note().staff());
+        coord_t startStaffY = startLocation.y - _metrics.staffOrigin(start->note().staff());
+        coord_t stopStaffY = stopLocation.y - _metrics.staffOrigin(stop->note().staff());
         coord_t avgy = (startStaffY + stopStaffY) / 2;
         if (avgy < Metrics::staffHeight()/2)
             tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));
@@ -182,8 +184,8 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
         }
     }
 
-    tieGeom->setStartLocation(_partGeometry.convertFromGeometry(startLocation, start->parentGeometry()));
-    tieGeom->setStopLocation(_partGeometry.convertFromGeometry(stopLocation, stop->parentGeometry()));
+    tieGeom->setStartLocation(_parentGeometry.convertFromGeometry(startLocation, start->parentGeometry()));
+    tieGeom->setStopLocation(_parentGeometry.convertFromGeometry(stopLocation, stop->parentGeometry()));
     
     return tieGeom;
 }

@@ -72,7 +72,7 @@ namespace mxml {
         return g1->size().width < g2->size().width;
     }
     
-    VerticalResolver::VerticalResolver(const PartGeometry& partGeometry) : CollisionResolver(partGeometry) {
+    VerticalResolver::VerticalResolver(const Geometry& geometry, const Metrics& metrics) : CollisionResolver(geometry, metrics) {
     }
     
     void VerticalResolver::resolveCollision(const CollisionPair& pair) {
@@ -96,12 +96,12 @@ namespace mxml {
     }
     
     void VerticalResolver::resolveCollision(const Geometry* g1, Geometry* g2) {
-        Rect f1 = _partGeometry.convertFromGeometry(g1->frame(), g1->parentGeometry());
-        Rect f2 = _partGeometry.convertFromGeometry(g2->frame(), g2->parentGeometry());
+        Rect f1 = _geometry.convertFromGeometry(g1->frame(), g1->parentGeometry());
+        Rect f2 = _geometry.convertFromGeometry(g2->frame(), g2->parentGeometry());
         
         // Only move things that are already outside the staves further away
-        coord_t top = _partGeometry.staffOrigin(1) - _partGeometry.stavesHeight()/2;
-        coord_t bottom = _partGeometry.staffOrigin(static_cast<int>(_partGeometry.staves())) - _partGeometry.stavesHeight()/2;
+        coord_t top = _metrics.staffOrigin(1) - _metrics.stavesHeight()/2;
+        coord_t bottom = _metrics.staffOrigin(static_cast<int>(_metrics.staves())) - _metrics.stavesHeight()/2;
         if (f2.origin.y <= top)
             f2.origin.y = f1.origin.y - f2.size.height - 1;
         else if (f2.max().y >= bottom)
@@ -116,8 +116,8 @@ namespace mxml {
     }
     
     void VerticalResolver::resolveCollision(const NoteGeometry* note, RestGeometry* rest) {
-        Rect noteFrame = _partGeometry.convertFromGeometry(note->frame(), note->parentGeometry());
-        Rect restFrame = _partGeometry.convertFromGeometry(rest->frame(), rest->parentGeometry());
+        Rect noteFrame = _geometry.convertFromGeometry(note->frame(), note->parentGeometry());
+        Rect restFrame = _geometry.convertFromGeometry(rest->frame(), rest->parentGeometry());
         
         // Only move things that are already outside the staves further away
         if (note->note().stem() == dom::kStemUp)

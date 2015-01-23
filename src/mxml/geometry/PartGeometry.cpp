@@ -6,13 +6,11 @@
 
 namespace mxml {
 
-PartGeometry::PartGeometry(const dom::Part& part, const ScoreProperties& scoreProperties, const ScrollMetrics& metrics, const SpanCollection& spans)
+PartGeometry::PartGeometry(const dom::Part& part, const ScoreProperties& scoreProperties, const ScrollMetrics& metrics)
 : _part(part),
   _scoreProperties(scoreProperties),
   _metrics(metrics)
-{
-    _staves = scoreProperties.staves(part.index());
-    _staffDistance = metrics.staffDistance();
+{    _staffDistance = metrics.staffDistance();
 }
 
 dom::tenths_t PartGeometry::noteY(const dom::Note& note) const {

@@ -9,12 +9,14 @@
 #include <mxml/SpanCollection.h>
 #include <mxml/dom/Score.h>
 
+#include <memory>
+
 
 namespace mxml {
 
 class ScoreGeometry : public Geometry {
 public:
-    ScoreGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, const ScrollMetrics& metrics, bool naturalSpacing = true);
+    ScoreGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, bool naturalSpacing = true);
 
     const dom::Score& score() const {
         return _score;
@@ -25,14 +27,17 @@ public:
     const std::vector<PartGeometry*>& partGeometries() const {
         return _partGeometries;
     }
+    const ScrollMetrics& metrics(std::size_t partIndex) const {
+        return *_metrics[partIndex];
+    }
 
 private:
     const dom::Score& _score;
     const ScoreProperties& _scoreProperties;
-    const ScrollMetrics& _metrics;
     
     SpanCollection _spans;
     std::vector<PartGeometry*> _partGeometries;
+    std::vector<std::unique_ptr<ScrollMetrics>> _metrics;
 };
 
 } // namespace

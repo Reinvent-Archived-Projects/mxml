@@ -21,7 +21,7 @@ public:
     static const coord_t kTieSpacing;
     
 public:
-    explicit TieGeometryFactory(const PartGeometry& partGeometry);
+    explicit TieGeometryFactory(const Geometry& parentGeometry, const Metrics& metrics);
     
     std::vector<std::unique_ptr<TieGeometry>>&& buildTieGeometries(const std::vector<std::unique_ptr<Geometry>>& geometries);
     
@@ -34,7 +34,8 @@ private:
     std::unique_ptr<TieGeometry> buildSlurGeometry(const NoteGeometry* startGeom, const NoteGeometry* stopGeom, const dom::Optional<dom::Placement>& placement);
     
 private:
-    const PartGeometry& _partGeometry;
+    const Geometry& _parentGeometry;
+    const Metrics& _metrics;
 
     std::vector<std::unique_ptr<TieGeometry>> _tieGeometries;
     std::map<std::pair<int, int>, NoteGeometry*> _slurStartGeometries;
