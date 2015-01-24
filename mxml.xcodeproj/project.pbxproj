@@ -56,7 +56,7 @@
 		614057031A5C6228005224C9 /* PartGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6140562C1A5C6228005224C9 /* PartGeometry.cpp */; };
 		614057071A5C6228005224C9 /* PedalGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056301A5C6228005224C9 /* PedalGeometry.cpp */; };
 		6140570C1A5C6228005224C9 /* RestGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056351A5C6228005224C9 /* RestGeometry.cpp */; };
-		6140570E1A5C6228005224C9 /* ScoreGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056371A5C6228005224C9 /* ScoreGeometry.cpp */; };
+		6140570E1A5C6228005224C9 /* ScrollScoreGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056371A5C6228005224C9 /* ScrollScoreGeometry.cpp */; };
 		614057111A5C6228005224C9 /* SpanDirectionGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6140563A1A5C6228005224C9 /* SpanDirectionGeometry.cpp */; };
 		614057151A5C6228005224C9 /* StemGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 6140563E1A5C6228005224C9 /* StemGeometry.cpp */; };
 		614057181A5C6228005224C9 /* TieGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614056411A5C6228005224C9 /* TieGeometry.cpp */; };
@@ -154,8 +154,6 @@
 		61F073781A707934002CA9CA /* PageMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F073761A707934002CA9CA /* PageMetrics.h */; };
 		61F0737B1A70799F002CA9CA /* ScrollMetrics.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F073791A70799F002CA9CA /* ScrollMetrics.cpp */; };
 		61F0737C1A70799F002CA9CA /* ScrollMetrics.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F0737A1A70799F002CA9CA /* ScrollMetrics.h */; };
-		61F0737F1A708398002CA9CA /* System.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F0737D1A708398002CA9CA /* System.cpp */; };
-		61F073801A708398002CA9CA /* System.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F0737E1A708398002CA9CA /* System.h */; };
 		61F073A11A71A447002CA9CA /* SystemGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F0739F1A71A447002CA9CA /* SystemGeometry.cpp */; };
 		61F073A21A71A447002CA9CA /* SystemGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F073A01A71A447002CA9CA /* SystemGeometry.h */; };
 		61F073BE1A71CD8F002CA9CA /* DirectionGeometryFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F073B01A71CD8F002CA9CA /* DirectionGeometryFactory.cpp */; };
@@ -166,12 +164,12 @@
 		61F073C31A71CD8F002CA9CA /* OrnamentGeometryFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F073B51A71CD8F002CA9CA /* OrnamentGeometryFactory.h */; };
 		61F073C41A71CD8F002CA9CA /* PartGeometryFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F073B61A71CD8F002CA9CA /* PartGeometryFactory.cpp */; };
 		61F073C51A71CD8F002CA9CA /* PartGeometryFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F073B71A71CD8F002CA9CA /* PartGeometryFactory.h */; };
-		61F073C81A71CD8F002CA9CA /* SystemGeometryFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F073BA1A71CD8F002CA9CA /* SystemGeometryFactory.cpp */; };
-		61F073C91A71CD8F002CA9CA /* SystemGeometryFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F073BB1A71CD8F002CA9CA /* SystemGeometryFactory.h */; };
 		61F073CA1A71CD8F002CA9CA /* TieGeometryFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F073BC1A71CD8F002CA9CA /* TieGeometryFactory.cpp */; };
 		61F073CB1A71CD8F002CA9CA /* TieGeometryFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F073BD1A71CD8F002CA9CA /* TieGeometryFactory.h */; };
 		61F073CE1A71CEF5002CA9CA /* EndingGeometryFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F073CC1A71CEF5002CA9CA /* EndingGeometryFactory.cpp */; };
 		61F073CF1A71CEF5002CA9CA /* EndingGeometryFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F073CD1A71CEF5002CA9CA /* EndingGeometryFactory.h */; };
+		61F074241A72C676002CA9CA /* PageScoreGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F074221A72C676002CA9CA /* PageScoreGeometry.cpp */; };
+		61F074251A72C676002CA9CA /* PageScoreGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F074231A72C676002CA9CA /* PageScoreGeometry.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -320,8 +318,8 @@
 		614056341A5C6228005224C9 /* Rect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rect.h; sourceTree = "<group>"; };
 		614056351A5C6228005224C9 /* RestGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RestGeometry.cpp; sourceTree = "<group>"; };
 		614056361A5C6228005224C9 /* RestGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RestGeometry.h; sourceTree = "<group>"; };
-		614056371A5C6228005224C9 /* ScoreGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreGeometry.cpp; sourceTree = "<group>"; };
-		614056381A5C6228005224C9 /* ScoreGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreGeometry.h; sourceTree = "<group>"; };
+		614056371A5C6228005224C9 /* ScrollScoreGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScrollScoreGeometry.cpp; sourceTree = "<group>"; };
+		614056381A5C6228005224C9 /* ScrollScoreGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollScoreGeometry.h; sourceTree = "<group>"; };
 		614056391A5C6228005224C9 /* Size.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Size.h; sourceTree = "<group>"; };
 		6140563A1A5C6228005224C9 /* SpanDirectionGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpanDirectionGeometry.cpp; sourceTree = "<group>"; };
 		6140563B1A5C6228005224C9 /* SpanDirectionGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpanDirectionGeometry.h; sourceTree = "<group>"; };
@@ -490,8 +488,6 @@
 		61F073761A707934002CA9CA /* PageMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageMetrics.h; sourceTree = "<group>"; };
 		61F073791A70799F002CA9CA /* ScrollMetrics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScrollMetrics.cpp; sourceTree = "<group>"; };
 		61F0737A1A70799F002CA9CA /* ScrollMetrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScrollMetrics.h; sourceTree = "<group>"; };
-		61F0737D1A708398002CA9CA /* System.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = System.cpp; sourceTree = "<group>"; };
-		61F0737E1A708398002CA9CA /* System.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = System.h; sourceTree = "<group>"; };
 		61F0739F1A71A447002CA9CA /* SystemGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemGeometry.cpp; sourceTree = "<group>"; };
 		61F073A01A71A447002CA9CA /* SystemGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemGeometry.h; sourceTree = "<group>"; };
 		61F073B01A71CD8F002CA9CA /* DirectionGeometryFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DirectionGeometryFactory.cpp; sourceTree = "<group>"; };
@@ -502,12 +498,12 @@
 		61F073B51A71CD8F002CA9CA /* OrnamentGeometryFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrnamentGeometryFactory.h; sourceTree = "<group>"; };
 		61F073B61A71CD8F002CA9CA /* PartGeometryFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PartGeometryFactory.cpp; sourceTree = "<group>"; };
 		61F073B71A71CD8F002CA9CA /* PartGeometryFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PartGeometryFactory.h; sourceTree = "<group>"; };
-		61F073BA1A71CD8F002CA9CA /* SystemGeometryFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemGeometryFactory.cpp; sourceTree = "<group>"; };
-		61F073BB1A71CD8F002CA9CA /* SystemGeometryFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemGeometryFactory.h; sourceTree = "<group>"; };
 		61F073BC1A71CD8F002CA9CA /* TieGeometryFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TieGeometryFactory.cpp; sourceTree = "<group>"; };
 		61F073BD1A71CD8F002CA9CA /* TieGeometryFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TieGeometryFactory.h; sourceTree = "<group>"; };
 		61F073CC1A71CEF5002CA9CA /* EndingGeometryFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EndingGeometryFactory.cpp; sourceTree = "<group>"; };
 		61F073CD1A71CEF5002CA9CA /* EndingGeometryFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndingGeometryFactory.h; sourceTree = "<group>"; };
+		61F074221A72C676002CA9CA /* PageScoreGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PageScoreGeometry.cpp; sourceTree = "<group>"; };
+		61F074231A72C676002CA9CA /* PageScoreGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageScoreGeometry.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -602,8 +598,6 @@
 				6140569D1A5C6228005224C9 /* SpanFactory.h */,
 				6140569E1A5C6228005224C9 /* StringUtility.cpp */,
 				6140569F1A5C6228005224C9 /* StringUtility.h */,
-				61F0737D1A708398002CA9CA /* System.cpp */,
-				61F0737E1A708398002CA9CA /* System.h */,
 			);
 			name = mxml;
 			path = src/mxml;
@@ -725,8 +719,8 @@
 				614056341A5C6228005224C9 /* Rect.h */,
 				614056351A5C6228005224C9 /* RestGeometry.cpp */,
 				614056361A5C6228005224C9 /* RestGeometry.h */,
-				614056371A5C6228005224C9 /* ScoreGeometry.cpp */,
-				614056381A5C6228005224C9 /* ScoreGeometry.h */,
+				614056371A5C6228005224C9 /* ScrollScoreGeometry.cpp */,
+				614056381A5C6228005224C9 /* ScrollScoreGeometry.h */,
 				00094EFB1A67464A0053C615 /* SegnoGeometry.cpp */,
 				00094EFC1A67464A0053C615 /* SegnoGeometry.h */,
 				614056391A5C6228005224C9 /* Size.h */,
@@ -743,6 +737,8 @@
 				614056461A5C6228005224C9 /* TimeSignatureGeometry.h */,
 				00094EF71A6746340053C615 /* WordsGeometry.cpp */,
 				00094EF81A6746340053C615 /* WordsGeometry.h */,
+				61F074221A72C676002CA9CA /* PageScoreGeometry.cpp */,
+				61F074231A72C676002CA9CA /* PageScoreGeometry.h */,
 			);
 			path = geometry;
 			sourceTree = "<group>";
@@ -914,8 +910,6 @@
 				61F073B51A71CD8F002CA9CA /* OrnamentGeometryFactory.h */,
 				61F073B61A71CD8F002CA9CA /* PartGeometryFactory.cpp */,
 				61F073B71A71CD8F002CA9CA /* PartGeometryFactory.h */,
-				61F073BA1A71CD8F002CA9CA /* SystemGeometryFactory.cpp */,
-				61F073BB1A71CD8F002CA9CA /* SystemGeometryFactory.h */,
 				61F073BC1A71CD8F002CA9CA /* TieGeometryFactory.cpp */,
 				61F073BD1A71CD8F002CA9CA /* TieGeometryFactory.h */,
 			);
@@ -930,6 +924,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				61F073BF1A71CD8F002CA9CA /* DirectionGeometryFactory.h in Headers */,
+				61F074251A72C676002CA9CA /* PageScoreGeometry.h in Headers */,
 				0022AE001A7082C300139992 /* CollisionResolver.hh in Headers */,
 				61F072D61A6F0212002CA9CA /* SystemMarginsHandler.h in Headers */,
 				0022ADFE1A7082C300139992 /* CollisionHandler.h in Headers */,
@@ -957,7 +952,6 @@
 				61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */,
 				0022AE041A7082C300139992 /* VerticalResolver.h in Headers */,
 				00094EFE1A67464A0053C615 /* SegnoGeometry.h in Headers */,
-				61F073801A708398002CA9CA /* System.h in Headers */,
 				0008689B1A68430400BAA13D /* CodaGeometry.h in Headers */,
 				0022AE021A7082C300139992 /* HorizontalResolver.h in Headers */,
 				61239A6F1A65974400B3F0A3 /* ScoreBuilder.h in Headers */,
@@ -965,7 +959,6 @@
 				61239A7C1A67385400B3F0A3 /* Loop.h in Headers */,
 				61F073781A707934002CA9CA /* PageMetrics.h in Headers */,
 				61F073C31A71CD8F002CA9CA /* OrnamentGeometryFactory.h in Headers */,
-				61F073C91A71CD8F002CA9CA /* SystemGeometryFactory.h in Headers */,
 				61F073C11A71CD8F002CA9CA /* LyricGeometryFactory.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1063,7 +1056,6 @@
 				61F072CD1A6EEB48002CA9CA /* SystemDividersHandler.cpp in Sources */,
 				614056E11A5C6228005224C9 /* BarlineGeometry.cpp in Sources */,
 				61F073A11A71A447002CA9CA /* SystemGeometry.cpp in Sources */,
-				61F0737F1A708398002CA9CA /* System.cpp in Sources */,
 				614057BA1A5C7293005224C9 /* Pitch.cpp in Sources */,
 				614057291A5C6228005224C9 /* BeamHandler.cpp in Sources */,
 				6140571E1A5C6228005224C9 /* Metrics.cpp in Sources */,
@@ -1082,6 +1074,7 @@
 				614057181A5C6228005224C9 /* TieGeometry.cpp in Sources */,
 				614057111A5C6228005224C9 /* SpanDirectionGeometry.cpp in Sources */,
 				6140573B1A5C6228005224C9 /* FermataHandler.cpp in Sources */,
+				61F074241A72C676002CA9CA /* PageScoreGeometry.cpp in Sources */,
 				614057B51A5C62CF005224C9 /* StringHandler.cpp in Sources */,
 				614056D91A5C6228005224C9 /* EventFactory.cpp in Sources */,
 				61239BA11A67426C00B3F0A3 /* JumpFactory.cpp in Sources */,
@@ -1106,7 +1099,7 @@
 				61C850571A6D838500031100 /* OctaveShiftGeometry.cpp in Sources */,
 				614057571A5C6228005224C9 /* RestHandler.cpp in Sources */,
 				61F073771A707934002CA9CA /* PageMetrics.cpp in Sources */,
-				6140570E1A5C6228005224C9 /* ScoreGeometry.cpp in Sources */,
+				6140570E1A5C6228005224C9 /* ScrollScoreGeometry.cpp in Sources */,
 				614056F51A5C6228005224C9 /* KeyGeometry.cpp in Sources */,
 				6140571C1A5C6228005224C9 /* TimeSignatureGeometry.cpp in Sources */,
 				614057491A5C6228005224C9 /* NotationsHandler.cpp in Sources */,
@@ -1134,7 +1127,6 @@
 				61F072D51A6F0212002CA9CA /* SystemMarginsHandler.cpp in Sources */,
 				6140576D1A5C6228005224C9 /* UnpitchedHandler.cpp in Sources */,
 				614057721A5C6228005224C9 /* SpanFactory.cpp in Sources */,
-				61F073C81A71CD8F002CA9CA /* SystemGeometryFactory.cpp in Sources */,
 				61F072E91A6F1183002CA9CA /* GenericNodeHandler.cpp in Sources */,
 				614056DD1A5C6228005224C9 /* AccidentalGeometry.cpp in Sources */,
 				0008689A1A68430400BAA13D /* CodaGeometry.cpp in Sources */,

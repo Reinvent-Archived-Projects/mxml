@@ -4,10 +4,10 @@
 #pragma once
 #include "Jump.h"
 #include "Loop.h"
-#include "System.h"
 
 #include <mxml/dom/Attributes.h>
 #include <mxml/dom/Direction.h>
+#include <mxml/dom/Print.h>
 #include <mxml/dom/Score.h>
 #include <mxml/dom/Sound.h>
 
@@ -112,6 +112,15 @@ public:
      Get the system index for the given measure index.
      */
     std::size_t systemIndex(std::size_t measureIndex) const;
+
+    /**
+     Get the range of measures for the given system index.
+     */
+    std::pair<std::size_t, std::size_t> measureRange(std::size_t systemIndex) const;
+
+    std::size_t systemCount() const {
+        return _systemBegins.size();
+    }
 
 protected:
     struct AttributesRef {
@@ -329,9 +338,11 @@ private:
     std::set<SoundRef> _sounds;
     std::vector<Loop> _loops;
     std::vector<Jump> _jumps;
-    std::vector<System> _systems;
     std::vector<int> _staves;
     std::size_t _measureCount;
+
+    std::set<std::size_t> _systemBeginsSet;
+    std::vector<std::size_t> _systemBegins;
 
     static const dom::Key _defaultKey;
     static const dom::Clef _defaultClef;

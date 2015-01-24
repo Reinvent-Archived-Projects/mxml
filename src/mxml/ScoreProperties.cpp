@@ -25,6 +25,8 @@ ScoreProperties::ScoreProperties(const dom::Score& score)
   _measureCount(0)
 {
     _staves.resize(score.parts().size(), 0);
+    _systemBeginsSet.insert(0);
+
     std::size_t measureCount;
     for (auto& part : score.parts()) {
         auto partIndex = part->index();
@@ -36,11 +38,6 @@ ScoreProperties::ScoreProperties(const dom::Score& score)
 
         if (measureCount > _measureCount)
             _measureCount = measureCount;
-
-        if (!_systems.empty()) {
-            auto& lastSystem = _systems.back();
-            lastSystem.measureEnd = measureCount;
-        }
     }
 
     LoopFactory loopFactory(score);
@@ -48,6 +45,8 @@ ScoreProperties::ScoreProperties(const dom::Score& score)
 
     JumpFactory jumpFactory(score);
     _jumps = jumpFactory.build();
+
+    _systemBegins.insert(_systemBegins.end(), _systemBeginsSet.begin(), _systemBeginsSet.end());
 }
 
 void ScoreProperties::process(std::size_t partIndex, const dom::Measure& measure) {
@@ -101,15 +100,8 @@ void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, c
 }
 
 void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Print& print) {
-    if (!_systems.empty()) {
-        auto& lastSystem = _systems.back();
-        lastSystem.measureEnd = measureIndex;
-    }
-
-    System system;
-    system.print = &print;
-    system.measureBegin = measureIndex;
-    _systems.push_back(system);
+    if (print.newSystem)
+        _systemBeginsSet.insert(measureIndex);
 }
 
 void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Chord& chord) {
@@ -273,12 +265,20 @@ int ScoreProperties::octaveShift(std::size_t partIndex, std::size_t measureIndex
 }
 
 std::size_t ScoreProperties::systemIndex(std::size_t measureIndex) const {
-    auto it = std::lower_bound(_systems.begin(), _systems.end(), measureIndex, [](const System& system, std::size_t measureIndex) {
-        return system.measureEnd < measureIndex + 1;
-    });
-    if (it == _systems.end() || it->measureBegin > measureIndex)
-        return static_cast<std::size_t>(-1);
-    return it - _systems.begin();
+    auto it = std::upper_bound(_systemBegins.begin(), _systemBegins.end(), measureIndex);
+    if (it == _systemBegins.end())
+        return _systemBegins.size() - 1;
+    return std::distance(_systemBegins.begin(), it) - 1;
+}
+
+std::pair<std::size_t, std::size_t> ScoreProperties::measureRange(std::size_t index) const {
+    std::pair<std::size_t, std::size_t> range;
+    range.first = _systemBegins[index];
+    if (index == _systemBegins.size() - 1)
+        range.second = measureCount();
+    else
+        range.second = _systemBegins[index + 1];
+    return range;
 }
 
 }

@@ -13,7 +13,7 @@
 
 namespace mxml {
 
-PartGeometryFactory::PartGeometryFactory(const dom::Part& part, const ScoreProperties& scoreProperties, const ScrollMetrics& metrics, const SpanCollection& spans)
+PartGeometryFactory::PartGeometryFactory(const dom::Part& part, const ScoreProperties& scoreProperties, const Metrics& metrics, const SpanCollection& spans)
 : _part(part),
   _scoreProperties(scoreProperties),
   _metrics(metrics),
@@ -27,10 +27,16 @@ PartGeometryFactory::~PartGeometryFactory() {
 }
 
 std::unique_ptr<PartGeometry> PartGeometryFactory::build() {
+    return build(0, _scoreProperties.measureCount());
+}
+
+std::unique_ptr<PartGeometry> PartGeometryFactory::build(std::size_t beginMeasure, std::size_t endMeasure){
     _partGeometry.reset(new PartGeometry(_part, _scoreProperties, _metrics));
 
     coord_t offset = 0;
-    for (auto& measure : _part.measures()) {
+    for (std::size_t measureIndex = beginMeasure; measureIndex != endMeasure; measureIndex += 1) {
+        auto& measure = _part.measures()[measureIndex];
+
         std::unique_ptr<MeasureGeometry> geo(new MeasureGeometry(*measure, _spans, _scoreProperties, _metrics));
         geo->setHorizontalAnchorPointValues(0, 0);
         geo->setLocation({offset, 0});

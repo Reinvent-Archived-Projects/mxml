@@ -6,48 +6,27 @@
 #include <mxml/dom/Part.h>
 
 #include "Geometry.h"
-#include "MeasureGeometry.h"
-#include "TieGeometry.h"
+#include "PartGeometry.h"
 
 
 namespace mxml {
 
 class SystemGeometry : public Geometry {
 public:
-    SystemGeometry(const dom::Part& part, const System& system, const ScoreProperties& scoreProperties, const PageMetrics& metrics);
+    SystemGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, std::size_t systemIndex);
 
-    const dom::Part& part() const {
-        return _part;
-    }
-
-    const std::vector<MeasureGeometry*>& measureGeometries() const {
-        return _measureGeometries;
-    }
-    const std::vector<TieGeometry*>& tieGeometries() const {
-        return _tieGeometries;
-    }
-    const std::vector<PlacementGeometry*>& directionGeometries() const {
-        return _directionGeometries;
-    }
-    std::vector<PlacementGeometry*>& directionGeometries() {
-        return _directionGeometries;
-    }
-
-    dom::tenths_t staffDistance() const {
-        return _staffDistance;
+    const std::vector<PartGeometry*>& partGeometries() const {
+        return _partGeometries;
     }
     
 private:
-    const dom::Part& _part;
-    const System& _system;
+    const dom::Score& _score;
     const ScoreProperties& _scoreProperties;
-    const PageMetrics& _metrics;
+    const std::size_t _systemIndex;
 
-    dom::tenths_t _staffDistance;
-
-    std::vector<MeasureGeometry*> _measureGeometries;
-    std::vector<TieGeometry*> _tieGeometries;
-    std::vector<PlacementGeometry*> _directionGeometries;
+    SpanCollection _spans;
+    std::vector<PartGeometry*> _partGeometries;
+    std::vector<std::unique_ptr<PageMetrics>> _metrics;
 
     friend class SystemGeometryFactory;
 };

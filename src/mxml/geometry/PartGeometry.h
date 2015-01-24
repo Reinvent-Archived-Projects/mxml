@@ -6,7 +6,7 @@
 #include "MeasureGeometry.h"
 
 #include <mxml/ScoreProperties.h>
-#include <mxml/ScrollMetrics.h>
+#include <mxml/Metrics.h>
 #include <mxml/dom/Part.h>
 
 
@@ -19,7 +19,7 @@ class PlacementGeometry;
 
 class PartGeometry : public Geometry {
 public:
-    explicit PartGeometry(const dom::Part& part, const ScoreProperties& scoreProperties, const ScrollMetrics& metrics);
+    explicit PartGeometry(const dom::Part& part, const ScoreProperties& scoreProperties, const Metrics& metrics);
     
     const dom::Part& part() const {
         return _part;
@@ -59,7 +59,7 @@ public:
 private:
     const dom::Part& _part;
     const ScoreProperties& _scoreProperties;
-    const ScrollMetrics& _metrics;
+    const Metrics& _metrics;
     
     dom::tenths_t _staffDistance;
 

@@ -6,7 +6,7 @@
 
 namespace mxml {
 
-PartGeometry::PartGeometry(const dom::Part& part, const ScoreProperties& scoreProperties, const ScrollMetrics& metrics)
+PartGeometry::PartGeometry(const dom::Part& part, const ScoreProperties& scoreProperties, const Metrics& metrics)
 : _part(part),
   _scoreProperties(scoreProperties),
   _metrics(metrics)
