@@ -256,11 +256,10 @@ void DirectionGeometryFactory::buildSegno(const MeasureGeometry& measureGeom, co
     const dom::Segno& segno = dynamic_cast<const dom::Segno&>(*direction.type());
     std::unique_ptr<SegnoGeometry> segnoGeom(new SegnoGeometry(segno));
     
+    // Segnos are always placed at the start of the measure
     Point location;
-    const Span& span = *measureGeom.spans().with(&direction);
-    location.x = span.start();
+    location.x = measureGeom.location().x + SegnoGeometry::kSegnoSize.width;
     segnoGeom->setLocation(location);
-    
     placeDirection(*segnoGeom);
 
     _geometries.push_back(std::move(segnoGeom));
@@ -270,11 +269,10 @@ void DirectionGeometryFactory::buildCoda(const MeasureGeometry& measureGeom, con
     const dom::Coda& coda = dynamic_cast<const dom::Coda&>(*direction.type());
     std::unique_ptr<CodaGeometry> codaGeom(new CodaGeometry(coda));
     
+    // Codas are always placed at the start of the measure
     Point location;
-    const Span& span = *measureGeom.spans().with(&direction);
-    location.x = span.start();
+    location.x = measureGeom.location().x + CodaGeometry::kCodaSize.width;
     codaGeom->setLocation(location);
-    
     placeDirection(*codaGeom);
 
     _geometries.push_back(std::move(codaGeom));
