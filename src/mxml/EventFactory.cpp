@@ -119,7 +119,9 @@ std::unique_ptr<EventSequence> EventFactory::unroll() {
     dom::time_t time = 0;
 
     std::map<Loop, std::size_t> loopCounts;
-    std::map<Jump, std::size_t> jumpCounts;
+    
+    enum JumpState { kUnencountered, kFlagged, kActive, kPerformed };
+    std::map<Jump, JumpState> jumpStates;
 
     while (measureIndex < _scoreProperties.measureCount()) {
         bool skipped = false;
@@ -148,15 +150,26 @@ std::unique_ptr<EventSequence> EventFactory::unroll() {
 
         auto jumps = _scoreProperties.jumps(measureIndex);
         for (auto& jump : jumps) {
-            auto& count = jumpCounts[jump];
-            if (jump.forward() && count == 1) {
-                measureIndex = jump.to;
-                skipped = true;
-            } else if (!jump.forward() && count == 0) {
-                measureIndex = jump.to;
-                skipped = true;
+            auto& state = jumpStates[jump];
+            if (jump.forward()) {
+                if (state == kActive) {
+                    measureIndex = jump.to;
+                    skipped = true;
+                    state = kPerformed;
+                } else {
+                    state = kFlagged;
+                }
+            } else if (!jump.forward()) {
+                if (state == kUnencountered) {
+                    measureIndex = jump.to;
+                    skipped = true;
+                    for (auto& pair : jumpStates) {
+                        if (pair.second == kFlagged)
+                            pair.second = kActive;
+                    }
+                }
+                state = kPerformed;
             }
-            count += 1;
         }
 
         if (!skipped) {

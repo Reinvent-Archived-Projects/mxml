@@ -12,10 +12,17 @@
 
 using namespace mxml;
 
+static const char* kMoonlightFileName = "resources/moonlight.xml";
+static const char* kEventsFileName = "resources/events.xml";
+static const char* kEventsRepeatFileName = "resources/events_repeat.xml";
+static const char* kEventsDSAlCodaFileName = "resources/events_ds_al_coda.xml";
+static const char* kEventsComplex1FileName = "resources/events_complex_1.xml";
+static const char* kEventsComplex2FileName = "resources/events_complex_2.xml";
+
 BOOST_AUTO_TEST_CASE(moonlight) {
     ScoreHandler handler;
-    std::ifstream is("moonlight.xml");
-    lxml::parse(is, "moonlight.xml", handler);
+    std::ifstream is(kMoonlightFileName);
+    lxml::parse(is, kMoonlightFileName, handler);
 
     const dom::Score& score = *handler.result();
     ScoreProperties scoreProperties(score);
@@ -101,4 +108,183 @@ BOOST_AUTO_TEST_CASE(beats2_12) {
     BOOST_CHECK_EQUAL(it->measureIndex(), 0);
     BOOST_CHECK_EQUAL(it->measureTime(), 8);
     BOOST_CHECK(it->isBeatMark());
+}
+
+BOOST_AUTO_TEST_CASE(event_order) {
+    ScoreHandler handler;
+    std::ifstream is(kEventsFileName);
+    lxml::parse(is, kEventsFileName, handler);
+    
+    const dom::Score& score = *handler.result();
+    ScoreProperties scoreProperties(score);
+    
+    EventFactory factory(score, scoreProperties);
+    auto events = factory.build();
+    
+    dom::Pitch::Step event_order[] = {
+        dom::Pitch::Step::STEP_A,
+        dom::Pitch::Step::STEP_B,
+        dom::Pitch::Step::STEP_C,
+        dom::Pitch::Step::STEP_D
+    };
+    
+    int index = 0;
+    for (auto it = events->begin(); it != events->end(); ++it) {
+        auto& event = *it;
+        if (event.onNotes().size() > 0) {
+            auto note = event.onNotes().front();
+            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order[index]);
+            ++index;
+        }
+    }
+}
+
+BOOST_AUTO_TEST_CASE(event_order_repeat) {
+    ScoreHandler handler;
+    std::ifstream is(kEventsRepeatFileName);
+    lxml::parse(is, kEventsRepeatFileName, handler);
+    
+    const dom::Score& score = *handler.result();
+    ScoreProperties scoreProperties(score);
+    
+    EventFactory factory(score, scoreProperties);
+    auto events = factory.build();
+    
+    dom::Pitch::Step event_order[] = {
+        dom::Pitch::Step::STEP_A,
+        dom::Pitch::Step::STEP_B,
+        dom::Pitch::Step::STEP_C,
+        // Perform Repeat
+        dom::Pitch::Step::STEP_B,
+        dom::Pitch::Step::STEP_C,
+        dom::Pitch::Step::STEP_D
+    };
+    
+    int index = 0;
+    for (auto it = events->begin(); it != events->end(); ++it) {
+        auto& event = *it;
+        if (event.onNotes().size() > 0) {
+            auto note = event.onNotes().front();
+            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order[index]);
+            ++index;
+        }
+    }
+}
+
+BOOST_AUTO_TEST_CASE(event_order_ds_al_coda) {
+    ScoreHandler handler;
+    std::ifstream is(kEventsDSAlCodaFileName);
+    lxml::parse(is, kEventsDSAlCodaFileName, handler);
+    
+    const dom::Score& score = *handler.result();
+    ScoreProperties scoreProperties(score);
+    
+    EventFactory factory(score, scoreProperties);
+    auto events = factory.build();
+    
+    dom::Pitch::Step event_order[] = {
+        dom::Pitch::Step::STEP_A,
+        dom::Pitch::Step::STEP_B,
+        dom::Pitch::Step::STEP_C,
+        // Perform D.S. al Coda (goto Segno)
+        dom::Pitch::Step::STEP_A,
+        dom::Pitch::Step::STEP_B,
+        // Perform To Coda (goto Coda)
+        dom::Pitch::Step::STEP_D
+    };
+    
+    int index = 0;
+    for (auto it = events->begin(); it != events->end(); ++it) {
+        auto& event = *it;
+        if (event.onNotes().size() > 0) {
+            auto note = event.onNotes().front();
+            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order[index]);
+            ++index;
+        }
+    }
+}
+
+BOOST_AUTO_TEST_CASE(event_order_complex_1) {
+    ScoreHandler handler;
+    std::ifstream is(kEventsComplex1FileName);
+    lxml::parse(is, kEventsComplex1FileName, handler);
+    
+    const dom::Score& score = *handler.result();
+    ScoreProperties scoreProperties(score);
+    
+    EventFactory factory(score, scoreProperties);
+    auto events = factory.build();
+    
+    dom::Pitch::Step event_order[] = {
+        dom::Pitch::Step::STEP_A,
+        dom::Pitch::Step::STEP_B,
+        dom::Pitch::Step::STEP_C,
+        // Perform Repeat
+        dom::Pitch::Step::STEP_B,
+        dom::Pitch::Step::STEP_C,
+        dom::Pitch::Step::STEP_D,
+        dom::Pitch::Step::STEP_E,
+        dom::Pitch::Step::STEP_F,
+        // Perform D.S. al Coda (goto Segno)
+        dom::Pitch::Step::STEP_A,
+        dom::Pitch::Step::STEP_B,
+        // Perform To Coda (goto Coda)
+        dom::Pitch::Step::STEP_G,
+    };
+    
+    int index = 0;
+    for (auto it = events->begin(); it != events->end(); ++it) {
+        auto& event = *it;
+        if (event.onNotes().size() > 0) {
+            auto note = event.onNotes().front();
+            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order[index]);
+            ++index;
+        }
+    }
+}
+
+BOOST_AUTO_TEST_CASE(event_order_complex_2) {
+    ScoreHandler handler;
+    std::ifstream is(kEventsComplex2FileName);
+    lxml::parse(is, kEventsComplex2FileName, handler);
+    
+    const dom::Score& score = *handler.result();
+    ScoreProperties scoreProperties(score);
+    
+    EventFactory factory(score, scoreProperties);
+    auto events = factory.build();
+    
+    dom::Pitch::Step event_order[] = {
+        dom::Pitch::Step::STEP_A,
+        dom::Pitch::Step::STEP_B,
+        dom::Pitch::Step::STEP_C,
+        // Perform Repeat
+        dom::Pitch::Step::STEP_B,
+        dom::Pitch::Step::STEP_C,
+        dom::Pitch::Step::STEP_D,
+        dom::Pitch::Step::STEP_E,
+        dom::Pitch::Step::STEP_F,
+        // Perform D.S. al Coda (goto Segno)
+        dom::Pitch::Step::STEP_A,
+        dom::Pitch::Step::STEP_B,
+        // Perform To Coda (goto Coda)
+        dom::Pitch::Step::STEP_F,
+        dom::Pitch::Step::STEP_G,
+        // Perform D.S. (goto 2nd Segno)
+        dom::Pitch::Step::STEP_F,
+        dom::Pitch::Step::STEP_F,
+        dom::Pitch::Step::STEP_G,
+        dom::Pitch::Step::STEP_A,
+        dom::Pitch::Step::STEP_B,
+    };
+    
+    int index = 0;
+    for (auto it = events->begin(); it != events->end(); ++it) {
+        auto& event = *it;
+        if (event.onNotes().size() > 0) {
+            auto note = event.onNotes().front();
+            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order[index]);
+            ++index;
+        }
+    }
 }

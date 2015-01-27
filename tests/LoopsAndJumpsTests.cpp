@@ -14,8 +14,8 @@
 
 using namespace mxml;
 
-static const char* kLoopsFileName = "loops.xml";
-static const char* kRepeatsFileName = "repeats.xml";
+static const char* kLoopsFileName = "resources/loops.xml";
+static const char* kRepeatsFileName = "resources/repeats.xml";
 
 BOOST_AUTO_TEST_CASE(loops) {
     ScoreHandler handler;

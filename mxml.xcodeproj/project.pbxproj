@@ -209,6 +209,14 @@
 		0022ADFA1A7082C300139992 /* HorizontalResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HorizontalResolver.h; sourceTree = "<group>"; };
 		0022ADFB1A7082C300139992 /* VerticalResolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalResolver.cpp; sourceTree = "<group>"; };
 		0022ADFC1A7082C300139992 /* VerticalResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalResolver.h; sourceTree = "<group>"; };
+		00935E251A771D1100915D65 /* loops.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = loops.xml; sourceTree = "<group>"; };
+		00935E261A771D1100915D65 /* moonlight.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = moonlight.xml; sourceTree = "<group>"; };
+		00935E271A771D1100915D65 /* repeats.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = repeats.xml; sourceTree = "<group>"; };
+		00935E281A771EBA00915D65 /* events_complex_1.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = events_complex_1.xml; sourceTree = "<group>"; };
+		00935E291A771EBA00915D65 /* events_complex_2.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = events_complex_2.xml; sourceTree = "<group>"; };
+		00935E2A1A771EBA00915D65 /* events_ds_al_coda.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = events_ds_al_coda.xml; sourceTree = "<group>"; };
+		00935E2B1A771EBA00915D65 /* events_repeat.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = events_repeat.xml; sourceTree = "<group>"; };
+		00935E2C1A771EBA00915D65 /* events.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = events.xml; sourceTree = "<group>"; };
 		61239A5E1A64866500B3F0A3 /* ScoreProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreProperties.h; sourceTree = "<group>"; };
 		61239A5F1A64866500B3F0A3 /* ScoreProperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreProperties.cpp; sourceTree = "<group>"; };
 		61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreBuilder.cpp; sourceTree = "<group>"; };
@@ -424,7 +432,6 @@
 		614057841A5C625A005224C9 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		614057851A5C625A005224C9 /* MeasureGeometryTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MeasureGeometryTests.cpp; sourceTree = "<group>"; };
 		614057861A5C625A005224C9 /* MetricsTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MetricsTests.cpp; sourceTree = "<group>"; };
-		614057871A5C625A005224C9 /* moonlight.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = moonlight.xml; sourceTree = "<group>"; };
 		614057881A5C625A005224C9 /* NoteTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NoteTests.cpp; sourceTree = "<group>"; };
 		614057891A5C625A005224C9 /* ParsingTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParsingTests.cpp; sourceTree = "<group>"; };
 		614057931A5C6288005224C9 /* libboost_unit_test_framework-mt.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libboost_unit_test_framework-mt.dylib"; path = "../../../../../../../../../../usr/local/Cellar/boost/1.56.0/lib/libboost_unit_test_framework-mt.dylib"; sourceTree = "<group>"; };
@@ -449,9 +456,7 @@
 		614057BB1A5C7629005224C9 /* Key.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Key.cpp; sourceTree = "<group>"; };
 		614057BD1A5C79EF005224C9 /* KeyTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeyTests.cpp; sourceTree = "<group>"; };
 		614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScorePropertiesTests.cpp; sourceTree = "<group>"; };
-		61C8502C1A68439D00031100 /* repeats.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = repeats.xml; sourceTree = "<group>"; };
 		61C8502D1A6843EB00031100 /* LoopsAndJumpsTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoopsAndJumpsTests.cpp; sourceTree = "<group>"; };
-		61C850301A68464600031100 /* loops.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = loops.xml; sourceTree = "<group>"; };
 		61C8504C1A6D775100031100 /* OctaveShift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OctaveShift.h; sourceTree = "<group>"; };
 		61C8504D1A6D79CC00031100 /* OctaveShiftHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OctaveShiftHandler.cpp; sourceTree = "<group>"; };
 		61C8504E1A6D79CC00031100 /* OctaveShiftHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OctaveShiftHandler.h; sourceTree = "<group>"; };
@@ -540,6 +545,21 @@
 				0022ADFC1A7082C300139992 /* VerticalResolver.h */,
 			);
 			path = collisions;
+			sourceTree = "<group>";
+		};
+		00935E1F1A771D1100915D65 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				00935E281A771EBA00915D65 /* events_complex_1.xml */,
+				00935E291A771EBA00915D65 /* events_complex_2.xml */,
+				00935E2A1A771EBA00915D65 /* events_ds_al_coda.xml */,
+				00935E2B1A771EBA00915D65 /* events_repeat.xml */,
+				00935E2C1A771EBA00915D65 /* events.xml */,
+				00935E251A771D1100915D65 /* loops.xml */,
+				00935E261A771D1100915D65 /* moonlight.xml */,
+				00935E271A771D1100915D65 /* repeats.xml */,
+			);
+			path = resources;
 			sourceTree = "<group>";
 		};
 		614055AF1A5C61FE005224C9 = {
@@ -856,6 +876,7 @@
 		614057811A5C625A005224C9 /* tests */ = {
 			isa = PBXGroup;
 			children = (
+				00935E1F1A771D1100915D65 /* resources */,
 				614057841A5C625A005224C9 /* main.cpp */,
 				614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */,
 				614057821A5C625A005224C9 /* EventFactoryTests.cpp */,
@@ -866,9 +887,6 @@
 				614057861A5C625A005224C9 /* MetricsTests.cpp */,
 				614057881A5C625A005224C9 /* NoteTests.cpp */,
 				614057891A5C625A005224C9 /* ParsingTests.cpp */,
-				61C850301A68464600031100 /* loops.xml */,
-				614057871A5C625A005224C9 /* moonlight.xml */,
-				61C8502C1A68439D00031100 /* repeats.xml */,
 			);
 			path = tests;
 			sourceTree = "<group>";
