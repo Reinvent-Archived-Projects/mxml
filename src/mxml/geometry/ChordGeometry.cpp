@@ -155,11 +155,11 @@ void ChordGeometry::buildAccidentals(const Rect& notesFrame) {
 
 void ChordGeometry::buildAccidental(const NoteGeometry& noteGeom, const Rect& notesFrame) {
     const dom::Note& note = noteGeom.note();
-    auto alter = note.alter();
     if (!note.pitch())
         return;
-
-    int previousAlter = _scoreProperties.alter(note);
+    
+    int alter = note.alter();
+    int previousAlter = _scoreProperties.previousAlter(note);
     if (alter == previousAlter)
         return;
 

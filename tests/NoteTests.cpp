@@ -3,15 +3,16 @@
 
 #include <mxml/dom/Attributes.h>
 #include <mxml/dom/Note.h>
+
 #include <boost/test/unit_test.hpp>
 
 using namespace mxml::dom;
 
-Note createNote(int octave, Pitch::Step step, float alter) {
+Note createNote(int octave, Pitch::Step step, int alter) {
     std::unique_ptr<Pitch> pitch(new Pitch());
     pitch->setOctave(octave);
     pitch->setStep(step);
-    pitch->setAlter(alter);
+    pitch->setAlter({alter, true});
 
     Note note;
     note.setPitch(std::move(pitch));

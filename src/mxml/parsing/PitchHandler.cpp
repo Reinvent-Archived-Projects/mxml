@@ -22,7 +22,7 @@ lxml::RecursiveHandler* PitchHandler::startSubElement(const QName& qname) {
     if (strcmp(qname.localName(), kStepTag) == 0)
         return &_stringHandler;
     else if (strcmp(qname.localName(), kAlterTag) == 0)
-        return &_doubleHandler;
+        return &_integerHandler;
     else if (strcmp(qname.localName(), kOctaveTag) == 0)
         return &_integerHandler;
     return 0;
@@ -32,7 +32,7 @@ void PitchHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kStepTag) == 0)
         _result->setStep(stepFromString(_stringHandler.result()));
     else if (strcmp(qname.localName(), kAlterTag) == 0)
-        _result->setAlter(_doubleHandler.result());
+        _result->setAlter(dom::presentOptional(_integerHandler.result()));
     else if (strcmp(qname.localName(), kOctaveTag) == 0)
         _result->setOctave(_integerHandler.result());
 }

@@ -65,8 +65,6 @@ BOOST_AUTO_TEST_CASE(varyingDivisions) {
 }
 
 BOOST_AUTO_TEST_CASE(alters) {
-    static const std::size_t kPartIndex = 0;
-    static const std::size_t kMeasureIndex = 0;
     static const int kStaff = 1;
     static const int kOctave = 4;
 
@@ -75,41 +73,70 @@ BOOST_AUTO_TEST_CASE(alters) {
 
     // Create a measure defines a key signature and then a couple of alters
     auto measure1 = builder.addMeasure(part);
+    auto measure2 = builder.addMeasure(part);
     auto attributes1 = builder.addAttributes(measure1);
 
     auto clef = dom::Clef::trebleClef();
     clef->setParent(attributes1);
     attributes1->setClef(1, std::move(clef));
 
+    // This key signature modifies F and C by +1
     auto key = std::unique_ptr<dom::Key>(new dom::Key{});
     key->setParent(attributes1);
     key->setFifths(2);
     attributes1->setKey(1, std::move(key));
-
+    
+    // C Steps - measure 1
     auto chord1 = builder.addChord(measure1);
     auto note1 = builder.addNote(chord1, dom::Note::TYPE_EIGHTH, 1);
     note1->setStaff(kStaff);
-    builder.setPitch(note1, dom::Pitch::STEP_C, kOctave, 0);
-
+    builder.setPitch(note1, dom::Pitch::STEP_C, kOctave, {-1, true});
+    
     auto chord2 = builder.addChord(measure1);
     auto note2 = builder.addNote(chord2, dom::Note::TYPE_EIGHTH, 2);
     note2->setStaff(kStaff);
-    builder.setPitch(note2, dom::Pitch::STEP_D, kOctave, 1);
-
+    builder.setPitch(note2, dom::Pitch::STEP_C, kOctave, {1, true});
+    
+    // D Steps - measure 1
+    auto chord3 = builder.addChord(measure1);
+    auto note3 = builder.addNote(chord3, dom::Note::TYPE_EIGHTH, 1);
+    note3->setStaff(kStaff);
+    builder.setPitch(note3, dom::Pitch::STEP_D, kOctave, {1, true});
+    
+    auto chord4 = builder.addChord(measure1);
+    auto note4 = builder.addNote(chord4, dom::Note::TYPE_EIGHTH, 2);
+    note4->setStaff(kStaff);
+    builder.setPitch(note4, dom::Pitch::STEP_D, kOctave, {-1, true});
+    
+    // C Steps - measure 2
+    auto chord5 = builder.addChord(measure2);
+    auto note5 = builder.addNote(chord5, dom::Note::TYPE_EIGHTH, 1);
+    note5->setStaff(kStaff);
+    builder.setPitch(note5, dom::Pitch::STEP_C, kOctave);
+    
     auto score = builder.build();
     ScoreProperties properties(*score);
     
-    // Note C is initially 1 from the key signature and gets modified at time 1 back to 0
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, kStaff, 0, kOctave, dom::Pitch::STEP_C), 1);
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, kStaff, 1, kOctave, dom::Pitch::STEP_C), 0);
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, kStaff, 2, kOctave, dom::Pitch::STEP_C), 0);
+    // Original key signature
+    BOOST_CHECK_EQUAL(properties.previousAlter(*note1), 1);
+    
+    // Note C - measure 1 - time 1
+    BOOST_CHECK_EQUAL(properties.previousAlter(*note1), 1);
+    BOOST_CHECK_EQUAL(properties.alter(*note1), -1);
+    
+    // Note C - measure 1 - time 2
+    BOOST_CHECK_EQUAL(properties.previousAlter(*note2), -1);
+    BOOST_CHECK_EQUAL(properties.alter(*note2), 1);
 
-    // Note D is initially 0 and gets modified at time 2
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, kStaff, 0, kOctave, dom::Pitch::STEP_D), 0);
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, kStaff, 1, kOctave, dom::Pitch::STEP_D), 0);
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex, kStaff, 2, kOctave, dom::Pitch::STEP_D), 1);
-
+    // Note D - measure 1 - time 1
+    BOOST_CHECK_EQUAL(properties.previousAlter(*note3), 0);
+    BOOST_CHECK_EQUAL(properties.alter(*note3), 1);
+    
+    // Note D - measure 1 - time 2
+    BOOST_CHECK_EQUAL(properties.previousAlter(*note4), 1);
+    BOOST_CHECK_EQUAL(properties.alter(*note4), -1);
+    
     // Key signature modifications should not be preserved across measures
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex + 1, kStaff, 0, kOctave, dom::Pitch::STEP_C), 1);
-    BOOST_CHECK_EQUAL(properties.alter(kPartIndex, kMeasureIndex + 1, kStaff, 0, kOctave, dom::Pitch::STEP_D), 0);
+    // Note C - measure 2 - time 1
+    BOOST_CHECK_EQUAL(properties.alter(*note5), 1);
 }

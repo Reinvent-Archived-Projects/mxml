@@ -80,7 +80,7 @@ dom::Note* ScoreBuilder::addNote(dom::Chord* chord, dom::Note::Type type, dom::t
     return chord->notes().back().get();
 }
 
-dom::Pitch* ScoreBuilder::setPitch(dom::Note* note, dom::Pitch::Step step, int octave, int alter) {
+dom::Pitch* ScoreBuilder::setPitch(dom::Note* note, dom::Pitch::Step step, int octave, dom::Optional<int> alter) {
     auto pitch = std::unique_ptr<dom::Pitch>(new dom::Pitch{});
     pitch->setParent(note);
     pitch->setOctave(octave);

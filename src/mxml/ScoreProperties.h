@@ -71,9 +71,9 @@ public:
     int alter(const dom::Note& note) const;
 
     /**
-     Get the chromatic alteration for a given part, measure, time, staff, octave and step.
+     Get the previous chromatic alteration for a particular note.
      */
-    int alter(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time, int octave, dom::Pitch::Step step) const;
+    int previousAlter(const dom::Note& note) const;
 
     /**
      Get the tempo at the given measure and time.
@@ -84,11 +84,6 @@ public:
      Get the dynamics for the given note.
      */
     float dynamics(const dom::Note& note) const;
-    
-    /**
-     Get the dynamics at the given part, measure, staff and time.
-     */
-    float dynamics(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time) const;
 
     const std::vector<Loop>& loops() const { return _loops; }
     const std::vector<Jump>& jumps() const { return _jumps; }
@@ -121,6 +116,17 @@ public:
     std::size_t systemCount() const {
         return _systemBegins.size();
     }
+    
+private:
+    /**
+     Get the chromatic alteration for a given part, measure, time, staff, octave and step.
+     */
+    int alter(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time, int octave, dom::Pitch::Step step) const;
+    
+    /**
+     Get the dynamics at the given part, measure, staff and time.
+     */
+    float dynamics(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time) const;
 
 protected:
     struct AttributesRef {

@@ -172,17 +172,24 @@ int ScoreProperties::staves(std::size_t partIndex) const {
 int ScoreProperties::alter(const dom::Note& note) const {
     const auto partIndex = note.measure()->part()->index();
     const auto measureIndex = note.measure()->index();
-    return alter(partIndex, measureIndex, note.start(), note.staff(), note.pitch()->octave(), note.pitch()->step());
+    return alter(partIndex, measureIndex, note.staff(), note.start(), note.pitch()->octave(), note.pitch()->step());
+}
+
+int ScoreProperties::previousAlter(const dom::Note& note) const {
+    const auto partIndex = note.measure()->part()->index();
+    const auto measureIndex = note.measure()->index();
+    return alter(partIndex, measureIndex, note.staff(), note.start() - 1, note.pitch()->octave(), note.pitch()->step());
 }
 
 int ScoreProperties::alter(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time, int octave, dom::Pitch::Step step) const {
     auto currentKey = key(partIndex, measureIndex, staff, time);
-    int current = currentKey->alter(step);
+    const int base = currentKey->alter(step);
+    int current = base;
 
     for (auto& ref : _pitches) {
         if (ref.measureIndex > measureIndex || (ref.measureIndex == measureIndex && ref.time > time))
             return current;
-        if (ref.measureIndex == measureIndex && ref.staff == staff && ref.pitch->octave() == octave && ref.pitch->step() == step)
+        if (ref.measureIndex == measureIndex && ref.staff == staff && ref.pitch->octave() == octave && ref.pitch->step() == step && ref.pitch->alter().isPresent())
             current = ref.pitch->alter();
     }
 

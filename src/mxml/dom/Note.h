@@ -195,7 +195,7 @@ public:
         if (_accidental) {
             return Optional<int>(_accidental->type, true);
         } else if (_pitch) {
-           return Optional<int>(_pitch->alter(), true);
+           return _pitch->alter();
         }
 
         return Optional<int>();

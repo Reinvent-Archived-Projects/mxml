@@ -43,11 +43,11 @@ public:
     /**
      Chromatic alteration in number of semitones (e.g. -1 for flat, 1 for sharp).
      */
-    int alter() const {
+    Optional<int> alter() const {
         return _alter;
     }
     
-    void setAlter(int alter) {
+    void setAlter(Optional<int> alter) {
         _alter = alter;
     }
     
@@ -85,7 +85,7 @@ public:
     
 private:
     Step _step;
-    int _alter;
+    Optional<int> _alter;
     int _octave;
 };
 
