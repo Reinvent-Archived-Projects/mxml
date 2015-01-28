@@ -13,10 +13,10 @@ SystemGeometry::SystemGeometry(const dom::Score& score, const ScoreProperties& s
   _scoreProperties(scoreProperties),
   _systemIndex(systemIndex)
 {
-    SpanFactory spanFactory(_score, _scoreProperties, false);
-    _spans = spanFactory.build();
-
     auto range = _scoreProperties.measureRange(systemIndex);
+
+    SpanFactory spanFactory(_score, _scoreProperties, false);
+    _spans = spanFactory.build(range.first, range.second);
 
     std::size_t partIndex = 0;
     coord_t offset = 0;

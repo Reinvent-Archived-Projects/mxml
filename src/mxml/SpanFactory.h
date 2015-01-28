@@ -20,9 +20,10 @@ class SpanFactory {
 public:
     SpanFactory(const dom::Score& score, const ScoreProperties& scoreProperties, bool naturalSpacing);
     const SpanCollection& build();
+    const SpanCollection& build(std::size_t beginMeasureIndex, std::size_t endMeasureIndex);
     
 private:
-    void build(const dom::Part* part);
+    void build(const dom::Part* part, std::size_t beginMeasureIndex, std::size_t endMeasureIndex);
     void build(const dom::Measure* measure);
     void build(const dom::Attributes* attributes);
     void build(const dom::Barline* barline);

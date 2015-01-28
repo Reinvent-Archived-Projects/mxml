@@ -33,11 +33,15 @@ SpanFactory::SpanFactory(const dom::Score& score, const ScoreProperties& scorePr
 {
     _spans.setNaturalSpacing(naturalSpacing);
 }
-    
+
 const SpanCollection& SpanFactory::build() {
+    return build(0, _scoreProperties.measureCount());
+}
+
+const SpanCollection& SpanFactory::build(std::size_t beginMeasureIndex, std::size_t endMeasureIndex) {
     _partIndex = 0;
     for (auto& part : _score.parts()) {
-        build(part.get());
+        build(part.get(), beginMeasureIndex, endMeasureIndex);
         _partIndex += 1;
     }
     removeRedundantSpans();
@@ -47,8 +51,8 @@ const SpanCollection& SpanFactory::build() {
     return _spans;
 }
 
-void SpanFactory::build(const dom::Part* part) {
-    for (_measureIndex = 0; _measureIndex < part->measures().size(); _measureIndex += 1) {
+void SpanFactory::build(const dom::Part* part, std::size_t beginMeasureIndex, std::size_t endMeasureIndex) {
+    for (_measureIndex = beginMeasureIndex; _measureIndex < endMeasureIndex; _measureIndex += 1) {
         _currentTime = 0;
         build(part->measures().at(_measureIndex).get());
     }

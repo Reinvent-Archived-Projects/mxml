@@ -18,7 +18,13 @@ public:
     const std::vector<PartGeometry*>& partGeometries() const {
         return _partGeometries;
     }
-    
+    const SpanCollection& spans() const {
+        return _spans;
+    }
+    const std::size_t systemIndex() const {
+        return _systemIndex;
+    }
+
 private:
     const dom::Score& _score;
     const ScoreProperties& _scoreProperties;
