@@ -211,6 +211,7 @@
 		0022ADFA1A7082C300139992 /* HorizontalResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HorizontalResolver.h; sourceTree = "<group>"; };
 		0022ADFB1A7082C300139992 /* VerticalResolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalResolver.cpp; sourceTree = "<group>"; };
 		0022ADFC1A7082C300139992 /* VerticalResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VerticalResolver.h; sourceTree = "<group>"; };
+		00631C211A7AB59A00FB1283 /* events_repeat_last_measure.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = events_repeat_last_measure.xml; sourceTree = "<group>"; };
 		00935E251A771D1100915D65 /* loops.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = loops.xml; sourceTree = "<group>"; };
 		00935E261A771D1100915D65 /* moonlight.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = moonlight.xml; sourceTree = "<group>"; };
 		00935E271A771D1100915D65 /* repeats.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = repeats.xml; sourceTree = "<group>"; };
@@ -558,6 +559,7 @@
 				00935E291A771EBA00915D65 /* events_complex_2.xml */,
 				00935E2A1A771EBA00915D65 /* events_ds_al_coda.xml */,
 				00935E2B1A771EBA00915D65 /* events_repeat.xml */,
+				00631C211A7AB59A00FB1283 /* events_repeat_last_measure.xml */,
 				00935E2C1A771EBA00915D65 /* events.xml */,
 				00935E251A771D1100915D65 /* loops.xml */,
 				00935E261A771D1100915D65 /* moonlight.xml */,

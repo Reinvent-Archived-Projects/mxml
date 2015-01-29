@@ -12,12 +12,13 @@
 
 using namespace mxml;
 
-static const char* kMoonlightFileName = "resources/moonlight.xml";
-static const char* kEventsFileName = "resources/events.xml";
-static const char* kEventsRepeatFileName = "resources/events_repeat.xml";
-static const char* kEventsDSAlCodaFileName = "resources/events_ds_al_coda.xml";
-static const char* kEventsComplex1FileName = "resources/events_complex_1.xml";
-static const char* kEventsComplex2FileName = "resources/events_complex_2.xml";
+static const char* kMoonlightFileName               = "resources/moonlight.xml";
+static const char* kEventsFileName                  = "resources/events.xml";
+static const char* kEventsRepeatFileName            = "resources/events_repeat.xml";
+static const char* kEventsRepeatLastMeasureFileName = "resources/events_repeat_last_measure.xml";
+static const char* kEventsDSAlCodaFileName          = "resources/events_ds_al_coda.xml";
+static const char* kEventsComplex1FileName          = "resources/events_complex_1.xml";
+static const char* kEventsComplex2FileName          = "resources/events_complex_2.xml";
 
 BOOST_AUTO_TEST_CASE(moonlight) {
     ScoreHandler handler;
@@ -121,7 +122,7 @@ BOOST_AUTO_TEST_CASE(event_order) {
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
     
-    dom::Pitch::Step event_order[] = {
+    std::vector<dom::Pitch::Step> event_order{
         dom::Pitch::Step::STEP_A,
         dom::Pitch::Step::STEP_B,
         dom::Pitch::Step::STEP_C,
@@ -133,10 +134,12 @@ BOOST_AUTO_TEST_CASE(event_order) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order[index]);
+            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order.at(index));
             ++index;
         }
     }
+    
+    BOOST_CHECK_EQUAL(index, event_order.size());
 }
 
 BOOST_AUTO_TEST_CASE(event_order_repeat) {
@@ -150,7 +153,7 @@ BOOST_AUTO_TEST_CASE(event_order_repeat) {
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
     
-    dom::Pitch::Step event_order[] = {
+    std::vector<dom::Pitch::Step> event_order{
         dom::Pitch::Step::STEP_A,
         dom::Pitch::Step::STEP_B,
         dom::Pitch::Step::STEP_C,
@@ -165,10 +168,46 @@ BOOST_AUTO_TEST_CASE(event_order_repeat) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order[index]);
+            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order.at(index));
             ++index;
         }
     }
+    
+    BOOST_CHECK_EQUAL(index, event_order.size());
+}
+
+BOOST_AUTO_TEST_CASE(event_order_repeat_last_measure) {
+    ScoreHandler handler;
+    std::ifstream is(kEventsRepeatLastMeasureFileName);
+    lxml::parse(is, kEventsRepeatLastMeasureFileName, handler);
+    
+    const dom::Score& score = *handler.result();
+    ScoreProperties scoreProperties(score);
+    
+    EventFactory factory(score, scoreProperties);
+    auto events = factory.build();
+    
+    std::vector<dom::Pitch::Step> event_order{
+        dom::Pitch::Step::STEP_A,
+        dom::Pitch::Step::STEP_B,
+        dom::Pitch::Step::STEP_C,
+        dom::Pitch::Step::STEP_D,
+        // Perform Repeat
+        dom::Pitch::Step::STEP_C,
+        dom::Pitch::Step::STEP_D
+    };
+    
+    int index = 0;
+    for (auto it = events->begin(); it != events->end(); ++it) {
+        auto& event = *it;
+        if (event.onNotes().size() > 0) {
+            auto note = event.onNotes().front();
+            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order.at(index));
+            ++index;
+        }
+    }
+    
+    BOOST_CHECK_EQUAL(index, event_order.size());
 }
 
 BOOST_AUTO_TEST_CASE(event_order_ds_al_coda) {
@@ -182,7 +221,7 @@ BOOST_AUTO_TEST_CASE(event_order_ds_al_coda) {
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
     
-    dom::Pitch::Step event_order[] = {
+    std::vector<dom::Pitch::Step> event_order{
         dom::Pitch::Step::STEP_A,
         dom::Pitch::Step::STEP_B,
         dom::Pitch::Step::STEP_C,
@@ -198,10 +237,12 @@ BOOST_AUTO_TEST_CASE(event_order_ds_al_coda) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order[index]);
+            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order.at(index));
             ++index;
         }
     }
+    
+    BOOST_CHECK_EQUAL(index, event_order.size());
 }
 
 BOOST_AUTO_TEST_CASE(event_order_complex_1) {
@@ -215,7 +256,7 @@ BOOST_AUTO_TEST_CASE(event_order_complex_1) {
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
     
-    dom::Pitch::Step event_order[] = {
+    std::vector<dom::Pitch::Step> event_order{
         dom::Pitch::Step::STEP_A,
         dom::Pitch::Step::STEP_B,
         dom::Pitch::Step::STEP_C,
@@ -237,10 +278,12 @@ BOOST_AUTO_TEST_CASE(event_order_complex_1) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order[index]);
+            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order.at(index));
             ++index;
         }
     }
+    
+    BOOST_CHECK_EQUAL(index, event_order.size());
 }
 
 BOOST_AUTO_TEST_CASE(event_order_complex_2) {
@@ -254,7 +297,7 @@ BOOST_AUTO_TEST_CASE(event_order_complex_2) {
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
     
-    dom::Pitch::Step event_order[] = {
+    std::vector<dom::Pitch::Step> event_order{
         dom::Pitch::Step::STEP_A,
         dom::Pitch::Step::STEP_B,
         dom::Pitch::Step::STEP_C,
@@ -283,8 +326,10 @@ BOOST_AUTO_TEST_CASE(event_order_complex_2) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order[index]);
+            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order.at(index));
             ++index;
         }
     }
+    
+    BOOST_CHECK_EQUAL(index, event_order.size());
 }

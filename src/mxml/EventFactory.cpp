@@ -121,7 +121,9 @@ std::unique_ptr<EventSequence> EventFactory::unroll() {
     enum JumpState { kUnencountered, kFlagged, kActive, kPerformed };
     std::map<Jump, JumpState> jumpStates;
 
-    while (measureIndex < _scoreProperties.measureCount()) {
+    // Iterate until we equal the measure count for loops
+    // that 'end' past the last measure
+    while (measureIndex <= _scoreProperties.measureCount()) {
         bool skipped = false;
 
         auto prevLoop = _scoreProperties.loop(measureIndex - 1);
