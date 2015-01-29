@@ -217,7 +217,8 @@ float ScoreProperties::dynamics(const dom::Note& note) const {
 }
 
 float ScoreProperties::dynamics(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time) const {
-    float current = 100.0;
+    // Current value loosely based of a MIDI value of 80 (80/127 ~= 0.65)
+    float current = 65.0;
     for (auto& ref : _sounds) {
         if (ref.measureIndex > measureIndex || (ref.measureIndex == measureIndex && ref.time > time))
             return current;
