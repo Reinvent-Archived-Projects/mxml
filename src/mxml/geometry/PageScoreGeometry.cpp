@@ -23,6 +23,11 @@ PageScoreGeometry::PageScoreGeometry(const dom::Score& score, coord_t width)
         addGeometry(std::move(systemGeometry));
     }
     setBounds(subGeometriesFrame());
+
+    // Force the width even if there are systems that didn't fit
+    auto s = size();
+    s.width = width;
+    setSize(s);
 }
 
 } // namespace mxml
