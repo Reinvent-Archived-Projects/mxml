@@ -6,13 +6,13 @@
 
 namespace mxml {
 
-PageScoreGeometry::PageScoreGeometry(const dom::Score& score)
+PageScoreGeometry::PageScoreGeometry(const dom::Score& score, coord_t width)
 : _score(score),
   _scoreProperties(score)
 {
     coord_t offset = 0;
     for (std::size_t systemIndex = 0; systemIndex < _scoreProperties.systemCount(); systemIndex += 1) {
-        auto systemGeometry = std::unique_ptr<SystemGeometry>(new SystemGeometry(_score, _scoreProperties, systemIndex));
+        auto systemGeometry = std::unique_ptr<SystemGeometry>(new SystemGeometry(_score, _scoreProperties, systemIndex, width));
 
         systemGeometry->setHorizontalAnchorPointValues(0, 0);
         systemGeometry->setVerticalAnchorPointValues(0, 0);

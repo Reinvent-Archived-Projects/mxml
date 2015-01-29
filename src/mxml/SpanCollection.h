@@ -27,12 +27,9 @@ public:
     void setNaturalSpacing(bool naturalSpacing) {
         _naturalSpacing = naturalSpacing;
     }
-    
-    /** Get the first span. */
-    iterator first();
-    
-    /** Get the last span. */
-    iterator last();
+
+    std::size_t beginMeasureIndex() const;
+    std::size_t endMeasureIndex() const;
 
     /** Get the range of spans with a given measure number. */
     std::pair<iterator, iterator> range(std::size_t measureIndex);
@@ -137,6 +134,11 @@ public:
     
     /** Compute the total width of the measure based on span widths and margins. */
     coord_t width(std::size_t measureIndex) const;
+
+    /**
+      Compute the total flexible width of the measure. The flexible width is the total amount of space between elements.
+     */
+    coord_t flexibleWidth(std::size_t measureIndex) const;
     
     /**
      Fill in the spans' start location based on their widths and margins. Call this after the first layout pass to

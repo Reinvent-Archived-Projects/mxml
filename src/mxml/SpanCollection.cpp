@@ -10,14 +10,16 @@ namespace mxml {
 
 SpanCollection::SpanCollection() : _naturalSpacing(true) {}
 
-SpanCollection::iterator SpanCollection::first() {
-    return _spans.begin();
+std::size_t SpanCollection::beginMeasureIndex() const {
+    if (_spans.empty())
+        return 0;
+    return _spans.front().measureIndex();
 }
 
-SpanCollection::iterator SpanCollection::last() {
+std::size_t SpanCollection::endMeasureIndex() const {
     if (_spans.empty())
-        return _spans.end();
-    return _spans.end() - 1;
+        return 0;
+    return _spans.back().measureIndex() + 1;
 }
 
 std::pair<SpanCollection::iterator, SpanCollection::iterator> SpanCollection::range(std::size_t measureIndex) {
@@ -140,6 +142,26 @@ coord_t SpanCollection::width(std::size_t measureIndex) const {
         margin = span.rightMargin();
     }
     width += margin;
+    return width;
+}
+
+coord_t SpanCollection::flexibleWidth(std::size_t measureIndex) const {
+    coord_t flexWidth = 0;
+    coord_t width = 0;
+    coord_t margin = 0;
+    auto r = range(measureIndex);
+    for (auto it = r.first; it != r.second; ++it) {
+        auto& span = *it;
+        margin = std::max(margin, span.leftMargin());
+        if (_naturalSpacing)
+            width += margin + std::max(span.width(), span.naturalWidth());
+        else
+            width += margin + span.width();
+        flexWidth += margin;
+        margin = span.rightMargin();
+    }
+    width += margin;
+    flexWidth += margin;
     return width;
 }
 

@@ -19,8 +19,16 @@ namespace mxml {
 class SpanFactory {
 public:
     SpanFactory(const dom::Score& score, const ScoreProperties& scoreProperties, bool naturalSpacing);
+
+    /**
+     Build the span collection for the whole score, used in a scroll layout.
+     */
     const SpanCollection& build();
-    const SpanCollection& build(std::size_t beginMeasureIndex, std::size_t endMeasureIndex);
+
+    /**
+     Build the span collection for a single system with the given measure range and width.
+     */
+    const SpanCollection& build(std::size_t beginMeasureIndex, std::size_t endMeasureIndex, coord_t width);
     
 private:
     void build(const dom::Part* part, std::size_t beginMeasureIndex, std::size_t endMeasureIndex);
@@ -37,6 +45,8 @@ private:
 
     void removeRedundantSpans();
     static bool isAttributeOnlySpan(const Span& span);
+
+    void fitToWidth(coord_t width);
 
 private:
     const dom::Score& _score;

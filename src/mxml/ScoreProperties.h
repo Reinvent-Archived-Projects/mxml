@@ -57,7 +57,17 @@ public:
     /**
      Get active divisions for the given measure.
      */
-    int divisions(std::size_t measureIndex) const;
+    dom::time_t divisions(std::size_t measureIndex) const;
+
+    /**
+     Get the number of divsions per beat for the given measure.
+     */
+    dom::time_t divisionsPerBeat(std::size_t measureIndex) const;
+
+    /**
+     Get the number of divsions per measure for the given measure.
+     */
+    dom::time_t divisionsPerMeasure(std::size_t measureIndex) const;
 
     /**
      Get the number of staves for a given part. This method assumes that the staves value gets set once and never

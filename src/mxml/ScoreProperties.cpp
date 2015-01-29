@@ -100,7 +100,7 @@ void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, c
 }
 
 void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Print& print) {
-    if (print.newSystem)
+    if (print.newSystem || print.newPage)
         _systemBeginsSet.insert(measureIndex);
 }
 
@@ -151,12 +151,24 @@ const dom::Time* ScoreProperties::time(std::size_t measureIndex) const {
     });
 }
 
-int ScoreProperties::divisions(std::size_t measureIndex) const {
+dom::time_t ScoreProperties::divisions(std::size_t measureIndex) const {
     return getAttribute<int>(measureIndex, 0, 1, [&](const dom::Attributes& attribute, int previous) {
         if (attribute.divisions().isPresent())
             return attribute.divisions().value();
         return previous;
     });
+}
+
+dom::time_t ScoreProperties::divisionsPerBeat(std::size_t measureIndex) const {
+    const auto divs = divisions(measureIndex);
+    const auto t = time(measureIndex);
+    return divs * 4 / t->beatType();
+}
+
+dom::time_t ScoreProperties::divisionsPerMeasure(std::size_t measureIndex) const {
+    const auto divs = divisions(measureIndex);
+    const auto t = time(measureIndex);
+    return (divs * 4 / t->beatType()) * t->beats();
 }
 
 const dom::Clef* ScoreProperties::clef(const dom::Note& note) const {

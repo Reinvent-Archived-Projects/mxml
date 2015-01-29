@@ -1,6 +1,7 @@
 //  Created by Alejandro Isaza on 2014-04-30.
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
+#include "Algorithm.h"
 #include "SpanFactory.h"
 
 #include <mxml/geometry/AccidentalGeometry.h>
@@ -23,7 +24,7 @@ static const coord_t kMeasureRightPadding = 4;
 
 static const coord_t kAttributeMargin = 10;
 static const coord_t kRestWidth = 12;
-static const coord_t kNoteMargin = 20;
+static const coord_t kNoteMargin = 12;
 
 SpanFactory::SpanFactory(const dom::Score& score, const ScoreProperties& scoreProperties, bool naturalSpacing)
 : _score(score),
@@ -35,16 +36,19 @@ SpanFactory::SpanFactory(const dom::Score& score, const ScoreProperties& scorePr
 }
 
 const SpanCollection& SpanFactory::build() {
-    return build(0, _scoreProperties.measureCount());
+    return build(0, _scoreProperties.measureCount(), coord_t{});
 }
 
-const SpanCollection& SpanFactory::build(std::size_t beginMeasureIndex, std::size_t endMeasureIndex) {
+const SpanCollection& SpanFactory::build(std::size_t beginMeasureIndex, std::size_t endMeasureIndex, coord_t width) {
     _partIndex = 0;
     for (auto& part : _score.parts()) {
         build(part.get(), beginMeasureIndex, endMeasureIndex);
         _partIndex += 1;
     }
     removeRedundantSpans();
+
+    if (width != 0)
+        fitToWidth(width);
 
     _spans.fillStarts();
     _spans.generateNodesMap();
@@ -333,9 +337,7 @@ void SpanFactory::build(const dom::Note* note) {
 }
 
 void SpanFactory::removeRedundantSpans() {
-    auto first = _spans.first();
-    auto last = _spans.last();
-    if (first == _spans.end() || last == _spans.end())
+    if (_spans.begin() == _spans.end())
         return;
 
     std::size_t measureCount = 0;
@@ -410,6 +412,57 @@ coord_t SpanFactory::naturalWidthForNote(const dom::Note& note) {
             
         case dom::Note::TYPE_MAXIMA:
             return kBaseWidth + 64*kWidthIncrease;
+    }
+}
+
+void SpanFactory::fitToWidth(coord_t width) {
+    const auto beginMeasure = _spans.beginMeasureIndex();
+    const auto endMeasure = _spans.endMeasureIndex();
+
+    // Compute total width
+    std::vector<coord_t> widths;
+    coord_t totalWidth = 0;
+    for (auto measureIndex = beginMeasure; measureIndex != endMeasure; measureIndex += 1) {
+        const auto measureWidth = _spans.width(measureIndex);
+        widths.push_back(measureWidth);
+        totalWidth += measureWidth;
+    }
+
+    // Not much we can do if the measures don't fit
+    if (totalWidth >= width)
+        return;
+
+    // Scale all widths
+    const auto ratio = width / totalWidth;
+    for (auto measureIndex = beginMeasure; measureIndex != endMeasure; measureIndex += 1) {
+        widths[measureIndex - beginMeasure] *= ratio;
+    }
+
+    // Find the set of integer widths that add up to the total width exactly, minimizing the error
+    std::vector<int> newWidths;
+    integerSum(widths.begin(), widths.end(), std::inserter(newWidths, newWidths.begin()));
+
+    for (auto measureIndex = beginMeasure; measureIndex != endMeasure; measureIndex += 1) {
+        const auto measureWidth = _spans.width(measureIndex);
+        const auto newMeasureWidth = newWidths[measureIndex - beginMeasure];
+        const auto extraWidth = newMeasureWidth - measureWidth;
+        const auto totalDivisions = _scoreProperties.divisionsPerMeasure(measureIndex);
+        const auto widthPerDivision = extraWidth / totalDivisions;
+
+        auto range = _spans.range(measureIndex);
+        for (auto it = range.first; it != range.second; ++it) {
+            auto next = std::next(it);
+            dom::time_t duration;
+            if (it->time() == std::numeric_limits<int>::max())
+                duration = 0;
+            else if (next == range.second || next->time() == std::numeric_limits<int>::max())
+                duration = totalDivisions - it->time();
+            else
+                duration = next->time() - it->time();
+
+            const auto added = duration * widthPerDivision;
+            it->setRightMargin(it->rightMargin() + added);
+        }
     }
 }
 

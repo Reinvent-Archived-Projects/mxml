@@ -15,7 +15,7 @@ namespace mxml {
 
 class PageScoreGeometry : public Geometry {
 public:
-    PageScoreGeometry(const dom::Score& score);
+    PageScoreGeometry(const dom::Score& score, coord_t width);
 
     const dom::Score& score() const {
         return _score;

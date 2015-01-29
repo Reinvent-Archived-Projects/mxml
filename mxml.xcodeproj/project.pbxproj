@@ -132,6 +132,8 @@
 		61C850891A6EE39300031100 /* PositionFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C850871A6EE39300031100 /* PositionFactory.h */; };
 		61C8508C1A6EE64300031100 /* SystemLayoutHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61C8508A1A6EE64300031100 /* SystemLayoutHandler.cpp */; };
 		61C8508D1A6EE64300031100 /* SystemLayoutHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C8508B1A6EE64300031100 /* SystemLayoutHandler.h */; };
+		61E530B71A79A1FD00E5B2FF /* Algorithm.h in Headers */ = {isa = PBXBuildFile; fileRef = 61E530B51A79A1FD00E5B2FF /* Algorithm.h */; };
+		61E530BD1A79A43700E5B2FF /* AlgorithmTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61E530B91A79A21400E5B2FF /* AlgorithmTests.cpp */; };
 		61F072CD1A6EEB48002CA9CA /* SystemDividersHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F072CB1A6EEB48002CA9CA /* SystemDividersHandler.cpp */; };
 		61F072CE1A6EEB48002CA9CA /* SystemDividersHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F072CC1A6EEB48002CA9CA /* SystemDividersHandler.h */; };
 		61F072D11A6EEE03002CA9CA /* TypeFactories.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F072CF1A6EEE03002CA9CA /* TypeFactories.cpp */; };
@@ -471,6 +473,8 @@
 		61C850871A6EE39300031100 /* PositionFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PositionFactory.h; sourceTree = "<group>"; };
 		61C8508A1A6EE64300031100 /* SystemLayoutHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemLayoutHandler.cpp; sourceTree = "<group>"; };
 		61C8508B1A6EE64300031100 /* SystemLayoutHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemLayoutHandler.h; sourceTree = "<group>"; };
+		61E530B51A79A1FD00E5B2FF /* Algorithm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Algorithm.h; sourceTree = "<group>"; };
+		61E530B91A79A21400E5B2FF /* AlgorithmTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlgorithmTests.cpp; sourceTree = "<group>"; };
 		61F072CB1A6EEB48002CA9CA /* SystemDividersHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SystemDividersHandler.cpp; sourceTree = "<group>"; };
 		61F072CC1A6EEB48002CA9CA /* SystemDividersHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SystemDividersHandler.h; sourceTree = "<group>"; };
 		61F072CF1A6EEE03002CA9CA /* TypeFactories.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TypeFactories.cpp; sourceTree = "<group>"; };
@@ -589,6 +593,7 @@
 				614055C91A5C6228005224C9 /* dom */,
 				614056051A5C6228005224C9 /* geometry */,
 				614056491A5C6228005224C9 /* parsing */,
+				61E530B51A79A1FD00E5B2FF /* Algorithm.h */,
 				614055FF1A5C6228005224C9 /* Event.cpp */,
 				614056001A5C6228005224C9 /* Event.h */,
 				614056011A5C6228005224C9 /* EventFactory.cpp */,
@@ -878,6 +883,7 @@
 			children = (
 				00935E1F1A771D1100915D65 /* resources */,
 				614057841A5C625A005224C9 /* main.cpp */,
+				61E530B91A79A21400E5B2FF /* AlgorithmTests.cpp */,
 				614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */,
 				614057821A5C625A005224C9 /* EventFactoryTests.cpp */,
 				614057831A5C625A005224C9 /* GeometryTests.cpp */,
@@ -965,6 +971,7 @@
 				0022ADFF1A7082C300139992 /* CollisionResolver.h in Headers */,
 				61F073A21A71A447002CA9CA /* SystemGeometry.h in Headers */,
 				61F072DA1A6F02FE002CA9CA /* PageLayoutHandler.h in Headers */,
+				61E530B71A79A1FD00E5B2FF /* Algorithm.h in Headers */,
 				61F073CB1A71CD8F002CA9CA /* TieGeometryFactory.h in Headers */,
 				61239BA01A67426C00B3F0A3 /* JumpFactory.h in Headers */,
 				61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */,
@@ -1179,6 +1186,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61E530BD1A79A43700E5B2FF /* AlgorithmTests.cpp in Sources */,
 				614057901A5C625A005224C9 /* ParsingTests.cpp in Sources */,
 				614057C01A5CAA47005224C9 /* ScorePropertiesTests.cpp in Sources */,
 				614057BE1A5C79EF005224C9 /* KeyTests.cpp in Sources */,

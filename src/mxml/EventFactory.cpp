@@ -47,7 +47,7 @@ void EventFactory::processMeasure(const dom::Measure& measure) {
         }
     }
 
-    auto nextTime = _measureStartTime + Attributes::divisionsPerMeasure(_scoreProperties.divisions(measure.index()), *_scoreProperties.time(measure.index()));
+    auto nextTime = _measureStartTime + _scoreProperties.divisionsPerMeasure(measure.index());
     if (_time > nextTime)
         _time = nextTime;
     _measureStartTime = _time;
@@ -98,10 +98,8 @@ Event& EventFactory::event(std::size_t measureIndex, dom::time_t measureTime, do
 void EventFactory::setBeatMarks() {
     dom::time_t absoluteTime = 0;
     for (std::size_t measureIndex = 0; measureIndex < _scoreProperties.measureCount(); measureIndex += 1) {
-        auto divisions = _scoreProperties.divisions(measureIndex);
-        auto time = _scoreProperties.time(measureIndex);
-        auto divisionsPerBeat = Attributes::divisionsPerBeat(divisions, *time);
-        auto divisionsPerMeasure = divisionsPerBeat * time->beats();
+        auto divisionsPerBeat = _scoreProperties.divisionsPerBeat(measureIndex);
+        auto divisionsPerMeasure = _scoreProperties.divisionsPerMeasure(measureIndex);
 
         for (dom::time_t time = 0; time < divisionsPerMeasure; time += divisionsPerBeat) {
             auto& e = event(measureIndex, time, absoluteTime);
@@ -173,7 +171,7 @@ std::unique_ptr<EventSequence> EventFactory::unroll() {
         }
 
         if (!skipped) {
-            auto measureDuration = Attributes::divisionsPerMeasure(_scoreProperties.divisions(measureIndex), *_scoreProperties.time(measureIndex));
+            auto measureDuration = _scoreProperties.divisionsPerMeasure(measureIndex);
             auto first = _events.lower_bound(std::make_pair(measureIndex, 0));
             auto second = _events.upper_bound(std::make_pair(measureIndex, measureDuration));
             for (auto it = first; it != second; ++it) {

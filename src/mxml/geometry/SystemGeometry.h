@@ -13,7 +13,7 @@ namespace mxml {
 
 class SystemGeometry : public Geometry {
 public:
-    SystemGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, std::size_t systemIndex);
+    SystemGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, std::size_t systemIndex, coord_t width);
 
     const std::vector<PartGeometry*>& partGeometries() const {
         return _partGeometries;
