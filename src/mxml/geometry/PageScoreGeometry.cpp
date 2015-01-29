@@ -13,11 +13,14 @@ PageScoreGeometry::PageScoreGeometry(const dom::Score& score, coord_t width)
     coord_t offset = 0;
     for (std::size_t systemIndex = 0; systemIndex < _scoreProperties.systemCount(); systemIndex += 1) {
         auto systemGeometry = std::unique_ptr<SystemGeometry>(new SystemGeometry(_score, _scoreProperties, systemIndex, width));
+        auto& metrics = systemGeometry->metrics(_score.parts().size() - 1);
 
         systemGeometry->setHorizontalAnchorPointValues(0, 0);
         systemGeometry->setVerticalAnchorPointValues(0, 0);
         systemGeometry->setLocation({0, offset});
-        offset += systemGeometry->size().height;
+
+        auto systemDistance = metrics.systemDistance();
+        offset += systemGeometry->size().height + systemDistance - 2*MeasureGeometry::kVerticalPadding;
 
         _systemGeometries.push_back(systemGeometry.get());
         addGeometry(std::move(systemGeometry));

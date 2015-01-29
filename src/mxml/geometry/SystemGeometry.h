@@ -21,6 +21,9 @@ public:
     const SpanCollection& spans() const {
         return _spans;
     }
+    const PageMetrics& metrics(std::size_t partIndex) const {
+        return *_metrics[partIndex];
+    }
     const std::size_t systemIndex() const {
         return _systemIndex;
     }
