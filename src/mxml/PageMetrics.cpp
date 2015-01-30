@@ -58,9 +58,7 @@ dom::tenths_t PageMetrics::staffDistance() const {
 
         auto& print = *ref.print;
         if (print.staffDistance()) {
-            auto& systemLayout = print.systemLayout.value();
-            if (systemLayout.systemDistance)
-                distance = systemLayout.systemDistance;
+            distance = print.staffDistance();
         }
     }
 

@@ -28,6 +28,9 @@ public:
         return _systemIndex;
     }
 
+    coord_t topPadding() const;
+    coord_t bottomPadding() const;
+
 private:
     const dom::Score& _score;
     const ScoreProperties& _scoreProperties;

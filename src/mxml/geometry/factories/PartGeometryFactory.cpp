@@ -83,8 +83,10 @@ std::unique_ptr<PartGeometry> PartGeometryFactory::build(std::size_t beginMeasur
     
     CollisionHandler collisionHandler(*_partGeometry, _metrics);
     collisionHandler.resolveCollisions();
-    
-    _partGeometry->setBounds(_partGeometry->subGeometriesFrame());
+
+    auto bounds = _partGeometry->subGeometriesFrame();
+    bounds.origin.x = 0;
+    _partGeometry->setBounds(bounds);
 
     return std::move(_partGeometry);
 }

@@ -25,9 +25,16 @@ SystemGeometry::SystemGeometry(const dom::Score& score, const ScoreProperties& s
 
         PartGeometryFactory factory(*part, _scoreProperties, *_metrics.back(), _spans);
         std::unique_ptr<PartGeometry> geom = factory.build(range.first, range.second);
+
         geom->setHorizontalAnchorPointValues(0, 0);
         geom->setVerticalAnchorPointValues(0, 0);
         geom->setLocation({0, offset});
+
+        // Force the width so that everything aligns
+        auto size = geom->size();
+        size.width = width;
+        geom->setSize(size);
+
         offset += geom->size().height;
         _partGeometries.push_back(geom.get());
         addGeometry(std::move(geom));
@@ -35,7 +42,30 @@ SystemGeometry::SystemGeometry(const dom::Score& score, const ScoreProperties& s
         partIndex += 1;
     }
 
-    setBounds(subGeometriesFrame());
+    // Force the content offset in x and width so that all systems align properly
+    auto bounds = subGeometriesFrame();
+    bounds.origin.x = 0;
+    bounds.size.width = width;
+    setBounds(bounds);
+}
+
+coord_t SystemGeometry::topPadding() const {
+    if (_partGeometries.empty())
+        return {};
+
+    auto& firstPart = _partGeometries.front();
+    auto& firstMeasure = firstPart->measureGeometries().front();
+    return firstMeasure->convertToGeometry({0, 0}, this).y;
+}
+
+coord_t SystemGeometry::bottomPadding() const {
+    if (_partGeometries.empty())
+        return {};
+
+    auto& metrics = _metrics.back();
+    auto& lastPart = _partGeometries.back();
+    auto& firstMeasure = lastPart->measureGeometries().front();
+    return bounds().max().y - firstMeasure->convertToGeometry({0, metrics->stavesHeight()}, this).y;
 }
 
 } // namespace

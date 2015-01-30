@@ -15,22 +15,27 @@ PageScoreGeometry::PageScoreGeometry(const dom::Score& score, coord_t width)
         auto systemGeometry = std::unique_ptr<SystemGeometry>(new SystemGeometry(_score, _scoreProperties, systemIndex, width));
         auto& metrics = systemGeometry->metrics(_score.parts().size() - 1);
 
+        const auto systemDistance = metrics.systemDistance();
+        const auto bottomPadding = systemGeometry->bottomPadding();
+        const auto topPadding = systemGeometry->topPadding();
+        if (offset == 0)
+            offset = topPadding;
+
         systemGeometry->setHorizontalAnchorPointValues(0, 0);
         systemGeometry->setVerticalAnchorPointValues(0, 0);
-        systemGeometry->setLocation({0, offset});
+        systemGeometry->setLocation({0, offset - topPadding});
 
-        auto systemDistance = metrics.systemDistance();
-        offset += systemGeometry->size().height + systemDistance - 2*MeasureGeometry::kVerticalPadding;
+        offset += systemGeometry->size().height - topPadding - bottomPadding + systemDistance;
 
         _systemGeometries.push_back(systemGeometry.get());
         addGeometry(std::move(systemGeometry));
     }
-    setBounds(subGeometriesFrame());
 
-    // Force the width even if there are systems that didn't fit
-    auto s = size();
-    s.width = width;
-    setSize(s);
+    // Force the content offset in x and width so that the page aligns to the screen
+    auto bounds = subGeometriesFrame();
+    bounds.origin.x = 0;
+    bounds.size.width = width;
+    setBounds(bounds);
 }
 
 } // namespace mxml
