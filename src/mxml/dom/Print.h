@@ -25,7 +25,7 @@ namespace dom {
  continues to take the default values from the layout included in the defaults element.
  */
 struct Print : public Node {
-    Print() {}
+    Print() : newSystem(false), newPage(false) {}
 
     Optional<PageLayout> pageLayout;
     Optional<SystemLayout> systemLayout;
