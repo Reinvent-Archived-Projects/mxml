@@ -2,7 +2,9 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
+#include "ScoreProperties.h"
 #include "Span.h"
+
 #include <unordered_map>
 #include <vector>
 
@@ -19,7 +21,7 @@ public:
     typedef std::vector<Span>::const_iterator const_iterator;
     
 public:
-    SpanCollection();
+    explicit SpanCollection(const ScoreProperties& scoreProperties);
     
     bool naturalSpacing() const {
         return _naturalSpacing;
@@ -43,13 +45,29 @@ public:
     /** Get the range of spans with a given measure number and time. */
     std::pair<const_iterator, const_iterator> range(std::size_t measureIndex, int time) const;
     
-    /** Get the first span that contains the given node. Const version. Returns 0 if there is no such span. You need
-     to call generateNodesMap() when there are modifications or the result of this method will be invalid. */
+    /**
+     Get the first span that contains the given node. Const version. Returns 0 if there is no such span. You need
+     to call generateNodesMap() when there are modifications or the result of this method will be invalid.
+     */
     const_iterator with(const dom::Node* node) const;
 
-    /** Get the first span that contains the given node. Returns 0 if there is no such span. You need to call
-     generateNodesMap() when there are modifications or the result of this method will be invalid. */
+    /**
+     Get the first span that contains the given node. Returns end() if there is no such span. You need to call
+     generateNodesMap() when there are modifications or the result of this method will be invalid.
+     */
     iterator with(const dom::Node* node);
+
+    /**
+     Get the first span that contains the given node, constrained to the given measureIndex. Const version. Returns
+     end() if there is no such span.
+     */
+    const_iterator with(const dom::Node* node, std::size_t measureIndex) const;
+
+    /**
+     Get the first span that contains the given node, constrained to the given measureIndex. Returns end() if there is
+     no such span.
+     */
+    iterator with(const dom::Node* node, std::size_t measureIndex);
 
     /** Get the first span for a given measure and time that has the template type T. */
     template <typename T>
@@ -139,6 +157,11 @@ public:
       Compute the total flexible width of the measure. The flexible width is the total amount of space between elements.
      */
     coord_t flexibleWidth(std::size_t measureIndex) const;
+
+    /**
+     Expand spacing between notes to fill up each system to the given width.
+     */
+    void fitToWidth(coord_t width, std::size_t begnMeasure, std::size_t endMeasure);
     
     /**
      Fill in the spans' start location based on their widths and margins. Call this after the first layout pass to
@@ -153,6 +176,8 @@ public:
     void generateNodesMap();
     
 private:
+    const ScoreProperties& _scoreProperties;
+
     std::vector<Span> _spans;
     std::unordered_map<const dom::Node*, std::size_t> _nodesMap;
     bool _naturalSpacing;

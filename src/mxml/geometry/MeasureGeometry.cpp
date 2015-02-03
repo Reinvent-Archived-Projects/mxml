@@ -121,7 +121,7 @@ bool MeasureGeometry::buildClefGeometry(const dom::Clef* clef, int staff) {
     if (!clef)
         return false;
     
-    auto it = _spans.with(clef);
+    auto it = _spans.with(clef, _measure.index());
     if (it == _spans.end())
         return false;
     
@@ -143,7 +143,7 @@ bool MeasureGeometry::buildKeyGeometry(const dom::Key* key, int staff, dom::time
     if (!key)
         return false;
     
-    auto it = _spans.with(key);
+    auto it = _spans.with(key, _measure.index());
     if  (it == _spans.end())
         return false;
     
@@ -176,7 +176,7 @@ bool MeasureGeometry::buildTimeGeometry(const dom::Time* time, int staff) {
     if (!time)
         return false;
     
-    auto it = _spans.with(time);
+    auto it = _spans.with(time, _measure.index());
     if  (it == _spans.end())
         return false;
     

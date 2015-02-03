@@ -15,7 +15,7 @@ namespace mxml {
 
 class PageScoreGeometry : public Geometry {
 public:
-    PageScoreGeometry(const dom::Score& score, coord_t width);
+    PageScoreGeometry(const dom::Score& score, coord_t minWidth);
 
     const dom::Score& score() const {
         return _score;
@@ -27,10 +27,14 @@ public:
         return _systemGeometries;
     }
 
+protected:
+    coord_t maxSystemWidth() const;
+
 private:
     const dom::Score& _score;
 
     ScoreProperties _scoreProperties;
+    std::unique_ptr<SpanCollection> _spans;
     std::vector<SystemGeometry*> _systemGeometries;
 };
 

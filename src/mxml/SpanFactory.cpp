@@ -26,39 +26,43 @@ static const coord_t kAttributeMargin = 10;
 static const coord_t kRestWidth = 12;
 static const coord_t kNoteMargin = 12;
 
-SpanFactory::SpanFactory(const dom::Score& score, const ScoreProperties& scoreProperties, bool naturalSpacing)
+SpanFactory::SpanFactory(const dom::Score& score, const ScoreProperties& scoreProperties)
 : _score(score),
   _scoreProperties(scoreProperties),
+  _naturalSpacing(false),
+  _addClefAndKeyToEverySystem(false),
   _currentTime(0),
   _spans()
 {
-    _spans.setNaturalSpacing(naturalSpacing);
 }
 
-const SpanCollection& SpanFactory::build() {
-    return build(0, _scoreProperties.measureCount(), coord_t{});
-}
+std::unique_ptr<SpanCollection> SpanFactory::build() {
+    _spans.reset(new SpanCollection{_scoreProperties});
+    _spans->setNaturalSpacing(_naturalSpacing);
 
-const SpanCollection& SpanFactory::build(std::size_t beginMeasureIndex, std::size_t endMeasureIndex, coord_t width) {
     _partIndex = 0;
     for (auto& part : _score.parts()) {
-        build(part.get(), beginMeasureIndex, endMeasureIndex);
+        build(part.get(), 0, _scoreProperties.measureCount());
         _partIndex += 1;
     }
     removeRedundantSpans();
 
-    if (width != 0)
-        fitToWidth(width);
-
-    _spans.fillStarts();
-    _spans.generateNodesMap();
-    return _spans;
+    _spans->fillStarts();
+    _spans->generateNodesMap();
+    return std::move(_spans);
 }
 
 void SpanFactory::build(const dom::Part* part, std::size_t beginMeasureIndex, std::size_t endMeasureIndex) {
     for (_measureIndex = beginMeasureIndex; _measureIndex < endMeasureIndex; _measureIndex += 1) {
         _currentTime = 0;
-        build(part->measures().at(_measureIndex).get(), _measureIndex == beginMeasureIndex);
+
+        bool buildMeasureAttributes = false;
+        if (_addClefAndKeyToEverySystem) {
+            auto systemIndex = _scoreProperties.systemIndex(_measureIndex);
+            auto range = _scoreProperties.measureRange(systemIndex);
+            buildMeasureAttributes = range.first == _measureIndex;
+        }
+        build(part->measures().at(_measureIndex).get(), buildMeasureAttributes);
     }
 }
 
@@ -78,10 +82,10 @@ void SpanFactory::build(const dom::Measure* measure, bool buildMeasureAttributes
         }
     }
 
-    auto measureRange = _spans.range(_measureIndex);
+    auto measureRange = _spans->range(_measureIndex);
     if (measureRange.first == measureRange.second) {
         // Set measure padding for an empty measure
-        auto span = _spans.add(_measureIndex, 0);
+        auto span = _spans->add(_measureIndex, 0);
         span->pushLeftMargin(kMeasureLeftPadding);
         span->pushRightMargin(kMeasureRightPadding);
     } else {
@@ -103,9 +107,9 @@ void SpanFactory::build(const dom::Barline* barline) {
     if (barline == measure->nodes().back().get())
         time = std::numeric_limits<int>::max();
 
-    SpanCollection::iterator span = _spans.withType<dom::Barline>(_measureIndex, time);
-    if (span == _spans.end()) {
-        span = _spans.add(_measureIndex, time);
+    SpanCollection::iterator span = _spans->withType<dom::Barline>(_measureIndex, time);
+    if (span == _spans->end()) {
+        span = _spans->add(_measureIndex, time);
         span->setEvent(false);
     }
     span->pushWidth(BarlineGeometry::Width(*barline));
@@ -138,20 +142,20 @@ void SpanFactory::build(const dom::Attributes* attributes) {
 
     for (int staff = 1; staff <= _scoreProperties.staves(_partIndex); ++staff) {
         auto clefNode = attributes->clef(staff);
-        auto timeNode = attributes->time();
         auto keyNode = attributes->key(staff);
+        auto timeNode = attributes->time();
         build(clefNode, staff, time);
-        build(timeNode, staff, time);
         build(keyNode, staff, time);
+        build(timeNode, staff, time);
     }
 }
 
 void SpanFactory::build(const dom::Direction* direction) {
     _currentTime = direction->start();
 
-    SpanCollection::iterator span = _spans.eventSpan(_measureIndex, _currentTime);
-    if (span == _spans.end()) {
-        span = _spans.add(_measureIndex, _currentTime);
+    SpanCollection::iterator span = _spans->eventSpan(_measureIndex, _currentTime);
+    if (span == _spans->end()) {
+        span = _spans->add(_measureIndex, _currentTime);
         span->setEvent(true);
     }
     
@@ -176,9 +180,9 @@ void SpanFactory::build(const dom::Chord* chord) {
     if (chord->firstNote()->grace()) {
         span = graceNoteSpan(chord);
     } else {
-        span = _spans.eventSpan(_measureIndex, _currentTime);
-        if (span == _spans.end()) {
-            span = _spans.add(_measureIndex, _currentTime);
+        span = _spans->eventSpan(_measureIndex, _currentTime);
+        if (span == _spans->end()) {
+            span = _spans->add(_measureIndex, _currentTime);
             span->setEvent(true);
         }
     }
@@ -247,9 +251,9 @@ void SpanFactory::build(const dom::Note* note) {
     if (!note->printObject)
         return;
 
-    auto span = _spans.eventSpan(_measureIndex, _currentTime);
-    if (span == _spans.end()) {
-        span = _spans.add(_measureIndex, _currentTime);
+    auto span = _spans->eventSpan(_measureIndex, _currentTime);
+    if (span == _spans->end()) {
+        span = _spans->add(_measureIndex, _currentTime);
         span->setEvent(true);
     }
     span->pushWidth(kRestWidth);
@@ -264,9 +268,9 @@ void SpanFactory::build(const dom::Clef* clefNode, int staff, int time) {
     if (!clefNode)
         return;
 
-    SpanCollection::iterator clefSpan = _spans.withType<dom::Clef>(_measureIndex, time);
-    if (clefSpan == _spans.end())
-        clefSpan = _spans.add(_measureIndex, time);
+    SpanCollection::iterator clefSpan = _spans->withType<dom::Clef>(_measureIndex, time);
+    if (clefSpan == _spans->end())
+        clefSpan = _spans->add(_measureIndex, time);
     clefSpan->setEvent(false);
     clefSpan->pushLeftMargin(kAttributeMargin);
     clefSpan->pushRightMargin(kAttributeMargin);
@@ -278,9 +282,9 @@ void SpanFactory::build(const dom::Time* timeNode, int staff, int time) {
     if (!timeNode)
         return;
 
-    SpanCollection::iterator timeSpan = _spans.withType<dom::Time>(_measureIndex, time);
-    if (timeSpan == _spans.end())
-        timeSpan = _spans.add(_measureIndex, time);
+    SpanCollection::iterator timeSpan = _spans->withType<dom::Time>(_measureIndex, time);
+    if (timeSpan == _spans->end())
+        timeSpan = _spans->add(_measureIndex, time);
 
     coord_t width = TimeSignatureGeometry(*timeNode).size().width;
     if (width > 0) {
@@ -308,9 +312,9 @@ void SpanFactory::build(const dom::Key* keyNode, int staff, int time) {
     if (width <= 0)
         return;
 
-    SpanCollection::iterator keySpan = _spans.withType<dom::Key>(_measureIndex, time);
-    if (keySpan == _spans.end())
-        keySpan = _spans.add(_measureIndex, time);
+    SpanCollection::iterator keySpan = _spans->withType<dom::Key>(_measureIndex, time);
+    if (keySpan == _spans->end())
+        keySpan = _spans->add(_measureIndex, time);
     keySpan->pushLeftMargin(kAttributeMargin);
     keySpan->pushWidth(width);
     keySpan->pushRightMargin(kAttributeMargin);
@@ -319,9 +323,9 @@ void SpanFactory::build(const dom::Key* keyNode, int staff, int time) {
 }
 
 SpanCollection::iterator SpanFactory::graceNoteSpan(const dom::Chord* chord) {
-    const auto range = _spans.range(_measureIndex, _currentTime);
+    const auto range = _spans->range(_measureIndex, _currentTime);
     const int staff = chord->firstNote()->staff();
-    SpanCollection::iterator span = _spans.end();
+    SpanCollection::iterator span = _spans->end();
 
     // Count number of grace notes on the same staff
     auto count = std::count_if(range.first, range.second, [staff](const Span& s) {
@@ -354,14 +358,14 @@ SpanCollection::iterator SpanFactory::graceNoteSpan(const dom::Chord* chord) {
         }
     }
 
-    if (span == _spans.end())
-        span = _spans.addBeforeEvent(_measureIndex, _currentTime); // New grace note span
+    if (span == _spans->end())
+        span = _spans->addBeforeEvent(_measureIndex, _currentTime); // New grace note span
 
     return span;
 }
 
 void SpanFactory::removeRedundantSpans() {
-    if (_spans.begin() == _spans.end())
+    if (_spans->begin() == _spans->end())
         return;
 
     std::size_t measureCount = 0;
@@ -369,7 +373,7 @@ void SpanFactory::removeRedundantSpans() {
         measureCount = std::max(measureCount, part->measures().size());
 
     for (std::size_t index = 0; index < measureCount; index += 1) {
-        auto r = _spans.range(index);
+        auto r = _spans->range(index);
         if (r.first == r.second)
             break;
 
@@ -383,9 +387,9 @@ void SpanFactory::removeRedundantSpans() {
             if (it->event())
                 break;
 
-            auto rn = _spans.range(index + 1);
+            auto rn = _spans->range(index + 1);
             if (isAttributeOnlySpan(*it) && isAttributeOnlySpan(*rn.first))
-                _spans.erase(it);
+                _spans->erase(it);
         }
     }
 }
@@ -436,57 +440,6 @@ coord_t SpanFactory::naturalWidthForNote(const dom::Note& note) {
             
         case dom::Note::TYPE_MAXIMA:
             return kBaseWidth + 64*kWidthIncrease;
-    }
-}
-
-void SpanFactory::fitToWidth(coord_t width) {
-    const auto beginMeasure = _spans.beginMeasureIndex();
-    const auto endMeasure = _spans.endMeasureIndex();
-
-    // Compute total width
-    std::vector<coord_t> widths;
-    coord_t totalWidth = 0;
-    for (auto measureIndex = beginMeasure; measureIndex != endMeasure; measureIndex += 1) {
-        const auto measureWidth = _spans.width(measureIndex);
-        widths.push_back(measureWidth);
-        totalWidth += measureWidth;
-    }
-
-    // Not much we can do if the measures don't fit
-    if (totalWidth >= width)
-        return;
-
-    // Scale all widths
-    const auto ratio = width / totalWidth;
-    for (auto measureIndex = beginMeasure; measureIndex != endMeasure; measureIndex += 1) {
-        widths[measureIndex - beginMeasure] *= ratio;
-    }
-
-    // Find the set of integer widths that add up to the total width exactly, minimizing the error
-    std::vector<int> newWidths;
-    integerSum(widths.begin(), widths.end(), std::inserter(newWidths, newWidths.begin()));
-
-    for (auto measureIndex = beginMeasure; measureIndex != endMeasure; measureIndex += 1) {
-        const auto measureWidth = _spans.width(measureIndex);
-        const auto newMeasureWidth = newWidths[measureIndex - beginMeasure];
-        const auto extraWidth = newMeasureWidth - measureWidth;
-        const auto totalDivisions = _scoreProperties.divisionsPerMeasure(measureIndex);
-        const auto widthPerDivision = extraWidth / totalDivisions;
-
-        auto range = _spans.range(measureIndex);
-        for (auto it = range.first; it != range.second; ++it) {
-            auto next = std::next(it);
-            dom::time_t duration;
-            if (it->time() == std::numeric_limits<int>::max())
-                duration = 0;
-            else if (next == range.second || next->time() == std::numeric_limits<int>::max())
-                duration = totalDivisions - it->time();
-            else
-                duration = next->time() - it->time();
-
-            const auto added = duration * widthPerDivision;
-            it->setRightMargin(it->rightMargin() + added);
-        }
     }
 }
 

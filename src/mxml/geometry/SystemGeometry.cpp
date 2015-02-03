@@ -8,15 +8,13 @@
 
 namespace mxml {
 
-SystemGeometry::SystemGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, std::size_t systemIndex, coord_t width)
+SystemGeometry::SystemGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, const SpanCollection& spans, std::size_t systemIndex, coord_t width)
 : _score(score),
   _scoreProperties(scoreProperties),
+  _spans(spans),
   _systemIndex(systemIndex)
 {
     auto range = _scoreProperties.measureRange(systemIndex);
-
-    SpanFactory spanFactory(_score, _scoreProperties, false);
-    _spans = spanFactory.build(range.first, range.second, width);
 
     std::size_t partIndex = 0;
     coord_t offset = 0;

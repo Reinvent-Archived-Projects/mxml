@@ -11,6 +11,9 @@
 #include <mxml/dom/Measure.h>
 #include <mxml/dom/Score.h>
 
+#include <memory>
+
+
 namespace mxml {
 
 /**
@@ -18,17 +21,32 @@ namespace mxml {
  */
 class SpanFactory {
 public:
-    SpanFactory(const dom::Score& score, const ScoreProperties& scoreProperties, bool naturalSpacing);
+    SpanFactory(const dom::Score& score, const ScoreProperties& scoreProperties);
+
+    /**
+     With natural spacing enabled notes with longer durations have proportinaly more space to their right.
+     */
+    bool naturalSpacing() const {
+        return _naturalSpacing;
+    }
+    void setNaturalSpacing(bool value) {
+        _naturalSpacing = value;
+    }
+
+    /**
+     If this is enabled there will be space for the clef and the key signature on the first measure of every system.
+     */
+    bool addCleffAndKeyToEverySystem() const {
+        return _addClefAndKeyToEverySystem;
+    }
+    void setAddClefAndKeyToEverySystem(bool value) {
+        _addClefAndKeyToEverySystem = value;
+    }
 
     /**
      Build the span collection for the whole score, used in a scroll layout.
      */
-    const SpanCollection& build();
-
-    /**
-     Build the span collection for a single system with the given measure range and width.
-     */
-    const SpanCollection& build(std::size_t beginMeasureIndex, std::size_t endMeasureIndex, coord_t width);
+    std::unique_ptr<SpanCollection> build();
     
 private:
     void build(const dom::Part* part, std::size_t beginMeasureIndex, std::size_t endMeasureIndex);
@@ -50,17 +68,17 @@ private:
     void removeRedundantSpans();
     static bool isAttributeOnlySpan(const Span& span);
 
-    void fitToWidth(coord_t width);
-
 private:
     const dom::Score& _score;
     const ScoreProperties& _scoreProperties;
+    bool _naturalSpacing;
+    bool _addClefAndKeyToEverySystem;
 
     std::size_t _partIndex;
     std::size_t _measureIndex;
     int _currentTime;
-    
-    SpanCollection _spans;
+
+    std::unique_ptr<SpanCollection> _spans;
 };
 
 } // namespace mxml

@@ -27,7 +27,7 @@ public:
         return _scoreProperties;
     }
     const SpanCollection& spans() const {
-        return _spans;
+        return *_spans;
     }
     const std::vector<PartGeometry*>& partGeometries() const {
         return _partGeometries;
@@ -40,7 +40,7 @@ private:
     const dom::Score& _score;
 
     ScoreProperties _scoreProperties;
-    SpanCollection _spans;
+    std::unique_ptr<SpanCollection> _spans;
     std::vector<PartGeometry*> _partGeometries;
     std::vector<std::unique_ptr<ScrollMetrics>> _metrics;
 };

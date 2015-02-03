@@ -1,6 +1,7 @@
 //  Created by Alejandro Isaza on 2014-04-30.
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
+#include "Algorithm.h"
 #include "SpanCollection.h"
 #include <mxml/dom/TimedNode.h>
 #include <mxml/dom/Types.h>
@@ -8,7 +9,10 @@
 
 namespace mxml {
 
-SpanCollection::SpanCollection() : _naturalSpacing(true) {}
+SpanCollection::SpanCollection(const ScoreProperties& scoreProperties)
+: _scoreProperties(scoreProperties),
+  _naturalSpacing(true)
+{}
 
 std::size_t SpanCollection::beginMeasureIndex() const {
     if (_spans.empty())
@@ -84,6 +88,24 @@ SpanCollection::iterator SpanCollection::with(const dom::Node* node) {
     if (it == _nodesMap.end())
         return _spans.end();
     return _spans.begin() + it->second;
+}
+
+SpanCollection::const_iterator SpanCollection::with(const dom::Node* node, std::size_t measureIndex) const {
+    auto r = range(measureIndex);
+    for (auto it = r.first; it != r.second; ++it) {
+        if (it->hasNode(node))
+            return it;
+    }
+    return _spans.end();
+}
+
+SpanCollection::iterator SpanCollection::with(const dom::Node* node, std::size_t measureIndex) {
+    auto r = range(measureIndex);
+    for (auto it = r.first; it != r.second; ++it) {
+        if (it->hasNode(node))
+            return it;
+    }
+    return _spans.end();
 }
 
 SpanCollection::iterator SpanCollection::eventSpan(std::size_t measureIndex, int time) {
@@ -163,6 +185,54 @@ coord_t SpanCollection::flexibleWidth(std::size_t measureIndex) const {
     width += margin;
     flexWidth += margin;
     return width;
+}
+
+void SpanCollection::fitToWidth(coord_t targetWidth, std::size_t beginMeasure, std::size_t endMeasure) {
+    // Compute total width
+    std::vector<coord_t> widths;
+    coord_t totalWidth = 0;
+    for (auto measureIndex = beginMeasure; measureIndex != endMeasure; measureIndex += 1) {
+        const auto measureWidth = width(measureIndex);
+        widths.push_back(measureWidth);
+        totalWidth += measureWidth;
+    }
+
+    // Not much we can do if the measures don't fit
+    if (totalWidth >= targetWidth)
+        return;
+
+    // Scale all widths
+    const auto ratio = targetWidth / totalWidth;
+    for (auto measureIndex = beginMeasure; measureIndex != endMeasure; measureIndex += 1) {
+        widths[measureIndex - beginMeasure] *= ratio;
+    }
+
+    // Find the set of integer widths that add up to the total width exactly, minimizing the error
+    std::vector<int> newWidths;
+    integerSum(widths.begin(), widths.end(), std::inserter(newWidths, newWidths.begin()));
+
+    for (auto measureIndex = beginMeasure; measureIndex != endMeasure; measureIndex += 1) {
+        const auto measureWidth = width(measureIndex);
+        const auto newMeasureWidth = newWidths[measureIndex - beginMeasure];
+        const auto extraWidth = newMeasureWidth - measureWidth;
+        const auto totalDivisions = _scoreProperties.divisionsPerMeasure(measureIndex);
+        const auto widthPerDivision = extraWidth / totalDivisions;
+
+        auto spanRange = range(measureIndex);
+        for (auto it = spanRange.first; it != spanRange.second; ++it) {
+            auto next = std::next(it);
+            dom::time_t duration;
+            if (it->time() == std::numeric_limits<int>::max())
+                duration = 0;
+            else if (next == spanRange.second || next->time() == std::numeric_limits<int>::max())
+                duration = totalDivisions - it->time();
+            else
+                duration = next->time() - it->time();
+            
+            const auto added = duration * widthPerDivision;
+            it->setRightMargin(it->rightMargin() + added);
+        }
+    }
 }
 
 void SpanCollection::fillStarts() {
