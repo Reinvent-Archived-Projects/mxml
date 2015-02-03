@@ -58,11 +58,14 @@ const SpanCollection& SpanFactory::build(std::size_t beginMeasureIndex, std::siz
 void SpanFactory::build(const dom::Part* part, std::size_t beginMeasureIndex, std::size_t endMeasureIndex) {
     for (_measureIndex = beginMeasureIndex; _measureIndex < endMeasureIndex; _measureIndex += 1) {
         _currentTime = 0;
-        build(part->measures().at(_measureIndex).get());
+        build(part->measures().at(_measureIndex).get(), _measureIndex == beginMeasureIndex);
     }
 }
 
-void SpanFactory::build(const dom::Measure* measure) {
+void SpanFactory::build(const dom::Measure* measure, bool buildMeasureAttributes) {
+    if (buildMeasureAttributes)
+        build(measure);
+    
     for (auto& node : measure->nodes()) {
         if (const dom::Barline* barline = dynamic_cast<const dom::Barline*>(node.get())) {
             build(barline);
@@ -117,66 +120,29 @@ void SpanFactory::build(const dom::Barline* barline) {
     span->addNode(barline);
 }
 
+void SpanFactory::build(const dom::Measure* measure) {
+    const auto time = 0;
+    for (int staff = 1; staff <= _scoreProperties.staves(_partIndex); ++staff) {
+        auto clefNode = _scoreProperties.clef(_partIndex, _measureIndex, staff, time);
+        auto keyNode = _scoreProperties.key(_partIndex, _measureIndex, staff, time);
+        build(clefNode, staff, time);
+        build(keyNode, staff, time);
+    }
+}
+
 void SpanFactory::build(const dom::Attributes* attributes) {
     dom::time_t time = _currentTime;
     const dom::Measure* measure = dynamic_cast<const dom::Measure*>(attributes->parent());
     if (attributes == measure->nodes().back().get())
         time = std::numeric_limits<int>::max();
 
-    SpanCollection::iterator clefSpan = _spans.withType<dom::Clef>(_measureIndex, time);
-    for (int staff = 1; staff <= attributes->staves(); staff += 1) {
-        if (!attributes->clef(staff))
-            continue;
-        const auto& clef = attributes->clef(staff);
-        
-        if (clefSpan == _spans.end())
-            clefSpan = _spans.add(_measureIndex, time);
-        clefSpan->setEvent(false);
-        clefSpan->pushLeftMargin(kAttributeMargin);
-        clefSpan->pushRightMargin(kAttributeMargin);
-        clefSpan->pushWidth(ClefGeometry::kSize.width);
-        clefSpan->addNode(clef);
-    }
-    
-    SpanCollection::iterator timeSpan = _spans.withType<dom::Time>(_measureIndex, time);
-    if (attributes->time()) {
-        const auto& timeNode = attributes->time();
-        
-        if (timeSpan == _spans.end())
-            timeSpan = _spans.add(_measureIndex, time);
-        timeSpan->setEvent(false);
-        timeSpan->pushLeftMargin(kAttributeMargin);
-        timeSpan->pushRightMargin(kAttributeMargin);
-        timeSpan->pushWidth(TimeSignatureGeometry(*timeNode).size().width);
-        timeSpan->addNode(timeNode);
-    }
-    
-    SpanCollection::iterator keySpan = _spans.withType<dom::Key>(_measureIndex, time);
-    for (int staff = 1; staff <= attributes->staves(); staff += 1) {
-        if (!attributes->key(staff))
-            continue;
-        
-        coord_t width = 0;
-        
-        const auto& key = attributes->key(staff);
-        const auto& activeKey = _scoreProperties.key(_partIndex, _measureIndex, staff, attributes->start()-1);
-        if (activeKey && activeKey->fifths() != 0 && key->fifths() == 0) {
-            width = KeyGeometry::keySize(*activeKey).width;
-        } else if (key->fifths() != 0) {
-            width = KeyGeometry::keySize(*key).width;
-        }
-        
-        if (keySpan == _spans.end())
-            keySpan = _spans.add(_measureIndex, time);
-        
-        if (width != 0) {
-            keySpan->pushLeftMargin(kAttributeMargin);
-            keySpan->pushWidth(width);
-            keySpan->pushRightMargin(kAttributeMargin);
-        }
-        
-        keySpan->setEvent(false);
-        keySpan->addNode(key);
+    for (int staff = 1; staff <= _scoreProperties.staves(_partIndex); ++staff) {
+        auto clefNode = attributes->clef(staff);
+        auto timeNode = attributes->time();
+        auto keyNode = attributes->key(staff);
+        build(clefNode, staff, time);
+        build(timeNode, staff, time);
+        build(keyNode, staff, time);
     }
 }
 
@@ -275,6 +241,83 @@ void SpanFactory::build(const dom::Chord* chord) {
         span->addNode(note.get());
 }
 
+void SpanFactory::build(const dom::Note* note) {
+    assert (note->rest());
+
+    if (!note->printObject)
+        return;
+
+    auto span = _spans.eventSpan(_measureIndex, _currentTime);
+    if (span == _spans.end()) {
+        span = _spans.add(_measureIndex, _currentTime);
+        span->setEvent(true);
+    }
+    span->pushWidth(kRestWidth);
+    span->pullNaturalWidth(naturalWidthForNote(*note));
+    span->pushEventOffset(kRestWidth/2);
+    span->pushLeftMargin(kNoteMargin);
+    span->pushRightMargin(kNoteMargin);
+    span->addNode(note);
+}
+
+void SpanFactory::build(const dom::Clef* clefNode, int staff, int time) {
+    if (!clefNode)
+        return;
+
+    SpanCollection::iterator clefSpan = _spans.withType<dom::Clef>(_measureIndex, time);
+    if (clefSpan == _spans.end())
+        clefSpan = _spans.add(_measureIndex, time);
+    clefSpan->setEvent(false);
+    clefSpan->pushLeftMargin(kAttributeMargin);
+    clefSpan->pushRightMargin(kAttributeMargin);
+    clefSpan->pushWidth(ClefGeometry::kSize.width);
+    clefSpan->addNode(clefNode);
+}
+
+void SpanFactory::build(const dom::Time* timeNode, int staff, int time) {
+    if (!timeNode)
+        return;
+
+    SpanCollection::iterator timeSpan = _spans.withType<dom::Time>(_measureIndex, time);
+    if (timeSpan == _spans.end())
+        timeSpan = _spans.add(_measureIndex, time);
+
+    coord_t width = TimeSignatureGeometry(*timeNode).size().width;
+    if (width > 0) {
+        timeSpan->pushLeftMargin(kAttributeMargin);
+        timeSpan->pushWidth(width);
+        timeSpan->pushRightMargin(kAttributeMargin);
+    }
+
+    timeSpan->setEvent(false);
+    timeSpan->addNode(timeNode);
+}
+
+void SpanFactory::build(const dom::Key* keyNode, int staff, int time) {
+    if (!keyNode)
+        return;
+
+    coord_t width = 0;
+    auto activeKey = _scoreProperties.key(_partIndex, _measureIndex, staff, time-1);
+    if (activeKey && activeKey->fifths() != 0 && keyNode->fifths() == 0) {
+        width = KeyGeometry::keySize(*activeKey).width;
+    } else if (keyNode->fifths() != 0) {
+        width = KeyGeometry::keySize(*keyNode).width;
+    }
+
+    if (width <= 0)
+        return;
+
+    SpanCollection::iterator keySpan = _spans.withType<dom::Key>(_measureIndex, time);
+    if (keySpan == _spans.end())
+        keySpan = _spans.add(_measureIndex, time);
+    keySpan->pushLeftMargin(kAttributeMargin);
+    keySpan->pushWidth(width);
+    keySpan->pushRightMargin(kAttributeMargin);
+    keySpan->setEvent(false);
+    keySpan->addNode(keyNode);
+}
+
 SpanCollection::iterator SpanFactory::graceNoteSpan(const dom::Chord* chord) {
     const auto range = _spans.range(_measureIndex, _currentTime);
     const int staff = chord->firstNote()->staff();
@@ -315,25 +358,6 @@ SpanCollection::iterator SpanFactory::graceNoteSpan(const dom::Chord* chord) {
         span = _spans.addBeforeEvent(_measureIndex, _currentTime); // New grace note span
 
     return span;
-}
-
-void SpanFactory::build(const dom::Note* note) {
-    assert (note->rest());
-    
-    if (!note->printObject)
-        return;
-        
-    auto span = _spans.eventSpan(_measureIndex, _currentTime);
-    if (span == _spans.end()) {
-        span = _spans.add(_measureIndex, _currentTime);
-        span->setEvent(true);
-    }
-    span->pushWidth(kRestWidth);
-    span->pullNaturalWidth(naturalWidthForNote(*note));
-    span->pushEventOffset(kRestWidth/2);
-    span->pushLeftMargin(kNoteMargin);
-    span->pushRightMargin(kNoteMargin);
-    span->addNode(note);
 }
 
 void SpanFactory::removeRedundantSpans() {

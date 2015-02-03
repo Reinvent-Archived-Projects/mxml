@@ -47,14 +47,14 @@ dom::Time* ScoreBuilder::setTime(dom::Attributes* attributes) {
 }
 
 dom::Clef* ScoreBuilder::setTrebleClef(dom::Attributes* attributes, int staff) {
-    auto clef = dom::Clef::trebleClef();
+    auto clef = dom::Clef::trebleClef(staff);
     clef->setParent(attributes);
     attributes->setClef(staff, std::move(clef));
     return attributes->clef(staff);
 }
 
 dom::Clef* ScoreBuilder::setBassClef(dom::Attributes* attributes, int staff) {
-    auto clef = dom::Clef::bassClef();
+    auto clef = dom::Clef::bassClef(staff);
     clef->setParent(attributes);
     attributes->setClef(staff, std::move(clef));
     return attributes->clef(staff);

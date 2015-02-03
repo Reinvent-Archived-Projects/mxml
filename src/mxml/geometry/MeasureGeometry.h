@@ -46,14 +46,19 @@ public:
         return _spans.naturalSpacing();
     }
     
-    void build();
+    void build(bool firstMeasureInSystem);
     
 private:
+    void buildAttributes();
     void buildAttributes(const dom::Attributes* attributes);
     void buildBarline(const dom::Barline* barline);
     void buildTimedNode(const dom::TimedNode* barline);
     void buildChord(const dom::Chord* chord);
     void buildRest(const dom::Note* note);
+    
+    bool buildClefGeometry(const dom::Clef* clef, int staff);
+    bool buildKeyGeometry(const dom::Key* key, int staff, dom::time_t time);
+    bool buildTimeGeometry(const dom::Time* time, int staff);
 
     void centerLoneRest();
     
@@ -65,6 +70,11 @@ private:
     const std::size_t _partIndex;
 
     int _currentTime;
+    
+    /**
+     Track built geometires so that we know when system attributes overlap system attributes.
+     */
+    std::set<const dom::Node*> builtGeometries;
 };
 
 } // namespace mxml

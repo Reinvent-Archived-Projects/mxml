@@ -32,6 +32,7 @@ public:
     
 private:
     void build(const dom::Part* part, std::size_t beginMeasureIndex, std::size_t endMeasureIndex);
+    void build(const dom::Measure* measure, bool buildMeasureAttributes);
     void build(const dom::Measure* measure);
     void build(const dom::Attributes* attributes);
     void build(const dom::Barline* barline);
@@ -39,6 +40,9 @@ private:
     void build(const dom::TimedNode* node);
     void build(const dom::Chord* chord);
     void build(const dom::Note* note);
+    void build(const dom::Clef* clefNode, int staff, int time);
+    void build(const dom::Time* timeNode, int staff, int time);
+    void build(const dom::Key* keyNode, int staff, int time);
 
     coord_t naturalWidthForNote(const dom::Note& note);
     SpanCollection::iterator graceNoteSpan(const dom::Chord* chord);

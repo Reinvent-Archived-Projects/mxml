@@ -21,6 +21,7 @@
 		0022AE021A7082C300139992 /* HorizontalResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 0022ADFA1A7082C300139992 /* HorizontalResolver.h */; };
 		0022AE031A7082C300139992 /* VerticalResolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 0022ADFB1A7082C300139992 /* VerticalResolver.cpp */; };
 		0022AE041A7082C300139992 /* VerticalResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 0022ADFC1A7082C300139992 /* VerticalResolver.h */; };
+		00E7B4891A81510C00B949FC /* Attributes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00E7B4881A81510C00B949FC /* Attributes.cpp */; };
 		61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */ = {isa = PBXBuildFile; fileRef = 61239A5E1A64866500B3F0A3 /* ScoreProperties.h */; };
 		61239A611A64866500B3F0A3 /* ScoreProperties.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61239A5F1A64866500B3F0A3 /* ScoreProperties.cpp */; };
 		61239A6E1A65974400B3F0A3 /* ScoreBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */; };
@@ -220,6 +221,7 @@
 		00935E2A1A771EBA00915D65 /* events_ds_al_coda.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = events_ds_al_coda.xml; sourceTree = "<group>"; };
 		00935E2B1A771EBA00915D65 /* events_repeat.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = events_repeat.xml; sourceTree = "<group>"; };
 		00935E2C1A771EBA00915D65 /* events.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = events.xml; sourceTree = "<group>"; };
+		00E7B4881A81510C00B949FC /* Attributes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Attributes.cpp; sourceTree = "<group>"; };
 		61239A5E1A64866500B3F0A3 /* ScoreProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ScoreProperties.h; sourceTree = "<group>"; };
 		61239A5F1A64866500B3F0A3 /* ScoreProperties.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreProperties.cpp; sourceTree = "<group>"; };
 		61239A6C1A65974400B3F0A3 /* ScoreBuilder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScoreBuilder.cpp; sourceTree = "<group>"; };
@@ -635,6 +637,7 @@
 			children = (
 				614055CA1A5C6228005224C9 /* Accidental.h */,
 				614055CC1A5C6228005224C9 /* Articulation.h */,
+				00E7B4881A81510C00B949FC /* Attributes.cpp */,
 				614055CD1A5C6228005224C9 /* Attributes.h */,
 				614055CE1A5C6228005224C9 /* Backup.h */,
 				614055CF1A5C6228005224C9 /* Barline.h */,
@@ -1092,6 +1095,7 @@
 				614057431A5C6228005224C9 /* LyricHandler.cpp in Sources */,
 				614057071A5C6228005224C9 /* PedalGeometry.cpp in Sources */,
 				614056D71A5C6228005224C9 /* Event.cpp in Sources */,
+				00E7B4891A81510C00B949FC /* Attributes.cpp in Sources */,
 				614057591A5C6228005224C9 /* ScalingHandler.cpp in Sources */,
 				61239C201A6742A100B3F0A3 /* LoopFactory.cpp in Sources */,
 				61F072E11A6F0CB3002CA9CA /* AppearanceHandler.cpp in Sources */,

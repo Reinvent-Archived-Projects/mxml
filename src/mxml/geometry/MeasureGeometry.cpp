@@ -35,11 +35,13 @@ MeasureGeometry::MeasureGeometry(const Measure& measure,
   _metrics(metrics),
   _partIndex(metrics.partIndex())
 {
-    build();
 }
 
-void MeasureGeometry::build() {
+void MeasureGeometry::build(bool firstMeasureInSystem) {
     _currentTime = 0;
+    
+    if (firstMeasureInSystem)
+        buildAttributes();
     
     for (auto& node : _measure.nodes()) {
         if (const Attributes* attributes = dynamic_cast<const Attributes*>(node.get())) {
@@ -83,83 +85,113 @@ void MeasureGeometry::build() {
     centerLoneRest();
 }
 
+void MeasureGeometry::buildAttributes() {
+    const auto time = 0;
+    for (int staff = 1; staff <= _metrics.staves(); staff += 1) {
+        auto clef = _scoreProperties.clef(_partIndex, _measure.index(), staff, time);
+        auto key = _scoreProperties.key(_partIndex, _measure.index(), staff, time);
+        
+        if (buildClefGeometry(clef, staff))
+            builtGeometries.insert(clef);
+        
+        if (buildKeyGeometry(key, staff, time))
+            builtGeometries.insert(key);
+    }
+}
+
 void MeasureGeometry::buildAttributes(const Attributes* attributes) {
-    const auto staves = _metrics.staves();
-    for (int staff = 1; staff <= staves; staff += 1) {
-        if (!attributes->clef(staff))
-            continue;
-
-        const auto& clef = attributes->clef(staff);
-        auto it = _spans.with(clef);
-        if  (it == _spans.end())
-            continue;
-
-        std::unique_ptr<ClefGeometry> geo(new ClefGeometry(*clef));
-        geo->setStaff(staff);
-
-        const Span& span = *it;
-        Point location;
-        location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
-        location.y = _metrics.staffOrigin(staff) + Metrics::staffHeight()/2;
-        geo->setLocation(location);
+    for (int staff = 1; staff <= _metrics.staves(); staff += 1) {
+        auto time = attributes->time();
+        auto clef = attributes->clef(staff);
+        auto key = attributes->key(staff);
+        if (!key && staff > 1)
+            key = attributes->key(1);
         
-        addGeometry(std::move(geo));
+        if (builtGeometries.count(clef) == 0)
+            buildClefGeometry(clef, staff);
+        
+        if (builtGeometries.count(key) == 0)
+            buildKeyGeometry(key, staff, attributes->start());
+        
+        buildTimeGeometry(time, staff);
+    }
+}
+
+bool MeasureGeometry::buildClefGeometry(const dom::Clef* clef, int staff) {
+    if (!clef)
+        return false;
+    
+    auto it = _spans.with(clef);
+    if (it == _spans.end())
+        return false;
+    
+    std::unique_ptr<ClefGeometry> geo(new ClefGeometry(*clef));
+    geo->setStaff(staff);
+    
+    const Span& span = *it;
+    Point location;
+    location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
+    location.y = _metrics.staffOrigin(staff) + Metrics::staffHeight()/2;
+    geo->setLocation(location);
+    
+    addGeometry(std::move(geo));
+    
+    return true;
+}
+
+bool MeasureGeometry::buildKeyGeometry(const dom::Key* key, int staff, dom::time_t time) {
+    if (!key)
+        return false;
+    
+    auto it = _spans.with(key);
+    if  (it == _spans.end())
+        return false;
+    
+    const Span& span = *it;
+    std::unique_ptr<KeyGeometry> geo;
+    
+    auto clef = _scoreProperties.clef(_partIndex, _measure.index(), staff, time);
+    if (key->fifths() == 0) {
+        const auto& activeKey = _scoreProperties.key(_partIndex, _measure.index(), staff, time-1);
+        if (!activeKey)
+            return false;
+        
+        geo.reset(new KeyGeometry(*activeKey, *clef));
+        geo->setNatural(true);
+    } else {
+        geo.reset(new KeyGeometry(*key, *clef));
     }
     
-    for (int staff = 1; staff <= staves; staff += 1) {
-        if (!attributes->time())
-            continue;
-        
-        const auto& time = attributes->time();
-        auto it = _spans.with(time);
-        if  (it == _spans.end())
-            continue;
-        
-        const Span& span = *it;
-
-        std::unique_ptr<TimeSignatureGeometry> geo(new TimeSignatureGeometry(*time));
-        geo->setStaff(staff);
-
-        Point location;
-        location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
-        location.y = _metrics.staffOrigin(staff) + Metrics::staffHeight()/2;
-        geo->setLocation(location);
-        
-        addGeometry(std::move(geo));
-    }
+    Point location;
+    location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
+    location.y = _metrics.staffOrigin(staff) + Metrics::staffHeight()/2;
+    geo->setLocation(location);
+    geo->setStaff(staff);
+    addGeometry(std::move(geo));
     
-    for (int staff = 1; staff <= staves; staff += 1) {
-        const auto& key = _scoreProperties.key(_partIndex, _measure.index(), staff, attributes->start());
-        if (!key)
-            continue;
-        
-        auto it = _spans.with(key);
-        if  (it == _spans.end())
-            continue;
-        
-        const Span& span = *it;
-        const auto& clef = _scoreProperties.clef(_partIndex, _measure.index(), staff, attributes->start());
-        std::unique_ptr<KeyGeometry> geo;
-        
-        if (key->fifths() == 0) {
-            const auto& activeKey = _scoreProperties.key(_partIndex, _measure.index(), staff, attributes->start()-1);
-            if (!activeKey)
-                continue;
-            
-            geo.reset(new KeyGeometry(*activeKey, *clef));
-            geo->setNatural(true);
-        } else {
-            geo.reset(new KeyGeometry(*key, *clef));
-        }
+    return true;
+}
     
-        Point location;
-        location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
-        location.y = _metrics.staffOrigin(staff) + Metrics::staffHeight()/2;
-        geo->setLocation(location);
-        geo->setStaff(staff);
-        
-        addGeometry(std::move(geo));
-    }
+bool MeasureGeometry::buildTimeGeometry(const dom::Time* time, int staff) {
+    if (!time)
+        return false;
+    
+    auto it = _spans.with(time);
+    if  (it == _spans.end())
+        return false;
+    
+    const Span& span = *it;
+    
+    std::unique_ptr<TimeSignatureGeometry> geo(new TimeSignatureGeometry(*time));
+    geo->setStaff(staff);
+    
+    Point location;
+    location.x = span.start() + span.width()/2 - _spans.origin(_measure.index());
+    location.y = _metrics.staffOrigin(staff) + Metrics::staffHeight()/2;
+    geo->setLocation(location);
+    addGeometry(std::move(geo));
+    
+    return true;
 }
 
 void MeasureGeometry::buildBarline(const Barline* barline) {

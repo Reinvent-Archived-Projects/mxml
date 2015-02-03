@@ -12,13 +12,13 @@
 
 using namespace mxml;
 
-static const char* kMoonlightFileName               = "resources/moonlight.xml";
-static const char* kEventsFileName                  = "resources/events.xml";
-static const char* kEventsRepeatFileName            = "resources/events_repeat.xml";
-static const char* kEventsRepeatLastMeasureFileName = "resources/events_repeat_last_measure.xml";
-static const char* kEventsDSAlCodaFileName          = "resources/events_ds_al_coda.xml";
-static const char* kEventsComplex1FileName          = "resources/events_complex_1.xml";
-static const char* kEventsComplex2FileName          = "resources/events_complex_2.xml";
+static const char* kMoonlightFileName               = "moonlight.xml";
+static const char* kEventsFileName                  = "events.xml";
+static const char* kEventsRepeatFileName            = "events_repeat.xml";
+static const char* kEventsRepeatLastMeasureFileName = "events_repeat_last_measure.xml";
+static const char* kEventsDSAlCodaFileName          = "events_ds_al_coda.xml";
+static const char* kEventsComplex1FileName          = "events_complex_1.xml";
+static const char* kEventsComplex2FileName          = "events_complex_2.xml";
 
 BOOST_AUTO_TEST_CASE(moonlight) {
     ScoreHandler handler;

@@ -29,33 +29,7 @@ public:
     Optional<int> staves() const {
         return _staves;
     }
-    void setStaves(Optional<int> staves) {
-        if (_staves.value() > 0 && staves.value() > _staves.value()) {
-            auto& lastClef = _clefs.back();
-            auto& lastKey = _keys.back();
-            
-            for (int i = _staves; i < staves; i += 1) {
-                if (lastClef) {
-                    _clefs.emplace_back(new Clef(*lastClef));
-                    _clefs.back()->setNumber(i);
-                } else {
-                    _clefs.emplace_back();
-                }
-                
-                if (lastKey) {
-                    _keys.emplace_back(new Key(*lastKey));
-                    _keys.back()->setNumber(i);
-                } else {
-                    _keys.emplace_back();
-                }
-            }
-        } else {
-            _clefs.resize(staves);
-            _keys.resize(staves);
-        }
-        
-        _staves = staves;
-    }
+    void setStaves(Optional<int> staves);
     
     const Clef* clef(int number) const {
         if (number > 0 && number <= _clefs.size())
@@ -67,11 +41,7 @@ public:
             return _clefs[number - 1].get();
         return nullptr;
     }
-    void setClef(int number, std::unique_ptr<Clef>&& clef) {
-        assert(number >= 1 && number <= _clefs.size() + 1);
-        if (_clefs.size() >= number)
-            _clefs[number - 1] = std::move(clef);
-    }
+    void setClef(int number, std::unique_ptr<Clef>&& clef);
     
     const Key* key(int number) const {
         if (number > 0 && number <= _keys.size())
@@ -83,18 +53,7 @@ public:
             return _keys[number - 1].get();
         return nullptr;
     }
-    void setKey(int number, std::unique_ptr<Key> key) {
-        assert(number >= 1 && number <= _keys.size() + 1);
-        if (_keys.size() >= number)
-            _keys[number - 1] = std::move(key);
-        
-        if (number == 1) {
-            for (int i = 1; i < _staves; i += 1) {
-                _keys[i] = std::move(key);
-                _keys[i]->setNumber(i);
-            }
-        }
-    }
+    void setKey(int number, std::unique_ptr<Key> key);
     
     const Time* time() const {
         return _time.get();

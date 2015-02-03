@@ -28,6 +28,6 @@ target_link_libraries(mxml_tester lxml mxml ${LIBXML2_LIBRARIES} ${Boost_UNIT_TE
 
 add_test(
 	NAME mxml_tester
-	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tests
+	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/tests/resources
 	COMMAND ${EXECUTABLE_OUTPUT_PATH}/mxml_tester
 )

@@ -360,8 +360,6 @@ private:
     std::set<std::size_t> _systemBeginsSet;
     std::vector<std::size_t> _systemBegins;
 
-    static const dom::Key _defaultKey;
-    static const dom::Clef _defaultClef;
     static const dom::Time _defaultTime;
 };
     

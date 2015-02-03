@@ -11,8 +11,6 @@
 
 namespace mxml {
 
-const dom::Key ScoreProperties::_defaultKey;
-const dom::Clef ScoreProperties::_defaultClef;
 const dom::Time ScoreProperties::_defaultTime;
 
 ScoreProperties::ScoreProperties(const dom::Score& score)
@@ -124,7 +122,7 @@ void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, c
 }
 
 const dom::Key* ScoreProperties::key(std::size_t partIndex, std::size_t measureIndex, int staff, time_t time) const {
-    return getAttribute<const dom::Key*>(partIndex, measureIndex, time, &_defaultKey, [&](const dom::Attributes& attribute, const dom::Key* previous) {
+    return getAttribute<const dom::Key*>(partIndex, measureIndex, time, nullptr, [&](const dom::Attributes& attribute, const dom::Key* previous) {
         if (attribute.key(staff))
             return attribute.key(staff);
         else if (attribute.key(1))
@@ -134,7 +132,7 @@ const dom::Key* ScoreProperties::key(std::size_t partIndex, std::size_t measureI
 }
 
 const dom::Clef* ScoreProperties::clef(std::size_t partIndex, std::size_t measureIndex, int staff, time_t time) const {
-    return getAttribute<const dom::Clef*>(partIndex, measureIndex, time, &_defaultClef, [&](const dom::Attributes& attribute, const dom::Clef* previous) {
+    return getAttribute<const dom::Clef*>(partIndex, measureIndex, time, nullptr, [&](const dom::Attributes& attribute, const dom::Clef* previous) {
         if (attribute.clef(staff))
             return attribute.clef(staff);
         else if (attribute.clef(1))
@@ -195,6 +193,9 @@ int ScoreProperties::previousAlter(const dom::Note& note) const {
 
 int ScoreProperties::alter(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time, int octave, dom::Pitch::Step step) const {
     auto currentKey = key(partIndex, measureIndex, staff, time);
+    if (!currentKey)
+        return 0;
+    
     const int base = currentKey->alter(step);
     int current = base;
 
