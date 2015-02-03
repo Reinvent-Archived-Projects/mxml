@@ -23,6 +23,9 @@ public:
     const ScoreProperties& scoreProperties() const {
         return _scoreProperties;
     }
+    const SpanCollection& spans() const {
+        return *_spans;
+    }
     const std::vector<SystemGeometry*>& systemGeometries() const {
         return _systemGeometries;
     }
