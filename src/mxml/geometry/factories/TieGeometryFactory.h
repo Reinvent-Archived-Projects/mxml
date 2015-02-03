@@ -30,6 +30,8 @@ private:
     void createGeometriesFromNotes(const std::vector<NoteGeometry*>& notes);
     void createGeometryFromNote(NoteGeometry* noteGeometry);
     std::unique_ptr<TieGeometry> buildTieGeometry(const NoteGeometry* startGeom, const NoteGeometry* stopGeom, const dom::Optional<dom::Placement>& placement);
+    std::unique_ptr<TieGeometry> buildTieGeometryFromEdge(const NoteGeometry* stopGeom, const dom::Optional<dom::Placement>& placement);
+    std::unique_ptr<TieGeometry> buildTieGeometryToEdge(const NoteGeometry* startGeom, const dom::Optional<dom::Placement>& placement);
     std::unique_ptr<TieGeometry> buildSlurGeometry(const NoteGeometry* startGeom, const NoteGeometry* stopGeom, const dom::Optional<dom::Placement>& placement);
     
 private:
@@ -57,7 +59,7 @@ private:
             return a.second->octave() < b.second->octave();
         }
     };
-    std::map<PitchKey, NoteGeometry*, PitchComparator> _tieStartGeometries;
+    std::map<PitchKey, std::pair<const dom::Tied*, NoteGeometry*>, PitchComparator> _tieStartGeometries;
 };
 
 } // namespace mxml

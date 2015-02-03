@@ -74,6 +74,11 @@ std::unique_ptr<PartGeometry> PartGeometryFactory::build(std::size_t beginMeasur
         _partGeometry->addGeometry(std::move(lyric));
     }
 
+    // We need the bounds set to create the ties properly
+    auto bounds = _partGeometry->subGeometriesFrame();
+    bounds.origin.x = 0;
+    _partGeometry->setBounds(bounds);
+
     TieGeometryFactory factory(*_partGeometry, _metrics);
     auto ties = factory.buildTieGeometries(_partGeometry->geometries());
     for (auto& tie : ties) {
@@ -84,7 +89,8 @@ std::unique_ptr<PartGeometry> PartGeometryFactory::build(std::size_t beginMeasur
     CollisionHandler collisionHandler(*_partGeometry, _metrics);
     collisionHandler.resolveCollisions();
 
-    auto bounds = _partGeometry->subGeometriesFrame();
+    // Re-compute bounds after evertyhing is done
+    bounds = _partGeometry->subGeometriesFrame();
     bounds.origin.x = 0;
     _partGeometry->setBounds(bounds);
 

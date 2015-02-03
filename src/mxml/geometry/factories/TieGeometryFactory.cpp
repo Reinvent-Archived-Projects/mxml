@@ -23,6 +23,16 @@ std::vector<std::unique_ptr<TieGeometry>>&& TieGeometryFactory::buildTieGeometri
     _tieStartGeometries.clear();
     _slurStartGeometries.clear();
     createGeometries(geometries);
+
+    // Finish any ties that started but did not stop
+    for (auto& pair : _tieStartGeometries) {
+        auto tie = pair.second.first;
+        auto startGeom = pair.second.second;
+        auto tieGeom = buildTieGeometryToEdge(startGeom, tie->placement());
+        startGeom->setTieGeometry(tieGeom.get());
+        _tieGeometries.push_back(std::move(tieGeom));
+    }
+
     return std::move(_tieGeometries);
 }
 
@@ -60,20 +70,25 @@ void TieGeometryFactory::createGeometryFromNote(NoteGeometry* noteGeometry) {
     for (auto& tie : notations->ties()) {
         auto key = std::make_pair(note.staff(), note.pitch().get());
         if (tie->type() == dom::kContinue) {
-            _tieStartGeometries[key] = noteGeometry;
+            _tieStartGeometries[key] = std::make_pair(tie.get(), noteGeometry);
         } else if (tie->type() == dom::kStop) {
-            auto startGeom = _tieStartGeometries.find(key);
-            if (startGeom != _tieStartGeometries.end()) {
-                std::unique_ptr<TieGeometry> tieGeom = buildTieGeometry(startGeom->second, noteGeometry, tie->placement());
-                startGeom->second->setTieGeometry(tieGeom.get());
-                noteGeometry->setTieGeometry(tieGeom.get());
-                
-                _tieGeometries.push_back(std::move(tieGeom));
-                _tieStartGeometries.erase(startGeom);
+            auto it = _tieStartGeometries.find(key);
+            auto startGeom = it->second.second;
+
+            std::unique_ptr<TieGeometry> tieGeom;
+            if (it == _tieStartGeometries.end()) {
+                tieGeom = buildTieGeometryFromEdge(noteGeometry, tie->placement());
+            } else {
+                tieGeom = buildTieGeometry(startGeom, noteGeometry, tie->placement());
+                startGeom->setTieGeometry(tieGeom.get());
+                _tieStartGeometries.erase(it);
             }
+            noteGeometry->setTieGeometry(tieGeom.get());
+
+            _tieGeometries.push_back(std::move(tieGeom));
         }
     }
-    
+
     for (auto& slur : notations->slurs()) {
         auto key = std::make_pair(note.staff(), slur->number());
         if (slur->type() == dom::kContinue) {
@@ -96,11 +111,13 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometry(const NoteGeom
     std::unique_ptr<TieGeometry> tieGeom(new TieGeometry);
     
     Point startLocation;
-    Point stopLocation;
-    
     startLocation.x = start->frame().max().x;
+    startLocation.y = start->center().y;
+
+    Point stopLocation;
     stopLocation.x = stop->frame().min().x;
-    
+    stopLocation.y = stop->center().y;
+
     if (!placement.isPresent()) {
         coord_t startStaffY = startLocation.y - _metrics.staffOrigin(start->note().staff());
         coord_t stopStaffY = stopLocation.y - _metrics.staffOrigin(stop->note().staff());
@@ -118,9 +135,73 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometry(const NoteGeom
         startLocation.y = start->frame().min().y;
         stopLocation.y = stop->frame().min().y;
     }
-    
+
     tieGeom->setStartLocation(_parentGeometry.convertFromGeometry(startLocation, start->parentGeometry()));
     tieGeom->setStopLocation(_parentGeometry.convertFromGeometry(stopLocation, stop->parentGeometry()));
+    
+    return tieGeom;
+}
+
+std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometryFromEdge(const NoteGeometry* stop, const dom::Optional<dom::Placement>& placement) {
+    std::unique_ptr<TieGeometry> tieGeom(new TieGeometry);
+
+    Point startLocation;
+    startLocation.x = stop->convertFromGeometry({0, 0}, &_parentGeometry).x;
+    startLocation.y = stop->center().y;
+
+    Point stopLocation;
+    stopLocation.x = stop->frame().min().x;
+    stopLocation.y = stop->center().y;
+
+    if (!placement.isPresent()) {
+        coord_t staffY = startLocation.y - _metrics.staffOrigin(stop->note().staff());
+        if (staffY < Metrics::staffHeight()/2)
+            tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));
+        else
+            tieGeom->setPlacement(absentOptional(dom::kPlacementBelow));
+    }
+
+    if (tieGeom->placement().value() == dom::kPlacementBelow) {
+        stopLocation.y = stop->frame().max().y;
+    } else {
+        stopLocation.y = stop->frame().min().y;
+    }
+    startLocation.y = stopLocation.y;
+
+    tieGeom->setStartLocation(_parentGeometry.convertFromGeometry(startLocation, stop->parentGeometry()));
+    tieGeom->setStopLocation(_parentGeometry.convertFromGeometry(stopLocation, stop->parentGeometry()));
+    
+    return tieGeom;
+}
+
+std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometryToEdge(const NoteGeometry* start, const dom::Optional<dom::Placement>& placement) {
+    std::unique_ptr<TieGeometry> tieGeom(new TieGeometry);
+
+    Point startLocation;
+    startLocation.x = start->frame().max().x;
+    startLocation.y = start->center().y;
+
+    Point stopLocation;
+    stopLocation.x = start->convertFromGeometry(_parentGeometry.bounds().max(), &_parentGeometry).x;
+    stopLocation.y = start->center().y;
+
+    if (!placement.isPresent()) {
+        coord_t staffY = startLocation.y - _metrics.staffOrigin(start->note().staff());
+        if (staffY < Metrics::staffHeight()/2)
+            tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));
+        else
+            tieGeom->setPlacement(absentOptional(dom::kPlacementBelow));
+    }
+
+    if (tieGeom->placement().value() == dom::kPlacementBelow) {
+        startLocation.y = start->frame().max().y;
+    } else {
+        startLocation.y = start->frame().min().y;
+    }
+    stopLocation.y = startLocation.y;
+
+    tieGeom->setStartLocation(_parentGeometry.convertFromGeometry(startLocation, start->parentGeometry()));
+    tieGeom->setStopLocation(_parentGeometry.convertFromGeometry(stopLocation, start->parentGeometry()));
     
     return tieGeom;
 }
