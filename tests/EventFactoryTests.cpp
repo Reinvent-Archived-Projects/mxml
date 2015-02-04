@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(moonlight) {
     lxml::parse(is, kMoonlightFileName, handler);
 
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score);
+    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
 
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE(beats4_4) {
     time->setBeatType(4);
 
     auto score = builder.build();
-    ScoreProperties scoreProperties(*score);
+    ScoreProperties scoreProperties(*score, ScoreProperties::kLayoutTypeScroll);
 
     EventFactory factory(*score, scoreProperties);
     auto events = factory.build();
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(beats2_12) {
     time->setBeatType(12);
 
     auto score = builder.build();
-    ScoreProperties scoreProperties(*score);
+    ScoreProperties scoreProperties(*score, ScoreProperties::kLayoutTypeScroll);
 
     EventFactory factory(*score, scoreProperties);
     auto events = factory.build();
@@ -117,7 +117,7 @@ BOOST_AUTO_TEST_CASE(event_order) {
     lxml::parse(is, kEventsFileName, handler);
     
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score);
+    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
     
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
@@ -148,7 +148,7 @@ BOOST_AUTO_TEST_CASE(event_order_repeat) {
     lxml::parse(is, kEventsRepeatFileName, handler);
     
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score);
+    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
     
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
@@ -182,7 +182,7 @@ BOOST_AUTO_TEST_CASE(event_order_repeat_last_measure) {
     lxml::parse(is, kEventsRepeatLastMeasureFileName, handler);
     
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score);
+    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
     
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
@@ -216,7 +216,7 @@ BOOST_AUTO_TEST_CASE(event_order_ds_al_coda) {
     lxml::parse(is, kEventsDSAlCodaFileName, handler);
     
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score);
+    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
     
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
@@ -251,7 +251,7 @@ BOOST_AUTO_TEST_CASE(event_order_complex_1) {
     lxml::parse(is, kEventsComplex1FileName, handler);
     
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score);
+    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
     
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
@@ -292,7 +292,7 @@ BOOST_AUTO_TEST_CASE(event_order_complex_2) {
     lxml::parse(is, kEventsComplex2FileName, handler);
     
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score);
+    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
     
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();

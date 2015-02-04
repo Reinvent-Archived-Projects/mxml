@@ -27,7 +27,13 @@ namespace dom {
 
 class ScoreProperties {
 public:
-    ScoreProperties(const dom::Score& score);
+    enum LayoutType : int {
+        kLayoutTypeScroll,
+        kLayoutTypePage
+    };
+
+public:
+    ScoreProperties(const dom::Score& score, LayoutType layoutType);
 
     /**
      Get the number of measures in the score.
@@ -126,6 +132,14 @@ public:
     std::size_t systemCount() const {
         return _systemBegins.size();
     }
+
+    /**
+     Get the layout type for the score.
+     */
+    LayoutType layoutType() const {
+        return _layoutType;
+    }
+
     
 private:
     /**
@@ -359,6 +373,8 @@ private:
 
     std::set<std::size_t> _systemBeginsSet;
     std::vector<std::size_t> _systemBegins;
+
+    const LayoutType _layoutType;
 
     static const dom::Time _defaultTime;
 };

@@ -34,16 +34,6 @@ public:
     }
 
     /**
-     If this is enabled there will be space for the clef and the key signature on the first measure of every system.
-     */
-    bool addCleffAndKeyToEverySystem() const {
-        return _addClefAndKeyToEverySystem;
-    }
-    void setAddClefAndKeyToEverySystem(bool value) {
-        _addClefAndKeyToEverySystem = value;
-    }
-
-    /**
      Build the span collection for the whole score, used in a scroll layout.
      */
     std::unique_ptr<SpanCollection> build();
@@ -72,7 +62,6 @@ private:
     const dom::Score& _score;
     const ScoreProperties& _scoreProperties;
     bool _naturalSpacing;
-    bool _addClefAndKeyToEverySystem;
 
     std::size_t _partIndex;
     std::size_t _measureIndex;

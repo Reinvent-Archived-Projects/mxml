@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_CASE(noteStaffY) {
     builder.setBassClef(attributes, 2);
 
     auto score = builder.build();
-    ScoreProperties scoreProperties(*score);
+    ScoreProperties scoreProperties(*score, ScoreProperties::kLayoutTypeScroll);
     ScrollMetrics metrics(*score, scoreProperties, 0);
 
     Note note;
@@ -43,7 +43,7 @@ BOOST_AUTO_TEST_CASE(noteStaff2Y) {
     builder.setBassClef(attributes, 2);
 
     auto score = builder.build();
-    ScoreProperties scoreProperties(*score);
+    ScoreProperties scoreProperties(*score, ScoreProperties::kLayoutTypeScroll);
     ScrollMetrics metrics(*score, scoreProperties, 0);
     
     Note note;
@@ -67,7 +67,7 @@ BOOST_AUTO_TEST_CASE(staffOrigin) {
     builder.setBassClef(attributes, 2);
 
     auto score = builder.build();
-    ScoreProperties scoreProperties(*score);
+    ScoreProperties scoreProperties(*score, ScoreProperties::kLayoutTypeScroll);
     ScrollMetrics metrics(*score, scoreProperties, 0);
     
     BOOST_CHECK_EQUAL(metrics.staffOrigin(1), 0);
@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE(noteY) {
     builder.setBassClef(attributes, 2);
 
     auto score = builder.build();
-    ScoreProperties scoreProperties(*score);
+    ScoreProperties scoreProperties(*score, ScoreProperties::kLayoutTypeScroll);
     ScrollMetrics metrics(*score, scoreProperties, 0);
     
     Note note;

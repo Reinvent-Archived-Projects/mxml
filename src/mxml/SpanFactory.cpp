@@ -30,7 +30,6 @@ SpanFactory::SpanFactory(const dom::Score& score, const ScoreProperties& scorePr
 : _score(score),
   _scoreProperties(scoreProperties),
   _naturalSpacing(false),
-  _addClefAndKeyToEverySystem(false),
   _currentTime(0),
   _spans()
 {
@@ -56,8 +55,9 @@ void SpanFactory::build(const dom::Part* part, std::size_t beginMeasureIndex, st
     for (_measureIndex = beginMeasureIndex; _measureIndex < endMeasureIndex; _measureIndex += 1) {
         _currentTime = 0;
 
+        // In page layout mode we add attributes to the first measure in each system
         bool buildMeasureAttributes = false;
-        if (_addClefAndKeyToEverySystem) {
+        if (_scoreProperties.layoutType() == ScoreProperties::kLayoutTypePage) {
             auto systemIndex = _scoreProperties.systemIndex(_measureIndex);
             auto range = _scoreProperties.measureRange(systemIndex);
             buildMeasureAttributes = range.first == _measureIndex;

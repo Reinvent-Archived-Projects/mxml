@@ -33,7 +33,8 @@ MeasureGeometry::MeasureGeometry(const Measure& measure,
   _spans(spans),
   _scoreProperties(scoreProperties),
   _metrics(metrics),
-  _partIndex(metrics.partIndex())
+  _partIndex(metrics.partIndex()),
+  _showNumber(false)
 {
 }
 
@@ -42,6 +43,9 @@ void MeasureGeometry::build(bool firstMeasureInSystem) {
     
     if (firstMeasureInSystem)
         buildAttributes();
+
+    if (firstMeasureInSystem || _scoreProperties.layoutType() == ScoreProperties::kLayoutTypeScroll)
+        _showNumber = true;
     
     for (auto& node : _measure.nodes()) {
         if (const Attributes* attributes = dynamic_cast<const Attributes*>(node.get())) {

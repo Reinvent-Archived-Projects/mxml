@@ -9,12 +9,11 @@ namespace mxml {
 
 ScrollScoreGeometry::ScrollScoreGeometry(const dom::Score& score, bool naturalSpacing)
 : _score(score),
-  _scoreProperties(score),
+  _scoreProperties(score, ScoreProperties::kLayoutTypeScroll),
   _spans()
 {
     SpanFactory spanFactory(_score, _scoreProperties);
     spanFactory.setNaturalSpacing(naturalSpacing);
-    spanFactory.setAddClefAndKeyToEverySystem(false);
     _spans = spanFactory.build();
 
     std::size_t partIndex = 0;

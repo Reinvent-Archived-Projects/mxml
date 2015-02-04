@@ -13,7 +13,7 @@ BOOST_AUTO_TEST_CASE(defaultDivisions) {
     builder.addPart();
 
     auto score = builder.build();
-    ScoreProperties properties(*score);
+    ScoreProperties properties(*score, ScoreProperties::kLayoutTypeScroll);
 
     BOOST_CHECK_EQUAL(properties.divisions(0), 1);
     BOOST_CHECK_EQUAL(properties.divisions(20), 1);
@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE(onlyDivisions) {
     attributes->setDivisions(dom::presentOptional(kInitialDivisions));
 
     auto score = builder.build();
-    ScoreProperties properties(*score);
+    ScoreProperties properties(*score, ScoreProperties::kLayoutTypeScroll);
 
     BOOST_CHECK_EQUAL(properties.divisions(0), 8);
     BOOST_CHECK_EQUAL(properties.divisions(20), 8);
@@ -56,7 +56,7 @@ BOOST_AUTO_TEST_CASE(varyingDivisions) {
     attributes3->setDivisions(dom::presentOptional(kModifiedDivisions));
 
     auto score = builder.build();
-    ScoreProperties properties(*score);
+    ScoreProperties properties(*score, ScoreProperties::kLayoutTypeScroll);
 
     BOOST_CHECK_EQUAL(properties.divisions(0), kInitialDivisions);
     BOOST_CHECK_EQUAL(properties.divisions(1), kInitialDivisions);
@@ -115,7 +115,7 @@ BOOST_AUTO_TEST_CASE(alters) {
     builder.setPitch(note5, dom::Pitch::STEP_C, kOctave);
     
     auto score = builder.build();
-    ScoreProperties properties(*score);
+    ScoreProperties properties(*score, ScoreProperties::kLayoutTypeScroll);
     
     // Original key signature
     BOOST_CHECK_EQUAL(properties.previousAlter(*note1), 1);

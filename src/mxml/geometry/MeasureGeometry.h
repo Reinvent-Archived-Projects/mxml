@@ -29,6 +29,8 @@ public:
                     const SpanCollection& spans,
                     const ScoreProperties& scoreProperties,
                     const Metrics& metrics);
+
+    void build(bool firstMeasureInSystem);
     
     const dom::Measure& measure() const {
         return _measure;
@@ -45,9 +47,11 @@ public:
     bool naturalSpacing() const {
         return _spans.naturalSpacing();
     }
-    
-    void build(bool firstMeasureInSystem);
-    
+
+    bool showNumber() const {
+        return _showNumber;
+    }
+
 private:
     void buildAttributes();
     void buildAttributes(const dom::Attributes* attributes);
@@ -55,7 +59,7 @@ private:
     void buildTimedNode(const dom::TimedNode* barline);
     void buildChord(const dom::Chord* chord);
     void buildRest(const dom::Note* note);
-    
+
     bool buildClefGeometry(const dom::Clef* clef, int staff);
     bool buildKeyGeometry(const dom::Key* key, int staff, dom::time_t time);
     bool buildTimeGeometry(const dom::Time* time, int staff);
@@ -70,7 +74,12 @@ private:
     const std::size_t _partIndex;
 
     int _currentTime;
-    
+
+    /**
+     If true this measure should show its number.
+     */
+    bool _showNumber;
+
     /**
      Track built geometires so that we know when system attributes overlap system attributes.
      */

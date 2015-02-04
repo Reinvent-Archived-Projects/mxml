@@ -13,14 +13,15 @@ namespace mxml {
 
 const dom::Time ScoreProperties::_defaultTime;
 
-ScoreProperties::ScoreProperties(const dom::Score& score)
+ScoreProperties::ScoreProperties(const dom::Score& score, LayoutType layoutType)
 : _attributes(),
   _pitches(),
   _sounds(),
   _loops(),
   _jumps(),
   _staves(0),
-  _measureCount(0)
+  _measureCount(0),
+  _layoutType(layoutType)
 {
     _staves.resize(score.parts().size(), 0);
     _systemBeginsSet.insert(0);

@@ -9,11 +9,10 @@ namespace mxml {
 
 PageScoreGeometry::PageScoreGeometry(const dom::Score& score, coord_t minWidth)
 : _score(score),
-  _scoreProperties(score)
+  _scoreProperties(score, ScoreProperties::kLayoutTypePage)
 {
     SpanFactory spanFactory(_score, _scoreProperties);
     spanFactory.setNaturalSpacing(false);
-    spanFactory.setAddClefAndKeyToEverySystem(true);
     _spans = spanFactory.build();
 
     // Make all widths uniform
