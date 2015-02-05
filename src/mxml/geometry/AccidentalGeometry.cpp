@@ -11,7 +11,7 @@ const Size AccidentalGeometry::kNaturalSize = {6, 26};
 const Size AccidentalGeometry::kSharpSize = {8, 26};
 const Size AccidentalGeometry::kFlatSize = {8, 39};
 const Size AccidentalGeometry::kDoubleSharpSize = {9, 9};
-const Size AccidentalGeometry::kDoubleFlatSize = {16, 9};
+const Size AccidentalGeometry::kDoubleFlatSize = {16, 39};
 
 AccidentalGeometry::AccidentalGeometry(int alter) : _alter(alter) {
     setSize(Size(alter));

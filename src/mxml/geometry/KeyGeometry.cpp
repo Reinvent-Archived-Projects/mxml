@@ -22,10 +22,10 @@ Size KeyGeometry::keySize(const dom::Key& key) {
     if (key.fifths() > 0)
         size.width = key.fifths() * (AccidentalGeometry::kSharpSize.width + kSpacing) - kSpacing;
     else if (key.fifths() == 0)
-        size.width = key.fifths() * (AccidentalGeometry::kNaturalSize.width + kSpacing) - kSpacing;
+        size.width = 0;
     else if (key.fifths() < 0)
         size.width = -key.fifths() * (AccidentalGeometry::kFlatSize.width + kSpacing) - kSpacing;
-    size.height = Metrics::staffHeight() + Metrics::kStaffLineSpacing + std::max(AccidentalGeometry::kFlatSize.height/2, AccidentalGeometry::kSharpSize.height/2);
+    size.height = Metrics::staffHeight() + Metrics::kStaffLineSpacing + std::max(AccidentalGeometry::kFlatSize.height, AccidentalGeometry::kSharpSize.height);
     return size;
 }
 
