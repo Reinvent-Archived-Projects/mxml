@@ -134,6 +134,15 @@ public:
     }
 
     /**
+     Get the page index for the given measure index.
+     */
+    std::size_t pageIndex(std::size_t measureIndex) const;
+
+    std::size_t pageCount() const {
+        return _pageBegins.size();
+    }
+
+    /**
      Get the layout type for the score.
      */
     LayoutType layoutType() const {
@@ -373,6 +382,8 @@ private:
 
     std::set<std::size_t> _systemBeginsSet;
     std::vector<std::size_t> _systemBegins;
+    std::set<std::size_t> _pageBeginsSet;
+    std::vector<std::size_t> _pageBegins;
 
     const LayoutType _layoutType;
 

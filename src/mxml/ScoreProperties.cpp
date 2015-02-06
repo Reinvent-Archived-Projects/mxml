@@ -25,6 +25,7 @@ ScoreProperties::ScoreProperties(const dom::Score& score, LayoutType layoutType)
 {
     _staves.resize(score.parts().size(), 0);
     _systemBeginsSet.insert(0);
+    _pageBeginsSet.insert(0);
 
     std::size_t measureCount;
     for (auto& part : score.parts()) {
@@ -46,6 +47,7 @@ ScoreProperties::ScoreProperties(const dom::Score& score, LayoutType layoutType)
     _jumps = jumpFactory.build();
 
     _systemBegins.insert(_systemBegins.end(), _systemBeginsSet.begin(), _systemBeginsSet.end());
+    _pageBegins.insert(_pageBegins.end(), _pageBeginsSet.begin(), _pageBeginsSet.end());
 }
 
 void ScoreProperties::process(std::size_t partIndex, const dom::Measure& measure) {
@@ -101,6 +103,8 @@ void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, c
 void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Print& print) {
     if (print.newSystem || print.newPage)
         _systemBeginsSet.insert(measureIndex);
+    if (print.newPage)
+        _pageBeginsSet.insert(measureIndex);
 }
 
 void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Chord& chord) {
@@ -291,6 +295,13 @@ std::size_t ScoreProperties::systemIndex(std::size_t measureIndex) const {
     if (it == _systemBegins.end())
         return _systemBegins.size() - 1;
     return std::distance(_systemBegins.begin(), it) - 1;
+}
+
+std::size_t ScoreProperties::pageIndex(std::size_t measureIndex) const {
+    auto it = std::upper_bound(_pageBegins.begin(), _pageBegins.end(), measureIndex);
+    if (it == _pageBegins.end())
+        return _pageBegins.size() - 1;
+    return std::distance(_pageBegins.begin(), it) - 1;
 }
 
 std::pair<std::size_t, std::size_t> ScoreProperties::measureRange(std::size_t index) const {
