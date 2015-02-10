@@ -76,10 +76,21 @@ public:
     dom::time_t divisionsPerMeasure(std::size_t measureIndex) const;
 
     /**
+     Get the number of parts in the score.
+     */
+    std::size_t partCount() const;
+
+    /**
      Get the number of staves for a given part. This method assumes that the staves value gets set once and never
      changes.
      */
     int staves(std::size_t partIndex) const;
+
+    /**
+     Get the total number of staves for all parts. This method assumes that the staves value gets set once and never
+     changes.
+     */
+    int staves() const;
 
     /**
      Get the chromatic alteration for a particular note.

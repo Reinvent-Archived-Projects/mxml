@@ -8,6 +8,8 @@
 #include <mxml/dom/Chord.h>
 #include <mxml/dom/OctaveShift.h>
 
+#include <numeric>
+
 
 namespace mxml {
 
@@ -180,8 +182,16 @@ const dom::Clef* ScoreProperties::clef(const dom::Note& note) const {
     return clef(partIndex, measureIndex, note.staff(), note.start());
 }
 
+std::size_t ScoreProperties::partCount() const {
+    return _staves.size();
+}
+
 int ScoreProperties::staves(std::size_t partIndex) const {
     return _staves[partIndex];
+}
+
+int ScoreProperties::staves() const {
+    return std::accumulate(_staves.begin(), _staves.end(), 0);
 }
 
 int ScoreProperties::alter(const dom::Note& note) const {
