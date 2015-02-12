@@ -124,6 +124,18 @@
 		614057BC1A5C7629005224C9 /* Key.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614057BB1A5C7629005224C9 /* Key.cpp */; };
 		614057BE1A5C79EF005224C9 /* KeyTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614057BD1A5C79EF005224C9 /* KeyTests.cpp */; };
 		614057C01A5CAA47005224C9 /* ScorePropertiesTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */; };
+		61A2B75E1A8E870000C1EE2A /* AlterSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A2B7521A8E870000C1EE2A /* AlterSequence.cpp */; };
+		61A2B75F1A8E870000C1EE2A /* AlterSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B7531A8E870000C1EE2A /* AlterSequence.h */; };
+		61A2B7601A8E870000C1EE2A /* AttributeSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B7541A8E870000C1EE2A /* AttributeSequence.h */; };
+		61A2B7611A8E870000C1EE2A /* AttributeSequence.hh in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B7551A8E870000C1EE2A /* AttributeSequence.hh */; };
+		61A2B7621A8E870000C1EE2A /* ClefSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A2B7561A8E870000C1EE2A /* ClefSequence.cpp */; };
+		61A2B7631A8E870000C1EE2A /* ClefSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B7571A8E870000C1EE2A /* ClefSequence.h */; };
+		61A2B7641A8E870000C1EE2A /* DivisionsSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A2B7581A8E870000C1EE2A /* DivisionsSequence.cpp */; };
+		61A2B7651A8E870000C1EE2A /* DivisionsSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B7591A8E870000C1EE2A /* DivisionsSequence.h */; };
+		61A2B7661A8E870000C1EE2A /* KeySequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A2B75A1A8E870000C1EE2A /* KeySequence.cpp */; };
+		61A2B7671A8E870000C1EE2A /* KeySequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B75B1A8E870000C1EE2A /* KeySequence.h */; };
+		61A2B7681A8E870000C1EE2A /* TimeSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A2B75C1A8E870000C1EE2A /* TimeSequence.cpp */; };
+		61A2B7691A8E870000C1EE2A /* TimeSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B75D1A8E870000C1EE2A /* TimeSequence.h */; };
 		61C8502F1A6843EB00031100 /* LoopsAndJumpsTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61C8502D1A6843EB00031100 /* LoopsAndJumpsTests.cpp */; };
 		61C8504F1A6D79CC00031100 /* OctaveShiftHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61C8504D1A6D79CC00031100 /* OctaveShiftHandler.cpp */; };
 		61C850501A6D79CC00031100 /* OctaveShiftHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C8504E1A6D79CC00031100 /* OctaveShiftHandler.h */; };
@@ -461,6 +473,18 @@
 		614057BB1A5C7629005224C9 /* Key.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Key.cpp; sourceTree = "<group>"; };
 		614057BD1A5C79EF005224C9 /* KeyTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeyTests.cpp; sourceTree = "<group>"; };
 		614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScorePropertiesTests.cpp; sourceTree = "<group>"; };
+		61A2B7521A8E870000C1EE2A /* AlterSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlterSequence.cpp; sourceTree = "<group>"; };
+		61A2B7531A8E870000C1EE2A /* AlterSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlterSequence.h; sourceTree = "<group>"; };
+		61A2B7541A8E870000C1EE2A /* AttributeSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributeSequence.h; sourceTree = "<group>"; };
+		61A2B7551A8E870000C1EE2A /* AttributeSequence.hh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AttributeSequence.hh; sourceTree = "<group>"; };
+		61A2B7561A8E870000C1EE2A /* ClefSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClefSequence.cpp; sourceTree = "<group>"; };
+		61A2B7571A8E870000C1EE2A /* ClefSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClefSequence.h; sourceTree = "<group>"; };
+		61A2B7581A8E870000C1EE2A /* DivisionsSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DivisionsSequence.cpp; sourceTree = "<group>"; };
+		61A2B7591A8E870000C1EE2A /* DivisionsSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DivisionsSequence.h; sourceTree = "<group>"; };
+		61A2B75A1A8E870000C1EE2A /* KeySequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeySequence.cpp; sourceTree = "<group>"; };
+		61A2B75B1A8E870000C1EE2A /* KeySequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeySequence.h; sourceTree = "<group>"; };
+		61A2B75C1A8E870000C1EE2A /* TimeSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimeSequence.cpp; sourceTree = "<group>"; };
+		61A2B75D1A8E870000C1EE2A /* TimeSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeSequence.h; sourceTree = "<group>"; };
 		61C8502D1A6843EB00031100 /* LoopsAndJumpsTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoopsAndJumpsTests.cpp; sourceTree = "<group>"; };
 		61C8504C1A6D775100031100 /* OctaveShift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OctaveShift.h; sourceTree = "<group>"; };
 		61C8504D1A6D79CC00031100 /* OctaveShiftHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OctaveShiftHandler.cpp; sourceTree = "<group>"; };
@@ -597,6 +621,7 @@
 				614055C91A5C6228005224C9 /* dom */,
 				614056051A5C6228005224C9 /* geometry */,
 				614056491A5C6228005224C9 /* parsing */,
+				61A2B7511A8E870000C1EE2A /* attributes */,
 				61E530B51A79A1FD00E5B2FF /* Algorithm.h */,
 				614055FF1A5C6228005224C9 /* Event.cpp */,
 				614056001A5C6228005224C9 /* Event.h */,
@@ -926,6 +951,25 @@
 			path = lxml/src/lxml;
 			sourceTree = "<group>";
 		};
+		61A2B7511A8E870000C1EE2A /* attributes */ = {
+			isa = PBXGroup;
+			children = (
+				61A2B7521A8E870000C1EE2A /* AlterSequence.cpp */,
+				61A2B7531A8E870000C1EE2A /* AlterSequence.h */,
+				61A2B7541A8E870000C1EE2A /* AttributeSequence.h */,
+				61A2B7551A8E870000C1EE2A /* AttributeSequence.hh */,
+				61A2B7561A8E870000C1EE2A /* ClefSequence.cpp */,
+				61A2B7571A8E870000C1EE2A /* ClefSequence.h */,
+				61A2B7581A8E870000C1EE2A /* DivisionsSequence.cpp */,
+				61A2B7591A8E870000C1EE2A /* DivisionsSequence.h */,
+				61A2B75A1A8E870000C1EE2A /* KeySequence.cpp */,
+				61A2B75B1A8E870000C1EE2A /* KeySequence.h */,
+				61A2B75C1A8E870000C1EE2A /* TimeSequence.cpp */,
+				61A2B75D1A8E870000C1EE2A /* TimeSequence.h */,
+			);
+			path = attributes;
+			sourceTree = "<group>";
+		};
 		61F073AF1A71CD8F002CA9CA /* factories */ = {
 			isa = PBXGroup;
 			children = (
@@ -955,11 +999,13 @@
 				61F073BF1A71CD8F002CA9CA /* DirectionGeometryFactory.h in Headers */,
 				61F074251A72C676002CA9CA /* PageScoreGeometry.h in Headers */,
 				0022AE001A7082C300139992 /* CollisionResolver.hh in Headers */,
+				61A2B7651A8E870000C1EE2A /* DivisionsSequence.h in Headers */,
 				61F072D61A6F0212002CA9CA /* SystemMarginsHandler.h in Headers */,
 				0022ADFE1A7082C300139992 /* CollisionHandler.h in Headers */,
 				61C850501A6D79CC00031100 /* OctaveShiftHandler.h in Headers */,
 				61F072E61A6F0F4C002CA9CA /* GenericNode.h in Headers */,
 				61F072DE1A6F0431002CA9CA /* PageMarginsHandler.h in Headers */,
+				61A2B7691A8E870000C1EE2A /* TimeSequence.h in Headers */,
 				61F0737C1A70799F002CA9CA /* ScrollMetrics.h in Headers */,
 				61239C1D1A67429100B3F0A3 /* Jump.h in Headers */,
 				61F072E21A6F0CB3002CA9CA /* AppearanceHandler.h in Headers */,
@@ -967,20 +1013,25 @@
 				61F073CF1A71CEF5002CA9CA /* EndingGeometryFactory.h in Headers */,
 				61F072EA1A6F1183002CA9CA /* GenericNodeHandler.h in Headers */,
 				61C8508D1A6EE64300031100 /* SystemLayoutHandler.h in Headers */,
+				61A2B75F1A8E870000C1EE2A /* AlterSequence.h in Headers */,
 				61F072EE1A6F1BEE002CA9CA /* FormattedTextHandler.h in Headers */,
 				61C850581A6D838500031100 /* OctaveShiftGeometry.h in Headers */,
 				61F073C51A71CD8F002CA9CA /* PartGeometryFactory.h in Headers */,
 				61C850891A6EE39300031100 /* PositionFactory.h in Headers */,
+				61A2B7671A8E870000C1EE2A /* KeySequence.h in Headers */,
 				61F072CE1A6EEB48002CA9CA /* SystemDividersHandler.h in Headers */,
+				61A2B7611A8E870000C1EE2A /* AttributeSequence.hh in Headers */,
 				61F072D21A6EEE03002CA9CA /* TypeFactories.h in Headers */,
 				0022ADFF1A7082C300139992 /* CollisionResolver.h in Headers */,
 				61F073A21A71A447002CA9CA /* SystemGeometry.h in Headers */,
+				61A2B7631A8E870000C1EE2A /* ClefSequence.h in Headers */,
 				61F072DA1A6F02FE002CA9CA /* PageLayoutHandler.h in Headers */,
 				61E530B71A79A1FD00E5B2FF /* Algorithm.h in Headers */,
 				61F073CB1A71CD8F002CA9CA /* TieGeometryFactory.h in Headers */,
 				61239BA01A67426C00B3F0A3 /* JumpFactory.h in Headers */,
 				61239A601A64866500B3F0A3 /* ScoreProperties.h in Headers */,
 				0022AE041A7082C300139992 /* VerticalResolver.h in Headers */,
+				61A2B7601A8E870000C1EE2A /* AttributeSequence.h in Headers */,
 				00094EFE1A67464A0053C615 /* SegnoGeometry.h in Headers */,
 				0008689B1A68430400BAA13D /* CodaGeometry.h in Headers */,
 				0022AE021A7082C300139992 /* HorizontalResolver.h in Headers */,
@@ -1087,11 +1138,13 @@
 				614056E11A5C6228005224C9 /* BarlineGeometry.cpp in Sources */,
 				61F073A11A71A447002CA9CA /* SystemGeometry.cpp in Sources */,
 				614057BA1A5C7293005224C9 /* Pitch.cpp in Sources */,
+				61A2B7621A8E870000C1EE2A /* ClefSequence.cpp in Sources */,
 				614057291A5C6228005224C9 /* BeamHandler.cpp in Sources */,
 				6140571E1A5C6228005224C9 /* Metrics.cpp in Sources */,
 				614057531A5C6228005224C9 /* PrintHandler.cpp in Sources */,
 				614057741A5C6228005224C9 /* StringUtility.cpp in Sources */,
 				614057691A5C6228005224C9 /* TimeHandler.cpp in Sources */,
+				61A2B7661A8E870000C1EE2A /* KeySequence.cpp in Sources */,
 				614057431A5C6228005224C9 /* LyricHandler.cpp in Sources */,
 				614057071A5C6228005224C9 /* PedalGeometry.cpp in Sources */,
 				614056D71A5C6228005224C9 /* Event.cpp in Sources */,
@@ -1137,6 +1190,7 @@
 				614057BC1A5C7629005224C9 /* Key.cpp in Sources */,
 				614056FF1A5C6228005224C9 /* NoteGeometry.cpp in Sources */,
 				0022AE011A7082C300139992 /* HorizontalResolver.cpp in Sources */,
+				61A2B7641A8E870000C1EE2A /* DivisionsSequence.cpp in Sources */,
 				614057031A5C6228005224C9 /* PartGeometry.cpp in Sources */,
 				61F073CA1A71CD8F002CA9CA /* TieGeometryFactory.cpp in Sources */,
 				61F072ED1A6F1BEE002CA9CA /* FormattedTextHandler.cpp in Sources */,
@@ -1156,6 +1210,7 @@
 				614057A81A5C62CF005224C9 /* DoubleHandler.cpp in Sources */,
 				6140570C1A5C6228005224C9 /* RestGeometry.cpp in Sources */,
 				61F072D51A6F0212002CA9CA /* SystemMarginsHandler.cpp in Sources */,
+				61A2B75E1A8E870000C1EE2A /* AlterSequence.cpp in Sources */,
 				6140576D1A5C6228005224C9 /* UnpitchedHandler.cpp in Sources */,
 				614057721A5C6228005224C9 /* SpanFactory.cpp in Sources */,
 				61F072E91A6F1183002CA9CA /* GenericNodeHandler.cpp in Sources */,
@@ -1182,6 +1237,7 @@
 				614057471A5C6228005224C9 /* MordentHandler.cpp in Sources */,
 				61239A6E1A65974400B3F0A3 /* ScoreBuilder.cpp in Sources */,
 				614056F81A5C6228005224C9 /* LyricGeometry.cpp in Sources */,
+				61A2B7681A8E870000C1EE2A /* TimeSequence.cpp in Sources */,
 				614057451A5C6228005224C9 /* MeasureHandler.cpp in Sources */,
 				61F073C21A71CD8F002CA9CA /* OrnamentGeometryFactory.cpp in Sources */,
 				614057011A5C6228005224C9 /* OrnamentsGeometry.cpp in Sources */,

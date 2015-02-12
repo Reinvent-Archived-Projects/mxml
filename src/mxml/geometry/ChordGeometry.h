@@ -82,6 +82,7 @@ private:
     std::vector<NoteGeometry*> _notes;
     StemGeometry* _stem;
     Point _refNoteLocation;
+    int _currentAlter;
 };
 
 } // namespace mxml

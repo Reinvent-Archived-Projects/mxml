@@ -159,7 +159,7 @@ void ChordGeometry::buildAccidental(const NoteGeometry& noteGeom, const Rect& no
         return;
     
     int alter = note.alter();
-    int previousAlter = _scoreProperties.previousAlter(note);
+    int previousAlter = _scoreProperties.alter(note);
     if (alter == previousAlter)
         return;
 

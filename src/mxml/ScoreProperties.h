@@ -2,6 +2,11 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
+#include "attributes/AlterSequence.h"
+#include "attributes/ClefSequence.h"
+#include "attributes/DivisionsSequence.h"
+#include "attributes/KeySequence.h"
+#include "attributes/TimeSequence.h"
 #include "Jump.h"
 #include "Loop.h"
 
@@ -43,12 +48,16 @@ public:
     /**
      Get active key for the given part, measure, staff and time.
      */
-    const dom::Key* key(std::size_t partIndex, std::size_t measureIndex, int staff, time_t time) const;
+    const dom::Key* key(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time) const {
+        return _keySequence.find(partIndex, measureIndex, staff, time);
+    }
 
     /**
      Get active clef for the given part, measure, staff and time.
      */
-    const dom::Clef* clef(std::size_t partIndex, std::size_t measureIndex, int staff, time_t time) const;
+    const dom::Clef* clef(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time) const {
+        return _clefSequence.find(partIndex, measureIndex, staff, time);
+    }
 
     /**
      Get the clef for a given note.
@@ -58,12 +67,16 @@ public:
     /**
      Get active time signature for the given measure.
      */
-    const dom::Time* time(std::size_t measureIndex) const;
+    const dom::Time* time(std::size_t measureIndex) const {
+        return _timeSequence.find(measureIndex);
+    }
 
     /**
      Get active divisions for the given measure.
      */
-    dom::time_t divisions(std::size_t measureIndex) const;
+    dom::time_t divisions(std::size_t measureIndex) const {
+        return _divisionsSequence.find(measureIndex);
+    }
 
     /**
      Get the number of divsions per beat for the given measure.
@@ -93,14 +106,9 @@ public:
     int staves() const;
 
     /**
-     Get the chromatic alteration for a particular note.
+     Get the chromatic alteration for a particular note, not including alterations at the same time as the note.
      */
     int alter(const dom::Note& note) const;
-
-    /**
-     Get the previous chromatic alteration for a particular note.
-     */
-    int previousAlter(const dom::Note& note) const;
 
     /**
      Get the tempo at the given measure and time.
@@ -168,70 +176,6 @@ private:
     float dynamics(std::size_t partIndex, std::size_t measureIndex, int staff, dom::time_t time) const;
 
 protected:
-    struct AttributesRef {
-        std::size_t partIndex;
-        std::size_t measureIndex;
-        dom::time_t time;
-        const dom::Attributes* attributes;
-
-        bool operator==(const AttributesRef& rhs) const {
-            return partIndex == rhs.partIndex && measureIndex == rhs.measureIndex && time == rhs.time && attributes == rhs.attributes;
-        }
-        bool operator<(const AttributesRef& rhs) const {
-            if (measureIndex < rhs.measureIndex)
-                return true;
-            if (measureIndex > rhs.measureIndex)
-                return false;
-
-            if (time < rhs.time)
-                return true;
-            if (time > rhs.time)
-                return false;
-
-            if (partIndex < rhs.partIndex)
-                return true;
-            if (partIndex > rhs.partIndex)
-                return false;
-
-            return attributes < rhs.attributes;
-        }
-    };
-
-    struct PitchRef {
-        std::size_t partIndex;
-        std::size_t measureIndex;
-        dom::time_t time;
-        int staff;
-        const dom::Pitch* pitch;
-
-        bool operator==(const PitchRef& rhs) const {
-            return partIndex == rhs.partIndex && measureIndex == rhs.measureIndex && time == rhs.time && staff == rhs.staff && pitch == rhs.pitch;
-        }
-        bool operator<(const PitchRef& rhs) const {
-            if (measureIndex < rhs.measureIndex)
-                return true;
-            if (measureIndex > rhs.measureIndex)
-                return false;
-
-            if (time < rhs.time)
-                return true;
-            if (time > rhs.time)
-                return false;
-
-            if (staff < rhs.staff)
-                return true;
-            if (staff > rhs.staff)
-                return false;
-
-            if (partIndex < rhs.partIndex)
-                return true;
-            if (partIndex > rhs.partIndex)
-                return false;
-
-            return pitch < rhs.pitch;
-        }
-    };
-
     struct SoundRef {
         std::size_t partIndex;
         std::size_t measureIndex;
@@ -305,82 +249,17 @@ protected:
     void process(std::size_t partIndex, std::size_t measureIndex, const dom::Direction& direction);
     void process(std::size_t partIndex, std::size_t measureIndex, const dom::Print& print);
     void process(std::size_t partIndex, std::size_t measureIndex, const dom::Chord& chord);
-    void process(std::size_t partIndex, std::size_t measureIndex, const dom::Note& note);
-
-    /**
-     Get an attribute value for the given part, measure and time.
-
-     @param partIndex    The part index
-     @param measureIndex The measure index
-     @param time         The time relative to the start of the measure
-     @param defaultValue The default value to return if no attribute has the requested value
-     @param cooser       The function that captures a value from dom::Attributes or returns its second argument if the
-                         value is not present.
-
-     @return The most recent attribute value in the measure at the given time or the default value.
-     */
-    template <typename T>
-    T getAttribute(std::size_t partIndex, std::size_t measureIndex, time_t time, T defaultValue, std::function<T (const dom::Attributes&, T)> chooser) const {
-        T current = defaultValue;
-        for (auto& ref : _attributes) {
-            if (ref.partIndex != partIndex)
-                continue;
-
-            if (ref.measureIndex > measureIndex || (ref.measureIndex == measureIndex && ref.time > time))
-                return current;
-            current = chooser(*ref.attributes, current);
-        }
-        return current;
-    }
-
-    /**
-     Get an attribute value for the given measure and time.
-
-     @param measureIndex The measure index
-     @param time         The time relative to the start of the measure
-     @param defaultValue The default value to return if no attribute has the requested value
-     @param cooser       The function that captures a value from dom::Attributes or returns its second argument if the
-     value is not present.
-
-     @return The most recent attribute value in the measure at the given time or the default value.
-     */
-    template <typename T>
-    T getAttribute(std::size_t measureIndex, time_t time, T defaultValue, std::function<T (const dom::Attributes&, T)> chooser) const {
-        T current = defaultValue;
-        for (auto& ref : _attributes) {
-            if (ref.measureIndex > measureIndex || (ref.measureIndex == measureIndex && ref.time > time))
-                return current;
-            current = chooser(*ref.attributes, current);
-        }
-        return current;
-    }
-
-    /**
-     Get an attribute value for the given measure.
-
-     @param measureIndex The measure index
-     @param defaultValue The default value to return if no attribute has the requested value
-     @param cooser       The function that captures a value from dom::Attributes or returns its second argument if the
-     value is not present.
-
-     @return The most recent attribute value in the measure at the given time or the default value.
-     */
-    template <typename T>
-    T getAttribute(std::size_t measureIndex, T defaultValue, std::function<T (const dom::Attributes&, T)> chooser) const {
-        T current = defaultValue;
-        for (auto& ref : _attributes) {
-            if (ref.measureIndex > measureIndex)
-                return current;
-            current = chooser(*ref.attributes, current);
-        }
-        return current;
-    }
 
 private:
-    std::set<AttributesRef> _attributes;
     std::set<DirectionRef> _directions;
-    std::set<PitchRef> _pitches;
     std::set<SoundRef> _sounds;
+
+    ClefSequence _clefSequence;
+    KeySequence _keySequence;
+    TimeSequence _timeSequence;
+    DivisionsSequence _divisionsSequence;
+    AlterSequence _alterSequence;
+
     std::vector<Loop> _loops;
     std::vector<Jump> _jumps;
     std::vector<int> _staves;
@@ -392,8 +271,6 @@ private:
     std::vector<std::size_t> _pageBegins;
 
     const LayoutType _layoutType;
-
-    static const dom::Time _defaultTime;
 };
     
 }

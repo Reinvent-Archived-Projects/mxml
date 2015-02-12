@@ -13,12 +13,8 @@
 
 namespace mxml {
 
-const dom::Time ScoreProperties::_defaultTime;
-
 ScoreProperties::ScoreProperties(const dom::Score& score, LayoutType layoutType)
-: _attributes(),
-  _pitches(),
-  _sounds(),
+: _sounds(),
   _loops(),
   _jumps(),
   _staves(0),
@@ -41,6 +37,12 @@ ScoreProperties::ScoreProperties(const dom::Score& score, LayoutType layoutType)
         if (measureCount > _measureCount)
             _measureCount = measureCount;
     }
+
+    _clefSequence.sort();
+    _keySequence.sort();
+    _timeSequence.sort();
+    _divisionsSequence.sort();
+    _alterSequence.sort();
 
     LoopFactory loopFactory(score);
     _loops = loopFactory.build();
@@ -67,19 +69,17 @@ void ScoreProperties::process(std::size_t partIndex, const dom::Measure& measure
 }
 
 void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Attributes& attributes) {
-    AttributesRef ref;
-    ref.partIndex = partIndex;
-    ref.measureIndex = measureIndex;
-    ref.time = attributes.start();
-    ref.attributes = &attributes;
-    _attributes.insert(ref);
-
     if (attributes.staves().isPresent()) {
         assert(_staves[partIndex] == 0); // We don't support changing the number of staves mid-song
         _staves[partIndex] = attributes.staves();
     } else if (_staves[partIndex] == 0) {
         _staves[partIndex] = 1;
     }
+
+    _clefSequence.addFromAttributes(partIndex, measureIndex, attributes);
+    _keySequence.addFromAttributes(partIndex, measureIndex, attributes);
+    _timeSequence.addFromAttributes(measureIndex, attributes);
+    _divisionsSequence.addFromAttributes(measureIndex, attributes);
 }
 
 void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Direction& direction) {
@@ -111,57 +111,8 @@ void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, c
 
 void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Chord& chord) {
     for (auto& note : chord.notes()) {
-        process(partIndex, measureIndex, *note);
+        _alterSequence.addFromNote(partIndex, measureIndex, *note);
     }
-}
-
-void ScoreProperties::process(std::size_t partIndex, std::size_t measureIndex, const dom::Note& note) {
-    if (!note.pitch())
-        return;
-
-    PitchRef ref;
-    ref.partIndex = partIndex;
-    ref.measureIndex = measureIndex;
-    ref.staff = note.staff();
-    ref.pitch = note.pitch().get();
-    ref.time = note.start();
-    _pitches.insert(ref);
-}
-
-const dom::Key* ScoreProperties::key(std::size_t partIndex, std::size_t measureIndex, int staff, time_t time) const {
-    return getAttribute<const dom::Key*>(partIndex, measureIndex, time, nullptr, [&](const dom::Attributes& attribute, const dom::Key* previous) {
-        if (attribute.key(staff))
-            return attribute.key(staff);
-        else if (attribute.key(1))
-            return attribute.key(1);
-        return previous;
-    });
-}
-
-const dom::Clef* ScoreProperties::clef(std::size_t partIndex, std::size_t measureIndex, int staff, time_t time) const {
-    return getAttribute<const dom::Clef*>(partIndex, measureIndex, time, nullptr, [&](const dom::Attributes& attribute, const dom::Clef* previous) {
-        if (attribute.clef(staff))
-            return attribute.clef(staff);
-        else if (attribute.clef(1))
-            return attribute.clef(1);
-        return previous;
-    });
-}
-
-const dom::Time* ScoreProperties::time(std::size_t measureIndex) const {
-    return getAttribute<const dom::Time*>(measureIndex, &_defaultTime, [&](const dom::Attributes& attribute, const dom::Time* previous) {
-        if (attribute.time())
-            return attribute.time();
-        return previous;
-    });
-}
-
-dom::time_t ScoreProperties::divisions(std::size_t measureIndex) const {
-    return getAttribute<int>(measureIndex, 0, 1, [&](const dom::Attributes& attribute, int previous) {
-        if (attribute.divisions().isPresent())
-            return attribute.divisions().value();
-        return previous;
-    });
 }
 
 dom::time_t ScoreProperties::divisionsPerBeat(std::size_t measureIndex) const {
@@ -200,48 +151,12 @@ int ScoreProperties::alter(const dom::Note& note) const {
 
     const auto partIndex = note.measure()->part()->index();
     const auto measureIndex = note.measure()->index();
-    const auto& pitch = *note.pitch();
-
     auto currentKey = key(partIndex, measureIndex, note.staff(), note.start());
     if (!currentKey)
         return 0;
 
-    const int base = currentKey->alter(pitch.step());
-    int current = base;
-
-    for (auto& ref : _pitches) {
-        if (ref.measureIndex > measureIndex || (ref.measureIndex == measureIndex && ref.time > note.start()))
-            return current;
-        if (ref.measureIndex == measureIndex && ref.staff == note.staff() && *ref.pitch == pitch && ref.pitch->alter().isPresent())
-            current = ref.pitch->alter();
-    }
-
-    return current;
-}
-
-int ScoreProperties::previousAlter(const dom::Note& note) const {
-    if (!note.pitch())
-        return 0;
-
-    const auto partIndex = note.measure()->part()->index();
-    const auto measureIndex = note.measure()->index();
-    const auto& pitch = *note.pitch();
-
-    auto currentKey = key(partIndex, measureIndex, note.staff(), note.start());
-    if (!currentKey)
-        return 0;
-
-    const int base = currentKey->alter(pitch.step());
-    int current = base;
-
-    for (auto& ref : _pitches) {
-        if (ref.measureIndex > measureIndex || (ref.measureIndex == measureIndex && ref.time >= note.start()))
-            return current;
-        if (ref.measureIndex == measureIndex && ref.staff == note.staff() && *ref.pitch == pitch && ref.pitch->alter().isPresent())
-            current = ref.pitch->alter();
-    }
-    
-    return current;
+    const int base = currentKey->alter(note.pitch()->step());
+    return _alterSequence.find(AlterSequence::indexFromNote(note), base);
 }
 
 float ScoreProperties::tempo(std::size_t measureIndex, dom::time_t time) const {
