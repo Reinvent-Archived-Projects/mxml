@@ -23,11 +23,18 @@ EventFactory::EventFactory(const dom::Score& score, const ScoreProperties& score
 {}
 
 std::unique_ptr<EventSequence> EventFactory::build() {
+    return build(0, _score.parts().at(0)->measures().size());
+}
+
+std::unique_ptr<EventSequence> EventFactory::build(std::size_t startMeasureIndex, std::size_t endMeasureIndex) {
+    _startMeasureIndex = startMeasureIndex;
+    _endMeasureIndex = endMeasureIndex;
+
     for (auto& part : _score.parts()) {
         _part = part.get();
         _measureStartTime = 0;
         _time = 0;
-        for (std::size_t measureIndex = 0; measureIndex < part->measures().size(); measureIndex += 1) {
+        for (std::size_t measureIndex = _startMeasureIndex; measureIndex < _endMeasureIndex; measureIndex += 1) {
             const Measure& measure = *part->measures().at(measureIndex);
             processMeasure(measure);
         }
@@ -97,7 +104,7 @@ Event& EventFactory::event(std::size_t measureIndex, dom::time_t measureTime, do
 
 void EventFactory::setBeatMarks() {
     dom::time_t absoluteTime = 0;
-    for (std::size_t measureIndex = 0; measureIndex < _scoreProperties.measureCount(); measureIndex += 1) {
+    for (std::size_t measureIndex = _startMeasureIndex; measureIndex < _endMeasureIndex; measureIndex += 1) {
         auto divisionsPerBeat = _scoreProperties.divisionsPerBeat(measureIndex);
         auto divisionsPerMeasure = _scoreProperties.divisionsPerMeasure(measureIndex);
 
@@ -112,7 +119,7 @@ void EventFactory::setBeatMarks() {
 std::unique_ptr<EventSequence> EventFactory::unroll() {
     auto eventSequence = std::unique_ptr<EventSequence>(new EventSequence(_scoreProperties));
 
-    std::size_t measureIndex = 0;
+    std::size_t measureIndex = _startMeasureIndex;
     dom::time_t measureStartTime = 0;
     dom::time_t time = 0;
 
@@ -123,7 +130,7 @@ std::unique_ptr<EventSequence> EventFactory::unroll() {
 
     // Iterate until we equal the measure count for loops
     // that 'end' past the last measure
-    while (measureIndex <= _scoreProperties.measureCount()) {
+    while (measureIndex <= _endMeasureIndex) {
         bool skipped = false;
 
         auto prevLoop = _scoreProperties.loop(measureIndex - 1);
