@@ -52,13 +52,6 @@ void Attributes::setKey(int number, std::unique_ptr<Key> key) {
     while (_keys.size() <= number)
         _keys.emplace_back();
     _keys[number - 1] = std::move(key);
-
-    if (number == 1) {
-        for (int i = 1; i < _staves; i += 1) {
-            _keys[i] = std::move(key);
-            _keys[i]->setNumber(i);
-        }
-    }
 }
 
 }

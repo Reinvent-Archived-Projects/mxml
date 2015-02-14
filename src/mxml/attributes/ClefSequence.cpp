@@ -18,6 +18,8 @@ void ClefSequence::addFromAttributes(std::size_t partIndex, std::size_t measureI
     auto const staves = _staves[partIndex];
     for (int staff = 1; staff <= staves; staff += 1) {
         auto clef = attributes.clef(staff);
+
+        // Reuse the clef from the first staff if that is the only one present
         if (!clef)
             clef = attributes.clef(1);
         if (!clef)

@@ -133,3 +133,69 @@ BOOST_AUTO_TEST_CASE(alters) {
     // Note C - measure 2 - time 1
     BOOST_CHECK_EQUAL(properties.alter(*note_c3), 1);
 }
+
+BOOST_AUTO_TEST_CASE(altersSecondStaff) {
+    ScoreBuilder builder;
+    auto part = builder.addPart();
+
+    // Create a measure defines a key signature and then a couple of alters
+    auto measure1 = builder.addMeasure(part);
+
+    auto attributes1 = builder.addAttributes(measure1);
+    attributes1->setStaves({2, true});
+
+    auto clef1 = dom::Clef::trebleClef();
+    clef1->setParent(attributes1);
+    attributes1->setClef(1, std::move(clef1));
+
+    auto clef2 = dom::Clef::bassClef();
+    clef2->setParent(attributes1);
+    attributes1->setClef(2, std::move(clef2));
+
+    // This key signature modifies F and C by +1
+    auto key = std::unique_ptr<dom::Key>(new dom::Key{});
+    key->setParent(attributes1);
+    key->setFifths(2);
+    attributes1->setKey(1, std::move(key));
+
+    // C Steps - staff 1
+    auto chord_c1 = builder.addChord(measure1);
+    auto note_c1 = builder.addNote(chord_c1, dom::Note::TYPE_EIGHTH, 1);
+    note_c1->setStaff(1);
+    builder.setPitch(note_c1, dom::Pitch::STEP_C, 4);
+
+    // C Steps - staff 2
+    auto chord_c2 = builder.addChord(measure1);
+    auto note_c2 = builder.addNote(chord_c2, dom::Note::TYPE_EIGHTH, 1);
+    note_c2->setStaff(2);
+    builder.setPitch(note_c2, dom::Pitch::STEP_C, 5);
+
+    auto score = builder.build();
+    ScoreProperties properties(*score, ScoreProperties::kLayoutTypeScroll);
+
+    // Even though the key signature is only set for the first staff, it should apply to the second staff as well
+    BOOST_CHECK_EQUAL(properties.alter(*note_c1), 1);
+    BOOST_CHECK_EQUAL(properties.alter(*note_c2), 1);
+}
+
+BOOST_AUTO_TEST_CASE(keySignatures) {
+    static const int kFifths = 2;
+
+    ScoreBuilder builder;
+    auto part = builder.addPart();
+    auto measure = builder.addMeasure(part);
+    auto attributes = builder.addAttributes(measure);
+    attributes->setStaves({2, true});
+
+    auto key = std::unique_ptr<dom::Key>(new dom::Key{});
+    key->setParent(attributes);
+    key->setFifths(kFifths);
+    attributes->setKey(1, std::move(key));
+
+    auto score = builder.build();
+    ScoreProperties proeprties(*score, ScoreProperties::kLayoutTypeScroll);
+
+    // Even though the key was only specified for the first staff it should apply to all staves
+    BOOST_CHECK_EQUAL(proeprties.key(0, 0, 1, 0)->fifths(), kFifths);
+    BOOST_CHECK_EQUAL(proeprties.key(0, 0, 2, 0)->fifths(), kFifths);
+}

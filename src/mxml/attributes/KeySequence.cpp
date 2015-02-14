@@ -16,10 +16,18 @@ void KeySequence::addFromAttributes(std::size_t partIndex, std::size_t measureIn
         _staves[partIndex] = attributes.staves();
 
     auto const staves = _staves[partIndex];
+    const dom::Key* keyForAllStaves = nullptr;
     for (int staff = 1; staff <= staves; staff += 1) {
         auto key = attributes.key(staff);
+
+        // Reuse the key from the first staff if that is the only one present
         if (!key)
+            key = attributes.key(1);
+        if(!key)
             continue;
+
+        if (staff == 1)
+            keyForAllStaves = key;
 
         Item item;
         item.index.time.measureIndex = measureIndex;
