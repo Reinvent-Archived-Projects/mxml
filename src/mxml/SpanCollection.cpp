@@ -167,26 +167,6 @@ coord_t SpanCollection::width(std::size_t measureIndex) const {
     return width;
 }
 
-coord_t SpanCollection::flexibleWidth(std::size_t measureIndex) const {
-    coord_t flexWidth = 0;
-    coord_t width = 0;
-    coord_t margin = 0;
-    auto r = range(measureIndex);
-    for (auto it = r.first; it != r.second; ++it) {
-        auto& span = *it;
-        margin = std::max(margin, span.leftMargin());
-        if (_naturalSpacing)
-            width += margin + std::max(span.width(), span.naturalWidth());
-        else
-            width += margin + span.width();
-        flexWidth += margin;
-        margin = span.rightMargin();
-    }
-    width += margin;
-    flexWidth += margin;
-    return width;
-}
-
 void SpanCollection::fitToWidth(coord_t targetWidth, std::size_t beginMeasure, std::size_t endMeasure) {
     // Compute total width
     std::vector<coord_t> widths;

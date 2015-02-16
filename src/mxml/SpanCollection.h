@@ -154,11 +154,6 @@ public:
     coord_t width(std::size_t measureIndex) const;
 
     /**
-      Compute the total flexible width of the measure. The flexible width is the total amount of space between elements.
-     */
-    coord_t flexibleWidth(std::size_t measureIndex) const;
-
-    /**
      Expand spacing between notes to fill up each system to the given width.
      */
     void fitToWidth(coord_t width, std::size_t begnMeasure, std::size_t endMeasure);

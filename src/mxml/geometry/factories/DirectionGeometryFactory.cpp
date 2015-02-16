@@ -232,7 +232,7 @@ void DirectionGeometryFactory::buildWords(const MeasureGeometry& measureGeom, co
     wordsGeom->setLocation(location);
 
     // Better placement defaults if the placement is not specified
-    dom::Placement placement = direction.placement();
+    dom::Placement placement;
     if (!direction.placement().isPresent()) {
         if (wordsGeom->dynamics()) {
             if (direction.staff() == 1)
