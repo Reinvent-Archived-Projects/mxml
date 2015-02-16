@@ -13,37 +13,7 @@ namespace mxml {
 
 class EventSequence {
 public:
-    class Iterator {
-    public:
-        Iterator() = default;
-        Iterator(const EventSequence& eventSequence, std::size_t index);
-        Iterator(const Iterator& it) = default;
-        
-        Iterator& operator++();
-        Iterator& operator--();
-        
-        const Event& operator*() const;
-        const Event* operator->() const;
-
-        bool isValid() const {
-            return _eventSequence;
-        }
-        
-        const std::size_t index() const {
-            return _index;
-        }
-        
-        bool operator==(const Iterator& it) const {
-            return _eventSequence == it._eventSequence && _index == it._index;
-        }
-        bool operator!=(const Iterator& it) const {
-            return !operator==(it);
-        }
-        
-    private:
-        const EventSequence* _eventSequence;
-        std::size_t _index;
-    };
+    using Iterator = std::vector<Event>::const_iterator;
     
 public:
     EventSequence(const ScoreProperties& scoreProperties);
@@ -57,6 +27,16 @@ public:
     std::vector<Event>& events() {
         return _events;
     }
+
+    /**
+     Find the event at the given absolute time
+     */
+    Iterator find(dom::time_t time) const;
+
+    /**
+     Find the closest event to the given absolute time.
+     */
+    Iterator findClosest(dom::time_t time) const;
     
     /** Return the index of the event at the given absolute time, -1 if there is no such event.
      */
@@ -82,9 +62,18 @@ public:
     /** Return the last event for a given measure index.
      */
     const Event* lastEvent(std::size_t measureIndex) const;
-    
-    Iterator begin() const;
-    Iterator end() const;
+
+    /**
+     Get the total duration of the event sequence, in abosulte time.
+     */
+    dom::time_t duration() const;
+
+    Iterator begin() const {
+        return _events.begin();
+    }
+    Iterator end() const {
+        return _events.end();
+    }
 
     Iterator begin(std::size_t measureIndex) const;
     Iterator end(std::size_t measureIndex) const;

@@ -8,34 +8,6 @@
 
 namespace mxml {
 
-EventSequence::Iterator::Iterator(const EventSequence& eventSequence, std::size_t index)
-: _eventSequence(&eventSequence), _index(index)
-{
-}
-
-EventSequence::Iterator& EventSequence::Iterator::operator++() {
-    _index += 1;
-    if (_index > _eventSequence->events().size())
-        _index = _eventSequence->events().size();
-    return *this;
-}
-
-EventSequence::Iterator& EventSequence::Iterator::operator--() {
-    _index -= 1;
-    if (_index > _eventSequence->events().size())
-        _index = _eventSequence->events().size();
-    return *this;
-}
-
-const Event& EventSequence::Iterator::operator*() const {
-    return _eventSequence->events().at(_index);
-}
-
-const Event* EventSequence::Iterator::operator->() const {
-    return &_eventSequence->events().at(_index);
-}
-
-
 EventSequence::EventSequence(const ScoreProperties& scoreProperties) : _scoreProperties(scoreProperties) {
     
 }
@@ -62,13 +34,36 @@ void EventSequence::clear() {
     _events.clear();
 }
 
-std::size_t EventSequence::index(dom::time_t time) const {
+EventSequence::Iterator EventSequence::find(dom::time_t time) const {
     auto it = std::lower_bound(_events.begin(), _events.end(), time, [](const Event& event, dom::time_t time) {
         return event.absoluteTime() < time;
     });
     if (it == _events.end() || it->absoluteTime() != time)
-        return static_cast<std::size_t>(-1);
+        return _events.end();
+    return it;
+}
+
+EventSequence::Iterator EventSequence::findClosest(dom::time_t time) const {
+    auto it2 = std::lower_bound(_events.begin(), _events.end(), time, [](const Event& event, dom::time_t time) {
+        return event.absoluteTime() < time;
+    });
+    auto it1 = std::prev(it2);
+    if (it2 == _events.end())
+        return it1;
+    if (it1 == _events.end())
+        return it2;
     
+    auto d1 = std::abs(time - it1->absoluteTime());
+    auto d2 = std::abs(time = it2->absoluteTime());
+    if (d1 < d2)
+        return it1;
+    return it2;
+}
+
+std::size_t EventSequence::index(dom::time_t time) const {
+    auto it = find(time);
+    if (it == _events.end())
+        return static_cast<std::size_t>(-1);
     return it - _events.begin();
 }
 
@@ -119,22 +114,21 @@ const Event* EventSequence::lastEvent(std::size_t measureIndex) const {
     return &*it;
 }
 
-EventSequence::Iterator EventSequence::begin() const {
-    return Iterator(*this, 0);
-}
+dom::time_t EventSequence::duration() const {
+    if (_events.empty())
+        return 0;
 
-EventSequence::Iterator EventSequence::end() const {
-    return Iterator(*this, _events.size());
+    auto& lastEvent = _events.back();
+    return lastEvent.absoluteTime() + lastEvent.maxDuration();
 }
 
 EventSequence::Iterator EventSequence::begin(std::size_t measureIndex) const {
-    auto it = std::find_if(_events.begin(), _events.end(), [measureIndex](const Event& event) {
-        return event.measureIndex() == measureIndex;
+    auto it = std::lower_bound(_events.begin(), _events.end(), measureIndex, [](const Event& event1, std::size_t measureIndex) {
+        return event1.measureIndex() < measureIndex;
     });
-    if (it == _events.end())
-        return end();
-    
-    return Iterator(*this, it - _events.begin());
+    if (it == _events.end() || it->measureIndex() != measureIndex)
+        return _events.end();
+    return it;
 }
 
 EventSequence::Iterator EventSequence::end(std::size_t measureIndex) const {
