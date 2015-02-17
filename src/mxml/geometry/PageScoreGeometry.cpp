@@ -23,22 +23,25 @@ PageScoreGeometry::PageScoreGeometry(const dom::Score& score, coord_t minWidth)
     }
     _spans->fillStarts();
 
-    coord_t offset = 0;
+    coord_t prevBottom = 0;
+    coord_t prevBottomPadding = 0;
     for (std::size_t systemIndex = 0; systemIndex < _scoreProperties.systemCount(); systemIndex += 1) {
         auto systemGeometry = std::unique_ptr<SystemGeometry>(new SystemGeometry(_score, _scoreProperties, *_spans, systemIndex, width));
         auto& metrics = systemGeometry->metrics(_score.parts().size() - 1);
 
         const auto systemDistance = metrics.systemDistance();
-        const auto bottomPadding = systemGeometry->bottomPadding();
         const auto topPadding = systemGeometry->topPadding();
-        if (offset == 0)
-            offset = topPadding;
+        auto top = prevBottom;
+        if (prevBottom > 0) {
+            top = std::max(top, prevBottom - prevBottomPadding + systemDistance - topPadding);
+        }
 
         systemGeometry->setHorizontalAnchorPointValues(0, 0);
         systemGeometry->setVerticalAnchorPointValues(0, 0);
-        systemGeometry->setLocation({0, offset - topPadding});
+        systemGeometry->setLocation({0, top});
 
-        offset += systemGeometry->size().height - topPadding - bottomPadding + systemDistance;
+        prevBottom = systemGeometry->frame().max().y;
+        prevBottomPadding = systemGeometry->bottomPadding();
 
         _systemGeometries.push_back(systemGeometry.get());
         addGeometry(std::move(systemGeometry));
