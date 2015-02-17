@@ -68,7 +68,7 @@ std::unique_ptr<PartGeometry> PartGeometryFactory::build(std::size_t beginMeasur
         _partGeometry->addGeometry(std::move(geometry));
     }
 
-    LyricGeometryFactory lyricGeometryFactory(_partGeometry->measureGeometries(), _metrics);
+    LyricGeometryFactory lyricGeometryFactory(*_partGeometry, _partGeometry->measureGeometries(), _metrics);
     auto lyrics = lyricGeometryFactory.build();
     for (auto& lyric : lyrics) {
         _partGeometry->directionGeometries().push_back(lyric.get());

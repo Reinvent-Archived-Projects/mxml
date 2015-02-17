@@ -15,7 +15,7 @@ class MeasureGeometry;
 
 class LyricGeometryFactory {
 public:
-    LyricGeometryFactory(const std::vector<MeasureGeometry*>& measureGeometries, const Metrics& metrics);
+    LyricGeometryFactory(const Geometry& parent, const std::vector<MeasureGeometry*>& measureGeometries, const Metrics& metrics);
     std::vector<std::unique_ptr<LyricGeometry>> build();
 
 protected:
@@ -24,6 +24,7 @@ protected:
     void build(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom, const dom::Lyric& lyric);
     
 private:
+    const Geometry& _parent;
     const std::vector<MeasureGeometry*>& _measureGeometries;
     const Metrics& _metrics;
 

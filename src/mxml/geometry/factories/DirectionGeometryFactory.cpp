@@ -73,6 +73,16 @@ void DirectionGeometryFactory::buildDirection(const MeasureGeometry& measureGeom
     }
 }
 
+Point DirectionGeometryFactory::spanOffsetInParentGeometry(const MeasureGeometry& measureGeometry, Point p) {
+    auto& spans = measureGeometry.spans();
+    auto measureIndex = measureGeometry.measure().index();
+    auto measureOrigin = spans.origin(measureIndex);
+
+    p.x -= measureOrigin;
+    p = _parentGeometry->convertFromGeometry(p, &measureGeometry);
+    return p;
+}
+
 void DirectionGeometryFactory::placeDirection(PlacementGeometry& geometry) {
     auto location = geometry.location();
 
@@ -113,10 +123,12 @@ void DirectionGeometryFactory::buildWedge(const MeasureGeometry& startMeasureGeo
     const Span& startSpan = *startMeasureGeom.spans().with(&startDirection);
     Point startLocation;
     startLocation.x = startSpan.start() + startSpan.eventOffset();
+    startLocation = spanOffsetInParentGeometry(startMeasureGeom, startLocation);
 
     const Span& stopSpan = *stopMeasureGeom.spans().with(&stopDirection);
     Point stopLocation;
     stopLocation.x = stopSpan.start() + stopSpan.eventOffset();
+    stopLocation = spanOffsetInParentGeometry(stopMeasureGeom, stopLocation);
 
     int staff = startDirection.staff();
     dom::Placement placement = startDirection.placement();
@@ -167,10 +179,12 @@ void DirectionGeometryFactory::buildPedal(const MeasureGeometry& startMeasureGeo
     const Span& startSpan = *startMeasureGeom.spans().with(&startDirection);
     Point startLocation;
     startLocation.x = startSpan.start() + startSpan.eventOffset();
+    startLocation = spanOffsetInParentGeometry(startMeasureGeom, startLocation);
 
     const Span& stopSpan = *stopMeasureGeom.spans().with(&stopDirection);
     Point stopLocation;
     stopLocation.x = stopSpan.start() + stopSpan.eventOffset();
+    stopLocation = spanOffsetInParentGeometry(stopMeasureGeom, stopLocation);
 
     int staff = startDirection.staff();
     startLocation.y = stopLocation.y = _metrics.staffOrigin(staff) + Metrics::staffHeight() + _metrics.staffDistance()/2 - _metrics.stavesHeight()/2;
@@ -206,10 +220,12 @@ void DirectionGeometryFactory::buildOctaveShift(const MeasureGeometry& startMeas
     const Span& startSpan = *startMeasureGeom.spans().with(&startDirection);
     Point startLocation;
     startLocation.x = startSpan.start() + startSpan.eventOffset();
+    startLocation = spanOffsetInParentGeometry(startMeasureGeom, startLocation);
 
     const Span& stopSpan = *stopMeasureGeom.spans().with(&stopDirection);
     Point stopLocation;
     stopLocation.x = stopSpan.start() + stopSpan.eventOffset();
+    stopLocation = spanOffsetInParentGeometry(stopMeasureGeom, stopLocation);
 
     startLocation.y = stopLocation.y = startMeasureGeom.origin().y - OctaveShiftGeometry::k8vaSize.height - 10;
 
@@ -222,13 +238,14 @@ void DirectionGeometryFactory::buildOctaveShift(const MeasureGeometry& startMeas
 void DirectionGeometryFactory::buildWords(const MeasureGeometry& measureGeom, const dom::Direction& direction) {
     std::unique_ptr<WordsGeometry> wordsGeom(new WordsGeometry(direction));
 
-    Point location;
     const Span& span = *measureGeom.spans().with(&direction);
+    Point location;
     if (wordsGeom->size().width > 2*NoteGeometry::kQuarterWidth) {
         location.x = span.start() - span.leftMargin()/2;
     } else {
         location.x = span.start();
     }
+    location = spanOffsetInParentGeometry(measureGeom, location);
     wordsGeom->setLocation(location);
 
     // Better placement defaults if the placement is not specified

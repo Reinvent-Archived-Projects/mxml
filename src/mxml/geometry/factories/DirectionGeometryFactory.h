@@ -36,6 +36,7 @@ private:
     void buildSegno(const MeasureGeometry&  measureGeom, const dom::Direction& direction);
     void buildCoda(const MeasureGeometry&  measureGeom, const dom::Direction& direction);
 
+    Point spanOffsetInParentGeometry(const MeasureGeometry& measureGeometry, Point p);
     void placeDirection(PlacementGeometry& geometry);
     void swapPlacement(PlacementGeometry& geometry);
 

@@ -9,8 +9,9 @@
 
 namespace mxml {
 
-LyricGeometryFactory::LyricGeometryFactory(const std::vector<MeasureGeometry*>& measureGeometries, const Metrics& metrics)
-: _measureGeometries(measureGeometries),
+LyricGeometryFactory::LyricGeometryFactory(const Geometry& parent, const std::vector<MeasureGeometry*>& measureGeometries, const Metrics& metrics)
+: _parent(parent),
+  _measureGeometries(measureGeometries),
   _metrics(metrics)
 {}
 
@@ -59,9 +60,14 @@ void LyricGeometryFactory::build(const MeasureGeometry& measureGeom, const Chord
     const int staff = chordGeom.chord().firstNote()->staff();
     std::unique_ptr<LyricGeometry> geometry(new LyricGeometry(lyric, staff));
 
+    auto& spans = measureGeom.spans();
+    auto measureIndex = measureGeom.measure().index();
+    auto measureOrigin = spans.origin(measureIndex);
+
     const Span& span = *measureGeom.spans().with(&chordGeom.chord());
     Point location;
-    location.x = span.start() + span.eventOffset();
+    location.x = span.start() + span.eventOffset() - measureOrigin;
+    location = _parent.convertFromGeometry(location, &measureGeom);
 
     if (geometry->placement() == dom::kPlacementAbove) {
         location.y = _notesBounds.min().y;
