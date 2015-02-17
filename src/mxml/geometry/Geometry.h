@@ -226,6 +226,13 @@ public:
      */
     Rect convertFromGeometry(Rect rect, const Geometry* target) const;
 
+    /**
+     Determines if the geometry is active or inactive. Inactive geometries are grayed out.
+     */
+    bool isActive() const {
+        return _active;
+    }
+    void setActive(bool active);
 
 protected:
     Point _contentOffset;
@@ -239,6 +246,8 @@ protected:
 
     Geometry* _parentGeometry;
     std::vector<std::unique_ptr<Geometry>> _geometries;
+
+    bool _active;
 };
 
 } // namespace mxml

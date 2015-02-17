@@ -18,7 +18,8 @@ Geometry::Geometry()
   _verticalAnchorPointMultiplier(0.5),
   _verticalAnchorPointConstant(0),
   _parentGeometry(),
-  _geometries()
+  _geometries(),
+  _active(true)
 {}
 
 void Geometry::addGeometry(std::unique_ptr<Geometry>&& geom) {
@@ -164,6 +165,12 @@ Rect Geometry::convertFromGeometry(Rect rect, const Geometry* target) const {
 
     assert(rootGeometry() == target->rootGeometry());
     return convertFromRoot(target->convertToRoot(rect));
+}
+
+void Geometry::setActive(bool active) {
+    _active = active;
+    for (auto& geometry : _geometries)
+        geometry->setActive(active);
 }
 
 } // namespace mxml
