@@ -4,7 +4,7 @@
 
 #include <mxml/geometry/collisions/CollisionHandler.h>
 #include <mxml/geometry/factories/PartGeometryFactory.h>
-#include <mxml/SpanFactory.h>
+
 
 namespace mxml {
 
@@ -64,6 +64,20 @@ coord_t SystemGeometry::bottomPadding() const {
     auto& lastPart = _partGeometries.back();
     auto& firstMeasure = lastPart->measureGeometries().front();
     return bounds().max().y - firstMeasure->convertToGeometry({0, metrics->stavesHeight()}, this).y;
+}
+
+void SystemGeometry::setActiveRange(std::size_t startMeasureIndex, std::size_t endMeasureIndex) {
+    auto systemRange = _scoreProperties.measureRange(_systemIndex);
+    if (startMeasureIndex <= systemRange.first && endMeasureIndex >= systemRange.second) {
+        setActive(true);
+    } else if (startMeasureIndex >= systemRange.second || endMeasureIndex <= systemRange.first) {
+        setActive(false);
+    } else {
+        setActive(true);
+        for (auto& partGeometry: _partGeometries) {
+            partGeometry->setActiveRange(startMeasureIndex, endMeasureIndex);
+        }
+    }
 }
 
 } // namespace

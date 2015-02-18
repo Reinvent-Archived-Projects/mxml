@@ -56,6 +56,8 @@ public:
      */
     dom::tenths_t noteY(const dom::Note& note) const;
 
+    void setActiveRange(std::size_t startMeasureIndex, std::size_t endMeasureIndex);
+
 private:
     const dom::Part& _part;
     const ScoreProperties& _scoreProperties;

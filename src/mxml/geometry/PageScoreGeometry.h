@@ -30,6 +30,8 @@ public:
         return _systemGeometries;
     }
 
+    void setActiveRange(std::size_t startMeasureIndex, std::size_t endMeasureIndex);
+    
 protected:
     coord_t maxSystemWidth() const;
 

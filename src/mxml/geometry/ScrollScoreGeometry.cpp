@@ -36,4 +36,10 @@ ScrollScoreGeometry::ScrollScoreGeometry(const dom::Score& score, bool naturalSp
     setBounds(subGeometriesFrame());
 }
 
+void ScrollScoreGeometry::setActiveRange(std::size_t startMeasureIndex, std::size_t endMeasureIndex) {
+    for (auto& partGeometry: _partGeometries) {
+        partGeometry->setActiveRange(startMeasureIndex, endMeasureIndex);
+    }
+}
+
 } // namespace mxml

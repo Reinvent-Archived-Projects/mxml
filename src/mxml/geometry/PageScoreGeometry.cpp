@@ -69,4 +69,10 @@ coord_t PageScoreGeometry::maxSystemWidth() const {
     return width;
 }
 
+void PageScoreGeometry::setActiveRange(std::size_t startMeasureIndex, std::size_t endMeasureIndex) {
+    for (auto& systemGeometry : _systemGeometries) {
+        systemGeometry->setActiveRange(startMeasureIndex, endMeasureIndex);
+    }
+}
+
 } // namespace mxml

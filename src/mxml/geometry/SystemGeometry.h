@@ -31,6 +31,8 @@ public:
     coord_t topPadding() const;
     coord_t bottomPadding() const;
 
+    void setActiveRange(std::size_t startMeasureIndex, std::size_t endMeasureIndex);
+
 private:
     const dom::Score& _score;
     const ScoreProperties& _scoreProperties;
