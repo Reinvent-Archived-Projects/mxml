@@ -107,7 +107,7 @@ void SpanFactory::build(const dom::Barline* barline) {
     if (barline == measure->nodes().back().get())
         time = std::numeric_limits<int>::max();
 
-    SpanCollection::iterator span = _spans->withType<dom::Barline>(_measureIndex, time);
+    SpanCollection::iterator span = _spans->withType(_measureIndex, time, typeid(dom::Barline));
     if (span == _spans->end()) {
         span = _spans->add(_measureIndex, time);
         span->setEvent(false);
@@ -268,7 +268,7 @@ void SpanFactory::build(const dom::Clef* clefNode, int staff, int time) {
     if (!clefNode)
         return;
 
-    SpanCollection::iterator clefSpan = _spans->withType<dom::Clef>(_measureIndex, time);
+    SpanCollection::iterator clefSpan = _spans->withType(_measureIndex, time, typeid(dom::Clef));
     if (clefSpan == _spans->end())
         clefSpan = _spans->add(_measureIndex, time);
     clefSpan->setEvent(false);
@@ -282,7 +282,7 @@ void SpanFactory::build(const dom::Time* timeNode, int staff, int time) {
     if (!timeNode)
         return;
 
-    SpanCollection::iterator timeSpan = _spans->withType<dom::Time>(_measureIndex, time);
+    SpanCollection::iterator timeSpan = _spans->withType(_measureIndex, time, typeid(dom::Time));
     if (timeSpan == _spans->end())
         timeSpan = _spans->add(_measureIndex, time);
 
@@ -312,7 +312,7 @@ void SpanFactory::build(const dom::Key* keyNode, int staff, int time) {
     if (width <= 0)
         return;
 
-    SpanCollection::iterator keySpan = _spans->withType<dom::Key>(_measureIndex, time);
+    SpanCollection::iterator keySpan = _spans->withType(_measureIndex, time, typeid(dom::Key));
     if (keySpan == _spans->end())
         keySpan = _spans->add(_measureIndex, time);
     keySpan->pushLeftMargin(kAttributeMargin);

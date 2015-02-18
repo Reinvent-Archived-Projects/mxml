@@ -7,6 +7,8 @@
 
 #include <algorithm>
 #include <set>
+#include <typeinfo>
+
 
 namespace mxml {
 
@@ -118,6 +120,8 @@ public:
     bool hasNode(const dom::Node* node) const {
         return _nodes.count(node) > 0;
     }
+    /** Determine if the span has a node of the given type */
+    bool hasNodeType(const std::type_info& type) const;
     const std::set<const dom::Node*> nodes() const {
         return _nodes;
     }
@@ -159,5 +163,14 @@ private:
     
     std::set<const dom::Node*> _nodes;
 };
+
+inline bool Span::hasNodeType(const std::type_info& type) const {
+    for (auto it = _nodes.begin(); it != _nodes.end(); ++it) {
+        const auto& nodeType = typeid(**it);
+        if (nodeType == type)
+            return true;
+    }
+    return false;
+}
 
 } // namespace mxml

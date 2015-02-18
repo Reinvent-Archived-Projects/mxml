@@ -40,10 +40,10 @@ public:
     std::pair<const_iterator, const_iterator> range(std::size_t measureIndex) const;
     
     /** Get the range of spans with a given measure number and time. */
-    std::pair<iterator, iterator> range(std::size_t measureIndex, int time);
+    std::pair<iterator, iterator> range(std::size_t measureIndex, dom::time_t time);
     
     /** Get the range of spans with a given measure number and time. */
-    std::pair<const_iterator, const_iterator> range(std::size_t measureIndex, int time) const;
+    std::pair<const_iterator, const_iterator> range(std::size_t measureIndex, dom::time_t time) const;
     
     /**
      Get the first span that contains the given node. Const version. Returns 0 if there is no such span. You need
@@ -69,42 +69,26 @@ public:
      */
     iterator with(const dom::Node* node, std::size_t measureIndex);
 
-    /** Get the first span for a given measure and time that has the template type T. */
-    template <typename T>
-    iterator withType(std::size_t measureIndex, int time) {
-        auto r = range(measureIndex, time);
-        for (auto it = r.first; it != r.second; ++it) {
-            const std::set<const dom::Node*>& nodes = it->nodes();
-            for (auto nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt) {
-                if (dynamic_cast<const T*>(*nodeIt))
-                    return it;
-            }
-        }
-        return end();
-    }
+    /** Get the first span for a given measure and time that has a node of the given type. */
+    iterator withType(std::size_t measureIndex, dom::time_t time, const std::type_info& type);
 
-    /** Get the first span for a given measure and time that has the template type T. const version. */
-    template <typename T>
-    const_iterator withType(std::size_t measureIndex, int time) const {
-        auto r = range(measureIndex, time);
-        for (auto it = r.first; it != r.second; ++it) {
-            const std::set<const dom::Node*>& nodes = it->nodes();
-            for (auto nodeIt = nodes.begin(); nodeIt != nodes.end(); ++nodeIt) {
-                if (dynamic_cast<const T*>(*nodeIt))
-                    return it;
-            }
-        }
-        return end();
-    }
+    /** Get the first span for a given measure and time that has a node of the given type. const version. */
+    const_iterator withType(std::size_t measureIndex, dom::time_t time, const std::type_info& type) const;
+
+    /** Get the span in the given measure closest to the given time that has the given node type. */
+    const_iterator closest(std::size_t measureIndex, dom::time_t time, const std::type_info& type) const;
 
     /** Get the first event span in the given measure, with the given time. Or end if it's not found. */
-    iterator eventSpan(std::size_t measureIndex, int time);
+    iterator eventSpan(std::size_t measureIndex, dom::time_t time);
+
+    /** Get the first event span in the given measure, with the given time. Or end if it's not found. */
+    const_iterator eventSpan(std::size_t measureIndex, dom::time_t time) const;
     
     /** Add a new span for the given time and measure. */
-    iterator add(std::size_t measureIndex, int time);
+    iterator add(std::size_t measureIndex, dom::time_t time);
 
     /** Add a new non-event span for the given time. The span in inserted before any event spans. */
-    iterator addBeforeEvent(std::size_t measureIndex, int time);
+    iterator addBeforeEvent(std::size_t measureIndex, dom::time_t time);
 
     void erase(const_iterator pos) {
         _spans.erase(pos);

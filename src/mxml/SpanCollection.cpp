@@ -50,7 +50,7 @@ std::pair<SpanCollection::const_iterator, SpanCollection::const_iterator> SpanCo
     return pair;
 }
 
-std::pair<SpanCollection::iterator, SpanCollection::iterator> SpanCollection::range(std::size_t measureIndex, int time) {
+std::pair<SpanCollection::iterator, SpanCollection::iterator> SpanCollection::range(std::size_t measureIndex, dom::time_t time) {
     Span testSpan;
     testSpan.setMeasureIndex(measureIndex);
     testSpan.setTime(time);
@@ -63,7 +63,7 @@ std::pair<SpanCollection::iterator, SpanCollection::iterator> SpanCollection::ra
     return pair;
 }
 
-std::pair<SpanCollection::const_iterator, SpanCollection::const_iterator> SpanCollection::range(std::size_t measureIndex, int time) const {
+std::pair<SpanCollection::const_iterator, SpanCollection::const_iterator> SpanCollection::range(std::size_t measureIndex, dom::time_t time) const {
     Span testSpan;
     testSpan.setMeasureIndex(measureIndex);
     testSpan.setTime(time);
@@ -108,7 +108,45 @@ SpanCollection::iterator SpanCollection::with(const dom::Node* node, std::size_t
     return _spans.end();
 }
 
-SpanCollection::iterator SpanCollection::eventSpan(std::size_t measureIndex, int time) {
+SpanCollection::iterator SpanCollection::withType(std::size_t measureIndex, dom::time_t time, const std::type_info& type) {
+    auto r = range(measureIndex, time);
+    for (auto it = r.first; it != r.second; ++it) {
+        if (it->hasNodeType(type))
+            return it;
+    }
+    return end();
+}
+
+SpanCollection::const_iterator SpanCollection::withType(std::size_t measureIndex, dom::time_t time, const std::type_info& type) const {
+    auto r = range(measureIndex, time);
+    for (auto it = r.first; it != r.second; ++it) {
+        if (it->hasNodeType(type))
+            return it;
+    }
+    return end();
+}
+
+
+SpanCollection::const_iterator SpanCollection::closest(std::size_t measureIndex, dom::time_t time, const std::type_info& type) const {
+    auto closest = end();
+    dom::time_t smallestDelta = std::numeric_limits<dom::time_t>::max();
+
+    auto r = range(measureIndex);
+    for (auto it = r.first; it != r.second; ++it) {
+        if (!it->hasNodeType(type))
+            continue;
+
+        auto delta = std::abs(it->time() - time);
+        if (delta < smallestDelta) {
+            smallestDelta = delta;
+            closest = it;
+        }
+    }
+    
+    return closest;
+}
+
+SpanCollection::iterator SpanCollection::eventSpan(std::size_t measureIndex, dom::time_t time) {
     auto r = range(measureIndex, time);
     auto it = std::find_if(r.first, r.second, [](const Span& s) { return s.event(); });
     if (it == r.second)
@@ -116,7 +154,15 @@ SpanCollection::iterator SpanCollection::eventSpan(std::size_t measureIndex, int
     return it;
 }
 
-SpanCollection::iterator SpanCollection::add(std::size_t measureIndex, int time) {
+SpanCollection::const_iterator SpanCollection::eventSpan(std::size_t measureIndex, dom::time_t time) const {
+    auto r = range(measureIndex, time);
+    auto it = std::find_if(r.first, r.second, [](const Span& s) { return s.event(); });
+    if (it == r.second)
+        return end();
+    return it;
+}
+
+SpanCollection::iterator SpanCollection::add(std::size_t measureIndex, dom::time_t time) {
     Span testSpan;
     testSpan.setMeasureIndex(measureIndex);
     testSpan.setTime(time);
@@ -127,7 +173,7 @@ SpanCollection::iterator SpanCollection::add(std::size_t measureIndex, int time)
     return _spans.insert(it, Span(measureIndex, time));
 }
 
-SpanCollection::iterator SpanCollection::addBeforeEvent(std::size_t measureIndex, int time) {
+SpanCollection::iterator SpanCollection::addBeforeEvent(std::size_t measureIndex, dom::time_t time) {
     Span testSpan;
     testSpan.setMeasureIndex(measureIndex);
     testSpan.setTime(time);

@@ -64,9 +64,14 @@ public:
     const Event* lastEvent(std::size_t measureIndex) const;
 
     /**
-     Get the total duration of the event sequence, in abosulte time.
+     Get the start time of the event sequence, in abosulte time.
      */
-    dom::time_t duration() const;
+    dom::time_t startTime() const;
+    
+    /**
+     Get the end time of the event sequence, in abosulte time.
+     */
+    dom::time_t endTime() const;
 
     Iterator begin() const {
         return _events.begin();

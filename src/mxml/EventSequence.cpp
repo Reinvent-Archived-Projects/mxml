@@ -114,7 +114,15 @@ const Event* EventSequence::lastEvent(std::size_t measureIndex) const {
     return &*it;
 }
 
-dom::time_t EventSequence::duration() const {
+dom::time_t EventSequence::startTime() const {
+    if (_events.empty())
+        return 0;
+
+    auto& firstEvent = _events.front();
+    return firstEvent.absoluteTime();
+}
+
+dom::time_t EventSequence::endTime() const {
     if (_events.empty())
         return 0;
 
