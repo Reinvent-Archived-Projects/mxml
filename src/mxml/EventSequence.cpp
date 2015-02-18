@@ -48,13 +48,13 @@ EventSequence::Iterator EventSequence::findClosest(dom::time_t time) const {
         return event.absoluteTime() < time;
     });
     auto it1 = std::prev(it2);
-    if (it2 == _events.end())
-        return it1;
+    if (it2 == _events.begin())
+        return it2;
     if (it1 == _events.end())
         return it2;
     
     auto d1 = std::abs(time - it1->absoluteTime());
-    auto d2 = std::abs(time = it2->absoluteTime());
+    auto d2 = std::abs(time - it2->absoluteTime());
     if (d1 < d2)
         return it1;
     return it2;
