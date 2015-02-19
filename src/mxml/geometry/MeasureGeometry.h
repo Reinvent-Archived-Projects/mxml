@@ -22,7 +22,6 @@ namespace mxml {
 class MeasureGeometry : public Geometry {
 public:
     static const coord_t kGraceNoteScale;
-    static const coord_t kVerticalPadding;
 
 public:
     MeasureGeometry(const dom::Measure& measure,
@@ -51,6 +50,8 @@ public:
     bool showNumber() const {
         return _showNumber;
     }
+
+    void adjustBounds();
 
 private:
     void buildAttributes();

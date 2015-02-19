@@ -93,7 +93,6 @@ void DirectionGeometryFactory::placeDirection(PlacementGeometry& geometry) {
         location.y = _metrics.staffOrigin(geometry.staff()) + Metrics::staffHeight() + Metrics::kStaffLineSpacing;
         geometry.setVerticalAnchorPointValues(0, 0);
     }
-    location.y -= _metrics.stavesHeight()/2;
 
     geometry.setLocation(location);
 }
@@ -144,8 +143,6 @@ void DirectionGeometryFactory::buildWedge(const MeasureGeometry& startMeasureGeo
     } else if (placement == dom::kPlacementBelow) {
         startLocation.y = stopLocation.y = _metrics.staffOrigin(staff) + Metrics::staffHeight() + _metrics.staffDistance()/2;
     }
-    startLocation.y -= _metrics.stavesHeight()/2;
-    stopLocation.y -= _metrics.stavesHeight()/2;
 
     std::unique_ptr<PlacementGeometry> geo(new SpanDirectionGeometry(startDirection, startLocation, stopDirection, stopLocation));
     geo->setPlacement(dom::Optional<dom::Placement>(placement, startDirection.placement().isPresent()));
@@ -187,7 +184,7 @@ void DirectionGeometryFactory::buildPedal(const MeasureGeometry& startMeasureGeo
     stopLocation = spanOffsetInParentGeometry(stopMeasureGeom, stopLocation);
 
     int staff = startDirection.staff();
-    startLocation.y = stopLocation.y = _metrics.staffOrigin(staff) + Metrics::staffHeight() + _metrics.staffDistance()/2 - _metrics.stavesHeight()/2;
+    startLocation.y = stopLocation.y = _metrics.staffOrigin(staff) + Metrics::staffHeight() + _metrics.staffDistance()/2;
 
     std::unique_ptr<PlacementGeometry> geo(new PedalGeometry(startDirection, startLocation, stopDirection, stopLocation));
     geo->setLocation(startLocation);

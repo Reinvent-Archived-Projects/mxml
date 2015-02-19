@@ -40,12 +40,18 @@ std::unique_ptr<PartGeometry> PartGeometryFactory::build(std::size_t beginMeasur
         std::unique_ptr<MeasureGeometry> geo(new MeasureGeometry(*measure, _spans, _scoreProperties, _metrics));
         geo->build(measureIndex == beginMeasure);
         geo->setHorizontalAnchorPointValues(0, 0);
+        geo->setVerticalAnchorPointValues(0, -geo->contentOffset().y);
         geo->setLocation({offset, 0});
         offset += geo->size().width;
 
         _partGeometry->_measureGeometries.push_back(geo.get());
         _partGeometry->addGeometry(std::move(geo));
     }
+
+    // We need the bounds to match the measures
+    auto bounds = _partGeometry->subGeometriesFrame();
+    bounds.origin.x = 0;
+    _partGeometry->setBounds(bounds);
 
     DirectionGeometryFactory directionGeometryFactory(_partGeometry.get(), _partGeometry->measureGeometries(), _metrics);
     auto directions = directionGeometryFactory.build();
@@ -75,11 +81,6 @@ std::unique_ptr<PartGeometry> PartGeometryFactory::build(std::size_t beginMeasur
         _partGeometry->addGeometry(std::move(lyric));
     }
 
-    // We need the bounds set to create the ties properly
-    auto bounds = _partGeometry->subGeometriesFrame();
-    bounds.origin.x = 0;
-    _partGeometry->setBounds(bounds);
-
     TieGeometryFactory factory(*_partGeometry, _metrics);
     auto ties = factory.buildTieGeometries(_partGeometry->geometries());
     for (auto& tie : ties) {
@@ -91,6 +92,8 @@ std::unique_ptr<PartGeometry> PartGeometryFactory::build(std::size_t beginMeasur
     collisionHandler.resolveCollisions();
 
     // Re-compute bounds after evertyhing is done
+    for (auto measure : _partGeometry->measureGeometries())
+        measure->adjustBounds();
     bounds = _partGeometry->subGeometriesFrame();
     bounds.origin.x = 0;
     _partGeometry->setBounds(bounds);

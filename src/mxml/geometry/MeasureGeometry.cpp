@@ -23,7 +23,6 @@ namespace mxml {
 using namespace dom;
 
 const coord_t MeasureGeometry::kGraceNoteScale = 0.85;
-const coord_t MeasureGeometry::kVerticalPadding = 40;
 
 MeasureGeometry::MeasureGeometry(const Measure& measure,
                                  const SpanCollection& spans,
@@ -83,9 +82,7 @@ void MeasureGeometry::build(bool firstMeasureInSystem) {
         }
     }
 
-    setSize({_spans.width(_measure.index()), _metrics.stavesHeight() + 2*kVerticalPadding});
-    setContentOffset({0, -kVerticalPadding});
-
+    adjustBounds();
     centerLoneRest();
 }
 
@@ -321,6 +318,16 @@ void MeasureGeometry::centerLoneRest() {
             rest->setLocation(location);
         }
     }
+}
+
+void MeasureGeometry::adjustBounds() {
+    auto newBounds = subGeometriesFrame();
+    newBounds = join(newBounds, {Point{0, -0.5}, Size{0, 1 + _metrics.stavesHeight()}});
+    newBounds.origin.x = 0;
+    newBounds.size.width = _spans.width(_measure.index());
+
+    setBounds(newBounds);
+    setVerticalAnchorPointValues(0, -newBounds.origin.y);
 }
 
 } // namespace mxml

@@ -36,7 +36,7 @@ void EndingGeometryFactory::buildEndings(const MeasureGeometry& measureGeom, con
     if ((ending->type() == dom::Ending::kStop || ending->type() == dom::Ending::kDiscontinue) && _startEnding.isPresent()) {
         Point stopLocation;
         stopLocation.x = measureGeom.frame().max().x - 1;
-        stopLocation.y = measureGeom.origin().y + MeasureGeometry::kVerticalPadding - EndingGeometry::kHeight - 10;
+        stopLocation.y = measureGeom.origin().y - measureGeom.contentOffset().y - EndingGeometry::kHeight - 10;
 
         std::unique_ptr<EndingGeometry> endingGeom(new EndingGeometry(_startEnding, _startEndingLocation, *ending, stopLocation));
         endingGeom->setLocation(_startEndingLocation);
@@ -46,7 +46,7 @@ void EndingGeometryFactory::buildEndings(const MeasureGeometry& measureGeom, con
     } else if (ending->type() == dom::Ending::kStart) {
         _startEnding.setPresentValue(*ending);
         _startEndingLocation = measureGeom.location();
-        _startEndingLocation.y = measureGeom.origin().y + MeasureGeometry::kVerticalPadding - EndingGeometry::kHeight - 10;
+        _startEndingLocation.y = measureGeom.origin().y - measureGeom.contentOffset().y - EndingGeometry::kHeight - 10;
     }
 }
 
