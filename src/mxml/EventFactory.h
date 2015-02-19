@@ -25,7 +25,7 @@ public:
     explicit EventFactory(const dom::Score& score, const ScoreProperties& scoreProperties);
 
     std::unique_ptr<EventSequence> build();
-    std::unique_ptr<EventSequence> build(std::size_t startMeasureIndex, std::size_t endMeasureIndex);
+    std::unique_ptr<EventSequence> build(dom::time_t startTime, std::size_t startMeasureIndex, std::size_t endMeasureIndex);
     
 private:
     void processMeasure(const dom::Measure& measure);
@@ -63,6 +63,7 @@ private:
     const ScoreProperties& _scoreProperties;
     const dom::Part* _part;
 
+    dom::time_t _startTime;
     dom::time_t _measureStartTime;
     dom::time_t _time;
 

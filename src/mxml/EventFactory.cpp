@@ -19,21 +19,23 @@ using namespace dom;
 EventFactory::EventFactory(const dom::Score& score, const ScoreProperties& scoreProperties)
 : _score(score),
   _scoreProperties(scoreProperties),
+  _startTime(),
   _time(0)
 {}
 
 std::unique_ptr<EventSequence> EventFactory::build() {
-    return build(0, _score.parts().at(0)->measures().size());
+    return build(0, 0, _score.parts().at(0)->measures().size());
 }
 
-std::unique_ptr<EventSequence> EventFactory::build(std::size_t startMeasureIndex, std::size_t endMeasureIndex) {
+std::unique_ptr<EventSequence> EventFactory::build(dom::time_t startTime, std::size_t startMeasureIndex, std::size_t endMeasureIndex) {
+    _startTime = startTime;
     _startMeasureIndex = startMeasureIndex;
     _endMeasureIndex = endMeasureIndex;
 
     for (auto& part : _score.parts()) {
         _part = part.get();
         _measureStartTime = 0;
-        _time = 0;
+        _time = _startTime;
         for (std::size_t measureIndex = _startMeasureIndex; measureIndex < _endMeasureIndex; measureIndex += 1) {
             const Measure& measure = *part->measures().at(measureIndex);
             processMeasure(measure);
@@ -203,7 +205,7 @@ std::unique_ptr<EventSequence> EventFactory::unroll() {
 void EventFactory::fillWallTimes(EventSequence& eventSequence) {
     double tempo = 60.0;
     int divisions = 1;
-    dom::time_t time = 0;
+    dom::time_t time = _startTime;
     double wallTime = 0.0;
 
     for (auto& event : eventSequence.events()) {
