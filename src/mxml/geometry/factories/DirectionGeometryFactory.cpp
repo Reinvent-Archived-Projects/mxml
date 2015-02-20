@@ -37,6 +37,17 @@ std::vector<std::unique_ptr<PlacementGeometry>> DirectionGeometryFactory::build(
         }
     }
 
+    // Finish any direction that started but did not stop
+    for (auto& pair : _openSpanDirections) {
+        auto measureGeometry = pair.first;
+        auto direction = pair.second;
+        if (dynamic_cast<const dom::OctaveShift*>(direction->type())) {
+            buildOctaveShiftToEdge(*measureGeometry, *direction);
+        } else if (dynamic_cast<const dom::Pedal*>(direction->type())) {
+            buildPedalToEdge(*measureGeometry, *direction);
+        }
+    }
+
     return std::move(_geometries);
 }
 
@@ -144,7 +155,7 @@ void DirectionGeometryFactory::buildWedge(const MeasureGeometry& startMeasureGeo
         startLocation.y = stopLocation.y = _metrics.staffOrigin(staff) + Metrics::staffHeight() + _metrics.staffDistance()/2;
     }
 
-    std::unique_ptr<PlacementGeometry> geo(new SpanDirectionGeometry(startDirection, startLocation, stopDirection, stopLocation));
+    std::unique_ptr<PlacementGeometry> geo(new SpanDirectionGeometry(&startDirection, startLocation, &stopDirection, stopLocation));
     geo->setPlacement(dom::Optional<dom::Placement>(placement, startDirection.placement().isPresent()));
     geo->setLocation(startLocation);
 
@@ -163,8 +174,10 @@ void DirectionGeometryFactory::buildPedal(const MeasureGeometry& measureGeom, co
         });
 
         if (it != _openSpanDirections.rend()) {
-            buildPedal(*it->first, *it->second, measureGeom,direction);
+            buildPedal(*it->first, *it->second, measureGeom, direction);
             _openSpanDirections.erase(it.base() - 1);
+        } else {
+            buildPedalFromEdge(measureGeom, direction);
         }
     } else if (pedal.type() != dom::kContinue) {
         _openSpanDirections.push_back(std::make_pair(&measureGeom, &direction));
@@ -186,7 +199,43 @@ void DirectionGeometryFactory::buildPedal(const MeasureGeometry& startMeasureGeo
     int staff = startDirection.staff();
     startLocation.y = stopLocation.y = _metrics.staffOrigin(staff) + Metrics::staffHeight() + _metrics.staffDistance()/2;
 
-    std::unique_ptr<PlacementGeometry> geo(new PedalGeometry(startDirection, startLocation, stopDirection, stopLocation));
+    std::unique_ptr<PlacementGeometry> geo(new PedalGeometry(&startDirection, startLocation, &stopDirection, stopLocation));
+    geo->setLocation(startLocation);
+
+    _geometries.push_back(std::move(geo));
+}
+
+void DirectionGeometryFactory::buildPedalFromEdge(const MeasureGeometry& stopMeasureGeom, const dom::Direction& stopDirection) {
+    Point startLocation;
+    startLocation.x = 0;
+
+    const Span& stopSpan = *stopMeasureGeom.spans().with(&stopDirection);
+    Point stopLocation;
+    stopLocation.x = stopSpan.start() + stopSpan.eventOffset();
+    stopLocation = spanOffsetInParentGeometry(stopMeasureGeom, stopLocation);
+
+    int staff = stopDirection.staff();
+    startLocation.y = stopLocation.y = _metrics.staffOrigin(staff) + Metrics::staffHeight() + _metrics.staffDistance()/2;
+
+    std::unique_ptr<PlacementGeometry> geo(new PedalGeometry(nullptr, startLocation, &stopDirection, stopLocation));
+    geo->setLocation(startLocation);
+
+    _geometries.push_back(std::move(geo));
+}
+
+void DirectionGeometryFactory::buildPedalToEdge(const MeasureGeometry& startMeasureGeom, const dom::Direction& startDirection) {
+    const Span& startSpan = *startMeasureGeom.spans().with(&startDirection);
+    Point startLocation;
+    startLocation.x = startSpan.start() + startSpan.eventOffset();
+    startLocation = spanOffsetInParentGeometry(startMeasureGeom, startLocation);
+
+    Point stopLocation;
+    stopLocation.x = _parentGeometry->bounds().max().x;
+
+    int staff = startDirection.staff();
+    startLocation.y = stopLocation.y = _metrics.staffOrigin(staff) + Metrics::staffHeight() + _metrics.staffDistance()/2;
+
+    std::unique_ptr<PlacementGeometry> geo(new PedalGeometry(&startDirection, startLocation, nullptr, stopLocation));
     geo->setLocation(startLocation);
 
     _geometries.push_back(std::move(geo));
@@ -204,8 +253,10 @@ void DirectionGeometryFactory::buildOctaveShift(const MeasureGeometry& measureGe
         });
 
         if (it != _openSpanDirections.rend()) {
-            buildOctaveShift(*it->first, *it->second, measureGeom,direction);
+            buildOctaveShift(*it->first, *it->second, measureGeom, direction);
             _openSpanDirections.erase(it.base() - 1);
+        } else {
+            buildOctaveShiftFromEdge(measureGeom, direction);
         }
     } else if (octaveShift.type != OctaveShift::kContinue) {
         _openSpanDirections.push_back(std::make_pair(&measureGeom, &direction));
@@ -226,7 +277,41 @@ void DirectionGeometryFactory::buildOctaveShift(const MeasureGeometry& startMeas
 
     startLocation.y = stopLocation.y = startMeasureGeom.origin().y - OctaveShiftGeometry::k8vaSize.height - 10;
 
-    std::unique_ptr<PlacementGeometry> geo(new OctaveShiftGeometry(startDirection, startLocation, stopDirection, stopLocation));
+    std::unique_ptr<PlacementGeometry> geo(new OctaveShiftGeometry(&startDirection, startLocation, &stopDirection, stopLocation));
+    geo->setLocation(startLocation);
+
+    _geometries.push_back(std::move(geo));
+}
+
+void DirectionGeometryFactory::buildOctaveShiftFromEdge(const MeasureGeometry& stopMeasureGeom, const dom::Direction& stopDirection) {
+    Point startLocation;
+    startLocation.x = 0;
+
+    const Span& stopSpan = *stopMeasureGeom.spans().with(&stopDirection);
+    Point stopLocation;
+    stopLocation.x = stopSpan.start() + stopSpan.eventOffset();
+    stopLocation = spanOffsetInParentGeometry(stopMeasureGeom, stopLocation);
+
+    startLocation.y = stopLocation.y = stopMeasureGeom.origin().y - OctaveShiftGeometry::k8vaSize.height - 10;
+
+    std::unique_ptr<PlacementGeometry> geo(new OctaveShiftGeometry(nullptr, startLocation, &stopDirection, stopLocation));
+    geo->setLocation(startLocation);
+
+    _geometries.push_back(std::move(geo));
+}
+
+void DirectionGeometryFactory::buildOctaveShiftToEdge(const MeasureGeometry& startMeasureGeom, const dom::Direction& startDirection) {
+    const Span& startSpan = *startMeasureGeom.spans().with(&startDirection);
+    Point startLocation;
+    startLocation.x = startSpan.start() + startSpan.eventOffset();
+    startLocation = spanOffsetInParentGeometry(startMeasureGeom, startLocation);
+
+    Point stopLocation;
+    stopLocation.x = _parentGeometry->bounds().max().x;
+
+    startLocation.y = stopLocation.y = startMeasureGeom.origin().y - OctaveShiftGeometry::k8vaSize.height - 10;
+
+    std::unique_ptr<PlacementGeometry> geo(new OctaveShiftGeometry(&startDirection, startLocation, nullptr, stopLocation));
     geo->setLocation(startLocation);
 
     _geometries.push_back(std::move(geo));

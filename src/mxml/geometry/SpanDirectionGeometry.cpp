@@ -14,21 +14,27 @@ using namespace dom;
 
 const coord_t SpanDirectionGeometry::kLineWidth = 1;
 
-SpanDirectionGeometry::SpanDirectionGeometry(const Direction& start, const Point& startLocation, const Direction& stop, const Point& stopLocation)
-: PlacementGeometry(start.placement(), start.staff()),
+SpanDirectionGeometry::SpanDirectionGeometry(const Direction* start, const Point& startLocation, const Direction* stop, const Point& stopLocation)
+: PlacementGeometry(start ? start->placement() : stop ? stop->placement() : dom::absentOptional(kPlacementAbove),
+                    start ? start->staff() : stop ? stop->staff() : dom::absentOptional(1)),
   _startDirection(start),
   _startLocation(startLocation),
   _stopDirection(stop),
   _stopLocation(stopLocation)
 {
-    assert(typeid(start.type()) == typeid(stop.type()));
+    const dom::DirectionType* type = nullptr;
+    if (start)
+        type = start->type();
+    else if (stop)
+        type = stop->type();
+
     setHorizontalAnchorPointValues(0, 0);
     
     Size size;
     size.width = stopLocation.x - startLocation.x;
     
-    if (const Wedge* startWedge = dynamic_cast<const Wedge*>(start.type())) {
-        const Wedge* stopWedge = dynamic_cast<const Wedge*>(stop.type());
+    if (const Wedge* startWedge = dynamic_cast<const Wedge*>(type)) {
+        const Wedge* stopWedge = dynamic_cast<const Wedge*>(type);
         size.height = 2*kLineWidth + std::max(startWedge->spread(), stopWedge->spread());
     }
     setSize(size);

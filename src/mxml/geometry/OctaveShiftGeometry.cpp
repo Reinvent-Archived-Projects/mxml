@@ -7,7 +7,7 @@ namespace mxml {
 
 const Size OctaveShiftGeometry::k8vaSize = {30, 20};
 
-OctaveShiftGeometry::OctaveShiftGeometry(const dom::Direction& start, const Point& startLocation, const dom::Direction& stop, const Point& stopLocation)
+OctaveShiftGeometry::OctaveShiftGeometry(const dom::Direction* start, const Point& startLocation, const dom::Direction* stop, const Point& stopLocation)
 : SpanDirectionGeometry(start, startLocation, stop, stopLocation)
 {
     Size size = Geometry::size();

@@ -8,11 +8,18 @@ namespace mxml {
     const Size PedalGeometry::kPedSize = {30, 20};
     const Size PedalGeometry::kStarSize = {15, 15};
 
-    PedalGeometry::PedalGeometry(const dom::Direction& start, const Point& startLocation, const dom::Direction& stop, const Point& stopLocation)
+    PedalGeometry::PedalGeometry(const dom::Direction* start, const Point& startLocation, const dom::Direction* stop, const Point& stopLocation)
         : SpanDirectionGeometry(start, startLocation, stop, stopLocation)
     {
         Size size = Geometry::size();
-        const dom::Pedal* pedal = dynamic_cast<const dom::Pedal*>(start.type());
+
+        const dom::DirectionType* type = nullptr;
+        if (start)
+            type = start->type();
+        else if (stop)
+            type = stop->type();
+
+        const dom::Pedal* pedal = dynamic_cast<const dom::Pedal*>(type);
         if (pedal->sign())
             size.width = std::max(size.width, kPedSize.width + kStarSize.width);
         else

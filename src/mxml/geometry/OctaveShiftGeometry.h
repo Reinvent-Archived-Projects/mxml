@@ -11,7 +11,7 @@ namespace mxml {
         static const Size k8vaSize;
 
     public:
-        OctaveShiftGeometry(const dom::Direction& start, const Point& startLocation, const dom::Direction& stop, const Point& stopLocation);
+        OctaveShiftGeometry(const dom::Direction* start, const Point& startLocation, const dom::Direction* stop, const Point& stopLocation);
     };
     
 } // namespace

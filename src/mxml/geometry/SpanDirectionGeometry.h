@@ -12,27 +12,31 @@ public:
     static const coord_t kLineWidth;
     
 public:
-    SpanDirectionGeometry(const dom::Direction& start, const Point& startLocation, const dom::Direction& stop, const Point& stopLocation);
+    SpanDirectionGeometry(const dom::Direction* start, const Point& startLocation, const dom::Direction* stop, const Point& stopLocation);
     
-    const dom::Direction& startDirection() const {
+    const dom::Direction* startDirection() const {
         return _startDirection;
     }
     const Point& startLocation() const {
         return _startLocation;
     }
     
-    const dom::Direction& stopDirection() const {
+    const dom::Direction* stopDirection() const {
         return _stopDirection;
     }
     const Point& stopLocation() const {
         return _stopLocation;
     }
+
+    const dom::DirectionType* type() const {
+        return _startDirection ? _startDirection->type() : _stopDirection ? _stopDirection->type() : nullptr;
+    }
     
 private:
-    const dom::Direction& _startDirection;
+    const dom::Direction* _startDirection;
     Point _startLocation;
     
-    const dom::Direction& _stopDirection;
+    const dom::Direction* _stopDirection;
     Point _stopLocation;
 };
 

@@ -12,7 +12,7 @@ public:
     static const Size kStarSize;
 
 public:
-    PedalGeometry(const dom::Direction& start, const Point& startLocation, const dom::Direction& stop, const Point& stopLocation);
+    PedalGeometry(const dom::Direction* start, const Point& startLocation, const dom::Direction* stop, const Point& stopLocation);
 };
 
 } // namespace

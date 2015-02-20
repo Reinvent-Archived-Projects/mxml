@@ -28,9 +28,14 @@ private:
     void buildPedal(const MeasureGeometry& measureGeom, const dom::Direction& direction);
     void buildPedal(const MeasureGeometry& startMeasureGeom, const dom::Direction& startDirection,
                     const MeasureGeometry& stopMeasureGeom, const dom::Direction& stopDirection);
+    void buildPedalFromEdge(const MeasureGeometry& stopMeasureGeom, const dom::Direction& stopDirection);
+    void buildPedalToEdge(const MeasureGeometry& startMeasureGeom, const dom::Direction& startDirection);
+
     void buildOctaveShift(const MeasureGeometry& measureGeom, const dom::Direction& direction);
     void buildOctaveShift(const MeasureGeometry& startMeasureGeom, const dom::Direction& startDirection,
                           const MeasureGeometry& stopMeasureGeom, const dom::Direction& stopDirection);
+    void buildOctaveShiftFromEdge(const MeasureGeometry& stopMeasureGeom, const dom::Direction& stopDirection);
+    void buildOctaveShiftToEdge(const MeasureGeometry& startMeasureGeom, const dom::Direction& startDirection);
 
     void buildWords(const MeasureGeometry&  measureGeom, const dom::Direction& direction);
     void buildSegno(const MeasureGeometry&  measureGeom, const dom::Direction& direction);
