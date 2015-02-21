@@ -43,8 +43,6 @@ namespace mxml {
         typeOrder[std::type_index(typeid(DotGeometry))] = 1;
         typeOrder[std::type_index(typeid(AccidentalGeometry))] = 1;
         typeOrder[std::type_index(typeid(StemGeometry))] = 1;
-        typeOrder[std::type_index(typeid(BeamGeometry))] = 1;
-        typeOrder[std::type_index(typeid(TieGeometry))] = 1;
         typeOrder[std::type_index(typeid(EndingGeometry))] = 1;
         typeOrder[std::type_index(typeid(LyricGeometry))] = 2;
         typeOrder[std::type_index(typeid(ArticulationGeometry))] = 3;
@@ -100,8 +98,8 @@ namespace mxml {
         Rect f2 = _geometry.convertFromGeometry(g2->frame(), g2->parentGeometry());
         
         // Only move things that are already outside the staves further away
-        coord_t top = _metrics.staffOrigin(1) - _metrics.stavesHeight()/2;
-        coord_t bottom = _metrics.staffOrigin(static_cast<int>(_metrics.staves())) - _metrics.stavesHeight()/2;
+        coord_t top = _metrics.staffOrigin(1);
+        coord_t bottom = _metrics.staffOrigin(static_cast<int>(_metrics.staves()));
         if (f2.origin.y <= top)
             f2.origin.y = f1.origin.y - f2.size.height - 1;
         else if (f2.max().y >= bottom)

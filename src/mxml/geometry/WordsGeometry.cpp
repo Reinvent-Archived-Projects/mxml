@@ -16,7 +16,7 @@ WordsGeometry::WordsGeometry(const dom::Direction& direction)
     
     dom::Words* words = dynamic_cast<dom::Words*>(direction.type());
     if (words) {
-        setSize({static_cast<coord_t>(20 * words->contents().length()), 23});
+        setSize({static_cast<coord_t>(15 * words->contents().length()), 23});
     }
 
     setHorizontalAnchorPointValues(0, 0);

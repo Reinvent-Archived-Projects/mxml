@@ -84,7 +84,6 @@ void LyricGeometryFactory::build(const MeasureGeometry& measureGeom, const Chord
             location.y += (lyric.number() - 1) * geometry->size().height;
     }
 
-    location.y -= _metrics.stavesHeight()/2;
     geometry->setLocation(location);
 
     _lyricGeometries.push_back(std::move(geometry));

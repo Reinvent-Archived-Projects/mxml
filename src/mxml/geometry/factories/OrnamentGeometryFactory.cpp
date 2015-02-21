@@ -81,7 +81,6 @@ void OrnamentGeometryFactory::place(PlacementGeometry& geometry) {
         location.y = _metrics.staffOrigin(geometry.staff()) + Metrics::staffHeight() + Metrics::kStaffLineSpacing;
         geometry.setVerticalAnchorPointValues(0, 0);
     }
-    location.y -= _metrics.stavesHeight()/2;
     
     geometry.setLocation(location);
 }
