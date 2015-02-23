@@ -43,8 +43,12 @@ const dom::Clef* ClefSequence::find(std::size_t partIndex, std::size_t measureIn
     auto it = std::find_if(rbegin, _items.rend(), [=](const Item& item) {
         return item.index.line == modelItem.index.line;
     });
-    if (it == _items.rend())
-        return nullptr;
+    if (it == _items.rend()) {
+        if (staff == 1)
+            return nullptr;
+        else
+            return find(partIndex, measureIndex, 1, time);
+    }
 
     return it->value;
 }

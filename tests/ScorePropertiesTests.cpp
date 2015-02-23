@@ -199,3 +199,65 @@ BOOST_AUTO_TEST_CASE(keySignatures) {
     BOOST_CHECK_EQUAL(proeprties.key(0, 0, 1, 0)->fifths(), kFifths);
     BOOST_CHECK_EQUAL(proeprties.key(0, 0, 2, 0)->fifths(), kFifths);
 }
+
+BOOST_AUTO_TEST_CASE(clefSignatures) {
+    ScoreBuilder builder;
+    auto part = builder.addPart();
+    auto measure1 = builder.addMeasure(part);
+    auto attributes1 = builder.addAttributes(measure1);
+    attributes1->setStaves({2, true});
+
+    auto trebleClef = dom::Clef::trebleClef();
+    trebleClef->setParent(attributes1);
+    attributes1->setClef(1, std::move(trebleClef));
+
+    auto measure2 = builder.addMeasure(part);
+    auto attributes2 = builder.addAttributes(measure2);
+
+    auto bassClef = dom::Clef::bassClef();
+    bassClef->setParent(attributes2);
+    attributes2->setClef(2, std::move(bassClef));
+
+    auto score = builder.build();
+    ScoreProperties proeprties(*score, ScoreProperties::kLayoutTypeScroll);
+
+    // Measure 1
+    // Even though the clef was only specified for the first staff it should apply to all staves
+    BOOST_CHECK_EQUAL(proeprties.clef(0, 0, 1, 0)->sign(), dom::Clef::SIGN_G);
+    BOOST_CHECK_EQUAL(proeprties.clef(0, 0, 2, 0)->sign(), dom::Clef::SIGN_G);
+
+    // Measure 2
+    BOOST_CHECK_EQUAL(proeprties.clef(0, 1, 1, 0)->sign(), dom::Clef::SIGN_G);
+    BOOST_CHECK_EQUAL(proeprties.clef(0, 1, 2, 0)->sign(), dom::Clef::SIGN_F);
+}
+
+BOOST_AUTO_TEST_CASE(clefSignaturesOnlyFirstStaff) {
+    ScoreBuilder builder;
+    auto part = builder.addPart();
+    auto measure1 = builder.addMeasure(part);
+    auto attributes1 = builder.addAttributes(measure1);
+    attributes1->setStaves({2, true});
+
+    auto trebleClef = dom::Clef::trebleClef();
+    trebleClef->setParent(attributes1);
+    attributes1->setClef(1, std::move(trebleClef));
+
+    auto measure2 = builder.addMeasure(part);
+    auto attributes2 = builder.addAttributes(measure2);
+
+    auto bassClef = dom::Clef::bassClef();
+    bassClef->setParent(attributes2);
+    attributes2->setClef(1, std::move(bassClef));
+
+    auto score = builder.build();
+    ScoreProperties proeprties(*score, ScoreProperties::kLayoutTypeScroll);
+
+    // Measure 1
+    // Even though the clef was only specified for the first staff it should apply to all staves
+    BOOST_CHECK_EQUAL(proeprties.clef(0, 0, 1, 0)->sign(), dom::Clef::SIGN_G);
+    BOOST_CHECK_EQUAL(proeprties.clef(0, 0, 2, 0)->sign(), dom::Clef::SIGN_G);
+
+    // Measure 2
+    BOOST_CHECK_EQUAL(proeprties.clef(0, 1, 1, 0)->sign(), dom::Clef::SIGN_F);
+    BOOST_CHECK_EQUAL(proeprties.clef(0, 1, 2, 0)->sign(), dom::Clef::SIGN_F);
+}
