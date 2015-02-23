@@ -7,6 +7,8 @@
 
 namespace mxml {
 
+const coord_t kSystemDistancePadding = 20;
+
 PageScoreGeometry::PageScoreGeometry(const dom::Score& score, coord_t minWidth)
 : _score(score),
   _scoreProperties(score, ScoreProperties::kLayoutTypePage)
@@ -23,29 +25,18 @@ PageScoreGeometry::PageScoreGeometry(const dom::Score& score, coord_t minWidth)
     }
     _spans->fillStarts();
 
-    coord_t prevBottom = 0;
-    coord_t prevBottomPadding = 0;
+    // Create system geometires
     for (std::size_t systemIndex = 0; systemIndex < _scoreProperties.systemCount(); systemIndex += 1) {
         auto systemGeometry = std::unique_ptr<SystemGeometry>(new SystemGeometry(_score, _scoreProperties, *_spans, systemIndex, width));
-        auto& metrics = systemGeometry->metrics(_score.parts().size() - 1);
-
-        const auto systemDistance = metrics.systemDistance();
-        const auto topPadding = systemGeometry->topPadding();
-        auto top = prevBottom;
-        if (prevBottom > 0) {
-            top = std::max(top, prevBottom - prevBottomPadding + systemDistance - topPadding);
-        }
-
         systemGeometry->setHorizontalAnchorPointValues(0, 0);
         systemGeometry->setVerticalAnchorPointValues(0, 0);
-        systemGeometry->setLocation({0, top});
-
-        prevBottom = systemGeometry->frame().max().y;
-        prevBottomPadding = systemGeometry->bottomPadding();
-
         _systemGeometries.push_back(systemGeometry.get());
         addGeometry(std::move(systemGeometry));
     }
+
+    // Make all distances uniform
+    const auto distance = maxSystemDistance();
+    setSystemDistances(distance);
 
     // Force the content offset in x and width so that the page aligns to the screen
     auto bounds = subGeometriesFrame();
@@ -67,6 +58,37 @@ coord_t PageScoreGeometry::maxSystemWidth() const {
             width = systemWidth;
     }
     return width;
+}
+
+coord_t PageScoreGeometry::maxSystemDistance() const {
+    coord_t prevBottom = 0;
+    coord_t prevBottomPadding = 0;
+    coord_t maxSystemDistance = 0;
+    for (auto systemGeometry : _systemGeometries) {
+        if (prevBottom > 0) {
+            const auto topPadding = systemGeometry->topPadding();
+            const auto prevStavesBottom = prevBottom - prevBottomPadding;
+            const auto currentStavesTop = prevBottom + topPadding;
+            const auto systemDistance = currentStavesTop - prevStavesBottom;
+            maxSystemDistance = std::max(maxSystemDistance, systemDistance);
+        }
+        prevBottom = systemGeometry->frame().max().y;
+        prevBottomPadding = systemGeometry->bottomPadding();
+    }
+    return maxSystemDistance + kSystemDistancePadding;
+}
+
+void PageScoreGeometry::setSystemDistances(const coord_t distance) {
+    coord_t prevBottom = 0;
+    coord_t prevBottomPadding = 0;
+    for (auto systemGeometry : _systemGeometries) {
+        if (prevBottom > 0) {
+            const auto topPadding = systemGeometry->topPadding();
+            systemGeometry->setLocation({0, prevBottom - prevBottomPadding + distance - topPadding});
+        }
+        prevBottom = systemGeometry->frame().max().y;
+        prevBottomPadding = systemGeometry->bottomPadding();
+    }
 }
 
 void PageScoreGeometry::setActiveRange(std::size_t startMeasureIndex, std::size_t endMeasureIndex) {

@@ -34,6 +34,9 @@ public:
     
 protected:
     coord_t maxSystemWidth() const;
+    coord_t maxSystemDistance() const;
+
+    void setSystemDistances(const coord_t distance);
 
 private:
     const dom::Score& _score;
