@@ -28,6 +28,18 @@ public:
         return _stopLocation;
     }
 
+    void setContinuation(bool b = true) {
+        _continuation = b;
+    }
+
+    /**
+     Determines if this is a geometry for a direction that started in a previous system. This affects how certain
+     geometries are drawn. For instance (8va) instead of 8va.
+     */
+    bool isContinuation() const {
+        return _continuation;
+    }
+
     const dom::DirectionType* type() const {
         return _startDirection ? _startDirection->type() : _stopDirection ? _stopDirection->type() : nullptr;
     }
@@ -38,6 +50,8 @@ private:
     
     const dom::Direction* _stopDirection;
     Point _stopLocation;
+
+    bool _continuation;
 };
 
 } // namespace mxml

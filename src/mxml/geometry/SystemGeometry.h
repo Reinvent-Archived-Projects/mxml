@@ -7,13 +7,14 @@
 
 #include "Geometry.h"
 #include "PartGeometry.h"
+#include "factories/DirectionGeometryFactory.h"
 
 
 namespace mxml {
 
 class SystemGeometry : public Geometry {
 public:
-    SystemGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, const SpanCollection& spans, std::size_t systemIndex, coord_t width);
+    SystemGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, const SpanCollection& spans, DirectionGeometryFactory& directionGeometryFactory, std::size_t systemIndex, coord_t width);
 
     const std::vector<PartGeometry*>& partGeometries() const {
         return _partGeometries;
@@ -38,6 +39,7 @@ private:
     const ScoreProperties& _scoreProperties;
     const SpanCollection& _spans;
     const std::size_t _systemIndex;
+    DirectionGeometryFactory& _directionGeometryFactory;
 
     std::vector<PartGeometry*> _partGeometries;
     std::vector<std::unique_ptr<PageMetrics>> _metrics;

@@ -17,6 +17,8 @@ PageScoreGeometry::PageScoreGeometry(const dom::Score& score, coord_t minWidth)
     spanFactory.setNaturalSpacing(false);
     _spans = spanFactory.build();
 
+    DirectionGeometryFactory directionGeometryFactory;
+    
     // Make all widths uniform
     const auto width = std::max(minWidth, maxSystemWidth());
     for (std::size_t systemIndex = 0; systemIndex < _scoreProperties.systemCount(); systemIndex += 1) {
@@ -27,7 +29,7 @@ PageScoreGeometry::PageScoreGeometry(const dom::Score& score, coord_t minWidth)
 
     // Create system geometires
     for (std::size_t systemIndex = 0; systemIndex < _scoreProperties.systemCount(); systemIndex += 1) {
-        auto systemGeometry = std::unique_ptr<SystemGeometry>(new SystemGeometry(_score, _scoreProperties, *_spans, systemIndex, width));
+        auto systemGeometry = std::unique_ptr<SystemGeometry>(new SystemGeometry(_score, _scoreProperties, *_spans, directionGeometryFactory, systemIndex, width));
         systemGeometry->setHorizontalAnchorPointValues(0, 0);
         systemGeometry->setVerticalAnchorPointValues(0, 0);
         _systemGeometries.push_back(systemGeometry.get());

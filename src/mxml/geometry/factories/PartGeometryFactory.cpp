@@ -1,7 +1,6 @@
 //  Created by Alejandro Isaza on 2014-12-18.
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
-#include "DirectionGeometryFactory.h"
 #include "EndingGeometryFactory.h"
 #include "LyricGeometryFactory.h"
 #include "OrnamentGeometryFactory.h"
@@ -13,12 +12,13 @@
 
 namespace mxml {
 
-PartGeometryFactory::PartGeometryFactory(const dom::Part& part, const ScoreProperties& scoreProperties, const Metrics& metrics, const SpanCollection& spans)
+PartGeometryFactory::PartGeometryFactory(const dom::Part& part, const ScoreProperties& scoreProperties, const Metrics& metrics, const SpanCollection& spans, DirectionGeometryFactory& directionGeometryFactory)
 : _part(part),
   _scoreProperties(scoreProperties),
   _metrics(metrics),
   _spans(spans),
-  _partGeometry()
+  _partGeometry(),
+  _directionGeometryFactory(directionGeometryFactory)
 {
 }
 
@@ -53,8 +53,8 @@ std::unique_ptr<PartGeometry> PartGeometryFactory::build(std::size_t beginMeasur
     bounds.origin.x = 0;
     _partGeometry->setBounds(bounds);
 
-    DirectionGeometryFactory directionGeometryFactory(_partGeometry.get(), _partGeometry->measureGeometries(), _metrics);
-    auto directions = directionGeometryFactory.build();
+    _directionGeometryFactory.reset(_partGeometry.get(), _partGeometry->measureGeometries(), _metrics);
+    auto directions = _directionGeometryFactory.build();
     for (auto& geometry : directions) {
         _partGeometry->directionGeometries().push_back(geometry.get());
         _partGeometry->addGeometry(std::move(geometry));

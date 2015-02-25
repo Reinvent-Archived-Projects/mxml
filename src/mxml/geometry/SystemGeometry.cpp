@@ -8,11 +8,12 @@
 
 namespace mxml {
 
-SystemGeometry::SystemGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, const SpanCollection& spans, std::size_t systemIndex, coord_t width)
+SystemGeometry::SystemGeometry(const dom::Score& score, const ScoreProperties& scoreProperties, const SpanCollection& spans, DirectionGeometryFactory& directionGeometryFactory, std::size_t systemIndex, coord_t width)
 : _score(score),
   _scoreProperties(scoreProperties),
   _spans(spans),
-  _systemIndex(systemIndex)
+  _systemIndex(systemIndex),
+  _directionGeometryFactory(directionGeometryFactory)
 {
     auto range = _scoreProperties.measureRange(systemIndex);
 
@@ -21,7 +22,7 @@ SystemGeometry::SystemGeometry(const dom::Score& score, const ScoreProperties& s
     for (auto& part : _score.parts()) {
         _metrics.emplace_back(new PageMetrics(_score, _scoreProperties, systemIndex, partIndex));
 
-        PartGeometryFactory factory(*part, _scoreProperties, *_metrics.back(), _spans);
+        PartGeometryFactory factory(*part, _scoreProperties, *_metrics.back(), _spans, _directionGeometryFactory);
         std::unique_ptr<PartGeometry> geom = factory.build(range.first, range.second);
 
         geom->setHorizontalAnchorPointValues(0, 0);

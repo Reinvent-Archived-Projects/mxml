@@ -16,12 +16,14 @@ ScrollScoreGeometry::ScrollScoreGeometry(const dom::Score& score, bool naturalSp
     spanFactory.setNaturalSpacing(naturalSpacing);
     _spans = spanFactory.build();
 
+    DirectionGeometryFactory directionGeometryFactory;
+
     std::size_t partIndex = 0;
     coord_t offset = 0;
     for (auto& part : _score.parts()) {
         _metrics.emplace_back(new ScrollMetrics(_score, _scoreProperties, partIndex));
 
-        PartGeometryFactory factory(*part, _scoreProperties, *_metrics.back(), *_spans);
+        PartGeometryFactory factory(*part, _scoreProperties, *_metrics.back(), *_spans, directionGeometryFactory);
         std::unique_ptr<PartGeometry> geom = factory.build();
         geom->setHorizontalAnchorPointValues(0, 0);
         geom->setVerticalAnchorPointValues(0, 0);

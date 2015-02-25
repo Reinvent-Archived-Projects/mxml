@@ -1,6 +1,8 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
+#include "DirectionGeometryFactory.h"
+
 #include <mxml/Metrics.h>
 #include <mxml/ScoreProperties.h>
 #include <mxml/SpanCollection.h>
@@ -12,7 +14,7 @@ namespace mxml {
 
 class PartGeometryFactory {
 public:
-    PartGeometryFactory(const dom::Part& part, const ScoreProperties& scoreProperties, const Metrics& metrics, const SpanCollection& spans);
+    PartGeometryFactory(const dom::Part& part, const ScoreProperties& scoreProperties, const Metrics& metrics, const SpanCollection& spans, DirectionGeometryFactory& directionGeometryFactory);
     ~PartGeometryFactory();
 
     /**
@@ -30,6 +32,7 @@ private:
     const ScoreProperties& _scoreProperties;
     const Metrics& _metrics;
     const SpanCollection& _spans;
+    DirectionGeometryFactory& _directionGeometryFactory;
 
     std::unique_ptr<PartGeometry> _partGeometry;
 };
