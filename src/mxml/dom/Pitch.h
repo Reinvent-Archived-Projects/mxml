@@ -25,7 +25,7 @@ public:
     static const std::size_t kUniqueCount;
 
 public:
-    Pitch() : _step(STEP_C), _alter(), _octave(4) {}
+    Pitch() : _step(STEP_C), _alter(0), _octave(4) {}
     Pitch(Step step, int alter, int octave)
     : _step(step), _alter(alter), _octave(octave) {}
     
@@ -43,11 +43,11 @@ public:
     /**
      Chromatic alteration in number of semitones (e.g. -1 for flat, 1 for sharp).
      */
-    Optional<int> alter() const {
+    int alter() const {
         return _alter;
     }
     
-    void setAlter(Optional<int> alter) {
+    void setAlter(int alter) {
         _alter = alter;
     }
     
@@ -85,7 +85,7 @@ public:
     
 private:
     Step _step;
-    Optional<int> _alter;
+    int _alter;
     int _octave;
 };
 

@@ -90,23 +90,23 @@ BOOST_AUTO_TEST_CASE(alters) {
     auto chord_c1 = builder.addChord(measure1);
     auto note_c1 = builder.addNote(chord_c1, dom::Note::TYPE_EIGHTH, 1);
     note_c1->setStaff(kStaff);
-    builder.setPitch(note_c1, dom::Pitch::STEP_C, kOctave, {-1, true});
+    builder.setPitch(note_c1, dom::Pitch::STEP_C, kOctave, -1);
     
     auto chord_c2 = builder.addChord(measure1);
     auto note_c2 = builder.addNote(chord_c2, dom::Note::TYPE_EIGHTH, 2);
     note_c2->setStaff(kStaff);
-    builder.setPitch(note_c2, dom::Pitch::STEP_C, kOctave, {0, false});
+    builder.setPitch(note_c2, dom::Pitch::STEP_C, kOctave, 0);
     
     // D Steps - measure 1
     auto chord_d1 = builder.addChord(measure1);
     auto note_d1 = builder.addNote(chord_d1, dom::Note::TYPE_EIGHTH, 1);
     note_d1->setStaff(kStaff);
-    builder.setPitch(note_d1, dom::Pitch::STEP_D, kOctave, {1, true});
+    builder.setPitch(note_d1, dom::Pitch::STEP_D, kOctave, 1);
     
     auto chord_d2 = builder.addChord(measure1);
     auto note_d2 = builder.addNote(chord_d2, dom::Note::TYPE_EIGHTH, 2);
     note_d2->setStaff(kStaff);
-    builder.setPitch(note_d2, dom::Pitch::STEP_D, kOctave, {0, false});
+    builder.setPitch(note_d2, dom::Pitch::STEP_D, kOctave, 0);
     
     // C Steps - measure 2
     auto chord_c3 = builder.addChord(measure2);

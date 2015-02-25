@@ -12,7 +12,7 @@ Note createNote(int octave, Pitch::Step step, int alter) {
     std::unique_ptr<Pitch> pitch(new Pitch());
     pitch->setOctave(octave);
     pitch->setStep(step);
-    pitch->setAlter({alter, true});
+    pitch->setAlter(alter);
 
     Note note;
     note.setPitch(std::move(pitch));

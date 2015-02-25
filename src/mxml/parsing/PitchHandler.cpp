@@ -32,7 +32,7 @@ void PitchHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kStepTag) == 0)
         _result->setStep(stepFromString(_stringHandler.result()));
     else if (strcmp(qname.localName(), kAlterTag) == 0)
-        _result->setAlter(dom::presentOptional(_integerHandler.result()));
+        _result->setAlter(_integerHandler.result());
     else if (strcmp(qname.localName(), kOctaveTag) == 0)
         _result->setOctave(_integerHandler.result());
 }

@@ -195,8 +195,9 @@ void SpanFactory::build(const dom::Chord* chord) {
     for (auto& note : chord->notes()) {
         headWidth = std::max(headWidth, NoteGeometry::Size(*note).width);
 
-        //int previousAlter = _attributesManager.alter(note);
-        if (note->alter().isPresent()) // && alter != previousAlter)
+        int alter = note->alter();
+        int previousAlter = _scoreProperties.alter(*note);
+        if (alter != previousAlter)
             accidentalWidth = AccidentalGeometry::Size(note->alter()).width;
 
         if (note->stem() == dom::kStemUp && note->beams().empty() && chord->firstNote()->beams().empty())

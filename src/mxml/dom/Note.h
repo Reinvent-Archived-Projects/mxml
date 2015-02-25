@@ -191,14 +191,12 @@ public:
     /**
      Return the alter value for this note, coming either from an accidental or from the pitch alter value.
      */
-    Optional<int> alter() const {
-        if (_accidental) {
-            return Optional<int>(_accidental->type, true);
-        } else if (_pitch) {
-           return _pitch->alter();
-        }
-
-        return Optional<int>();
+    int alter() const {
+        if (_accidental)
+            return _accidental->type;
+        else if (_pitch)
+            return _pitch->alter();
+        return 0;
     }
     
     unsigned int midiNumber() const;

@@ -16,13 +16,9 @@ void AlterSequence::addFromNote(std::size_t partIndex, std::size_t measureIndex,
     if (!note.pitch())
         return;
 
-    auto& pitch = *note.pitch();
-    if (!pitch.alter().isPresent())
-        return;
-
     Item item;
     item.index = indexFromNote(note);
-    item.value = pitch.alter();
+    item.value = note.pitch()->alter();
     _items.push_back(item);
 }
 

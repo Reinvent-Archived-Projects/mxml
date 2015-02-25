@@ -215,7 +215,7 @@ void NoteHandler::increasePitch(dom::Pitch& pitch) {
 
     pitch.setOctave(octave);
     pitch.setStep(step);
-    pitch.setAlter(dom::presentOptional(alter));
+    pitch.setAlter(alter);
 }
 
 void NoteHandler::decreasePitch(dom::Pitch& pitch) {
@@ -250,7 +250,7 @@ void NoteHandler::decreasePitch(dom::Pitch& pitch) {
     
     pitch.setOctave(octave);
     pitch.setStep(step);
-    pitch.setAlter(dom::presentOptional(alter));
+    pitch.setAlter(alter);
 }
 
 } // namespace mxml
