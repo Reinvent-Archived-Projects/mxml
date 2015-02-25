@@ -322,13 +322,11 @@ void DirectionGeometryFactory::buildWords(const MeasureGeometry& measureGeom, co
 
     const Span& span = *measureGeom.spans().with(&direction);
     Point location;
-    if (wordsGeom->size().width > 2*NoteGeometry::kQuarterWidth) {
+    if (dynamic_cast<dom::Dynamics*>(direction.type()))
+        location.x = span.start() + span.eventOffset();
+    else
         location.x = span.start() - span.leftMargin()/2;
-    } else {
-        location.x = span.start();
-    }
-    location = spanOffsetInParentGeometry(measureGeom, location);
-    wordsGeom->setLocation(location);
+    wordsGeom->setLocation(spanOffsetInParentGeometry(measureGeom, location));
 
     // Better placement defaults if the placement is not specified
     dom::Placement placement;

@@ -20,6 +20,9 @@ public:
     }
     
     const std::string* contents() const;
+
+    static Size computeSize(const dom::Words& words);
+    static Size computeSize(const dom::Dynamics& dynamics);
     
 private:
     const dom::Direction& _direction;
