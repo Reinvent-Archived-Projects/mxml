@@ -328,6 +328,15 @@ void DirectionGeometryFactory::buildWords(const MeasureGeometry& measureGeom, co
         location.x = span.start() - span.leftMargin()/2;
     wordsGeom->setLocation(spanOffsetInParentGeometry(measureGeom, location));
 
+    // Don't place outside parent's bounds
+    if (wordsGeom->frame().max().x  > _parentGeometry->bounds().max().x) {
+        location.x = _parentGeometry->bounds().max().x - wordsGeom->size().width + wordsGeom->anchorPoint().x;
+        wordsGeom->setLocation(location);
+    } else if (wordsGeom->frame().min().x < _parentGeometry->bounds().min().x) {
+        location.x = _parentGeometry->bounds().min().x + wordsGeom->anchorPoint().x;
+        wordsGeom->setLocation(location);
+    }
+
     // Better placement defaults if the placement is not specified
     dom::Placement placement;
     if (!direction.placement().isPresent()) {
