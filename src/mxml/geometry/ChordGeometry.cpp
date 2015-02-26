@@ -43,19 +43,21 @@ Rect ChordGeometry::notesFrame() const {
 }
 
 void ChordGeometry::extendStem(coord_t coordinate) {
-    coord_t dy;
-    Rect f = frame();
-    if (_chord.stem() == dom::kStemUp || _chord.stem() == dom::kStemDouble) {
-        dy = f.min().y - coordinate;
+    if (!_stem)
+        return;
+
+    auto frame = _stem->frame();
+    if (_stem->stemDirection() == dom::kStemUp) {
+        auto dy = frame.min().y - coordinate;
+        frame.origin.y -= dy;
+        frame.size.height += dy;
     } else {
-        dy = coordinate - f.max().y;
+        auto dy = coordinate - frame.max().y;
+        frame.size.height += dy;
     }
 
-    if (_stem) {
-        Size size{_stem->size().width, _stem->size().height + dy};
-        _stem->setSize(size);
-        setBounds(subGeometriesFrame());
-    }
+    _stem->setFrame(frame);
+    setBounds(subGeometriesFrame());
 }
 
 void ChordGeometry::build() {
@@ -197,11 +199,13 @@ void ChordGeometry::buildArticulation(const dom::Articulation& articulation, Rec
     const int staff = _chord.firstNote()->staff();
     std::unique_ptr<ArticulationGeometry> geom(new ArticulationGeometry(articulation, _chord.stem()));
     
-    bool above;
+    bool above = true;
     if (articulation.placement().isPresent()) {
         above = articulation.placement() == dom::kPlacementAbove;
+    } else if (_stem) {
+        above = _stem->stemDirection() == dom::kStemDown;
     } else {
-        above = _chord.stem() != dom::kStemUp && _chord.stem() != dom::kStemDouble;
+        above = _chord.stem() == dom::kStemDown;
     }
     
     Size size = geom->size();

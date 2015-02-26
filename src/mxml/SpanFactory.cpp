@@ -201,7 +201,7 @@ void SpanFactory::build(const dom::Chord* chord) {
             accidentalWidth = AccidentalGeometry::Size(note->alter()).width;
 
         if (note->stem() == dom::kStemUp && note->beams().empty() && chord->firstNote()->beams().empty())
-            stemWidth = StemGeometry::Size(*note, true).width - StemGeometry::kNoFlagWidth;
+            stemWidth = StemGeometry::Size(*note, dom::kStemUp, true).width - StemGeometry::kNoFlagWidth;
         
         if (naturalWidth == -1)
             naturalWidth = naturalWidthForNote(*note);

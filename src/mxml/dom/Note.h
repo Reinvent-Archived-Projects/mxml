@@ -51,7 +51,7 @@ public:
       _type(absentOptional(TYPE_QUARTER)),
       _chord(false),
       _grace(false),
-      _stem(kStemUp),
+      _stem(kStemUp, false),
       _staff(1)
     {}
     
@@ -83,10 +83,10 @@ public:
         _grace = grace;
     }
     
-    Stem stem() const {
+    Optional<Stem> stem() const {
         return _stem;
     }
-    void setStem(Stem stem) {
+    void setStem(Optional<Stem> stem) {
         _stem = stem;
     }
     
@@ -210,7 +210,7 @@ private:
     
     bool _chord;
     bool _grace;
-    Stem _stem;
+    Optional<Stem> _stem;
     int _staff;
     
     Optional<Type> _type;

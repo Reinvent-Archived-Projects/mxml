@@ -123,7 +123,7 @@ void NoteHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     else if (strcmp(qname.localName(), kGraceTag) == 0)
         _result->setGrace(_presenceHandler.result());
     else if (strcmp(qname.localName(), kStemTag) == 0)
-        _result->setStem(stemFromString(_stringHandler.result()));
+        _result->setStem(presentOptional(stemFromString(_stringHandler.result())));
     else if (strcmp(qname.localName(), kStaffTag) == 0)
         _result->setStaff(_integerHandler.result());
     else if (strcmp(qname.localName(), kPitchTag) == 0)

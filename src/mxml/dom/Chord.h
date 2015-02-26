@@ -29,7 +29,7 @@ public:
         return firstNote()->type();
     }
     
-    Stem stem() const {
+    Optional<Stem> stem() const {
         return firstNote()->stem();
     }
     

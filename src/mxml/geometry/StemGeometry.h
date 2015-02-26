@@ -22,15 +22,21 @@ public:
         return _note;
     }
     
+    dom::Stem stemDirection() const {
+        return _stemDirection;
+    }
+    void setStemDirection(dom::Stem direction);
+
     bool showFlags() const {
         return _showFlags;
     }
     void setShowFlags(bool show);
     
-    static Size Size(const dom::Note& note, bool flags);
+    static Size Size(const dom::Note& note, dom::Stem direction, bool flags);
     
 private:
     const dom::Note& _note;
+    dom::Stem _stemDirection;
     bool _showFlags;
 };
 
