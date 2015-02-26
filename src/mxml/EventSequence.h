@@ -13,14 +13,29 @@ namespace mxml {
 
 class EventSequence {
 public:
-    using Iterator = std::vector<Event>::const_iterator;
+    using ConstIterator = std::vector<Event>::const_iterator;
+    using Iterator = std::vector<Event>::iterator;
     
 public:
     EventSequence(const ScoreProperties& scoreProperties);
     
     Event& addEvent(const Event& event);
     void clear();
-    
+
+    const ScoreProperties& scoreProperties() const {
+        return _scoreProperties;
+    }
+
+    /**
+     Get the start time of the event sequence, in abosulte time.
+     */
+    dom::time_t startTime() const;
+
+    /**
+     Get the end time of the event sequence, in abosulte time.
+     */
+    dom::time_t endTime() const;
+
     const std::vector<Event>& events() const {
         return _events;
     }
@@ -28,64 +43,40 @@ public:
         return _events;
     }
 
+    ConstIterator begin() const {
+        return _events.begin();
+    }
+    Iterator begin() {
+        return _events.begin();
+    }
+    ConstIterator end() const {
+        return _events.end();
+    }
+    Iterator end() {
+        return _events.end();
+    }
+
     /**
      Find the event at the given absolute time
      */
-    Iterator find(dom::time_t time) const;
+    ConstIterator find(dom::time_t time) const;
+
+    /**
+     Find the event at the given absolute time
+     */
+    Iterator find(dom::time_t time);
 
     /**
      Find the closest event to the given absolute time.
      */
-    Iterator findClosest(dom::time_t time) const;
-    
-    /** Return the index of the event at the given absolute time, -1 if there is no such event.
-     */
-    std::size_t index(dom::time_t time) const;
+    ConstIterator findClosest(dom::time_t time) const;
 
     /**
-     Return the measure index of the event at the given absolute time, -1 if there is no such event.
+     Find the closest event to the given absolute time.
      */
-    std::size_t measureIndex(dom::time_t time) const;
-    
-    /** Return a constant pointer to the event at the given absolute time, 0 if there is no such event.
-     */
-    const Event* event(dom::time_t time) const;
-    
-    /** Return a pointer to the event at the given absolute time, 0 if there is no such event.
-     */
-    Event* event(dom::time_t time);
+    Iterator findClosest(dom::time_t time);
 
-    /** Return the first event for a given measure index.
-     */
-    const Event* firstEvent(std::size_t measureIndex) const;
-
-    /** Return the last event for a given measure index.
-     */
-    const Event* lastEvent(std::size_t measureIndex) const;
-
-    /**
-     Get the start time of the event sequence, in abosulte time.
-     */
-    dom::time_t startTime() const;
-    
-    /**
-     Get the end time of the event sequence, in abosulte time.
-     */
-    dom::time_t endTime() const;
-
-    Iterator begin() const {
-        return _events.begin();
-    }
-    Iterator end() const {
-        return _events.end();
-    }
-
-    Iterator begin(std::size_t measureIndex) const;
-    Iterator end(std::size_t measureIndex) const;
-
-    const ScoreProperties& scoreProperties() const {
-        return _scoreProperties;
-    }
+    ConstIterator firstInMeasure(std::size_t measureIndex) const;
 
 private:
     const ScoreProperties& _scoreProperties;
