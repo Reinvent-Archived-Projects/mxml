@@ -12,6 +12,7 @@
 #include <mxml/dom/Chord.h>
 #include <mxml/dom/Direction.h>
 #include <mxml/dom/TimedNode.h>
+#include <mxml/geometry/factories/ChordGeometryFactory.h>
 #include <mxml/SpanCollection.h>
 
 #include <memory>
@@ -73,7 +74,8 @@ private:
     const ScoreProperties& _scoreProperties;
     const Metrics& _metrics;
     const std::size_t _partIndex;
-
+    ChordGeometryFactory _chordGeometryFactory;
+    
     int _currentTime;
 
     /**

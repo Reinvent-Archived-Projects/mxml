@@ -2,8 +2,8 @@
 //  Copyright (c) 2015 Venture Media Labs. All rights reserved.
 
 #include "EndingGeometryFactory.h"
-
 #include <mxml/geometry/BarlineGeometry.h>
+#include <mxml/geometry/MeasureGeometry.h>
 
 
 namespace mxml {

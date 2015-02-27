@@ -2,7 +2,8 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #pragma once
-#include "MeasureGeometry.h"
+#include "Geometry.h"
+
 
 namespace mxml {
 
@@ -17,10 +18,6 @@ public:
         _staff = staff;
     }
 
-    MeasureGeometry* measureGeometry() const {
-        return static_cast<MeasureGeometry*>(parentGeometry());
-    }
-    
 private:
     int _staff;
 };

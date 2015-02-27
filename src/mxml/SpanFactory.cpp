@@ -9,6 +9,7 @@
 #include <mxml/geometry/ClefGeometry.h>
 #include <mxml/geometry/KeyGeometry.h>
 #include <mxml/geometry/LyricGeometry.h>
+#include <mxml/geometry/MeasureGeometry.h>
 #include <mxml/geometry/NoteGeometry.h>
 #include <mxml/geometry/StemGeometry.h>
 #include <mxml/geometry/TimeSignatureGeometry.h>

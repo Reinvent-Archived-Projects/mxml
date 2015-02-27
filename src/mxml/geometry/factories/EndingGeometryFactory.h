@@ -4,7 +4,6 @@
 #pragma once
 #include <mxml/Metrics.h>
 #include <mxml/geometry/EndingGeometry.h>
-#include <mxml/geometry/MeasureGeometry.h>
 
 #include <memory>
 #include <vector>
@@ -12,7 +11,8 @@
 namespace mxml {
 
 class BarlineGeometry;
-
+class MeasureGeometry;
+    
 class EndingGeometryFactory {
 public:
     EndingGeometryFactory(const std::vector<MeasureGeometry*>& measureGeometries, const Metrics& metrics);

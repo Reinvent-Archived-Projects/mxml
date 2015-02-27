@@ -2,6 +2,7 @@
 //  Copyright (c) 2015 Venture Media Labs. All rights reserved.
 
 #include "OrnamentGeometryFactory.h"
+#include "MeasureGeometry.h"
 
 #include <mxml/geometry/ChordGeometry.h>
 

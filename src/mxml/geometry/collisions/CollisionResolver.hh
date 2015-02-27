@@ -2,6 +2,7 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #include <mxml/geometry/ChordGeometry.h>
+#include <mxml/geometry/MeasureGeometry.h>
 
 #include <typeinfo>
 

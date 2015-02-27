@@ -33,6 +33,7 @@ MeasureGeometry::MeasureGeometry(const Measure& measure,
   _scoreProperties(scoreProperties),
   _metrics(metrics),
   _partIndex(metrics.partIndex()),
+  _chordGeometryFactory(scoreProperties, metrics),
   _showNumber(false)
 {
 }
@@ -234,10 +235,9 @@ void MeasureGeometry::buildTimedNode(const TimedNode* node)  {
 }
 
 void MeasureGeometry::buildChord(const Chord* chord) {
-    if (!chord->firstNote()->printObject)
+    auto geo = _chordGeometryFactory.build(*chord);
+    if (!geo)
         return;
-    
-    std::unique_ptr<ChordGeometry> geo(new ChordGeometry(*chord, _scoreProperties, _metrics));
 
     Point location = geo->refNoteLocation();
     if (chord->stem() == kStemUp) {

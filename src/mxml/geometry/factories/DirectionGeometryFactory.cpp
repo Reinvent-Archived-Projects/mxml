@@ -3,16 +3,17 @@
 
 #include "DirectionGeometryFactory.h"
 
-#include "BarlineGeometry.h"
-#include "CodaGeometry.h"
-#include "EndingGeometry.h"
-#include "NoteGeometry.h"
-#include "OctaveShiftGeometry.h"
-#include "OrnamentsGeometry.h"
-#include "PedalGeometry.h"
-#include "SegnoGeometry.h"
-#include "SpanDirectionGeometry.h"
-#include "WordsGeometry.h"
+#include <mxml/geometry/BarlineGeometry.h>
+#include <mxml/geometry/CodaGeometry.h>
+#include <mxml/geometry/EndingGeometry.h>
+#include <mxml/geometry/NoteGeometry.h>
+#include <mxml/geometry/MeasureGeometry.h>
+#include <mxml/geometry/OctaveShiftGeometry.h>
+#include <mxml/geometry/OrnamentsGeometry.h>
+#include <mxml/geometry/PedalGeometry.h>
+#include <mxml/geometry/SegnoGeometry.h>
+#include <mxml/geometry/SpanDirectionGeometry.h>
+#include <mxml/geometry/WordsGeometry.h>
 
 #include <mxml/dom/OctaveShift.h>
 #include <mxml/dom/Pedal.h>

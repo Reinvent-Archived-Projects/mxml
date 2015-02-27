@@ -25,7 +25,7 @@ public:
     static const coord_t kDotSpacing;
     
 public:
-    ChordGeometry(const dom::Chord& chord, const ScoreProperties& scoreProperties, const Metrics& metrics);
+    ChordGeometry(const dom::Chord& chord);
     
     const dom::Chord& chord() const {
         return _chord;
@@ -64,25 +64,13 @@ public:
     void extendStem(coord_t coordinate);
     
 private:
-    void build();
-    Rect buildNotes();
-    void buildDot(const NoteGeometry& noteGeom);
-    void buildAccidentals(const Rect& notesFrame);
-    void buildAccidental(const NoteGeometry& noteGeom, const Rect& notesFrame);
-    void buildNotations(const Rect& notesFrame);
-    void buildArticulation(const dom::Articulation& articulation, Rect& notesFrame);
-    void buildFermata(const dom::Fermata& fermata, Rect& notesFrame);
-    void buildStem();
-    
-private:
     const dom::Chord& _chord;
-    const ScoreProperties& _scoreProperties;
-    const Metrics& _metrics;
     
     std::vector<NoteGeometry*> _notes;
     StemGeometry* _stem;
     Point _refNoteLocation;
-    int _currentAlter;
+
+    friend class ChordGeometryFactory;
 };
 
 } // namespace mxml

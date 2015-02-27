@@ -6,6 +6,7 @@
 #include "NoteGeometry.h"
 #include "TieGeometry.h"
 
+#include <mxml/Metrics.h>
 #include <mxml/dom/Note.h>
 
 #include <map>

@@ -124,6 +124,8 @@
 		614057BC1A5C7629005224C9 /* Key.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614057BB1A5C7629005224C9 /* Key.cpp */; };
 		614057BE1A5C79EF005224C9 /* KeyTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614057BD1A5C79EF005224C9 /* KeyTests.cpp */; };
 		614057C01A5CAA47005224C9 /* ScorePropertiesTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */; };
+		619AC7941AA11C60005DFBED /* ChordGeometryFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 619AC7921AA11C60005DFBED /* ChordGeometryFactory.cpp */; };
+		619AC7951AA11C60005DFBED /* ChordGeometryFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 619AC7931AA11C60005DFBED /* ChordGeometryFactory.h */; };
 		61A2B75E1A8E870000C1EE2A /* AlterSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A2B7521A8E870000C1EE2A /* AlterSequence.cpp */; };
 		61A2B75F1A8E870000C1EE2A /* AlterSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B7531A8E870000C1EE2A /* AlterSequence.h */; };
 		61A2B7601A8E870000C1EE2A /* AttributeSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B7541A8E870000C1EE2A /* AttributeSequence.h */; };
@@ -473,6 +475,8 @@
 		614057BB1A5C7629005224C9 /* Key.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Key.cpp; sourceTree = "<group>"; };
 		614057BD1A5C79EF005224C9 /* KeyTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = KeyTests.cpp; sourceTree = "<group>"; };
 		614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScorePropertiesTests.cpp; sourceTree = "<group>"; };
+		619AC7921AA11C60005DFBED /* ChordGeometryFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChordGeometryFactory.cpp; sourceTree = "<group>"; };
+		619AC7931AA11C60005DFBED /* ChordGeometryFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChordGeometryFactory.h; sourceTree = "<group>"; };
 		61A2B7521A8E870000C1EE2A /* AlterSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlterSequence.cpp; sourceTree = "<group>"; };
 		61A2B7531A8E870000C1EE2A /* AlterSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlterSequence.h; sourceTree = "<group>"; };
 		61A2B7541A8E870000C1EE2A /* AttributeSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributeSequence.h; sourceTree = "<group>"; };
@@ -973,6 +977,8 @@
 		61F073AF1A71CD8F002CA9CA /* factories */ = {
 			isa = PBXGroup;
 			children = (
+				619AC7921AA11C60005DFBED /* ChordGeometryFactory.cpp */,
+				619AC7931AA11C60005DFBED /* ChordGeometryFactory.h */,
 				61F073B01A71CD8F002CA9CA /* DirectionGeometryFactory.cpp */,
 				61F073B11A71CD8F002CA9CA /* DirectionGeometryFactory.h */,
 				61F073CC1A71CEF5002CA9CA /* EndingGeometryFactory.cpp */,
@@ -1026,6 +1032,7 @@
 				61F073A21A71A447002CA9CA /* SystemGeometry.h in Headers */,
 				61A2B7631A8E870000C1EE2A /* ClefSequence.h in Headers */,
 				61F072DA1A6F02FE002CA9CA /* PageLayoutHandler.h in Headers */,
+				619AC7951AA11C60005DFBED /* ChordGeometryFactory.h in Headers */,
 				61E530B71A79A1FD00E5B2FF /* Algorithm.h in Headers */,
 				61F073CB1A71CD8F002CA9CA /* TieGeometryFactory.h in Headers */,
 				61239BA01A67426C00B3F0A3 /* JumpFactory.h in Headers */,
@@ -1156,6 +1163,7 @@
 				0022AE031A7082C300139992 /* VerticalResolver.cpp in Sources */,
 				61F073CE1A71CEF5002CA9CA /* EndingGeometryFactory.cpp in Sources */,
 				614057181A5C6228005224C9 /* TieGeometry.cpp in Sources */,
+				619AC7941AA11C60005DFBED /* ChordGeometryFactory.cpp in Sources */,
 				614057111A5C6228005224C9 /* SpanDirectionGeometry.cpp in Sources */,
 				6140573B1A5C6228005224C9 /* FermataHandler.cpp in Sources */,
 				61F074241A72C676002CA9CA /* PageScoreGeometry.cpp in Sources */,

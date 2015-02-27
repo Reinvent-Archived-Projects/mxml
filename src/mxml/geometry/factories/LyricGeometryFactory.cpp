@@ -4,6 +4,7 @@
 #include "ChordGeometry.h"
 #include "LyricGeometry.h"
 #include "LyricGeometryFactory.h"
+#include "MeasureGeometry.h"
 
 #include <mxml/Metrics.h>
 

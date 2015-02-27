@@ -3,6 +3,9 @@
 
 #include "ClefGeometry.h"
 
+#include <cassert>
+
+
 namespace mxml {
 
 const Size ClefGeometry::kSize = {28, 80};

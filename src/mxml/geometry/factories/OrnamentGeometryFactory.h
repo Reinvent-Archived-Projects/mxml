@@ -3,7 +3,6 @@
 
 #pragma once
 #include <mxml/Metrics.h>
-#include <mxml/geometry/MeasureGeometry.h>
 #include <mxml/geometry/OrnamentsGeometry.h>
 
 #include <memory>
@@ -13,6 +12,7 @@
 namespace mxml {
 
 class ChordGeometry;
+class MeasureGeometry;
 
 class OrnamentGeometryFactory {
 public:
