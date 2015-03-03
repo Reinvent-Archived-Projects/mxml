@@ -38,6 +38,16 @@ Rect Geometry::subGeometriesFrame() const {
             frame = join(frame, geom->frame());
         first = false;
     }
+
+    // Ensure the frame is a whole integer value
+    auto dx = roundf(frame.origin.x) - frame.origin.x;
+    frame.origin.x += dx;
+    frame.size.width -= dx;
+
+    auto dy = roundf(frame.origin.y) - frame.origin.y;
+    frame.origin.y += dy;
+    frame.size.height -= dy;
+
     return frame;
 }
 
