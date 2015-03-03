@@ -20,10 +20,14 @@ BeamGeometry::BeamGeometry(std::vector<ChordGeometry*> chords)
     build();
 }
 
+coord_t BeamGeometry::slope() const {
+     return (_beamEnd.y - _beamBegin.y) / (_beamEnd.x - _beamBegin.x);
+}
+
 Point BeamGeometry::stemTip(const ChordGeometry* chordGeom) const {
-    coord_t slope = (_beamEnd.y - _beamBegin.y) / (_beamEnd.x - _beamBegin.x);
+    auto s = slope();
     
-    auto stemDirection = chordGeom->chord().stem();
+    auto stemDirection = chordGeom->stem()->stemDirection();
 
     Point point;
     if (stemDirection == dom::kStemUp) {
@@ -31,10 +35,9 @@ Point BeamGeometry::stemTip(const ChordGeometry* chordGeom) const {
     } else {
         point.x = chordGeom->location().x - NoteGeometry::kQuarterWidth/2 + kStemLineWidth/2;
     }
-    point.y = _beamEnd.y - slope * (_beamEnd.x - point.x) - frame().origin.y;
-    point.x -= frame().origin.x;
-    
-    return point;
+    point.y = _beamEnd.y - s * (_beamEnd.x - point.x);
+
+    return convertFromGeometry(point, chordGeom->parentGeometry());
 }
 
 void BeamGeometry::recomputeFrame() {
@@ -106,7 +109,7 @@ void BeamGeometry::build() {
         _beamBegin.y = first->frame().max().y;
     }
     
-    if (last->chord().stem() == dom::kStemUp) {
+    if (last->stem()->stemDirection() == dom::kStemUp) {
         _beamEnd.x = lastLocation.x + NoteGeometry::kQuarterWidth/2;
         _beamEnd.y = last->frame().min().y;
     } else {
@@ -119,15 +122,15 @@ void BeamGeometry::build() {
     
     // Cap slope
     Point midPoint = {(_beamEnd.x + _beamBegin.x)/2, (_beamEnd.y + _beamBegin.y)/2};
-    coord_t slope = (_beamEnd.y - _beamBegin.y) / (_beamEnd.x - _beamBegin.x);
+    coord_t s = slope();
     
-    if (slope > kMaxSlope) {
-        slope = kMaxSlope;
-    } else if (slope < -kMaxSlope) {
-        slope = -kMaxSlope;
+    if (s > kMaxSlope) {
+        s = kMaxSlope;
+    } else if (s < -kMaxSlope) {
+        s = -kMaxSlope;
     }
-    _beamBegin.y = midPoint.y - slope * (midPoint.x - _beamBegin.x);
-    _beamEnd.y = midPoint.y - slope * (midPoint.x - _beamEnd.x);
+    _beamBegin.y = midPoint.y - s * (midPoint.x - _beamBegin.x);
+    _beamEnd.y = midPoint.y - s * (midPoint.x - _beamEnd.x);
     
     // Move away so that stems are not too short
     coord_t dy = 0;
@@ -135,15 +138,15 @@ void BeamGeometry::build() {
         const dom::Chord& chord = chordGeom->chord();
         const coord_t beamsWidth = chord.firstNote()->beams().size() * (kBeamLineWidth + kBeamLineSpacing);
 
-        if (chord.stem() == dom::kStemUp) {
+        if (chordGeom->stem()->stemDirection() == dom::kStemUp) {
             coord_t beamx = chordGeom->frame().origin.x + chordGeom->size().width - kStemLineWidth/2;
-            coord_t beamy = _beamEnd.y - slope * (_beamEnd.x - beamx) - kBeamLineWidth/2;
+            coord_t beamy = _beamEnd.y - s * (_beamEnd.x - beamx) - kBeamLineWidth/2;
             coord_t maxy = chordGeom->notesFrame().min().y - kMinStem - beamsWidth;
             if (beamy > maxy)
                 dy = std::min(dy, maxy - beamy);
         } else {
             coord_t beamx = chordGeom->frame().origin.x + kStemLineWidth/2;
-            coord_t beamy = _beamEnd.y - slope * (_beamEnd.x - beamx) + kBeamLineWidth/2;
+            coord_t beamy = _beamEnd.y - s * (_beamEnd.x - beamx) + kBeamLineWidth/2;
             coord_t miny = chordGeom->notesFrame().max().y + kMinStem + beamsWidth;
             if (beamy < miny)
                 dy = std::max(dy, miny - beamy);
@@ -159,7 +162,7 @@ void BeamGeometry::build() {
 
         coord_t beamx;
         coord_t beamy = 0;
-        if (chord.stem() == dom::kStemUp) {
+        if (chordGeom->stem()->stemDirection() == dom::kStemUp) {
             beamx = chordGeom->location().x + NoteGeometry::kQuarterWidth/2 - kStemLineWidth/2;
             if (_placement == dom::kPlacementAbove)
                 beamy = -beamsWidth;
@@ -168,7 +171,7 @@ void BeamGeometry::build() {
             if (_placement == dom::kPlacementBelow)
                 beamy = beamsWidth;
         }
-        beamy += _beamEnd.y - slope * (_beamEnd.x - beamx);
+        beamy += _beamEnd.y - s * (_beamEnd.x - beamx);
 
         chordGeom->extendStem(beamy);
     }

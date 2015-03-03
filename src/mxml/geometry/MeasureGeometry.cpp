@@ -13,6 +13,7 @@
 #include "NoteGeometry.h"
 #include "RestGeometry.h"
 #include "TimeSignatureGeometry.h"
+#include "factories/StemDirectionResolver.h"
 
 #include <mxml/dom/Backup.h>
 #include <mxml/dom/Forward.h>
@@ -57,13 +58,19 @@ void MeasureGeometry::build(bool firstMeasureInSystem) {
         }
     }
 
+    StemDirectionResolver resolver;
+    resolver.resolve(this);
+    
     std::vector<ChordGeometry*> chords;
     for (std::size_t i = 0; i < _geometries.size(); i += 1) {
         auto& geom = _geometries[i];
         ChordGeometry* chordGeom = dynamic_cast<ChordGeometry*>(geom.get());
         if (!chordGeom)
             continue;
-        
+
+        // Fix chord for new stem direction
+        _chordGeometryFactory.resetForStem(chordGeom);
+
         const Note* note = chordGeom->chord().firstNote();
         if (note->beams().empty())
             continue;
@@ -240,13 +247,10 @@ void MeasureGeometry::buildChord(const Chord* chord) {
         return;
 
     Point location = geo->refNoteLocation();
-    if (chord->stem() == kStemUp) {
-        geo->setHorizontalAnchorPointValues(0, location.x - geo->contentOffset().x);
-        geo->setVerticalAnchorPointValues(1, -(geo->size().height - (location.y - geo->contentOffset().y)));
-    } else {
-        geo->setHorizontalAnchorPointValues(1, -(geo->size().width - (location.x - geo->contentOffset().x)));
-        geo->setVerticalAnchorPointValues(0, location.y - geo->contentOffset().y);
-    }
+
+    // Assume that the stem is up, we'll redo this later
+    geo->setHorizontalAnchorPointValues(0, location.x - geo->contentOffset().x);
+    geo->setVerticalAnchorPointValues(1, -(geo->size().height - (location.y - geo->contentOffset().y)));
 
     auto it = _spans.with(chord);
     assert(it != _spans.end());

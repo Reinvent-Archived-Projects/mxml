@@ -28,6 +28,18 @@ std::unique_ptr<ChordGeometry> ChordGeometryFactory::build(const dom::Chord& cho
     return std::move(_geometry);
 }
 
+void ChordGeometryFactory::resetForStem(ChordGeometry* chordGeometry) {
+    if (!chordGeometry->stem())
+        return;
+
+    Rect notesFrame = placeNotes(chordGeometry);
+    for (auto& geom : chordGeometry->geometries()) {
+        if (auto articulationGeometry = dynamic_cast<ArticulationGeometry*>(geom.get()))
+            placeArticulation(chordGeometry, articulationGeometry, notesFrame);
+    }
+    placeStem(chordGeometry);
+}
+
 Rect ChordGeometryFactory::buildNotes(const dom::Chord& chord) {
     for (auto& note : chord.notes()) {
         std::unique_ptr<NoteGeometry> geom(new NoteGeometry(*note));
@@ -38,47 +50,12 @@ Rect ChordGeometryFactory::buildNotes(const dom::Chord& chord) {
         _geometry->addGeometry(std::move(geom));
     }
 
-    // Sort notes by stem position
-    dom::Stem stem = chord.stem();
-    std::vector<NoteGeometry*> sorted = _geometry->_notes;
-    std::sort(sorted.begin(), sorted.end(), [stem](const NoteGeometry* g1, const NoteGeometry* g2) {
-        if (stem == dom::kStemUp)
-            return g1->location().y < g2->location().y;
-        else
-            return g1->location().y > g2->location().y;
-    });
-
-    Rect notesFrame;
-    for (std::size_t i = 0; i < sorted.size(); i += 1) {
-        NoteGeometry* geom = sorted[i];
-        Point loc = geom->location();
-
-        // Notes that are too close need to be shifted sideways
-        for (std::size_t j = i + 1; j < sorted.size(); j += 1) {
-            NoteGeometry* noteGeom = sorted[j];
-            if (loc.x == noteGeom->location().x && std::abs(loc.y - noteGeom->location().y) < Metrics::kStaffLineSpacing) {
-                if (stem == dom::kStemUp)
-                    loc.x += geom->size().width;
-                else
-                    loc.x -= geom->size().width;
-            }
-        }
-        geom->setLocation(loc);
-        _geometry->_refNoteLocation = loc;
-
-        if (notesFrame.size.width == 0) {
-            notesFrame = geom->frame();
-        } else {
-            notesFrame = join(notesFrame, geom->frame());
-        }
-    }
-
     // Build dots
     for (auto& noteGeometry : _geometry->_notes) {
         buildDot(*noteGeometry);
     }
 
-    return notesFrame;
+    return placeNotes(_geometry.get());
 }
 
 void ChordGeometryFactory::buildDot(const NoteGeometry& noteGeom) {
@@ -155,19 +132,103 @@ void ChordGeometryFactory::buildNotations(const dom::Chord& chord, const Rect& n
 }
 
 void ChordGeometryFactory::buildArticulation(const dom::Chord& chord, const dom::Articulation& articulation, Rect& notesFrame) {
-    const int staff = chord.firstNote()->staff();
     std::unique_ptr<ArticulationGeometry> geom(new ArticulationGeometry(articulation, chord.stem()));
+    placeArticulation(_geometry.get(), geom.get(), notesFrame);
+    _geometry->addGeometry(std::move(geom));
+}
+
+void ChordGeometryFactory::buildFermata(const dom::Fermata& fermata, Rect& notesFrame) {
+    std::unique_ptr<FermataGeometry> geom(new FermataGeometry(fermata));
+
+    Size size = geom->size();
+    Point location;
+    location.x = _geometry->_refNoteLocation.x;
+
+    bool above = fermata.type() == dom::Fermata::TYPE_UPRIGHT;
+    if (above) {
+        location.y = notesFrame.origin.y - size.height/2 - ChordGeometry::kFermataSpacing;
+    } else {
+        location.y = notesFrame.max().y + size.height/2 + ChordGeometry::kFermataSpacing;
+    }
+
+    geom->setLocation(location);
+    notesFrame = join(notesFrame, geom->frame());
+
+    _geometry->addGeometry(std::move(geom));
+}
+
+void ChordGeometryFactory::buildStem(const dom::Chord& chord) {
+    const dom::Note* note = chord.firstNote();
+    if (note->type() > dom::Note::TYPE_HALF || (note->stem() != dom::kStemUp && note->stem() != dom::kStemDown))
+        return;
+
+    bool flags = note->beams().empty() && chord.firstNote()->beams().empty();
+    std::unique_ptr<StemGeometry> stem(new StemGeometry(*note, flags));
+    _geometry->_stem = stem.get();
+    _geometry->addGeometry(std::move(stem));
+    placeStem(_geometry.get());
+}
+
+
+#pragma mark - Placement
+
+Rect ChordGeometryFactory::placeNotes(ChordGeometry* chordGeometry) {
+    auto& chord = chordGeometry->chord();
+    auto stem = chord.stem();
+    if (chordGeometry->stem())
+        stem = chordGeometry->stem()->stemDirection();
+
+    // Sort notes by stem position
+    std::vector<NoteGeometry*> sorted = chordGeometry->_notes;
+    std::sort(sorted.begin(), sorted.end(), [stem](const NoteGeometry* g1, const NoteGeometry* g2) {
+        if (stem == dom::kStemUp)
+            return g1->location().y < g2->location().y;
+        else
+            return g1->location().y > g2->location().y;
+    });
+
+    Rect notesFrame;
+    for (std::size_t i = 0; i < sorted.size(); i += 1) {
+        NoteGeometry* geom = sorted[i];
+        Point loc = geom->location();
+
+        // Notes that are too close need to be shifted sideways
+        for (std::size_t j = i + 1; j < sorted.size(); j += 1) {
+            NoteGeometry* noteGeom = sorted[j];
+            if (loc.x == noteGeom->location().x && std::abs(loc.y - noteGeom->location().y) < Metrics::kStaffLineSpacing) {
+                if (stem == dom::kStemUp)
+                    loc.x += geom->size().width;
+                else
+                    loc.x -= geom->size().width;
+            }
+        }
+        geom->setLocation(loc);
+        chordGeometry->_refNoteLocation = loc;
+
+        if (notesFrame.size.width == 0) {
+            notesFrame = geom->frame();
+        } else {
+            notesFrame = join(notesFrame, geom->frame());
+        }
+    }
+    
+    return notesFrame;
+}
+
+void ChordGeometryFactory::placeArticulation(ChordGeometry* chordGeometry, ArticulationGeometry* articulationGeometry, Rect& notesFrame) {
+    auto staff = chordGeometry->chord().firstNote()->staff();
+    auto& articulation = articulationGeometry->articulation();
 
     bool above = true;
     if (articulation.placement().isPresent()) {
         above = articulation.placement() == dom::kPlacementAbove;
-    } else if (_geometry->_stem) {
-        above = _geometry->_stem->stemDirection() == dom::kStemDown;
+    } else if (chordGeometry->stem()) {
+        above = chordGeometry->stem()->stemDirection() == dom::kStemDown;
     } else {
-        above = chord.stem() == dom::kStemDown;
+        above = chordGeometry->chord().stem() == dom::kStemDown;
     }
 
-    Size size = geom->size();
+    Size size = articulationGeometry->size();
     coord_t staffY;
     Point location;
     location.x = notesFrame.center().x;
@@ -203,70 +264,39 @@ void ChordGeometryFactory::buildArticulation(const dom::Chord& chord, const dom:
         else
             location.y = y + Metrics::kStaffLineSpacing/2;
     }
-
-    geom->setLocation(location);
-    notesFrame = join(notesFrame, geom->frame());
-
-    _geometry->addGeometry(std::move(geom));
+    
+    articulationGeometry->setLocation(location);
+    notesFrame = join(notesFrame, articulationGeometry->frame());
 }
 
-void ChordGeometryFactory::buildFermata(const dom::Fermata& fermata, Rect& notesFrame) {
-    std::unique_ptr<FermataGeometry> geom(new FermataGeometry(fermata));
-
-    Size size = geom->size();
-    Point location;
-    location.x = _geometry->_refNoteLocation.x;
-
-    bool above = fermata.type() == dom::Fermata::TYPE_UPRIGHT;
-    if (above) {
-        location.y = notesFrame.origin.y - size.height/2 - ChordGeometry::kFermataSpacing;
-    } else {
-        location.y = notesFrame.max().y + size.height/2 + ChordGeometry::kFermataSpacing;
-    }
-
-    geom->setLocation(location);
-    notesFrame = join(notesFrame, geom->frame());
-
-    _geometry->addGeometry(std::move(geom));
-}
-
-void ChordGeometryFactory::buildStem(const dom::Chord& chord) {
-    const dom::Note* note = chord.firstNote();
-    if (note->type() > dom::Note::TYPE_HALF || (note->stem() != dom::kStemUp && note->stem() != dom::kStemDown))
+void ChordGeometryFactory::placeStem(ChordGeometry* chordGeometry) {
+    auto stem = chordGeometry->stem();
+    if (!stem)
         return;
 
-    bool flags = note->beams().empty() && chord.firstNote()->beams().empty();
-    std::unique_ptr<StemGeometry> stem(new StemGeometry(*note, flags));
-    _geometry->_stem = stem.get();
-    _geometry->addGeometry(std::move(stem));
-    
     // Find edge notes
     bool first = true;
     Point topLocation;
     Point bottomLocation;
-    for (auto& note : _geometry->_notes) {
+    for (auto& note : chordGeometry->notes()) {
         if (first || note->location().y < topLocation.y)
             topLocation = note->location();
         if (first || note->location().y > bottomLocation.y)
             bottomLocation = note->location();
         first = false;
     }
-    
+
     // Set the location of the stem
     Point stemLocation;
-    if (chord.stem() == dom::kStemUp) {
-        stemLocation = {_geometry->_refNoteLocation.x, topLocation.y};
+    if (stem->stemDirection() == dom::kStemUp) {
+        stemLocation = {chordGeometry->refNoteLocation().x, topLocation.y};
+        stem->setVerticalAnchorPointValues(1, -NoteGeometry::kHeight/2);
     } else {
-        stemLocation = {_geometry->_refNoteLocation.x, bottomLocation.y};
+        stemLocation = {chordGeometry->refNoteLocation().x, bottomLocation.y};
+        stem->setVerticalAnchorPointValues(0, NoteGeometry::kHeight/2);
     }
-    _geometry->_stem->setLocation(stemLocation);
-    
-    _geometry->_stem->setHorizontalAnchorPointValues(0, NoteGeometry::kQuarterWidth/2);
-    if (chord.stem() == dom::kStemUp) {
-        _geometry->_stem->setVerticalAnchorPointValues(1, -NoteGeometry::kHeight/2);
-    } else {
-        _geometry->_stem->setVerticalAnchorPointValues(0, NoteGeometry::kHeight/2);
-    }
+    stem->setHorizontalAnchorPointValues(0, NoteGeometry::kQuarterWidth/2);
+    stem->setLocation(stemLocation);
 }
 
 } // namespace mxml

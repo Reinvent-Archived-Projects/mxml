@@ -19,6 +19,9 @@ public:
 
     std::unique_ptr<ChordGeometry> build(const dom::Chord& chord);
 
+    // Adjust placement of subgeometries based on new stem orientation
+    void resetForStem(ChordGeometry* chordGeometry);
+
 private:
     Rect buildNotes(const dom::Chord& chord);
     void buildDot(const NoteGeometry& noteGeom);
@@ -28,7 +31,11 @@ private:
     void buildArticulation(const dom::Chord& chord, const dom::Articulation& articulation, Rect& notesFrame);
     void buildFermata(const dom::Fermata& fermata, Rect& notesFrame);
     void buildStem(const dom::Chord& chord);
-    
+
+    Rect placeNotes(ChordGeometry* chordGeometry);
+    void placeArticulation(ChordGeometry* chordGeometry, ArticulationGeometry* articulationGeometry, Rect& notesFrame);
+    void placeStem(ChordGeometry* chordGeometry);
+
 private:
     const ScoreProperties& _scoreProperties;
     const Metrics& _metrics;

@@ -33,6 +33,8 @@ public:
     const Point& beamEnd() const {
         return _beamEnd;
     }
+
+    coord_t slope() const;
     
     /** Get the tip of the stem for a chord. */
     Point stemTip(const ChordGeometry* chordGeom) const;

@@ -49,6 +49,9 @@ public:
     const StemGeometry* stem() const {
         return _stem;
     }
+    StemGeometry* stem() {
+        return _stem;
+    }
     
     /** Get the notes' frame without stems or annotations. */
     Rect notesFrame() const;

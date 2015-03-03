@@ -126,6 +126,8 @@
 		614057C01A5CAA47005224C9 /* ScorePropertiesTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */; };
 		619AC7941AA11C60005DFBED /* ChordGeometryFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 619AC7921AA11C60005DFBED /* ChordGeometryFactory.cpp */; };
 		619AC7951AA11C60005DFBED /* ChordGeometryFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 619AC7931AA11C60005DFBED /* ChordGeometryFactory.h */; };
+		619AC79F1AA149C2005DFBED /* StemDirectionResolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 619AC79D1AA149C2005DFBED /* StemDirectionResolver.cpp */; };
+		619AC7A01AA149C2005DFBED /* StemDirectionResolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 619AC79E1AA149C2005DFBED /* StemDirectionResolver.h */; };
 		61A2B75E1A8E870000C1EE2A /* AlterSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A2B7521A8E870000C1EE2A /* AlterSequence.cpp */; };
 		61A2B75F1A8E870000C1EE2A /* AlterSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B7531A8E870000C1EE2A /* AlterSequence.h */; };
 		61A2B7601A8E870000C1EE2A /* AttributeSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B7541A8E870000C1EE2A /* AttributeSequence.h */; };
@@ -138,6 +140,9 @@
 		61A2B7671A8E870000C1EE2A /* KeySequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B75B1A8E870000C1EE2A /* KeySequence.h */; };
 		61A2B7681A8E870000C1EE2A /* TimeSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A2B75C1A8E870000C1EE2A /* TimeSequence.cpp */; };
 		61A2B7691A8E870000C1EE2A /* TimeSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B75D1A8E870000C1EE2A /* TimeSequence.h */; };
+		61B89F9A1AA5154000F7DD9C /* EqualityConstraintSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61B89F981AA5154000F7DD9C /* EqualityConstraintSolver.cpp */; };
+		61B89F9B1AA5154000F7DD9C /* EqualityConstraintSolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 61B89F991AA5154000F7DD9C /* EqualityConstraintSolver.h */; };
+		61B89F9E1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61B89F9C1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp */; };
 		61C8502F1A6843EB00031100 /* LoopsAndJumpsTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61C8502D1A6843EB00031100 /* LoopsAndJumpsTests.cpp */; };
 		61C8504F1A6D79CC00031100 /* OctaveShiftHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61C8504D1A6D79CC00031100 /* OctaveShiftHandler.cpp */; };
 		61C850501A6D79CC00031100 /* OctaveShiftHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61C8504E1A6D79CC00031100 /* OctaveShiftHandler.h */; };
@@ -477,6 +482,8 @@
 		614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ScorePropertiesTests.cpp; sourceTree = "<group>"; };
 		619AC7921AA11C60005DFBED /* ChordGeometryFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChordGeometryFactory.cpp; sourceTree = "<group>"; };
 		619AC7931AA11C60005DFBED /* ChordGeometryFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChordGeometryFactory.h; sourceTree = "<group>"; };
+		619AC79D1AA149C2005DFBED /* StemDirectionResolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StemDirectionResolver.cpp; sourceTree = "<group>"; };
+		619AC79E1AA149C2005DFBED /* StemDirectionResolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StemDirectionResolver.h; sourceTree = "<group>"; };
 		61A2B7521A8E870000C1EE2A /* AlterSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AlterSequence.cpp; sourceTree = "<group>"; };
 		61A2B7531A8E870000C1EE2A /* AlterSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AlterSequence.h; sourceTree = "<group>"; };
 		61A2B7541A8E870000C1EE2A /* AttributeSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributeSequence.h; sourceTree = "<group>"; };
@@ -489,6 +496,9 @@
 		61A2B75B1A8E870000C1EE2A /* KeySequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeySequence.h; sourceTree = "<group>"; };
 		61A2B75C1A8E870000C1EE2A /* TimeSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimeSequence.cpp; sourceTree = "<group>"; };
 		61A2B75D1A8E870000C1EE2A /* TimeSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeSequence.h; sourceTree = "<group>"; };
+		61B89F981AA5154000F7DD9C /* EqualityConstraintSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EqualityConstraintSolver.cpp; sourceTree = "<group>"; };
+		61B89F991AA5154000F7DD9C /* EqualityConstraintSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualityConstraintSolver.h; sourceTree = "<group>"; };
+		61B89F9C1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EqualityConstraintSolverTests.cpp; sourceTree = "<group>"; };
 		61C8502D1A6843EB00031100 /* LoopsAndJumpsTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LoopsAndJumpsTests.cpp; sourceTree = "<group>"; };
 		61C8504C1A6D775100031100 /* OctaveShift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OctaveShift.h; sourceTree = "<group>"; };
 		61C8504D1A6D79CC00031100 /* OctaveShiftHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OctaveShiftHandler.cpp; sourceTree = "<group>"; };
@@ -633,6 +643,8 @@
 				614056021A5C6228005224C9 /* EventFactory.h */,
 				614056031A5C6228005224C9 /* EventSequence.cpp */,
 				614056041A5C6228005224C9 /* EventSequence.h */,
+				61B89F981AA5154000F7DD9C /* EqualityConstraintSolver.cpp */,
+				61B89F991AA5154000F7DD9C /* EqualityConstraintSolver.h */,
 				61239C1B1A67429100B3F0A3 /* Jump.h */,
 				61239AD61A67426C00B3F0A3 /* JumpFactory.cpp */,
 				61239AD51A67426C00B3F0A3 /* JumpFactory.h */,
@@ -920,6 +932,7 @@
 				61E530B91A79A21400E5B2FF /* AlgorithmTests.cpp */,
 				614057BF1A5CAA47005224C9 /* ScorePropertiesTests.cpp */,
 				614057821A5C625A005224C9 /* EventFactoryTests.cpp */,
+				61B89F9C1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp */,
 				614057831A5C625A005224C9 /* GeometryTests.cpp */,
 				614057BD1A5C79EF005224C9 /* KeyTests.cpp */,
 				61C8502D1A6843EB00031100 /* LoopsAndJumpsTests.cpp */,
@@ -989,6 +1002,8 @@
 				61F073B51A71CD8F002CA9CA /* OrnamentGeometryFactory.h */,
 				61F073B61A71CD8F002CA9CA /* PartGeometryFactory.cpp */,
 				61F073B71A71CD8F002CA9CA /* PartGeometryFactory.h */,
+				619AC79D1AA149C2005DFBED /* StemDirectionResolver.cpp */,
+				619AC79E1AA149C2005DFBED /* StemDirectionResolver.h */,
 				61F073BC1A71CD8F002CA9CA /* TieGeometryFactory.cpp */,
 				61F073BD1A71CD8F002CA9CA /* TieGeometryFactory.h */,
 			);
@@ -1021,12 +1036,14 @@
 				61C8508D1A6EE64300031100 /* SystemLayoutHandler.h in Headers */,
 				61A2B75F1A8E870000C1EE2A /* AlterSequence.h in Headers */,
 				61F072EE1A6F1BEE002CA9CA /* FormattedTextHandler.h in Headers */,
+				619AC7A01AA149C2005DFBED /* StemDirectionResolver.h in Headers */,
 				61C850581A6D838500031100 /* OctaveShiftGeometry.h in Headers */,
 				61F073C51A71CD8F002CA9CA /* PartGeometryFactory.h in Headers */,
 				61C850891A6EE39300031100 /* PositionFactory.h in Headers */,
 				61A2B7671A8E870000C1EE2A /* KeySequence.h in Headers */,
 				61F072CE1A6EEB48002CA9CA /* SystemDividersHandler.h in Headers */,
 				61A2B7611A8E870000C1EE2A /* AttributeSequence.hh in Headers */,
+				61B89F9B1AA5154000F7DD9C /* EqualityConstraintSolver.h in Headers */,
 				61F072D21A6EEE03002CA9CA /* TypeFactories.h in Headers */,
 				0022ADFF1A7082C300139992 /* CollisionResolver.h in Headers */,
 				61F073A21A71A447002CA9CA /* SystemGeometry.h in Headers */,
@@ -1145,6 +1162,7 @@
 				614056E11A5C6228005224C9 /* BarlineGeometry.cpp in Sources */,
 				61F073A11A71A447002CA9CA /* SystemGeometry.cpp in Sources */,
 				614057BA1A5C7293005224C9 /* Pitch.cpp in Sources */,
+				619AC79F1AA149C2005DFBED /* StemDirectionResolver.cpp in Sources */,
 				61A2B7621A8E870000C1EE2A /* ClefSequence.cpp in Sources */,
 				614057291A5C6228005224C9 /* BeamHandler.cpp in Sources */,
 				6140571E1A5C6228005224C9 /* Metrics.cpp in Sources */,
@@ -1205,6 +1223,7 @@
 				614056B91A5C6228005224C9 /* Measure.cpp in Sources */,
 				0022ADFD1A7082C300139992 /* CollisionHandler.cpp in Sources */,
 				614057701A5C6228005224C9 /* SpanCollection.cpp in Sources */,
+				61B89F9A1AA5154000F7DD9C /* EqualityConstraintSolver.cpp in Sources */,
 				614056E31A5C6228005224C9 /* BeamGeometry.cpp in Sources */,
 				614056DB1A5C6228005224C9 /* EventSequence.cpp in Sources */,
 				6140575B1A5C6228005224C9 /* ScoreHandler.cpp in Sources */,
@@ -1261,6 +1280,7 @@
 				614057C01A5CAA47005224C9 /* ScorePropertiesTests.cpp in Sources */,
 				614057BE1A5C79EF005224C9 /* KeyTests.cpp in Sources */,
 				6140578F1A5C625A005224C9 /* NoteTests.cpp in Sources */,
+				61B89F9E1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp in Sources */,
 				6140578D1A5C625A005224C9 /* MeasureGeometryTests.cpp in Sources */,
 				6140578A1A5C625A005224C9 /* EventFactoryTests.cpp in Sources */,
 				6140578C1A5C625A005224C9 /* main.cpp in Sources */,
