@@ -97,6 +97,13 @@ public:
         _staff = staff;
     }
 
+    const std::string& voice() const {
+        return _voice;
+    }
+    void setVoice(const std::string& voice) {
+        _voice = voice;
+    }
+    
     Optional<float> dynamics() const {
         return  _dynamics;
     }
@@ -212,7 +219,8 @@ private:
     bool _grace;
     Optional<Stem> _stem;
     int _staff;
-    
+    std::string _voice;
+
     Optional<Type> _type;
     Optional<float> _dynamics;
     Optional<float> _endDynamics;

@@ -27,14 +27,14 @@ Beam::Type BeamHandler::typeFromString(const std::string& string) {
     if (string == "begin")
         return Beam::kTypeBegin;
     if (string == "continue")
-        return Beam::kContinue;
+        return Beam::kTypeContinue;
     if (string == "end")
         return Beam::kTypeEnd;
     if (string == "forward hook")
         return Beam::kTypeForwardHook;
     if (string == "backward hook")
         return Beam::kTypeBackwardHook;
-    return Beam::kContinue;
+    return Beam::kTypeContinue;
 }
 
 } // namespace mxml

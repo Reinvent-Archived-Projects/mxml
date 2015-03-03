@@ -26,6 +26,7 @@ static const char* kChordTag = "chord";
 static const char* kGraceTag = "grace";
 static const char* kStemTag = "stem";
 static const char* kStaffTag = "staff";
+static const char* kVoiceTag = "voice";
 static const char* kPitchTag = "pitch";
 static const char* kRestTag = "rest";
 static const char* kUnpitchedTag = "unpitched";
@@ -90,6 +91,8 @@ lxml::RecursiveHandler* NoteHandler::startSubElement(const QName& qname) {
         return &_stringHandler;
     else if (strcmp(qname.localName(), kStaffTag) == 0)
         return &_integerHandler;
+    else if (strcmp(qname.localName(), kVoiceTag) == 0)
+        return &_stringHandler;
     else if (strcmp(qname.localName(), kPitchTag) == 0)
         return &_pitchHandler;
     else if (strcmp(qname.localName(), kRestTag) == 0)
@@ -126,6 +129,8 @@ void NoteHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
         _result->setStem(presentOptional(stemFromString(_stringHandler.result())));
     else if (strcmp(qname.localName(), kStaffTag) == 0)
         _result->setStaff(_integerHandler.result());
+    else if (strcmp(qname.localName(), kVoiceTag) == 0)
+        _result->setVoice(_stringHandler.result());
     else if (strcmp(qname.localName(), kPitchTag) == 0)
         _result->setPitch(_pitchHandler.result());
     else if (strcmp(qname.localName(), kRestTag) == 0)

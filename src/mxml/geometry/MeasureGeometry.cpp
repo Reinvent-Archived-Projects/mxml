@@ -71,7 +71,7 @@ void MeasureGeometry::build(bool firstMeasureInSystem) {
         
         const auto& beam = note->beams().front();
         if (beam->type() == Beam::kTypeBegin) {
-        } else if (beam->type() == Beam::kContinue) {
+        } else if (beam->type() == Beam::kTypeContinue) {
         } else if (beam->type() == Beam::kTypeEnd) {
             std::unique_ptr<BeamGeometry> beamGeom(new BeamGeometry(chords));
             ChordGeometry* firstChordGeom = chords.front();

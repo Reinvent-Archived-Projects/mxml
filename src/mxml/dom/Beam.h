@@ -11,7 +11,7 @@ class Beam : public Node {
 public:
     enum Type {
         kTypeBegin,
-        kContinue,
+        kTypeContinue,
         kTypeEnd,
         kTypeForwardHook,
         kTypeBackwardHook
