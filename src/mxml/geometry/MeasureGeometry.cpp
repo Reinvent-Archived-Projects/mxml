@@ -326,7 +326,7 @@ void MeasureGeometry::centerLoneRest() {
 
 void MeasureGeometry::adjustBounds() {
     auto newBounds = subGeometriesFrame();
-    newBounds = join(newBounds, {Point{0, -0.5}, Size{0, 1 + _metrics.stavesHeight()}});
+    newBounds = join(newBounds, {Point{0, -1}, Size{0, 2 + _metrics.stavesHeight()}});
     newBounds.origin.x = 0;
     newBounds.size.width = _spans.width(_measure.index());
 
