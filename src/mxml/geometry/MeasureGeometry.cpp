@@ -60,36 +60,16 @@ void MeasureGeometry::build(bool firstMeasureInSystem) {
 
     StemDirectionResolver resolver;
     resolver.resolve(this);
-    
-    std::vector<ChordGeometry*> chords;
+
+    // Fix chords for new stem directions
     for (std::size_t i = 0; i < _geometries.size(); i += 1) {
         auto& geom = _geometries[i];
         ChordGeometry* chordGeom = dynamic_cast<ChordGeometry*>(geom.get());
-        if (!chordGeom)
-            continue;
-
-        // Fix chord for new stem direction
-        _chordGeometryFactory.resetForStem(chordGeom);
-
-        const Note* note = chordGeom->chord().firstNote();
-        if (note->beams().empty())
-            continue;
-        
-        chords.push_back(chordGeom);
-        
-        const auto& beam = note->beams().front();
-        if (beam->type() == Beam::kTypeBegin) {
-        } else if (beam->type() == Beam::kTypeContinue) {
-        } else if (beam->type() == Beam::kTypeEnd) {
-            std::unique_ptr<BeamGeometry> beamGeom(new BeamGeometry(chords));
-            ChordGeometry* firstChordGeom = chords.front();
-            beamGeom->setLocation(firstChordGeom->location());
-            chords.clear();
-            
-            addGeometry(std::move(beamGeom));
-        }
+        if (chordGeom)
+            _chordGeometryFactory.resetForStem(chordGeom);
     }
 
+    buildBeams();
     adjustBounds();
     centerLoneRest();
 }
@@ -324,6 +304,36 @@ void MeasureGeometry::centerLoneRest() {
     }
 }
 
+void MeasureGeometry::buildBeams() {
+    std::map<std::string, std::vector<ChordGeometry*>> chordsByVoice;
+
+    for (std::size_t i = 0; i < _geometries.size(); i += 1) {
+        auto& geom = _geometries[i];
+        ChordGeometry* chordGeom = dynamic_cast<ChordGeometry*>(geom.get());
+        if (!chordGeom)
+            continue;
+
+        const Note* note = chordGeom->chord().firstNote();
+        if (note->beams().empty())
+            continue;
+
+        auto& chords = chordsByVoice[note->voice()];
+        chords.push_back(chordGeom);
+
+        const auto& beam = note->beams().front();
+        if (beam->type() == Beam::kTypeBegin) {
+        } else if (beam->type() == Beam::kTypeContinue) {
+        } else if (beam->type() == Beam::kTypeEnd) {
+            std::unique_ptr<BeamGeometry> beamGeom(new BeamGeometry(chords));
+            ChordGeometry* firstChordGeom = chords.front();
+            beamGeom->setLocation(firstChordGeom->location());
+            chords.clear();
+
+            addGeometry(std::move(beamGeom));
+        }
+    }
+}
+    
 void MeasureGeometry::adjustBounds() {
     auto newBounds = subGeometriesFrame();
     newBounds = join(newBounds, {Point{0, -1}, Size{0, 2 + _metrics.stavesHeight()}});

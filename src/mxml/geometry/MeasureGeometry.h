@@ -65,7 +65,8 @@ private:
     bool buildClefGeometry(const dom::Clef* clef, int staff);
     bool buildKeyGeometry(const dom::Key* key, int staff, dom::time_t time);
     bool buildTimeGeometry(const dom::Time* time, int staff);
-
+    void buildBeams();
+    
     void centerLoneRest();
     
 private:
