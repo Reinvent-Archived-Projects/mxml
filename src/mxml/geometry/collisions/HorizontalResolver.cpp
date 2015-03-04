@@ -58,6 +58,10 @@ namespace mxml {
         // Ignore notes that belong to the same Chord
         if (n1->parentGeometry() == n2->parentGeometry())
             return;
+
+        // Ignore notes on different voices with stems (the stems are used to tell them appart)
+        if (n1->note().voice() != n2->note().voice() && n2->note().type() < dom::Note::TYPE_WHOLE)
+            return;
         
         // Prefer to move 'larger' notes
         if (n1->note().type() > n2->note().type())
