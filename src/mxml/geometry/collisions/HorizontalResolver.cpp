@@ -54,31 +54,36 @@ namespace mxml {
             resolveCollision(note1Geometry, note2Geometry);
     }
     
-    void HorizontalResolver::resolveCollision(NoteGeometry* n1, NoteGeometry* n2) {
+    void HorizontalResolver::resolveCollision(NoteGeometry* ng1, NoteGeometry* ng2) {
         // Ignore notes that belong to the same Chord
-        if (n1->parentGeometry() == n2->parentGeometry())
+        if (ng1->parentGeometry() == ng2->parentGeometry())
             return;
 
-        // Ignore notes on different voices with stems (the stems are used to tell them appart)
-        if (n1->note().voice() != n2->note().voice() && n2->note().type() < dom::Note::TYPE_WHOLE)
+        auto& n1 = ng1->note();
+        auto& n2 = ng2->note();
+
+        // Prefer to move 'larger' notes
+        if (n1.type() > n2.type())
+            std::swap(ng1, ng2);
+
+        // Ignore notes with stems on different voices that match exactly
+        if (n1.voice() != n2.voice() &&
+            n1.type() < dom::Note::TYPE_HALF && n2.type() < dom::Note::TYPE_HALF &&
+            n1.pitch() && n2.pitch() && n1.pitch()->step() == n2.pitch()->step())
             return;
         
-        // Prefer to move 'larger' notes
-        if (n1->note().type() > n2->note().type())
-            std::swap(n1, n2);
-        
         // We don't handle moving notes with ties yet
-        if (n2->tieGeometry())
+        if (ng2->tieGeometry())
             return;
         
         // When resoliving a note collision we need to move the parent geometry
-        ChordGeometry *chordGeometry = (ChordGeometry *)n2->parentGeometry();
-        Rect f1 = _geometry.convertFromGeometry(n1->frame(), n1->parentGeometry());
+        ChordGeometry *chordGeometry = (ChordGeometry *)ng2->parentGeometry();
+        Rect f1 = _geometry.convertFromGeometry(ng1->frame(), ng1->parentGeometry());
         Rect f2 = _geometry.convertFromGeometry(chordGeometry->frame(), chordGeometry->parentGeometry());
         f2.origin.x = f1.origin.x + f1.size.width;
         chordGeometry->setFrame(chordGeometry->parentGeometry()->convertFromRoot(f2));
         
-        removeCollisions(n2);
+        removeCollisions(ng2);
     }
     
     bool HorizontalResolver::colliding(const Geometry* g1, const Geometry* g2) const {
