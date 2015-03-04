@@ -31,10 +31,10 @@ std::vector<std::unique_ptr<LyricGeometry>> LyricGeometryFactory::build() {
 }
 
 void LyricGeometryFactory::computeNotesBounds() {
-    _notesBounds.origin.x = 0;
-    _notesBounds.origin.y = -Metrics::kStaffLineSpacing;
-    _notesBounds.size.width = 0;
-    _notesBounds.size.height = Metrics::staffHeight() + Metrics::kStaffLineSpacing;
+    _chordsBounds.origin.x = 0;
+    _chordsBounds.origin.y = -Metrics::kStaffLineSpacing;
+    _chordsBounds.size.width = 0;
+    _chordsBounds.size.height = Metrics::staffHeight() + Metrics::kStaffLineSpacing;
 
     // Get the bounding box of all notes on this part to place lyrics below that
     for (auto& measure: _measureGeometries) {
@@ -43,8 +43,7 @@ void LyricGeometryFactory::computeNotesBounds() {
             if (!chord)
                 continue;
 
-            auto chordNotesFrame = chord->notesFrame();
-            _notesBounds = join(_notesBounds, chordNotesFrame);
+            _chordsBounds = join(_chordsBounds, chord->frame());
         }
     }
 }
@@ -71,10 +70,10 @@ void LyricGeometryFactory::build(const MeasureGeometry& measureGeom, const Chord
     location = _parent.convertFromGeometry(location, &measureGeom);
 
     if (geometry->placement() == dom::kPlacementAbove) {
-        location.y = _notesBounds.min().y;
+        location.y = _chordsBounds.min().y;
         geometry->setVerticalAnchorPointValues(1, 0);
     } else {
-        location.y = _notesBounds.max().y;
+        location.y = _chordsBounds.max().y;
         geometry->setVerticalAnchorPointValues(0, 0);
     }
 
