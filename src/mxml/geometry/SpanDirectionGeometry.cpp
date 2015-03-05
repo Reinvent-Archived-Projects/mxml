@@ -20,7 +20,8 @@ SpanDirectionGeometry::SpanDirectionGeometry(const Direction* start, const Point
   _startDirection(start),
   _startLocation(startLocation),
   _stopDirection(stop),
-  _stopLocation(stopLocation)
+  _stopLocation(stopLocation),
+  _continuation(false)
 {
     const dom::DirectionType* type = nullptr;
     if (start)
