@@ -3,7 +3,6 @@
 
 #pragma once
 #include "Geometry.h"
-#include "NoteGeometry.h"
 #include "TieGeometry.h"
 
 #include <mxml/Metrics.h>
@@ -16,6 +15,9 @@
 
 namespace mxml {
 
+class ChordGeometry;
+class NoteGeometry;
+
 class TieGeometryFactory {
 public:
     static const coord_t kTieSpacing;
@@ -27,8 +29,7 @@ public:
     
 private:
     void createGeometries(const std::vector<std::unique_ptr<Geometry>>& geometries);
-    void createGeometriesFromNotes(const std::vector<std::unique_ptr<NoteGeometry>>& notes);
-    void createGeometriesFromNotes(const std::vector<NoteGeometry*>& notes);
+    void createGeometriesFromChord(ChordGeometry* chord);
     void createGeometryFromNote(NoteGeometry* noteGeometry);
     std::unique_ptr<TieGeometry> buildTieGeometry(const NoteGeometry* startGeom, const NoteGeometry* stopGeom, const dom::Optional<dom::Placement>& placement);
     std::unique_ptr<TieGeometry> buildTieGeometryFromEdge(const NoteGeometry* stopGeom, const dom::Optional<dom::Placement>& placement);

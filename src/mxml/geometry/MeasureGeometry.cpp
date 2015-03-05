@@ -65,8 +65,10 @@ void MeasureGeometry::build(bool firstMeasureInSystem) {
     for (std::size_t i = 0; i < _geometries.size(); i += 1) {
         auto& geom = _geometries[i];
         ChordGeometry* chordGeom = dynamic_cast<ChordGeometry*>(geom.get());
-        if (chordGeom)
+        if (chordGeom) {
             _chordGeometryFactory.resetForStem(chordGeom);
+            placeChord(chordGeom);
+        }
     }
 
     buildBeams();
@@ -226,24 +228,36 @@ void MeasureGeometry::buildChord(const Chord* chord) {
     if (!geo)
         return;
 
-    Point location = geo->refNoteLocation();
+    placeChord(geo.get());
+    addGeometry(std::move(geo));
+}
 
-    // Assume that the stem is up, we'll redo this later
-    geo->setHorizontalAnchorPointValues(0, location.x - geo->contentOffset().x);
-    geo->setVerticalAnchorPointValues(1, -(geo->size().height - (location.y - geo->contentOffset().y)));
+void MeasureGeometry::placeChord(ChordGeometry* chordGeom) {
+    auto refLocation = chordGeom->refNoteLocation();
+    auto stemDirection = dom::kStemUp;
+    if (chordGeom->stem())
+        stemDirection = chordGeom->stem()->stemDirection();
 
-    auto it = _spans.with(chord);
+    if (stemDirection == dom::kStemUp) {
+        chordGeom->setHorizontalAnchorPointValues(0, refLocation.x - chordGeom->contentOffset().x);
+        chordGeom->setVerticalAnchorPointValues(1, -(chordGeom->size().height - (refLocation.y - chordGeom->contentOffset().y)));
+    } else {
+        chordGeom->setHorizontalAnchorPointValues(1, -(chordGeom->size().width - (refLocation.x - chordGeom->contentOffset().x)));
+        chordGeom->setVerticalAnchorPointValues(0, refLocation.y - chordGeom->contentOffset().y);
+    }
+
+    auto& chord = chordGeom->chord();
+    auto it = _spans.with(&chord);
     assert(it != _spans.end());
 
     const Span& span = *it;
-    if (chord->firstNote()->grace()) {
-        location.x = span.start() - _spans.origin(_measure.index()) + geo->anchorPoint().x;
+    Point location = chordGeom->refNoteLocation();
+    if (chord.firstNote()->grace()) {
+        location.x = span.start() - _spans.origin(_measure.index()) + chordGeom->anchorPoint().x;
     } else {
         location.x = span.start() + span.eventOffset() - _spans.origin(_measure.index());
     }
-    geo->setLocation(location);
-
-    addGeometry(std::move(geo));
+    chordGeom->setLocation(location);
 }
 
 void MeasureGeometry::buildRest(const Note* note) {

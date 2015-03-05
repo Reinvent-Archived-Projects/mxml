@@ -41,21 +41,15 @@ void TieGeometryFactory::createGeometries(const std::vector<std::unique_ptr<Geom
         if (auto measure = dynamic_cast<MeasureGeometry*>(geom.get())) {
             createGeometries(measure->geometries());
         } else if (auto chordGeom = dynamic_cast<ChordGeometry*>(geom.get())) {
-            createGeometriesFromNotes(chordGeom->notes());
+            createGeometriesFromChord(chordGeom);
         } else if (auto noteGeom = dynamic_cast<NoteGeometry*>(geom.get())) {
             createGeometryFromNote(noteGeom);
         }
     }
 }
 
-void TieGeometryFactory::createGeometriesFromNotes(const std::vector<std::unique_ptr<NoteGeometry>>& notes) {
-    for (auto& note : notes) {
-        createGeometryFromNote(note.get());
-    }
-}
-
-void TieGeometryFactory::createGeometriesFromNotes(const std::vector<NoteGeometry*>& notes) {
-    for (auto& note : notes) {
+void TieGeometryFactory::createGeometriesFromChord(ChordGeometry* chord) {
+    for (auto& note : chord->notes()) {
         createGeometryFromNote(note);
     }
 }
@@ -91,7 +85,7 @@ void TieGeometryFactory::createGeometryFromNote(NoteGeometry* noteGeometry) {
 
     for (auto& slur : notations->slurs()) {
         auto key = std::make_pair(note.staff(), slur->number());
-        if (slur->type() == dom::kContinue) {
+        if (slur->type() == dom::kStart || slur->type() == dom::kContinue) {
             _slurStartGeometries[key] = noteGeometry;
         } else if (slur->type() == dom::kStop) {
             auto startGeom = _slurStartGeometries.find(key);
@@ -214,29 +208,29 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
     
     startLocation.x += kTieSpacing;
     stopLocation.x -= kTieSpacing;
-    
-    if (!placement.isPresent()) {
-        coord_t startStaffY = startLocation.y - _metrics.staffOrigin(start->note().staff());
-        coord_t stopStaffY = stopLocation.y - _metrics.staffOrigin(stop->note().staff());
-        coord_t avgy = (startStaffY + stopStaffY) / 2;
-        if (avgy < Metrics::staffHeight()/2)
-            tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));
-        else
-            tieGeom->setPlacement(absentOptional(dom::kPlacementBelow));
-    }
-    
+
     const ChordGeometry& startChordGeom = static_cast<const ChordGeometry&>(*start->parentGeometry());
     const ChordGeometry& stopChordGeom = static_cast<const ChordGeometry&>(*stop->parentGeometry());
     
-    Rect startNotesFrame = startChordGeom.notesFrame();
-    Rect stopNotesFrame = stopChordGeom.notesFrame();
+    if (!placement.isPresent()) {
+        auto s1 = startChordGeom.stem();
+        auto s2 = stopChordGeom.stem();
+
+        if (s1 && s1->stemDirection() == dom::kStemUp && s2 && s2->stemDirection() == dom::kStemUp)
+            tieGeom->setPlacement(absentOptional(dom::kPlacementBelow));
+        else
+            tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));
+    }
+    
+    Rect startChordFrame = startChordGeom.frame();
+    Rect stopChordFrame = stopChordGeom.frame();
     
     if (tieGeom->placement().value() == dom::kPlacementBelow) {
-        startLocation.y = startNotesFrame.max().y + kTieSpacing;
-        stopLocation.y = stopNotesFrame.max().y + kTieSpacing;
+        startLocation.y = startChordFrame.max().y + kTieSpacing;
+        stopLocation.y = stopChordFrame.max().y + kTieSpacing;
     } else {
-        startLocation.y = startNotesFrame.min().y - kTieSpacing;
-        stopLocation.y = stopNotesFrame.min().y - kTieSpacing;
+        startLocation.y = startChordFrame.min().y - kTieSpacing;
+        stopLocation.y = stopChordFrame.min().y - kTieSpacing;
     }
     
     // Avoid collisions with beamed sets

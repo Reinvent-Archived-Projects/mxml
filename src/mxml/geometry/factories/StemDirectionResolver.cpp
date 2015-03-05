@@ -191,7 +191,7 @@ dom::Stem StemDirectionResolver::preferredStem(const ChordGeometry* chordGeometr
     auto location = chordGeometry->location();
     auto staff = chordGeometry->chord().firstNote()->staff();
     auto midStaff = _measureGeometry->metrics().staffOrigin(staff) + Metrics::staffHeight()/2;
-    if (location.y < midStaff)
+    if (location.y <= midStaff)
         return dom::Stem::kStemDown;
     return dom::Stem::kStemUp;
 }

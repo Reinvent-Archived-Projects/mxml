@@ -38,6 +38,8 @@ void ChordGeometryFactory::resetForStem(ChordGeometry* chordGeometry) {
             placeArticulation(chordGeometry, articulationGeometry, notesFrame);
     }
     placeStem(chordGeometry);
+
+    chordGeometry->setBounds(chordGeometry->subGeometriesFrame());
 }
 
 Rect ChordGeometryFactory::buildNotes(const dom::Chord& chord) {
@@ -174,7 +176,7 @@ void ChordGeometryFactory::buildStem(const dom::Chord& chord) {
 
 Rect ChordGeometryFactory::placeNotes(ChordGeometry* chordGeometry) {
     auto& chord = chordGeometry->chord();
-    auto stem = chord.stem();
+    auto stem = chord.stem().value();
     if (chordGeometry->stem())
         stem = chordGeometry->stem()->stemDirection();
 

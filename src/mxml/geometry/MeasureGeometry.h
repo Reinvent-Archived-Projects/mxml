@@ -60,6 +60,7 @@ private:
     void buildBarline(const dom::Barline* barline);
     void buildTimedNode(const dom::TimedNode* barline);
     void buildChord(const dom::Chord* chord);
+    void placeChord(ChordGeometry* chordGeom);
     void buildRest(const dom::Note* note);
 
     bool buildClefGeometry(const dom::Clef* clef, int staff);
