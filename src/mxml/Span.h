@@ -122,7 +122,7 @@ public:
     }
     /** Determine if the span has a node of the given type */
     bool hasNodeType(const std::type_info& type) const;
-    const std::set<const dom::Node*> nodes() const {
+    const std::set<const dom::Node*>& nodes() const {
         return _nodes;
     }
     void addNode(const dom::Node* node) {

@@ -65,7 +65,8 @@ private:
 
     std::size_t _partIndex;
     std::size_t _measureIndex;
-    int _currentTime;
+    dom::time_t _currentTime;
+    dom::time_t _nextTime;
 
     std::unique_ptr<SpanCollection> _spans;
 };

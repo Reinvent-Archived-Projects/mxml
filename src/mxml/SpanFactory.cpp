@@ -70,8 +70,25 @@ void SpanFactory::build(const dom::Part* part, std::size_t beginMeasureIndex, st
 void SpanFactory::build(const dom::Measure* measure, bool buildMeasureAttributes) {
     if (buildMeasureAttributes)
         build(measure);
-    
-    for (auto& node : measure->nodes()) {
+
+    auto& nodes = measure->nodes();
+    for (auto it = nodes.begin(); it != nodes.end(); ++it) {
+        auto& node = *it;
+
+        // Compute next note time
+        _nextTime = -1;
+        for (auto it2 = std::next(it); it2 != nodes.end(); ++it2) {
+            if (auto chord = dynamic_cast<const dom::Chord*>(it2->get())) {
+                _nextTime = chord->start();
+                break;
+            } else if (auto note = dynamic_cast<const dom::Note*>(it2->get())) {
+                _nextTime = note->start();
+                break;
+            }
+        }
+        if (_nextTime == -1)
+            _nextTime = _scoreProperties.divisionsPerMeasure(measure->index());
+
         if (const dom::Barline* barline = dynamic_cast<const dom::Barline*>(node.get())) {
             build(barline);
         } else if (const dom::Attributes* attributes = dynamic_cast<const dom::Attributes*>(node.get())) {
@@ -136,7 +153,7 @@ void SpanFactory::build(const dom::Measure* measure) {
 }
 
 void SpanFactory::build(const dom::Attributes* attributes) {
-    dom::time_t time = _currentTime;
+    dom::time_t time = _nextTime;
     const dom::Measure* measure = dynamic_cast<const dom::Measure*>(attributes->parent());
     if (attributes == measure->nodes().back().get())
         time = std::numeric_limits<int>::max();
@@ -272,7 +289,7 @@ void SpanFactory::build(const dom::Clef* clefNode, int staff, int time) {
 
     SpanCollection::iterator clefSpan = _spans->withType(_measureIndex, time, typeid(dom::Clef));
     if (clefSpan == _spans->end())
-        clefSpan = _spans->add(_measureIndex, time);
+        clefSpan = _spans->addBeforeEvent(_measureIndex, time);
     clefSpan->setEvent(false);
     clefSpan->pushLeftMargin(kAttributeMargin);
     clefSpan->pushRightMargin(kAttributeMargin);
@@ -286,7 +303,7 @@ void SpanFactory::build(const dom::Time* timeNode, int staff, int time) {
 
     SpanCollection::iterator timeSpan = _spans->withType(_measureIndex, time, typeid(dom::Time));
     if (timeSpan == _spans->end())
-        timeSpan = _spans->add(_measureIndex, time);
+        timeSpan = _spans->addBeforeEvent(_measureIndex, time);
 
     coord_t width = TimeSignatureGeometry(*timeNode).size().width;
     if (width > 0) {
@@ -316,7 +333,7 @@ void SpanFactory::build(const dom::Key* keyNode, int staff, int time) {
 
     SpanCollection::iterator keySpan = _spans->withType(_measureIndex, time, typeid(dom::Key));
     if (keySpan == _spans->end())
-        keySpan = _spans->add(_measureIndex, time);
+        keySpan = _spans->addBeforeEvent(_measureIndex, time);
     keySpan->pushLeftMargin(kAttributeMargin);
     keySpan->pushWidth(width);
     keySpan->pushRightMargin(kAttributeMargin);
@@ -390,7 +407,7 @@ void SpanFactory::removeRedundantSpans() {
                 break;
 
             auto rn = _spans->range(index + 1);
-            if (isAttributeOnlySpan(*it) && isAttributeOnlySpan(*rn.first))
+            if (isAttributeOnlySpan(*it) && rn.first != rn.second && isAttributeOnlySpan(*rn.first))
                 _spans->erase(it);
         }
     }
