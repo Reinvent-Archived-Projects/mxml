@@ -10,8 +10,6 @@
 
 namespace mxml {
 
-const coord_t TieGeometryFactory::kTieSpacing = 2;
-
 TieGeometryFactory::TieGeometryFactory(const Geometry& parentGeometry, const Metrics& metrics)
 : _parentGeometry(parentGeometry),
   _metrics(metrics)
@@ -226,11 +224,31 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
     Rect stopChordFrame = stopChordGeom.frame();
     
     if (tieGeom->placement().value() == dom::kPlacementBelow) {
-        startLocation.y = startChordFrame.max().y + kTieSpacing;
-        stopLocation.y = stopChordFrame.max().y + kTieSpacing;
+        if (startChordGeom.stem() && startChordGeom.stem()->stemDirection() == dom::kStemDown) {
+            startLocation.y = startChordFrame.max().y - kSlurStemOffset;
+            startLocation.x = start->frame().max().x - kTieSpacing;
+        } else {
+            startLocation.y = startChordFrame.max().y + kTieSpacing;
+        }
+        if (stopChordGeom.stem() && stopChordGeom.stem()->stemDirection() == dom::kStemDown) {
+            stopLocation.y = stopChordFrame.max().y - kSlurStemOffset;
+            startLocation.x = start->frame().max().x + kTieSpacing;
+        } else {
+            stopLocation.y = stopChordFrame.max().y + kTieSpacing;
+        }
     } else {
-        startLocation.y = startChordFrame.min().y - kTieSpacing;
-        stopLocation.y = stopChordFrame.min().y - kTieSpacing;
+        if (startChordGeom.stem() && startChordGeom.stem()->stemDirection() == dom::kStemUp) {
+            startLocation.y = startChordFrame.min().y + kSlurStemOffset;
+            startLocation.x = start->frame().max().x + kTieSpacing;
+        } else {
+            startLocation.y = startChordFrame.min().y - kTieSpacing;
+        }
+        if (stopChordGeom.stem() && stopChordGeom.stem()->stemDirection() == dom::kStemUp) {
+            stopLocation.y = stopChordFrame.min().y + kSlurStemOffset;
+            startLocation.x = start->frame().max().x + kTieSpacing;
+        } else {
+            stopLocation.y = stopChordFrame.min().y - kTieSpacing;
+        }
     }
     
     // Avoid collisions with beamed sets

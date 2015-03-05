@@ -20,7 +20,8 @@ class NoteGeometry;
 
 class TieGeometryFactory {
 public:
-    static const coord_t kTieSpacing;
+    constexpr static const coord_t kTieSpacing = 2;
+    constexpr static const coord_t kSlurStemOffset = 10;
     
 public:
     explicit TieGeometryFactory(const Geometry& parentGeometry, const Metrics& metrics);
