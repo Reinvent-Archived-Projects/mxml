@@ -288,6 +288,14 @@ void ChordGeometryFactory::placeStem(ChordGeometry* chordGeometry) {
         first = false;
     }
 
+    // Extend the stems of notes above and below ledger lines to staves center
+    auto staffOrigin = _metrics.staffOrigin(chordGeometry->staff());
+    auto stavesCenter = staffOrigin + _metrics.staffHeight()/2;
+    if (stem->stemDirection() == dom::kStemUp && stem->frame().min().y > stavesCenter)
+        chordGeometry->extendStem(stavesCenter);
+    if (stem->stemDirection() == dom::kStemDown && stem->frame().max().y < stavesCenter)
+        chordGeometry->extendStem(stavesCenter);
+
     // Set the location of the stem
     Point stemLocation;
     if (stem->stemDirection() == dom::kStemUp) {
