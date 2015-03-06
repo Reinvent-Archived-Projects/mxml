@@ -12,10 +12,10 @@ namespace dom {
 
 class Ending : public Node {
 public:
-    enum Type {
-        kStart,
-        kStop,
-        kDiscontinue
+    enum class Type {
+        Start,
+        Stop,
+        Discontinue
     };
     
 public:

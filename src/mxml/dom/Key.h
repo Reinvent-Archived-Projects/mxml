@@ -11,21 +11,21 @@ namespace dom {
 
 class Key : public Node {
 public:
-    enum Mode {
-        MODE_MAJOR,
-        MODE_MINOR,
-        MODE_DORIAN,
-        MODE_PHRYGIAN,
-        MODE_LYDIAN,
-        MODE_MIXOLYDIAN,
-        MODE_AEOLIAN,
-        MODE_IONIAN,
-        MODE_LOCRAIN,
-        MODE_NONE
+    enum class Mode {
+        Major,
+        Minor,
+        Dorian,
+        Phrygian,
+        Lydian,
+        Mixolydian,
+        Aeolian,
+        Ionian,
+        Locrian,
+        None
     };
     
 public:
-    Key() : _number(1), _printObject(true), _cancel(), _fifths(), _mode(MODE_MAJOR) {}
+    Key() : _number(1), _printObject(true), _cancel(), _fifths(), _mode(Mode::Major) {}
     Key(const Key& rhs) : _number(rhs.number()), _printObject(rhs.printObject()), _cancel(rhs.cancel()), _fifths(rhs.fifths()), _mode(rhs.mode()) {}
     
     int number() const {

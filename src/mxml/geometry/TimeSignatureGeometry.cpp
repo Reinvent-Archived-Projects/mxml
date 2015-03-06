@@ -16,7 +16,7 @@ TimeSignatureGeometry::TimeSignatureGeometry(const dom::Time& time) : _time(time
 }
 
 Size TimeSignatureGeometry::Size(const dom::Time& time) {
-    if (time.symbol() == dom::Time::SYMBOL_COMMON)
+    if (time.symbol() == dom::Time::Symbol::Common)
         return kCommonSize;
     
     class Size s;

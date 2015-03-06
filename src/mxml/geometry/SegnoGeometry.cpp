@@ -8,7 +8,7 @@ namespace mxml {
 const Size SegnoGeometry::kSegnoSize = {19, 25};
 
 SegnoGeometry::SegnoGeometry(const dom::Segno& segno)
-: PlacementGeometry(dom::Optional<dom::Placement>(dom::kPlacementAbove, true), 1)
+: PlacementGeometry(dom::Optional<dom::Placement>(dom::Placement::Above, true), 1)
 {
     setSize(kSegnoSize);
 }

@@ -11,22 +11,22 @@ namespace dom {
 
 class Articulation : public EmptyPlacement {
 public:
-    enum Type {
-        ACCENT,
-        BREATH_MARK,
-        CAESURA,
-        DETACHED_LEGATO,
-        DOIT,
-        FALLOFF,
-        PLOP,
-        SCOOP,
-        SPICCATO,
-        STACCATISSIMO,
-        STACCATO,
-        STRESS,
-        STRONG_ACCENT,
-        TENUTO,
-        UNSTRESS
+    enum class Type {
+        Accent,
+        BreathMark,
+        Caesura,
+        DetachedLegato,
+        Doit,
+        Falloff,
+        Plop,
+        Scoop,
+        Spiccato,
+        Staccatissimo,
+        Staccato,
+        Stress,
+        StrongAccent,
+        Tenuto,
+        Unstress
     };
     
 public:

@@ -11,13 +11,13 @@ const Size ArticulationGeometry::kStaccatoSize = {3, 3};
 const Size ArticulationGeometry::kStaccatissimoSize = {6, 9};
 
 ArticulationGeometry::ArticulationGeometry(const dom::Articulation& articulation, dom::Stem stem) : _articulation(articulation), _stem(stem) {
-    if (articulation.type() == dom::Articulation::STACCATO) {
+    if (articulation.type() == dom::Articulation::Type::Staccato) {
         setSize(kStaccatoSize);
-    } else if (articulation.type() == dom::Articulation::ACCENT) {
+    } else if (articulation.type() == dom::Articulation::Type::Accent) {
         setSize(kAccentSize);
-    } else if (articulation.type() == dom::Articulation::SPICCATO) {
+    } else if (articulation.type() == dom::Articulation::Type::Spiccato) {
         setSize(kSpiccatoSize);
-    } else if (articulation.type() == dom::Articulation::STACCATISSIMO) {
+    } else if (articulation.type() == dom::Articulation::Type::Staccatissimo) {
         setSize(kStaccatissimoSize);
     }
 }

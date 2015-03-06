@@ -17,13 +17,13 @@ const coord_t StemGeometry::kVerticalOffset = 1;
 
 StemGeometry::StemGeometry(const Note& note, bool showFlags)
 : _note(note), _stemDirection(note.stem()), _showFlags(showFlags) {
-    assert(_stemDirection == dom::kStemUp || _stemDirection == dom::kStemDown);
+    assert(_stemDirection == dom::Stem::Up || _stemDirection == dom::Stem::Down);
     setSize(Size(note, _stemDirection, showFlags));
     setStaff(note.staff());
 }
 
 void StemGeometry::setStemDirection(dom::Stem direction) {
-    assert(direction == dom::kStemUp || direction == dom::kStemDown);
+    assert(direction == dom::Stem::Up || direction == dom::Stem::Down);
     _stemDirection = direction;
     setSize(Size(_note, _stemDirection, _showFlags));
 }
@@ -35,19 +35,19 @@ void StemGeometry::setShowFlags(bool show) {
 
 Size StemGeometry::Size(const Note& note, dom::Stem direction, bool flags) {
     coord_t width = NoteGeometry::kQuarterWidth;
-    if (flags && note.type() <= Note::TYPE_EIGHTH && direction == dom::kStemUp)
+    if (flags && note.type() <= Note::Type::Eighth && direction == dom::Stem::Up)
         width += kFlagWidth - kNoFlagWidth;
     
     coord_t height = 0;
-    if (note.type() >= Note::TYPE_WHOLE)
+    if (note.type() >= Note::Type::Whole)
         height = 0;
-    else if (note.type() >= Note::TYPE_16TH)
+    else if (note.type() >= Note::Type::_16th)
         height = kDefaultHeight;
-    else if (note.type() == Note::TYPE_32ND)
+    else if (note.type() == Note::Type::_32nd)
         height = 40;
-    else if (note.type() == Note::TYPE_64TH)
+    else if (note.type() == Note::Type::_64th)
         height = 47;
-    else if (note.type() <= Note::TYPE_128TH)
+    else if (note.type() <= Note::Type::_128th)
         height = 57;
     
     return {width, height + kVerticalOffset + NoteGeometry::kHeight/2};

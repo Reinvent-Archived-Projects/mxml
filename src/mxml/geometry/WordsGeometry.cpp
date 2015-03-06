@@ -73,7 +73,7 @@ WordsGeometry::WordsGeometry(const dom::Direction& direction)
         setHorizontalAnchorPointValues(0, 0);
     }
 
-    if (direction.placement() == dom::kPlacementAbove)
+    if (direction.placement() == dom::Placement::Above)
         setVerticalAnchorPointValues(1, 0);
     else
         setVerticalAnchorPointValues(0, 0);

@@ -154,58 +154,56 @@ void NoteHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
 }
 
 Note::Type NoteHandler::typeFromString(const std::string& string) {
-    if (string == "1024th") return Note::TYPE_1024TH;
-    if (string == "512th") return Note::TYPE_512TH;
-    if (string == "256th") return Note::TYPE_256TH;
-    if (string == "128th") return Note::TYPE_128TH;
-    if (string == "64th") return Note::TYPE_64TH;
-    if (string == "32nd") return Note::TYPE_32ND;
-    if (string == "16th") return Note::TYPE_16TH;
-    if (string == "eighth") return Note::TYPE_EIGHTH;
-    if (string == "quarter") return Note::TYPE_QUARTER;
-    if (string == "half") return Note::TYPE_HALF;
-    if (string == "whole") return Note::TYPE_WHOLE;
-    if (string == "breve") return Note::TYPE_BREVE;
-    if (string == "long") return Note::TYPE_LONG;
-    if (string == "maxima") return Note::TYPE_MAXIMA;
+    if (string == "1024th") return Note::Type::_1024th;
+    if (string == "512th") return Note::Type::_512th;
+    if (string == "256th") return Note::Type::_256th;
+    if (string == "128th") return Note::Type::_128th;
+    if (string == "64th") return Note::Type::_64th;
+    if (string == "32nd") return Note::Type::_32nd;
+    if (string == "16th") return Note::Type::_16th;
+    if (string == "eighth") return Note::Type::Eighth;
+    if (string == "quarter") return Note::Type::Quarter;
+    if (string == "half") return Note::Type::Half;
+    if (string == "whole") return Note::Type::Whole;
+    if (string == "breve") return Note::Type::Breve;
+    if (string == "long") return Note::Type::Long;
+    if (string == "maxima") return Note::Type::Maxima;
     throw dom::InvalidDataError("Invalid note type " + string);
 }
 
 dom::Stem NoteHandler::stemFromString(const std::string& string) {
-    if (string == "none") return dom::kStemNone;
-    if (string == "up") return dom::kStemUp;
-    if (string == "down") return dom::kStemDown;
-    if (string == "double") return dom::kStemDouble;
+    if (string == "none") return dom::Stem::None;
+    if (string == "up") return dom::Stem::Up;
+    if (string == "down") return dom::Stem::Down;
+    if (string == "double") return dom::Stem::Double;
     throw dom::InvalidDataError("Invalid note stem " + string);
 }
 
 dom::Accidental::Type NoteHandler::accidentalTypeFromString(const std::string& string) {
-    if (string == "sharp") return dom::Accidental::kTypeSharp;
-    if (string == "flat") return dom::Accidental::kTypeFlat;
-    if (string == "natural") return dom::Accidental::kTypeNatural;
-    if (string == "double-sharp" || string == "sharp-sharp") return dom::Accidental::kTypeDoubleSharp;
-    if (string == "flat-flat") return dom::Accidental::kTypeDoubleFlat;
-    throw dom::InvalidDataError("Invalid accidental type " + string);
+    auto type = dom::Accidental::Type::byName(string.c_str());
+    if (!type)
+        throw dom::InvalidDataError("Invalid accidental type " + string);
+    return *type;
 }
 
 void NoteHandler::increasePitch(dom::Pitch& pitch) {
     auto octave = pitch.octave();
-    auto step = pitch.step();
+    auto step = static_cast<int>(pitch.step());
     auto alter = pitch.alter();
 
-    switch (step) {
-        case dom::Pitch::STEP_C:
-        case dom::Pitch::STEP_D:
-        case dom::Pitch::STEP_F:
-        case dom::Pitch::STEP_G:
-        case dom::Pitch::STEP_A:
-            step = static_cast<dom::Pitch::Step>(step + 1);
+    switch (static_cast<dom::Pitch::Step>(step)) {
+        case dom::Pitch::Step::C:
+        case dom::Pitch::Step::D:
+        case dom::Pitch::Step::F:
+        case dom::Pitch::Step::G:
+        case dom::Pitch::Step::A:
+            step += 1;
             alter -= 2;
             break;
 
-        case dom::Pitch::STEP_E:
-        case dom::Pitch::STEP_B:
-            step = static_cast<dom::Pitch::Step>(step + 1);
+        case dom::Pitch::Step::E:
+        case dom::Pitch::Step::B:
+            step += 1;
             alter -= 1;
             break;
 
@@ -213,34 +211,34 @@ void NoteHandler::increasePitch(dom::Pitch& pitch) {
             break;
     }
 
-    if (step >= dom::Pitch::kStepCount) {
+    if (static_cast<std::size_t>(step) >= dom::Pitch::kStepCount) {
         octave += 1;
-        step = static_cast<dom::Pitch::Step>(step - dom::Pitch::kStepCount);
+        step -= dom::Pitch::kStepCount;
     }
 
     pitch.setOctave(octave);
-    pitch.setStep(step);
+    pitch.setStep(static_cast<dom::Pitch::Step>(step));
     pitch.setAlter(alter);
 }
 
 void NoteHandler::decreasePitch(dom::Pitch& pitch) {
     auto octave = pitch.octave();
-    auto step = pitch.step();
+    auto step = static_cast<int>(pitch.step());
     auto alter = pitch.alter();
 
-    switch (step) {
-        case dom::Pitch::STEP_D:
-        case dom::Pitch::STEP_E:
-        case dom::Pitch::STEP_G:
-        case dom::Pitch::STEP_A:
-        case dom::Pitch::STEP_B:
-            step = static_cast<dom::Pitch::Step>(step - 1);
+    switch (static_cast<dom::Pitch::Step>(step)) {
+        case dom::Pitch::Step::D:
+        case dom::Pitch::Step::E:
+        case dom::Pitch::Step::G:
+        case dom::Pitch::Step::A:
+        case dom::Pitch::Step::B:
+            step -= 1;
             alter += 2;
             break;
 
-        case dom::Pitch::STEP_C:
-        case dom::Pitch::STEP_F:
-            step = static_cast<dom::Pitch::Step>(step -1);
+        case dom::Pitch::Step::C:
+        case dom::Pitch::Step::F:
+            step -= 1;
             alter += 1;
             break;
 
@@ -250,11 +248,11 @@ void NoteHandler::decreasePitch(dom::Pitch& pitch) {
     
     if (step < 0) {
         octave -= 1;
-        step = static_cast<dom::Pitch::Step>(step + dom::Pitch::kStepCount);
+        step += dom::Pitch::kStepCount;
     }
     
     pitch.setOctave(octave);
-    pitch.setStep(step);
+    pitch.setStep(static_cast<dom::Pitch::Step>(step));
     pitch.setAlter(alter);
 }
 

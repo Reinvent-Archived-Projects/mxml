@@ -27,9 +27,9 @@ void RepeatHandler::startElement(const QName& qname, const AttributeMap& attribu
 
 Repeat::Direction RepeatHandler::directionFromString(const std::string& string) {
     if (string == "forward")
-        return Repeat::DIRECTION_FORWARD;
+        return Repeat::Direction::Forward;
     else if (string == "backward")
-        return Repeat::DIRECTION_BACKWARD;
+        return Repeat::Direction::Backward;
     throw dom::InvalidDataError("Invalid repeat direction " + string);
 }
 

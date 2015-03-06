@@ -91,14 +91,14 @@ void WedgeHandler::startElement(const QName& qname, const AttributeMap& attribut
 
 Wedge::Type WedgeHandler::typeFromString(const std::string& string) {
     if (string == "crescendo")
-        return Wedge::kTypeCrescendo;
+        return Wedge::Type::Crescendo;
     if (string == "diminuendo")
-        return Wedge::kTypeDiminuendo;
+        return Wedge::Type::Diminuendo;
     if (string == "stop")
-        return Wedge::kStop;
+        return Wedge::Type::Stop;
     if (string == "continue")
-        return Wedge::kContinue;
-    return Wedge::kTypeCrescendo;
+        return Wedge::Type::Continue;
+    return Wedge::Type::Crescendo;
 }
 
 

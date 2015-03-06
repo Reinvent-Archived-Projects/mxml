@@ -10,7 +10,7 @@ namespace dom {
 
 class Tied : public Node {
 public:
-    Tied() : _number(1), _type(), _placement(kPlacementBelow), _orientation(kOrientationUnder) {}
+    Tied() : _number(1), _type(), _placement(Placement::Below), _orientation(Orientation::Under) {}
     
     int number() const {
         return _number;

@@ -16,9 +16,9 @@ namespace dom {
  */
 struct FormattedText {
     FormattedText() : string(),
-                      justify(kJustifyLeft),
-                      horizontalAlignment(kHAlignLeft),
-                      verticalAlignment(kVAlignTop),
+                      justify(Justify::Left),
+                      horizontalAlignment(HAlign::Left),
+                      verticalAlignment(VAlign::Top),
                       underline(false),
                       overline(false),
                       lineThrough(false)

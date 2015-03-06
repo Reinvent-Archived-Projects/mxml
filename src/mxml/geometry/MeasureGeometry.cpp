@@ -45,7 +45,7 @@ void MeasureGeometry::build(bool firstMeasureInSystem) {
     if (firstMeasureInSystem)
         buildAttributes();
 
-    if (firstMeasureInSystem || _scoreProperties.layoutType() == ScoreProperties::kLayoutTypeScroll)
+    if (firstMeasureInSystem || _scoreProperties.layoutType() == ScoreProperties::LayoutType::Scroll)
         _showNumber = true;
     
     for (auto& node : _measure.nodes()) {
@@ -234,11 +234,11 @@ void MeasureGeometry::buildChord(const Chord* chord) {
 
 void MeasureGeometry::placeChord(ChordGeometry* chordGeom) {
     auto refLocation = chordGeom->refNoteLocation();
-    auto stemDirection = dom::kStemUp;
+    auto stemDirection = dom::Stem::Up;
     if (chordGeom->stem())
         stemDirection = chordGeom->stem()->stemDirection();
 
-    if (stemDirection == dom::kStemUp) {
+    if (stemDirection == dom::Stem::Up) {
         chordGeom->setHorizontalAnchorPointValues(0, refLocation.x - chordGeom->contentOffset().x);
         chordGeom->setVerticalAnchorPointValues(1, -(chordGeom->size().height - (refLocation.y - chordGeom->contentOffset().y)));
     } else {
@@ -335,9 +335,9 @@ void MeasureGeometry::buildBeams() {
         chords.push_back(chordGeom);
 
         const auto& beam = note->beams().front();
-        if (beam->type() == Beam::kTypeBegin) {
-        } else if (beam->type() == Beam::kTypeContinue) {
-        } else if (beam->type() == Beam::kTypeEnd) {
+        if (beam->type() == Beam::Type::Begin) {
+        } else if (beam->type() == Beam::Type::Continue) {
+        } else if (beam->type() == Beam::Type::End) {
             std::unique_ptr<BeamGeometry> beamGeom(new BeamGeometry(chords));
             ChordGeometry* firstChordGeom = chords.front();
             beamGeom->setLocation(firstChordGeom->location());

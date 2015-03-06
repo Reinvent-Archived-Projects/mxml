@@ -89,9 +89,9 @@ dom::tenths_t Metrics::staffY(const Note& note) const {
 
 dom::tenths_t Metrics::staffY(const Clef& clef, const Pitch& pitch) {
     switch (clef.sign().value()) {
-        case Clef::SIGN_G: return staffYInGClef(pitch.step(), pitch.octave());
-        case Clef::SIGN_F: return staffYInFClef(pitch.step(), pitch.octave());
-        case Clef::SIGN_C: return staffYInCClef(pitch.step(), pitch.octave());
+        case Clef::Sign::G: return staffYInGClef(pitch.step(), pitch.octave());
+        case Clef::Sign::F: return staffYInFClef(pitch.step(), pitch.octave());
+        case Clef::Sign::C: return staffYInCClef(pitch.step(), pitch.octave());
         default: return 20;
     }
 }
@@ -101,9 +101,9 @@ dom::tenths_t Metrics::staffY(const Clef& clef, const Rest& rest) {
         return 20;
     
     switch (clef.sign().value()) {
-        case Clef::SIGN_G: return staffYInGClef(rest.displayStep(), rest.displayOctave());
-        case Clef::SIGN_F: return staffYInFClef(rest.displayStep(), rest.displayOctave());
-        case Clef::SIGN_C: return staffYInCClef(rest.displayStep(), rest.displayOctave());
+        case Clef::Sign::G: return staffYInGClef(rest.displayStep(), rest.displayOctave());
+        case Clef::Sign::F: return staffYInFClef(rest.displayStep(), rest.displayOctave());
+        case Clef::Sign::C: return staffYInCClef(rest.displayStep(), rest.displayOctave());
         default: return 20;
     }
 }
@@ -111,13 +111,13 @@ dom::tenths_t Metrics::staffY(const Clef& clef, const Rest& rest) {
 dom::tenths_t Metrics::staffYInGClef(Pitch::Step step, int octave) {
     dom::tenths_t y;
     switch (step) {
-        case Pitch::STEP_C: y = 50; break;
-        case Pitch::STEP_D: y = 45; break;
-        case Pitch::STEP_E: y = 40; break;
-        case Pitch::STEP_F: y = 35; break;
-        case Pitch::STEP_G: y = 30; break;
-        case Pitch::STEP_A: y = 25; break;
-        case Pitch::STEP_B: y = 20; break;
+        case Pitch::Step::C: y = 50; break;
+        case Pitch::Step::D: y = 45; break;
+        case Pitch::Step::E: y = 40; break;
+        case Pitch::Step::F: y = 35; break;
+        case Pitch::Step::G: y = 30; break;
+        case Pitch::Step::A: y = 25; break;
+        case Pitch::Step::B: y = 20; break;
         default: y = 20;
     }
     return y - (octave - 4) * 35;
@@ -126,13 +126,13 @@ dom::tenths_t Metrics::staffYInGClef(Pitch::Step step, int octave) {
 dom::tenths_t Metrics::staffYInCClef(Pitch::Step step, int octave) {
     dom::tenths_t y;
     switch (step) {
-        case Pitch::STEP_C: y = 20; break;
-        case Pitch::STEP_D: y = 15; break;
-        case Pitch::STEP_E: y = 10; break;
-        case Pitch::STEP_F: y = 5; break;
-        case Pitch::STEP_G: y = 0; break;
-        case Pitch::STEP_A: y = -5; break;
-        case Pitch::STEP_B: y = -10; break;
+        case Pitch::Step::C: y = 20; break;
+        case Pitch::Step::D: y = 15; break;
+        case Pitch::Step::E: y = 10; break;
+        case Pitch::Step::F: y = 5; break;
+        case Pitch::Step::G: y = 0; break;
+        case Pitch::Step::A: y = -5; break;
+        case Pitch::Step::B: y = -10; break;
         default: y = 20;
     }
     return y - (octave - 5) * 35;
@@ -141,13 +141,13 @@ dom::tenths_t Metrics::staffYInCClef(Pitch::Step step, int octave) {
 dom::tenths_t Metrics::staffYInFClef(Pitch::Step step, int octave) {
     dom::tenths_t y;
     switch (step) {
-        case Pitch::STEP_C: y = 25; break;
-        case Pitch::STEP_D: y = 20; break;
-        case Pitch::STEP_E: y = 15; break;
-        case Pitch::STEP_F: y = 10; break;
-        case Pitch::STEP_G: y = 5; break;
-        case Pitch::STEP_A: y = 0; break;
-        case Pitch::STEP_B: y = -5; break;
+        case Pitch::Step::C: y = 25; break;
+        case Pitch::Step::D: y = 20; break;
+        case Pitch::Step::E: y = 15; break;
+        case Pitch::Step::F: y = 10; break;
+        case Pitch::Step::G: y = 5; break;
+        case Pitch::Step::A: y = 0; break;
+        case Pitch::Step::B: y = -5; break;
         default: y = 20;
     }
     return y - (octave - 3) * 35;

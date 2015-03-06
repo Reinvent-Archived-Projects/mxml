@@ -12,28 +12,28 @@ namespace dom {
 
 class Barline : public Node {
 public:
-    enum Style {
-        REGULAR,
-        DOTTED,
-        DASHED,
-        HEAVY,
-        LIGHT_LIGHT,
-        LIGHT_HEAVY,
-        HEAVY_LIGHT,
-        HEAVY_HEAVY,
-        TICK,
-        SHORT,
-        NONE
+    enum class Style {
+        Regular,
+        Dotted,
+        Dashed,
+        Heavy,
+        LightLight,
+        LightHeavy,
+        HeavyLight,
+        HeavyHeavy,
+        Tick,
+        Short,
+        None
     };
     
-    enum Location {
-        RIGHT,
-        LEFT,
-        MIDDLE
+    enum class Location {
+        Right,
+        Left,
+        Middle
     };
     
 public:
-    Barline() : _style(REGULAR), _location(MIDDLE), _ending(), _repeat() {}
+    Barline() : _style(Style::Regular), _location(Location::Middle), _ending(), _repeat() {}
     
     Style style() const {
         return _style;

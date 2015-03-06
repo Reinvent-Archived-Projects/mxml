@@ -40,7 +40,7 @@ coord_t KeyGeometry::keyStaffY(int fifth, const dom::Clef& clef) {
     else if (fifth > 0)
         y = kSharpOffsets[(fifth - 1) % kCount];
     
-    if (clef.sign() == dom::Clef::SIGN_F)
+    if (clef.sign() == dom::Clef::Sign::F)
         y += 10;
     
     return y;

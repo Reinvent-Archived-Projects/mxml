@@ -16,16 +16,27 @@ namespace dom {
  */
 struct Accidental : public Node {
 public:
-    enum Type : int {
-        kTypeDoubleFlat = -2,
-        kTypeFlat,
-        kTypeNatural,
-        kTypeSharp,
-        kTypeDoubleSharp
+    struct Type {
+        const int alter;
+        const char* name;
+
+        static Type DoubleFlat;
+        static Type Flat;
+        static Type Natural;
+        static Type Sharp;
+        static Type DoubleSharp;
+
+        static Type* byName(const char* name) noexcept;
+        static Type* byAlter(int alter) noexcept;
+        
+        constexpr operator int() const { return alter; }
+
+    private:
+        constexpr Type(int alter, const char* name) noexcept : alter(alter), name(name) {}
     };
     
 public:
-    Accidental() : type(kTypeSharp) {}
+    Accidental() : type(Type::Sharp) {}
     Accidental(Type type) : type(type) {}
     
 public:

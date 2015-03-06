@@ -227,10 +227,10 @@ int ScoreProperties::octaveShift(std::size_t partIndex, std::size_t measureIndex
         if (!octaveShift)
             continue;
 
-        if (octaveShift->type == dom::OctaveShift::kStop || octaveShift->size == 0)
+        if (octaveShift->type == dom::OctaveShift::Type::Stop || octaveShift->size == 0)
             current = 0;
         else
-            current = (octaveShift->type == dom::OctaveShift::kDown ? -1: 1) * (octaveShift->size - 1);
+            current = (octaveShift->type == dom::OctaveShift::Type::Down ? -1: 1) * (octaveShift->size - 1);
     }
     return current;
 }

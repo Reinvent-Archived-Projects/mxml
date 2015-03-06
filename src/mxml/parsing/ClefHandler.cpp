@@ -38,13 +38,13 @@ void ClefHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
 }
 
 Clef::Sign ClefHandler::signFromString(const std::string& string) {
-    if (string == "none") return Clef::SIGN_NONE;
-    if (string == "G") return Clef::SIGN_G;
-    if (string == "F") return Clef::SIGN_F;
-    if (string == "C") return Clef::SIGN_C;
-    if (string == "percussion") return Clef::SIGN_PERCUSSION;
-    if (string == "tab") return Clef::SIGN_TAB;
-    if (string == "jianpu") return Clef::SIGN_JIANPU;
+    if (string == "none") return Clef::Sign::None;
+    if (string == "G") return Clef::Sign::G;
+    if (string == "F") return Clef::Sign::F;
+    if (string == "C") return Clef::Sign::C;
+    if (string == "percussion") return Clef::Sign::Percussion;
+    if (string == "tab") return Clef::Sign::Tab;
+    if (string == "jianpu") return Clef::Sign::Jianpu;
     throw dom::InvalidDataError("Invalid clef sign " + string);
 }
 

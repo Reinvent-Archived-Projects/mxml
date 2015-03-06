@@ -10,17 +10,17 @@ namespace dom {
 
 int Key::alter(Pitch::Step step) const {
     // Only Major and Minor modes are supported
-    if (_mode != MODE_MAJOR && _mode != MODE_MINOR)
+    if (_mode != Mode::Major && _mode != Mode::Minor)
         return 0;
 
     Pitch::Step order[] = {
-        Pitch::STEP_F,
-        Pitch::STEP_C,
-        Pitch::STEP_G,
-        Pitch::STEP_D,
-        Pitch::STEP_A,
-        Pitch::STEP_E,
-        Pitch::STEP_B
+        Pitch::Step::F,
+        Pitch::Step::C,
+        Pitch::Step::G,
+        Pitch::Step::D,
+        Pitch::Step::A,
+        Pitch::Step::E,
+        Pitch::Step::B
     };
 
     static const auto stepCount = sizeof(order) / sizeof(Pitch::Step);

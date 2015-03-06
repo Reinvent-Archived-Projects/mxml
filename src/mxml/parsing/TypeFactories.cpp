@@ -28,7 +28,7 @@ dom::Optional<dom::Justify> JustifyFactory::buildFromAttributes(const AttributeM
     if (it != attributes.end())
         return value(it->second);
 
-    return dom::absentOptional(dom::kJustifyLeft);
+    return dom::absentOptional(dom::Justify::Left);
 }
 
 dom::Optional<dom::Justify> JustifyFactory::buildFromGenericNode(const GenericNode& node) {
@@ -36,16 +36,16 @@ dom::Optional<dom::Justify> JustifyFactory::buildFromGenericNode(const GenericNo
     if (string)
         return value(string.value());
 
-    return dom::absentOptional(dom::kJustifyLeft);
+    return dom::absentOptional(dom::Justify::Left);
 }
 
 dom::Optional<dom::Justify> JustifyFactory::value(const std::string& string) {
     if (string == "left")
-        return dom::kJustifyLeft;
+        return dom::Justify::Left;
     else if (string == "center")
-        return dom::kJustifyCenter;
+        return dom::Justify::Center;
     else if (string == "right")
-        return dom::kJustifyRight;
+        return dom::Justify::Right;
     
     throw dom::InvalidDataError("Invalid justify type " + string);
 }
@@ -55,7 +55,7 @@ dom::Optional<dom::HAlign> HAlignFactory::buildFromAttributes(const AttributeMap
     if (it != attributes.end())
         return value(it->second);
 
-    return dom::absentOptional(dom::kHAlignLeft);
+    return dom::absentOptional(dom::HAlign::Left);
 }
 
 dom::Optional<dom::HAlign> HAlignFactory::buildFromGenericNode(const GenericNode& node) {
@@ -63,16 +63,16 @@ dom::Optional<dom::HAlign> HAlignFactory::buildFromGenericNode(const GenericNode
     if (string)
         return value(string.value());
 
-    return dom::absentOptional(dom::kHAlignLeft);
+    return dom::absentOptional(dom::HAlign::Left);
 }
 
 dom::Optional<dom::HAlign> HAlignFactory::value(const std::string& string) {
     if (string == "left")
-        return dom::kHAlignLeft;
+        return dom::HAlign::Left;
     else if (string == "center")
-        return dom::kHalignCenter;
+        return dom::HAlign::Center;
     else if (string == "right")
-        return dom::kHAlignRight;
+        return dom::HAlign::Right;
 
     throw dom::InvalidDataError("Invalid halign type " + string);
 }
@@ -82,7 +82,7 @@ dom::Optional<dom::VAlign> VAlignFactory::buildFromAttributes(const AttributeMap
     if (it != attributes.end())
         return value(it->second);
 
-    return dom::absentOptional(dom::kVAlignTop);
+    return dom::absentOptional(dom::VAlign::Top);
 }
 
 dom::Optional<dom::VAlign> VAlignFactory::buildFromGenericNode(const GenericNode& node) {
@@ -90,18 +90,18 @@ dom::Optional<dom::VAlign> VAlignFactory::buildFromGenericNode(const GenericNode
     if (string)
         return value(string.value());
 
-    return dom::absentOptional(dom::kVAlignTop);
+    return dom::absentOptional(dom::VAlign::Top);
 }
 
 dom::Optional<dom::VAlign> VAlignFactory::value(const std::string& string) {
     if (string == "top")
-        return dom::kVAlignTop;
+        return dom::VAlign::Top;
     else if (string == "middle")
-        return dom::kVAlignMiddle;
+        return dom::VAlign::Middle;
     else if (string == "bottom")
-        return dom::kVAlignBottom;
+        return dom::VAlign::Bottom;
     else if (string == "baseline")
-        return dom::kVAlignBaseline;
+        return dom::VAlign::Baseline;
 
     throw dom::InvalidDataError("Invalid valign type " + string);
 }

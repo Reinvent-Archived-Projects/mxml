@@ -13,17 +13,17 @@ namespace dom {
  the defaults element, "both" is the default value.
  */
 struct PageMargins {
-    PageMargins() : type(kMarginTypeBoth) {}
+    PageMargins() : type(MarginType::Both) {}
 
     Optional<tenths_t> left;
     Optional<tenths_t> right;
     Optional<tenths_t> top;
     Optional<tenths_t> bottom;
 
-    enum MarginType {
-        kMarginTypeOdd,
-        kMarginTypeEven,
-        kMarginTypeBoth
+    enum class MarginType {
+        Odd,
+        Even,
+        Both
     };
     MarginType type;
 };

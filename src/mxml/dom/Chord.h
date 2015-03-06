@@ -40,19 +40,19 @@ public:
     bool isBeamStart() const {
         if (_notes.empty() || firstNote()->beams().empty())
             return false;
-        return firstNote()->beams().front()->type() == Beam::kTypeBegin;
+        return firstNote()->beams().front()->type() == Beam::Type::Begin;
     }
     
     bool isBeamContinue() const {
         if (_notes.empty() || firstNote()->beams().empty())
             return false;
-        return firstNote()->beams().front()->type() == Beam::kTypeContinue;
+        return firstNote()->beams().front()->type() == Beam::Type::Continue;
     }
     
     bool isBeamEnd() const {
         if (_notes.empty() || firstNote()->beams().empty())
             return false;
-        return firstNote()->beams().front()->type() == Beam::kTypeEnd;
+        return firstNote()->beams().front()->type() == Beam::Type::End;
     }
     
     bool hasBeam() const {

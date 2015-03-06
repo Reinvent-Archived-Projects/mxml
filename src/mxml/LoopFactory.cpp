@@ -37,7 +37,7 @@ void LoopFactory::process(std::size_t measureIndex, const dom::Barline& barline)
 
     if (barline.repeat()) {
         const auto& repeat = barline.repeat();
-        if (repeat->direction() == dom::Repeat::DIRECTION_FORWARD) {
+        if (repeat->direction() == dom::Repeat::Direction::Forward) {
             if (loop->begin() != loop->end()) {
                 _loops.emplace_back();
                 loop = &_loops.back();
@@ -57,7 +57,7 @@ void LoopFactory::process(std::size_t measureIndex, const dom::Barline& barline)
             loop->setCount(std::max(loop->count(), maxNumber));
         }
 
-        if (ending->type() == dom::Ending::kStart) {
+        if (ending->type() == dom::Ending::Type::Start) {
             _endingBegin = measureIndex;
         } else {
             for (std::size_t i = 0; i <= loop->count(); i += 1) {

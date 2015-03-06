@@ -9,13 +9,13 @@ namespace dom {
 
 class Repeat : public Node {
 public:
-    enum Direction {
-        DIRECTION_BACKWARD,
-        DIRECTION_FORWARD
+    enum class Direction {
+        Backward,
+        Forward
     };
     
 public:
-    Repeat() : _direction(DIRECTION_BACKWARD), _times(0) {}
+    Repeat() : _direction(Direction::Backward), _times(0) {}
     
     Direction direction() const {
         return _direction;

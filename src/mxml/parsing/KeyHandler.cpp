@@ -48,25 +48,25 @@ void KeyHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
 
 Key::Mode KeyHandler::modeFromString(const std::string& string) {
     if (string == "major")
-        return Key::MODE_MAJOR;
+        return Key::Mode::Major;
     else if (string == "minor")
-        return Key::MODE_MINOR;
+        return Key::Mode::Minor;
     else if (string == "dorian")
-        return Key::MODE_DORIAN;
+        return Key::Mode::Dorian;
     else if (string == "phrygian")
-        return Key::MODE_PHRYGIAN;
+        return Key::Mode::Phrygian;
     else if (string == "lydian")
-        return Key::MODE_LYDIAN;
+        return Key::Mode::Lydian;
     else if (string == "mixolydian")
-        return Key::MODE_MIXOLYDIAN;
+        return Key::Mode::Mixolydian;
     else if (string == "aeolian")
-        return Key::MODE_AEOLIAN;
+        return Key::Mode::Aeolian;
     else if (string == "ionian")
-        return Key::MODE_IONIAN;
-    else if (string == "LOCRAIN")
-        return Key::MODE_LOCRAIN;
+        return Key::Mode::Ionian;
+    else if (string == "locrian")
+        return Key::Mode::Locrian;
     else if (string == "none")
-        return Key::MODE_NONE;
+        return Key::Mode::None;
     throw dom::InvalidDataError("Invalid key mode " + string);
 }
 

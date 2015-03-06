@@ -115,12 +115,12 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometry(const NoteGeom
         coord_t stopStaffY = stopLocation.y - _metrics.staffOrigin(stop->note().staff());
         coord_t avgy = (startStaffY + stopStaffY) / 2;
         if (avgy < Metrics::staffHeight()/2)
-            tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));
+            tieGeom->setPlacement(absentOptional(dom::Placement::Above));
         else
-            tieGeom->setPlacement(absentOptional(dom::kPlacementBelow));
+            tieGeom->setPlacement(absentOptional(dom::Placement::Below));
     }
     
-    if (tieGeom->placement().value() == dom::kPlacementBelow) {
+    if (tieGeom->placement().value() == dom::Placement::Below) {
         startLocation.y = start->frame().max().y;
         stopLocation.y = stop->frame().max().y;
     } else {
@@ -148,12 +148,12 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometryFromEdge(const 
     if (!placement.isPresent()) {
         coord_t staffY = startLocation.y - _metrics.staffOrigin(stop->note().staff());
         if (staffY < Metrics::staffHeight()/2)
-            tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));
+            tieGeom->setPlacement(absentOptional(dom::Placement::Above));
         else
-            tieGeom->setPlacement(absentOptional(dom::kPlacementBelow));
+            tieGeom->setPlacement(absentOptional(dom::Placement::Below));
     }
 
-    if (tieGeom->placement().value() == dom::kPlacementBelow) {
+    if (tieGeom->placement().value() == dom::Placement::Below) {
         stopLocation.y = stop->frame().max().y;
     } else {
         stopLocation.y = stop->frame().min().y;
@@ -180,12 +180,12 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometryToEdge(const No
     if (!placement.isPresent()) {
         coord_t staffY = startLocation.y - _metrics.staffOrigin(start->note().staff());
         if (staffY < Metrics::staffHeight()/2)
-            tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));
+            tieGeom->setPlacement(absentOptional(dom::Placement::Above));
         else
-            tieGeom->setPlacement(absentOptional(dom::kPlacementBelow));
+            tieGeom->setPlacement(absentOptional(dom::Placement::Below));
     }
 
-    if (tieGeom->placement().value() == dom::kPlacementBelow) {
+    if (tieGeom->placement().value() == dom::Placement::Below) {
         startLocation.y = start->frame().max().y;
     } else {
         startLocation.y = start->frame().min().y;
@@ -214,36 +214,36 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
         auto s1 = startChordGeom.stem();
         auto s2 = stopChordGeom.stem();
 
-        if (s1 && s1->stemDirection() == dom::kStemUp && s2 && s2->stemDirection() == dom::kStemUp)
-            tieGeom->setPlacement(absentOptional(dom::kPlacementBelow));
+        if (s1 && s1->stemDirection() == dom::Stem::Up && s2 && s2->stemDirection() == dom::Stem::Up)
+            tieGeom->setPlacement(absentOptional(dom::Placement::Below));
         else
-            tieGeom->setPlacement(absentOptional(dom::kPlacementAbove));
+            tieGeom->setPlacement(absentOptional(dom::Placement::Above));
     }
     
     Rect startChordFrame = startChordGeom.frame();
     Rect stopChordFrame = stopChordGeom.frame();
     
-    if (tieGeom->placement().value() == dom::kPlacementBelow) {
-        if (startChordGeom.stem() && startChordGeom.stem()->stemDirection() == dom::kStemDown) {
+    if (tieGeom->placement().value() == dom::Placement::Below) {
+        if (startChordGeom.stem() && startChordGeom.stem()->stemDirection() == dom::Stem::Down) {
             startLocation.y = startChordFrame.max().y - kSlurStemOffset;
             startLocation.x = start->frame().max().x - kTieSpacing;
         } else {
             startLocation.y = startChordFrame.max().y + kTieSpacing;
         }
-        if (stopChordGeom.stem() && stopChordGeom.stem()->stemDirection() == dom::kStemDown) {
+        if (stopChordGeom.stem() && stopChordGeom.stem()->stemDirection() == dom::Stem::Down) {
             stopLocation.y = stopChordFrame.max().y - kSlurStemOffset;
             startLocation.x = start->frame().max().x + kTieSpacing;
         } else {
             stopLocation.y = stopChordFrame.max().y + kTieSpacing;
         }
     } else {
-        if (startChordGeom.stem() && startChordGeom.stem()->stemDirection() == dom::kStemUp) {
+        if (startChordGeom.stem() && startChordGeom.stem()->stemDirection() == dom::Stem::Up) {
             startLocation.y = startChordFrame.min().y + kSlurStemOffset;
             startLocation.x = start->frame().max().x + kTieSpacing;
         } else {
             startLocation.y = startChordFrame.min().y - kTieSpacing;
         }
-        if (stopChordGeom.stem() && stopChordGeom.stem()->stemDirection() == dom::kStemUp) {
+        if (stopChordGeom.stem() && stopChordGeom.stem()->stemDirection() == dom::Stem::Up) {
             stopLocation.y = stopChordFrame.min().y + kSlurStemOffset;
             startLocation.x = start->frame().max().x + kTieSpacing;
         } else {
@@ -252,26 +252,26 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
     }
     
     // Avoid collisions with beamed sets
-    if (!start->note().beams().empty() && start->note().beams().front()->type() != dom::Beam::kTypeEnd) {
+    if (!start->note().beams().empty() && start->note().beams().front()->type() != dom::Beam::Type::End) {
         ChordGeometry* chordGeom = (ChordGeometry*)start->parentGeometry();
         Rect stemFrame = chordGeom->stem()->frame();
         
-        if (tieGeom->placement().value() == dom::kPlacementBelow && start->note().stem() == dom::kStemDown) {
+        if (tieGeom->placement().value() == dom::Placement::Below && start->note().stem() == dom::Stem::Down) {
             startLocation.x = stemFrame.min().x + StemGeometry::kNoFlagWidth;
             startLocation.y = stemFrame.max().y + 2*kTieSpacing;
-        } else if (tieGeom->placement().value() == dom::kPlacementAbove && start->note().stem() == dom::kStemUp) {
+        } else if (tieGeom->placement().value() == dom::Placement::Above && start->note().stem() == dom::Stem::Up) {
             startLocation.x = stemFrame.max().x - StemGeometry::kNoFlagWidth;
             startLocation.y = stemFrame.min().y - 2*kTieSpacing;
         }
     }
-    if (!stop->note().beams().empty() && stop->note().beams().front()->type() != dom::Beam::kTypeBegin) {
+    if (!stop->note().beams().empty() && stop->note().beams().front()->type() != dom::Beam::Type::Begin) {
         ChordGeometry* chordGeom = (ChordGeometry*)stop->parentGeometry();
         Rect stemFrame = chordGeom->stem()->frame();
         
-        if (tieGeom->placement().value() == dom::kPlacementBelow && stop->note().stem() == dom::kStemDown) {
+        if (tieGeom->placement().value() == dom::Placement::Below && stop->note().stem() == dom::Stem::Down) {
             stopLocation.x = stemFrame.min().x + StemGeometry::kNoFlagWidth;
             stopLocation.y = stemFrame.max().y + 2*kTieSpacing;
-        } else if (tieGeom->placement().value() == dom::kPlacementAbove && stop->note().stem() == dom::kStemUp) {
+        } else if (tieGeom->placement().value() == dom::Placement::Above && stop->note().stem() == dom::Stem::Up) {
             stopLocation.x = stemFrame.max().x - StemGeometry::kNoFlagWidth;
             stopLocation.y = stemFrame.min().y - 2*kTieSpacing;
         }

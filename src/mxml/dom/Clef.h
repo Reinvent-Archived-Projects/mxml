@@ -12,33 +12,33 @@ namespace dom {
 
 class Clef : public Node {
 public:
-    enum Sign {
-        SIGN_NONE,
-        SIGN_G,
-        SIGN_F,
-        SIGN_C,
-        SIGN_PERCUSSION,
-        SIGN_TAB,
-        SIGN_JIANPU,
+    enum class Sign : int {
+        None,
+        G,
+        F,
+        C,
+        Percussion,
+        Tab,
+        Jianpu,
     };
     
     static std::unique_ptr<Clef> trebleClef(int number = 1) {
         std::unique_ptr<Clef> clef(new Clef(number));
-        clef->setSign(presentOptional(Clef::SIGN_G));
+        clef->setSign(presentOptional(Clef::Sign::G));
         clef->setLine(presentOptional(2));
         return clef;
     }
     
     static std::unique_ptr<Clef> bassClef(int number = 1) {
         std::unique_ptr<Clef> clef(new Clef(number));
-        clef->setSign(presentOptional(Clef::SIGN_F));
+        clef->setSign(presentOptional(Clef::Sign::F));
         clef->setLine(presentOptional(4));
         return clef;
     }
     
 public:
-    Clef() : _number(1), _sign(SIGN_G), _line() {}
-    Clef(int number) : _number(number), _sign(SIGN_G), _line() {}
+    Clef() : _number(1), _sign(Sign::G), _line() {}
+    Clef(int number) : _number(number), _sign(Sign::G), _line() {}
     
     int number() const {
         return _number;

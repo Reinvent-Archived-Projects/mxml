@@ -51,8 +51,8 @@ void DirectionHandler::endSubElement(const QName& qname, RecursiveHandler* parse
 
 Placement DirectionHandler::placementFromString(const std::string& string) {
     if (string == "below")
-        return dom::kPlacementBelow;
-    return dom::kPlacementAbove;
+        return dom::Placement::Below;
+    return dom::Placement::Above;
 }
 
 } // namespace mxml

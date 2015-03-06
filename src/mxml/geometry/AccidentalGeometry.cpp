@@ -5,8 +5,6 @@
 
 namespace mxml {
 
-using dom::Accidental;
-
 const Size AccidentalGeometry::kNaturalSize = {6, 26};
 const Size AccidentalGeometry::kSharpSize = {8, 26};
 const Size AccidentalGeometry::kFlatSize = {8, 39};
@@ -19,19 +17,19 @@ AccidentalGeometry::AccidentalGeometry(int alter) : _alter(alter) {
 
 Size AccidentalGeometry::Size(int alter) {
     switch (alter) {
-        case Accidental::kTypeSharp:
+        case 1:
             return kSharpSize;
             
-        case Accidental::kTypeFlat:
+        case -1:
             return kFlatSize;
             
-        case Accidental::kTypeNatural:
+        case 0:
             return kNaturalSize;
             
-        case Accidental::kTypeDoubleSharp:
+        case 2:
             return kDoubleSharpSize;
             
-        case Accidental::kTypeDoubleFlat:
+        case -2:
             return kDoubleFlatSize;
 
         default:

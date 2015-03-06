@@ -6,16 +6,16 @@
 namespace mxml {
 namespace dom {
 
-enum Placement {
-    kPlacementAbove,
-    kPlacementBelow
+enum class Placement {
+    Above,
+    Below
 };
 
-enum Stem {
-    kStemNone,
-    kStemUp,
-    kStemDown,
-    kStemDouble
+enum class Stem {
+    None,
+    Up,
+    Down,
+    Double
 };
 
 enum StartStopContinue {
@@ -25,9 +25,9 @@ enum StartStopContinue {
     kChange
 };
 
-enum Orientation {
-    kOrientationOver,
-    kOrientationUnder
+enum class Orientation {
+    Over,
+    Under
 };
 
 /**
@@ -43,21 +43,21 @@ enum Orientation {
  The halign attribute is used in these situations. If it is not present, its value is the same as for the justify
  attribute.
  */
-enum HAlign {
-    kHAlignLeft,
-    kHalignCenter,
-    kHAlignRight
+enum class HAlign {
+    Left,
+    Center,
+    Right
 };
 
 /**
  The valign type is used to indicate vertical alignment to the top, middle, bottom, or baseline of the text. Defaults
  are implementation-dependent.
  */
-enum VAlign {
-    kVAlignTop,
-    kVAlignMiddle,
-    kVAlignBottom,
-    kVAlignBaseline
+enum class VAlign {
+    Top,
+    Middle,
+    Bottom,
+    Baseline
 };
 
 /**
@@ -65,10 +65,10 @@ enum VAlign {
  elements. For elements where the justify attribute is present but the halign attribute is not, the justify attribute
  indicates horizontal alignment as well as justification.
  */
-enum Justify {
-    kJustifyLeft,
-    kJustifyCenter,
-    kJustifyRight
+enum class Justify {
+    Left,
+    Center,
+    Right
 };
 
 /**

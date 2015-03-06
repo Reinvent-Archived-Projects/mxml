@@ -140,6 +140,8 @@
 		61A2B7671A8E870000C1EE2A /* KeySequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B75B1A8E870000C1EE2A /* KeySequence.h */; };
 		61A2B7681A8E870000C1EE2A /* TimeSequence.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A2B75C1A8E870000C1EE2A /* TimeSequence.cpp */; };
 		61A2B7691A8E870000C1EE2A /* TimeSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B75D1A8E870000C1EE2A /* TimeSequence.h */; };
+		61A81C091AA9375B00E230A6 /* StreamOperators.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A81C081AA9375B00E230A6 /* StreamOperators.h */; };
+		61A81C0B1AA937D800E230A6 /* Accidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A81C0A1AA937D800E230A6 /* Accidental.cpp */; };
 		61B89F9A1AA5154000F7DD9C /* EqualityConstraintSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61B89F981AA5154000F7DD9C /* EqualityConstraintSolver.cpp */; };
 		61B89F9B1AA5154000F7DD9C /* EqualityConstraintSolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 61B89F991AA5154000F7DD9C /* EqualityConstraintSolver.h */; };
 		61B89F9E1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61B89F9C1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp */; };
@@ -357,20 +359,19 @@
 		6140563B1A5C6228005224C9 /* SpanDirectionGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpanDirectionGeometry.h; sourceTree = "<group>"; };
 		6140563E1A5C6228005224C9 /* StemGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = StemGeometry.cpp; sourceTree = "<group>"; };
 		6140563F1A5C6228005224C9 /* StemGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StemGeometry.h; sourceTree = "<group>"; };
-		614056401A5C6228005224C9 /* StreamOperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamOperators.h; sourceTree = "<group>"; };
 		614056411A5C6228005224C9 /* TieGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TieGeometry.cpp; sourceTree = "<group>"; };
 		614056421A5C6228005224C9 /* TieGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TieGeometry.h; sourceTree = "<group>"; };
 		614056451A5C6228005224C9 /* TimeSignatureGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimeSignatureGeometry.cpp; sourceTree = "<group>"; };
 		614056461A5C6228005224C9 /* TimeSignatureGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeSignatureGeometry.h; sourceTree = "<group>"; };
 		614056471A5C6228005224C9 /* Metrics.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Metrics.cpp; sourceTree = "<group>"; };
 		614056481A5C6228005224C9 /* Metrics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Metrics.h; sourceTree = "<group>"; };
-		6140564A1A5C6228005224C9 /* ArticulationHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArticulationHandler.cpp; sourceTree = "<group>"; };
+		6140564A1A5C6228005224C9 /* ArticulationHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ArticulationHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		6140564B1A5C6228005224C9 /* ArticulationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ArticulationHandler.h; sourceTree = "<group>"; };
 		6140564C1A5C6228005224C9 /* AttributesHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AttributesHandler.cpp; sourceTree = "<group>"; };
 		6140564D1A5C6228005224C9 /* AttributesHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AttributesHandler.h; sourceTree = "<group>"; };
 		6140564E1A5C6228005224C9 /* BackupHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BackupHandler.cpp; sourceTree = "<group>"; };
 		6140564F1A5C6228005224C9 /* BackupHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BackupHandler.h; sourceTree = "<group>"; };
-		614056501A5C6228005224C9 /* BarlineHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BarlineHandler.cpp; sourceTree = "<group>"; };
+		614056501A5C6228005224C9 /* BarlineHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BarlineHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		614056511A5C6228005224C9 /* BarlineHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BarlineHandler.h; sourceTree = "<group>"; };
 		614056521A5C6228005224C9 /* BaseHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BaseHandler.h; sourceTree = "<group>"; };
 		614056531A5C6228005224C9 /* BeamHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BeamHandler.cpp; sourceTree = "<group>"; };
@@ -389,7 +390,7 @@
 		614056601A5C6228005224C9 /* DirectionTypeHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DirectionTypeHandler.h; sourceTree = "<group>"; };
 		614056611A5C6228005224C9 /* EmptyPlacementHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EmptyPlacementHandler.cpp; sourceTree = "<group>"; };
 		614056621A5C6228005224C9 /* EmptyPlacementHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EmptyPlacementHandler.h; sourceTree = "<group>"; };
-		614056631A5C6228005224C9 /* EndingHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EndingHandler.cpp; sourceTree = "<group>"; };
+		614056631A5C6228005224C9 /* EndingHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EndingHandler.cpp; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.cpp; };
 		614056641A5C6228005224C9 /* EndingHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndingHandler.h; sourceTree = "<group>"; };
 		614056651A5C6228005224C9 /* FermataHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FermataHandler.cpp; sourceTree = "<group>"; };
 		614056661A5C6228005224C9 /* FermataHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FermataHandler.h; sourceTree = "<group>"; };
@@ -496,6 +497,8 @@
 		61A2B75B1A8E870000C1EE2A /* KeySequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeySequence.h; sourceTree = "<group>"; };
 		61A2B75C1A8E870000C1EE2A /* TimeSequence.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimeSequence.cpp; sourceTree = "<group>"; };
 		61A2B75D1A8E870000C1EE2A /* TimeSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeSequence.h; sourceTree = "<group>"; };
+		61A81C081AA9375B00E230A6 /* StreamOperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamOperators.h; sourceTree = "<group>"; };
+		61A81C0A1AA937D800E230A6 /* Accidental.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Accidental.cpp; sourceTree = "<group>"; };
 		61B89F981AA5154000F7DD9C /* EqualityConstraintSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EqualityConstraintSolver.cpp; sourceTree = "<group>"; };
 		61B89F991AA5154000F7DD9C /* EqualityConstraintSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualityConstraintSolver.h; sourceTree = "<group>"; };
 		61B89F9C1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EqualityConstraintSolverTests.cpp; sourceTree = "<group>"; };
@@ -668,6 +671,7 @@
 				6140569D1A5C6228005224C9 /* SpanFactory.h */,
 				6140569E1A5C6228005224C9 /* StringUtility.cpp */,
 				6140569F1A5C6228005224C9 /* StringUtility.h */,
+				61A81C081AA9375B00E230A6 /* StreamOperators.h */,
 			);
 			name = mxml;
 			path = src/mxml;
@@ -677,6 +681,7 @@
 			isa = PBXGroup;
 			children = (
 				614055CA1A5C6228005224C9 /* Accidental.h */,
+				61A81C0A1AA937D800E230A6 /* Accidental.cpp */,
 				614055CC1A5C6228005224C9 /* Articulation.h */,
 				00E7B4881A81510C00B949FC /* Attributes.cpp */,
 				614055CD1A5C6228005224C9 /* Attributes.h */,
@@ -799,7 +804,6 @@
 				6140563B1A5C6228005224C9 /* SpanDirectionGeometry.h */,
 				6140563E1A5C6228005224C9 /* StemGeometry.cpp */,
 				6140563F1A5C6228005224C9 /* StemGeometry.h */,
-				614056401A5C6228005224C9 /* StreamOperators.h */,
 				61F0739F1A71A447002CA9CA /* SystemGeometry.cpp */,
 				61F073A01A71A447002CA9CA /* SystemGeometry.h */,
 				614056411A5C6228005224C9 /* TieGeometry.cpp */,
@@ -1031,6 +1035,7 @@
 				61239C1D1A67429100B3F0A3 /* Jump.h in Headers */,
 				61F072E21A6F0CB3002CA9CA /* AppearanceHandler.h in Headers */,
 				61239C211A6742A100B3F0A3 /* LoopFactory.h in Headers */,
+				61A81C091AA9375B00E230A6 /* StreamOperators.h in Headers */,
 				61F073CF1A71CEF5002CA9CA /* EndingGeometryFactory.h in Headers */,
 				61F072EA1A6F1183002CA9CA /* GenericNodeHandler.h in Headers */,
 				61C8508D1A6EE64300031100 /* SystemLayoutHandler.h in Headers */,
@@ -1182,6 +1187,7 @@
 				61F073CE1A71CEF5002CA9CA /* EndingGeometryFactory.cpp in Sources */,
 				614057181A5C6228005224C9 /* TieGeometry.cpp in Sources */,
 				619AC7941AA11C60005DFBED /* ChordGeometryFactory.cpp in Sources */,
+				61A81C0B1AA937D800E230A6 /* Accidental.cpp in Sources */,
 				614057111A5C6228005224C9 /* SpanDirectionGeometry.cpp in Sources */,
 				6140573B1A5C6228005224C9 /* FermataHandler.cpp in Sources */,
 				61F074241A72C676002CA9CA /* PageScoreGeometry.cpp in Sources */,

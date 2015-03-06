@@ -58,7 +58,7 @@ void SpanFactory::build(const dom::Part* part, std::size_t beginMeasureIndex, st
 
         // In page layout mode we add attributes to the first measure in each system
         bool buildMeasureAttributes = false;
-        if (_scoreProperties.layoutType() == ScoreProperties::kLayoutTypePage) {
+        if (_scoreProperties.layoutType() == ScoreProperties::LayoutType::Page) {
             auto systemIndex = _scoreProperties.systemIndex(_measureIndex);
             auto range = _scoreProperties.measureRange(systemIndex);
             buildMeasureAttributes = range.first == _measureIndex;
@@ -218,8 +218,8 @@ void SpanFactory::build(const dom::Chord* chord) {
         if (alter != previousAlter)
             accidentalWidth = AccidentalGeometry::Size(note->alter()).width;
 
-        if (note->stem() == dom::kStemUp && note->beams().empty() && chord->firstNote()->beams().empty())
-            stemWidth = StemGeometry::Size(*note, dom::kStemUp, true).width - StemGeometry::kNoFlagWidth;
+        if (note->stem() == dom::Stem::Up && note->beams().empty() && chord->firstNote()->beams().empty())
+            stemWidth = StemGeometry::Size(*note, dom::Stem::Up, true).width - StemGeometry::kNoFlagWidth;
         
         if (naturalWidth == -1)
             naturalWidth = naturalWidthForNote(*note);
@@ -430,34 +430,34 @@ coord_t SpanFactory::naturalWidthForNote(const dom::Note& note) {
     static const coord_t kWidthIncrease = 20;
 
     switch (note.type().value()) {
-        case dom::Note::TYPE_1024TH:
-        case dom::Note::TYPE_512TH:
-        case dom::Note::TYPE_256TH:
-        case dom::Note::TYPE_128TH:
-        case dom::Note::TYPE_64TH:
-        case dom::Note::TYPE_32ND:
-        case dom::Note::TYPE_16TH:
+        case dom::Note::Type::_1024th:
+        case dom::Note::Type::_512th:
+        case dom::Note::Type::_256th:
+        case dom::Note::Type::_128th:
+        case dom::Note::Type::_64th:
+        case dom::Note::Type::_32nd:
+        case dom::Note::Type::_16th:
             return kBaseWidth;
 
-        case dom::Note::TYPE_EIGHTH:
+        case dom::Note::Type::Eighth:
             return kBaseWidth + kWidthIncrease;
 
-        case dom::Note::TYPE_QUARTER:
+        case dom::Note::Type::Quarter:
             return kBaseWidth + 2*kWidthIncrease;
 
-        case dom::Note::TYPE_HALF:
+        case dom::Note::Type::Half:
             return kBaseWidth + 4*kWidthIncrease;
 
-        case dom::Note::TYPE_WHOLE:
+        case dom::Note::Type::Whole:
             return kBaseWidth + 8*kWidthIncrease;
 
-        case dom::Note::TYPE_BREVE:
+        case dom::Note::Type::Breve:
             return kBaseWidth + 16*kWidthIncrease;
             
-        case dom::Note::TYPE_LONG:
+        case dom::Note::Type::Long:
             return kBaseWidth + 32*kWidthIncrease;
             
-        case dom::Note::TYPE_MAXIMA:
+        case dom::Note::Type::Maxima:
             return kBaseWidth + 64*kWidthIncrease;
     }
 }

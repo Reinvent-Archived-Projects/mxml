@@ -11,7 +11,7 @@ const coord_t kSystemDistancePadding = 20;
 
 PageScoreGeometry::PageScoreGeometry(const dom::Score& score, coord_t minWidth)
 : _score(score),
-  _scoreProperties(score, ScoreProperties::kLayoutTypePage)
+  _scoreProperties(score, ScoreProperties::LayoutType::Page)
 {
     SpanFactory spanFactory(_score, _scoreProperties);
     spanFactory.setNaturalSpacing(false);

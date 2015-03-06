@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(moonlight) {
     lxml::parse(is, kMoonlightFileName, handler);
 
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties scoreProperties(score, ScoreProperties::LayoutType::Scroll);
 
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
@@ -52,7 +52,7 @@ BOOST_AUTO_TEST_CASE(beats4_4) {
     time->setBeatType(4);
 
     auto score = builder.build();
-    ScoreProperties scoreProperties(*score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties scoreProperties(*score, ScoreProperties::LayoutType::Scroll);
 
     EventFactory factory(*score, scoreProperties);
     auto events = factory.build();
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(beats2_12) {
     time->setBeatType(12);
 
     auto score = builder.build();
-    ScoreProperties scoreProperties(*score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties scoreProperties(*score, ScoreProperties::LayoutType::Scroll);
 
     EventFactory factory(*score, scoreProperties);
     auto events = factory.build();
@@ -117,16 +117,16 @@ BOOST_AUTO_TEST_CASE(event_order) {
     lxml::parse(is, kEventsFileName, handler);
     
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties scoreProperties(score, ScoreProperties::LayoutType::Scroll);
     
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
     
     std::vector<dom::Pitch::Step> event_order{
-        dom::Pitch::Step::STEP_A,
-        dom::Pitch::Step::STEP_B,
-        dom::Pitch::Step::STEP_C,
-        dom::Pitch::Step::STEP_D
+        dom::Pitch::Step::A,
+        dom::Pitch::Step::B,
+        dom::Pitch::Step::C,
+        dom::Pitch::Step::D
     };
     
     int index = 0;
@@ -134,7 +134,7 @@ BOOST_AUTO_TEST_CASE(event_order) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order.at(index));
+            BOOST_CHECK(note->pitch()->step() == event_order.at(index));
             ++index;
         }
     }
@@ -148,19 +148,19 @@ BOOST_AUTO_TEST_CASE(event_order_repeat) {
     lxml::parse(is, kEventsRepeatFileName, handler);
     
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties scoreProperties(score, ScoreProperties::LayoutType::Scroll);
     
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
     
     std::vector<dom::Pitch::Step> event_order{
-        dom::Pitch::Step::STEP_A,
-        dom::Pitch::Step::STEP_B,
-        dom::Pitch::Step::STEP_C,
+        dom::Pitch::Step::A,
+        dom::Pitch::Step::B,
+        dom::Pitch::Step::C,
         // Perform Repeat
-        dom::Pitch::Step::STEP_B,
-        dom::Pitch::Step::STEP_C,
-        dom::Pitch::Step::STEP_D
+        dom::Pitch::Step::B,
+        dom::Pitch::Step::C,
+        dom::Pitch::Step::D
     };
     
     int index = 0;
@@ -168,7 +168,7 @@ BOOST_AUTO_TEST_CASE(event_order_repeat) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order.at(index));
+            BOOST_CHECK(note->pitch()->step() == event_order.at(index));
             ++index;
         }
     }
@@ -182,19 +182,19 @@ BOOST_AUTO_TEST_CASE(event_order_repeat_last_measure) {
     lxml::parse(is, kEventsRepeatLastMeasureFileName, handler);
     
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties scoreProperties(score, ScoreProperties::LayoutType::Scroll);
     
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
     
     std::vector<dom::Pitch::Step> event_order{
-        dom::Pitch::Step::STEP_A,
-        dom::Pitch::Step::STEP_B,
-        dom::Pitch::Step::STEP_C,
-        dom::Pitch::Step::STEP_D,
+        dom::Pitch::Step::A,
+        dom::Pitch::Step::B,
+        dom::Pitch::Step::C,
+        dom::Pitch::Step::D,
         // Perform Repeat
-        dom::Pitch::Step::STEP_C,
-        dom::Pitch::Step::STEP_D
+        dom::Pitch::Step::C,
+        dom::Pitch::Step::D
     };
     
     int index = 0;
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE(event_order_repeat_last_measure) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order.at(index));
+            BOOST_CHECK(note->pitch()->step() == event_order.at(index));
             ++index;
         }
     }
@@ -216,20 +216,20 @@ BOOST_AUTO_TEST_CASE(event_order_ds_al_coda) {
     lxml::parse(is, kEventsDSAlCodaFileName, handler);
     
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties scoreProperties(score, ScoreProperties::LayoutType::Scroll);
     
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
     
     std::vector<dom::Pitch::Step> event_order{
-        dom::Pitch::Step::STEP_A,
-        dom::Pitch::Step::STEP_B,
-        dom::Pitch::Step::STEP_C,
+        dom::Pitch::Step::A,
+        dom::Pitch::Step::B,
+        dom::Pitch::Step::C,
         // Perform D.S. al Coda (goto Segno)
-        dom::Pitch::Step::STEP_A,
-        dom::Pitch::Step::STEP_B,
+        dom::Pitch::Step::A,
+        dom::Pitch::Step::B,
         // Perform To Coda (goto Coda)
-        dom::Pitch::Step::STEP_D
+        dom::Pitch::Step::D
     };
     
     int index = 0;
@@ -237,7 +237,7 @@ BOOST_AUTO_TEST_CASE(event_order_ds_al_coda) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order.at(index));
+            BOOST_CHECK(note->pitch()->step() == event_order.at(index));
             ++index;
         }
     }
@@ -251,26 +251,26 @@ BOOST_AUTO_TEST_CASE(event_order_complex_1) {
     lxml::parse(is, kEventsComplex1FileName, handler);
     
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties scoreProperties(score, ScoreProperties::LayoutType::Scroll);
     
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
     
     std::vector<dom::Pitch::Step> event_order{
-        dom::Pitch::Step::STEP_A,
-        dom::Pitch::Step::STEP_B,
-        dom::Pitch::Step::STEP_C,
+        dom::Pitch::Step::A,
+        dom::Pitch::Step::B,
+        dom::Pitch::Step::C,
         // Perform Repeat
-        dom::Pitch::Step::STEP_B,
-        dom::Pitch::Step::STEP_C,
-        dom::Pitch::Step::STEP_D,
-        dom::Pitch::Step::STEP_E,
-        dom::Pitch::Step::STEP_F,
+        dom::Pitch::Step::B,
+        dom::Pitch::Step::C,
+        dom::Pitch::Step::D,
+        dom::Pitch::Step::E,
+        dom::Pitch::Step::F,
         // Perform D.S. al Coda (goto Segno)
-        dom::Pitch::Step::STEP_A,
-        dom::Pitch::Step::STEP_B,
+        dom::Pitch::Step::A,
+        dom::Pitch::Step::B,
         // Perform To Coda (goto Coda)
-        dom::Pitch::Step::STEP_G,
+        dom::Pitch::Step::G,
     };
     
     int index = 0;
@@ -278,7 +278,7 @@ BOOST_AUTO_TEST_CASE(event_order_complex_1) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order.at(index));
+            BOOST_CHECK(note->pitch()->step() == event_order.at(index));
             ++index;
         }
     }
@@ -292,33 +292,33 @@ BOOST_AUTO_TEST_CASE(event_order_complex_2) {
     lxml::parse(is, kEventsComplex2FileName, handler);
     
     const dom::Score& score = *handler.result();
-    ScoreProperties scoreProperties(score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties scoreProperties(score, ScoreProperties::LayoutType::Scroll);
     
     EventFactory factory(score, scoreProperties);
     auto events = factory.build();
     
     std::vector<dom::Pitch::Step> event_order{
-        dom::Pitch::Step::STEP_A,
-        dom::Pitch::Step::STEP_B,
-        dom::Pitch::Step::STEP_C,
+        dom::Pitch::Step::A,
+        dom::Pitch::Step::B,
+        dom::Pitch::Step::C,
         // Perform Repeat
-        dom::Pitch::Step::STEP_B,
-        dom::Pitch::Step::STEP_C,
-        dom::Pitch::Step::STEP_D,
-        dom::Pitch::Step::STEP_E,
-        dom::Pitch::Step::STEP_F,
+        dom::Pitch::Step::B,
+        dom::Pitch::Step::C,
+        dom::Pitch::Step::D,
+        dom::Pitch::Step::E,
+        dom::Pitch::Step::F,
         // Perform D.S. al Coda (goto Segno)
-        dom::Pitch::Step::STEP_A,
-        dom::Pitch::Step::STEP_B,
+        dom::Pitch::Step::A,
+        dom::Pitch::Step::B,
         // Perform To Coda (goto Coda)
-        dom::Pitch::Step::STEP_F,
-        dom::Pitch::Step::STEP_G,
+        dom::Pitch::Step::F,
+        dom::Pitch::Step::G,
         // Perform D.S. (goto 2nd Segno)
-        dom::Pitch::Step::STEP_F,
-        dom::Pitch::Step::STEP_F,
-        dom::Pitch::Step::STEP_G,
-        dom::Pitch::Step::STEP_A,
-        dom::Pitch::Step::STEP_B,
+        dom::Pitch::Step::F,
+        dom::Pitch::Step::F,
+        dom::Pitch::Step::G,
+        dom::Pitch::Step::A,
+        dom::Pitch::Step::B,
     };
     
     int index = 0;
@@ -326,7 +326,7 @@ BOOST_AUTO_TEST_CASE(event_order_complex_2) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK_EQUAL(note->pitch()->step(), event_order.at(index));
+            BOOST_CHECK(note->pitch()->step() == event_order.at(index));
             ++index;
         }
     }

@@ -47,40 +47,40 @@ void AppearanceHandler::endSubElement(const lxml::QName& qname, RecursiveHandler
 }
 
 dom::LineType AppearanceHandler::lineTypeFromString(const std::string& string) {
-    if (string == "beam")           return dom::kLineTypeBeam;
-    if (string == "bracket")        return dom::kLineTypeBracket;
-    if (string == "dashes")         return dom::kLineTypeDashes;
-    if (string == "enclosure")      return dom::kLineTypeEnclosure;
-    if (string == "ending")         return dom::kLineTypeEnding;
-    if (string == "extend")         return dom::kLineTypeExtend;
-    if (string == "heavy barline")  return dom::kLineTypeHeavyBarline;
-    if (string == "leger")          return dom::kLineTypeLeger;
-    if (string == "light barline")  return dom::kLineTypeLightBarline;
-    if (string == "octave shift")   return dom::kLineTypeOctaveShift;
-    if (string == "pedal")          return dom::kLineTypePedal;
-    if (string == "slur middle")    return dom::kLineTypeSlurMiddle;
-    if (string == "slur tip")       return dom::kLineTypeSlurTip;
-    if (string == "staff")          return dom::kLineTypeStaff;
-    if (string == "stem")           return dom::kLineTypeStem;
-    if (string == "tie middle")     return dom::kLineTypeTieMiddle;
-    if (string == "tie tip")        return dom::kLineTypeTieTip;
-    if (string == "tuplet bracket") return dom::kLineTypeTupletBracket;
-    if (string == "wedge")          return dom::kLineTypeWedge;
+    if (string == "beam")           return dom::LineType::Beam;
+    if (string == "bracket")        return dom::LineType::Bracket;
+    if (string == "dashes")         return dom::LineType::Dashes;
+    if (string == "enclosure")      return dom::LineType::Enclosure;
+    if (string == "ending")         return dom::LineType::Ending;
+    if (string == "extend")         return dom::LineType::Extend;
+    if (string == "heavy barline")  return dom::LineType::HeavyBarline;
+    if (string == "leger")          return dom::LineType::Leger;
+    if (string == "light barline")  return dom::LineType::LightBarline;
+    if (string == "octave shift")   return dom::LineType::OctaveShift;
+    if (string == "pedal")          return dom::LineType::Pedal;
+    if (string == "slur middle")    return dom::LineType::SlurMiddle;
+    if (string == "slur tip")       return dom::LineType::SlurTip;
+    if (string == "staff")          return dom::LineType::Staff;
+    if (string == "stem")           return dom::LineType::Stem;
+    if (string == "tie middle")     return dom::LineType::TieMiddle;
+    if (string == "tie tip")        return dom::LineType::TieTip;
+    if (string == "tuplet bracket") return dom::LineType::TupletBracket;
+    if (string == "wedge")          return dom::LineType::Wedge;
 
     throw dom::InvalidDataError("Invalid halign type " + string);
 }
 
 dom::NoteType AppearanceHandler::noteTypeFromString(const std::string& string) {
-    if (string == "cue")   return dom::kNoteTypeCue;
-    if (string == "grace") return dom::kNoteTypeGrace;
-    if (string == "large") return dom::kNoteTypeLarge;
+    if (string == "cue")   return dom::NoteType::Cue;
+    if (string == "grace") return dom::NoteType::Grace;
+    if (string == "large") return dom::NoteType::Large;
 
     throw dom::InvalidDataError("Invalid halign type " + string);
 }
 
 dom::DistanceType AppearanceHandler::distanceTypeFromString(const std::string& string) {
-    if (string == "beam")   return dom::kDistanceTypeBeam;
-    if (string == "hyphen") return dom::kDistanceTypeHyphen;
+    if (string == "beam")   return dom::DistanceType::Beam;
+    if (string == "hyphen") return dom::DistanceType::Hyphen;
     
     throw dom::InvalidDataError("Invalid halign type " + string);
 }

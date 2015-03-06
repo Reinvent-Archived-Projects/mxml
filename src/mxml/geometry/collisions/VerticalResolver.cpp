@@ -118,9 +118,9 @@ namespace mxml {
         Rect restFrame = _geometry.convertFromGeometry(rest->frame(), rest->parentGeometry());
         
         // Only move things that are already outside the staves further away
-        if (note->note().stem() == dom::kStemUp)
+        if (note->note().stem() == dom::Stem::Up)
             restFrame.origin.y = noteFrame.origin.y + noteFrame.size.height + 1;
-        else if (note->note().stem() == dom::kStemDown)
+        else if (note->note().stem() == dom::Stem::Down)
             restFrame.origin.y = noteFrame.origin.y - restFrame.size.height - 1;
         
         rest->setFrame(rest->parentGeometry()->convertFromRoot(restFrame));

@@ -13,14 +13,14 @@ namespace dom {
 
 class CreditWords : public Node {
 public:
-    enum FontStyle {
-        FONT_STYLE_NORMAL,
-        FONT_STYLE_ITALIC
+    enum class FontStyle {
+        Normal,
+        Italic
     };
     
-    enum FontWeight {
-        FONT_WEIGHT_NORMAL,
-        FONT_WEIGHT_BOLD
+    enum class FontWeight {
+        Normal,
+        Bold
     };
     
 public:

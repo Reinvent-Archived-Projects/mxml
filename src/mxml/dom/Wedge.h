@@ -9,11 +9,11 @@ namespace dom {
 
 class Wedge : public DirectionType {
 public:
-    enum Type {
-        kTypeCrescendo,
-        kTypeDiminuendo,
-        kStop,
-        kContinue
+    enum class Type {
+        Crescendo,
+        Diminuendo,
+        Stop,
+        Continue
     };
     
 public:

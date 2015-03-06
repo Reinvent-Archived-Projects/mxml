@@ -9,19 +9,19 @@ namespace dom {
 
 class Fermata : public Node {
 public:
-    enum Type {
-        TYPE_UPRIGHT,
-        TYPE_INVERTED
+    enum class Type {
+        Upright,
+        Inverted
     };
     
-    enum Shape {
-        SHAPE_NORMAL,
-        SHAPE_ANGLED,
-        SHAPE_SQUARE
+    enum class Shape {
+        Normal,
+        Angled,
+        Square
     };
     
 public:
-    Fermata() : _type(TYPE_UPRIGHT), _shape(SHAPE_NORMAL) {}
+    Fermata() : _type(Type::Upright), _shape(Shape::Normal) {}
     Fermata(const Fermata& rhs) : _type(rhs.type()), _shape(rhs.shape()) {}
     
     Type type() const {

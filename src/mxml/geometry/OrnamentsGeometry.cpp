@@ -12,7 +12,7 @@ static const Size kTurnSize = {24, 10};
 static const Size kInvertedTurnSize = {24, 16};
 
 OrnamentsGeometry::OrnamentsGeometry(const dom::Ornaments& ornaments, int staff)
-: PlacementGeometry(dom::absentOptional(dom::kPlacementAbove), staff),
+: PlacementGeometry(dom::absentOptional(dom::Placement::Above), staff),
   _ornaments(ornaments)
 {
     if (ornaments.placement())

@@ -42,25 +42,25 @@ Pitch::Step PitchHandler::stepFromString(const std::string& string) {
     switch (c) {
         case 'C':
         case 'c':
-            return Pitch::STEP_C;
+            return Pitch::Step::C;
         case 'D':
         case 'd':
-            return Pitch::STEP_D;
+            return Pitch::Step::D;
         case 'E':
         case 'e':
-            return Pitch::STEP_E;
+            return Pitch::Step::E;
         case 'F':
         case 'f':
-            return Pitch::STEP_F;
+            return Pitch::Step::F;
         case 'G':
         case 'g':
-            return Pitch::STEP_G;
+            return Pitch::Step::G;
         case 'A':
         case 'a':
-            return Pitch::STEP_A;
+            return Pitch::Step::A;
         case 'B':
         case 'b':
-            return Pitch::STEP_B;
+            return Pitch::Step::B;
             
         default:
             throw dom::InvalidDataError("Invalid step " + string);

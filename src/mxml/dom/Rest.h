@@ -11,7 +11,7 @@ namespace dom {
 
 class Rest : public Node {
 public:
-    Rest() : _displayStep(Pitch::STEP_C), _displayOctave(4) {}
+    Rest() : _displayStep(Pitch::Step::C), _displayOctave(4) {}
     Rest(Pitch::Step step, int octave)
     : _displayStep(step), _displayOctave(octave) {}
     

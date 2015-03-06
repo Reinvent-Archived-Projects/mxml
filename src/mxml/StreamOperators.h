@@ -4,9 +4,10 @@
 #pragma once
 #include <iostream>
 
-#include "Point.h"
-#include "Size.h"
-#include "Rect.h"
+#include <mxml/dom/Accidental.h>
+#include <mxml/geometry/Point.h>
+#include <mxml/geometry/Size.h>
+#include <mxml/geometry/Rect.h>
 
 namespace mxml {
 
@@ -18,6 +19,10 @@ inline std::ostream& operator<<(std::ostream& os, const mxml::Size& size) {
 }
 inline std::ostream& operator<<(std::ostream& os, const mxml::Rect& rect) {
     return os << "{" << rect.origin << ", " << rect.size << "}";
+}
+
+inline std::ostream& operator<<(std::ostream& os, const mxml::dom::Accidental::Type& type) {
+    return os << type.name;
 }
 
 } // namespace

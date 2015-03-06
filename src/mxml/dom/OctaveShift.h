@@ -13,15 +13,15 @@ namespace dom {
  */
 struct OctaveShift : public DirectionType {
 public:
-    enum Type {
-        kUp,
-        kDown,
-        kStop,
-        kContinue
+    enum class Type {
+        Up,
+        Down,
+        Stop,
+        Continue
     };
 
 public:
-    OctaveShift() : type(kUp), number(1), size(8)  {}
+    OctaveShift() : type(Type::Up), number(1), size(8)  {}
 
     bool span() const {
         return true;

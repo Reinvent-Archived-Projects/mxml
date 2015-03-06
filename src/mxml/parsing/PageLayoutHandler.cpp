@@ -31,9 +31,9 @@ void PageLayoutHandler::endSubElement(const lxml::QName& qname, RecursiveHandler
         _result.pageWidth = dom::presentOptional(value);
     } else if (strcmp(qname.localName(), kPageMarginsTag) == 0) {
         auto margins = _pageMarginsHandler.result();
-        if (margins.type == dom::PageMargins::kMarginTypeOdd || margins.type == dom::PageMargins::kMarginTypeBoth)
+        if (margins.type == dom::PageMargins::MarginType::Odd || margins.type == dom::PageMargins::MarginType::Both)
             _result.oddPageMargins = margins;
-        if (margins.type == dom::PageMargins::kMarginTypeEven || margins.type == dom::PageMargins::kMarginTypeBoth)
+        if (margins.type == dom::PageMargins::MarginType::Even || margins.type == dom::PageMargins::MarginType::Both)
             _result.evenPageMargins = margins;
     }
 }

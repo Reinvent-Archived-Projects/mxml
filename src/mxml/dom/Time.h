@@ -13,17 +13,17 @@ namespace dom {
 
 class Time : public Node {
 public:
-    enum Symbol {
-        SYMBOL_NORMAL,
-        SYMBOL_COMMON,
-        SYMBOL_CUT,
-        SYMBOL_SINGLE_NUMBER,
-        SYMBOL_NOTE,
-        SYMBOL_DOTTED_NOTE
+    enum class Symbol {
+        Normal,
+        Common,
+        Cut,
+        SingleNumber,
+        Note,
+        DottedNote
     };
     
 public:
-    Time() : _number(1), _symbol(SYMBOL_NORMAL), _senzaMisura(), _beats(4), _beatType(4) {}
+    Time() : _number(1), _symbol(Symbol::Normal), _senzaMisura(), _beats(4), _beatType(4) {}
     
     const Optional<int>& number() const {
         return _number;
@@ -62,13 +62,13 @@ public:
     
     Note::Type beatNoteType() const {
         switch (_beatType) {
-            case 1: return Note::TYPE_WHOLE;
-            case 2: return Note::TYPE_HALF;
-            case 4: return Note::TYPE_QUARTER;
-            case 8: return Note::TYPE_EIGHTH;
-            case 18: return Note::TYPE_16TH;
+            case 1: return Note::Type::Whole;
+            case 2: return Note::Type::Half;
+            case 4: return Note::Type::Quarter;
+            case 8: return Note::Type::Eighth;
+            case 18: return Note::Type::_16th;
         }
-        return Note::TYPE_QUARTER;
+        return Note::Type::Quarter;
     }
     
     /**
@@ -77,7 +77,7 @@ public:
      */
     double measureRatio(Note::Type type) const {
         double wholeSize = _beatType / static_cast<double>(_beats);
-        double ratio = std::exp2(static_cast<double>(type - Note::TYPE_WHOLE));
+        double ratio = std::exp2(static_cast<double>(type) - static_cast<double>(Note::Type::Whole));
         return wholeSize * ratio;
     }
     

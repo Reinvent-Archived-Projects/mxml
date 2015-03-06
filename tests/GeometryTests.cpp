@@ -2,7 +2,7 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #include <mxml/geometry/Geometry.h>
-#include <mxml/geometry/StreamOperators.h>
+#include <mxml/StreamOperators.h>
 #include <boost/test/unit_test.hpp>
 
 using namespace mxml;

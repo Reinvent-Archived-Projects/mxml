@@ -49,14 +49,14 @@ void CreditWordsHandler::endElement(const QName& qname, const std::string& conte
 
 CreditWords::FontStyle CreditWordsHandler::fontStyleFromString(const std::string& string) {
     if (string == "italic")
-        return CreditWords::FONT_STYLE_ITALIC;
-    return CreditWords::FONT_STYLE_NORMAL;
+        return CreditWords::FontStyle::Italic;
+    return CreditWords::FontStyle::Normal;
 }
 
 CreditWords::FontWeight CreditWordsHandler::fontWeightFromString(const std::string& string) {
     if (string == "bold")
-        return CreditWords::FONT_WEIGHT_BOLD;
-    return CreditWords::FONT_WEIGHT_NORMAL;
+        return CreditWords::FontWeight::Bold;
+    return CreditWords::FontWeight::Normal;
 }
 
 } // namespace mxml

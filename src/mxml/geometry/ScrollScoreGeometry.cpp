@@ -9,7 +9,7 @@ namespace mxml {
 
 ScrollScoreGeometry::ScrollScoreGeometry(const dom::Score& score, bool naturalSpacing)
 : _score(score),
-  _scoreProperties(score, ScoreProperties::kLayoutTypeScroll),
+  _scoreProperties(score, ScoreProperties::LayoutType::Scroll),
   _spans()
 {
     SpanFactory spanFactory(_score, _scoreProperties);

@@ -50,11 +50,11 @@ void PageMarginsHandler::endSubElement(const lxml::QName& qname, RecursiveHandle
 
 dom::PageMargins::MarginType PageMarginsHandler::marginTypeFromString(const std::string& string) {
     if (string == "odd")
-        return dom::PageMargins::kMarginTypeOdd;
+        return dom::PageMargins::MarginType::Odd;
     if (string == "even")
-        return dom::PageMargins::kMarginTypeEven;
+        return dom::PageMargins::MarginType::Even;
     if (string == "both")
-        return dom::PageMargins::kMarginTypeBoth;
+        return dom::PageMargins::MarginType::Both;
 
     throw dom::InvalidDataError("Invalid margin type " + string);
 }

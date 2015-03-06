@@ -10,7 +10,7 @@ namespace dom {
 
 class Unpitched : public Node {
 public:
-    Unpitched() : _displayStep(Pitch::STEP_C), _displayOctave(4) {}
+    Unpitched() : _displayStep(Pitch::Step::C), _displayOctave(4) {}
     Unpitched(Pitch::Step step, int octave)
     : _displayStep(step), _displayOctave(octave) {}
     

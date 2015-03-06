@@ -43,37 +43,37 @@ void BarlineHandler::endSubElement(const QName& qname, RecursiveHandler* parser)
 
 Barline::Style BarlineHandler::styleFromString(const std::string& string) {
     if (string == "regular")
-        return Barline::REGULAR;
+        return Barline::Style::Regular;
     else if (string == "dotted")
-        return Barline::DOTTED;
+        return Barline::Style::Dotted;
     else if (string == "dashed")
-        return Barline::DASHED;
+        return Barline::Style::Dashed;
     else if (string == "heavy")
-        return Barline::HEAVY;
+        return Barline::Style::Heavy;
     else if (string == "light-light")
-        return Barline::LIGHT_LIGHT;
+        return Barline::Style::LightLight;
     else if (string == "light-heavy")
-        return Barline::LIGHT_HEAVY;
+        return Barline::Style::LightHeavy;
     else if (string == "heavy-light")
-        return Barline::HEAVY_LIGHT;
+        return Barline::Style::HeavyLight;
     else if (string == "heavy-heavy")
-        return Barline::HEAVY_HEAVY;
+        return Barline::Style::HeavyHeavy;
     else if (string == "tick")
-        return Barline::TICK;
+        return Barline::Style::Tick;
     else if (string == "short")
-        return Barline::SHORT;
+        return Barline::Style::Short;
     else if (string == "none")
-        return Barline::NONE;
+        return Barline::Style::None;
     throw dom::InvalidDataError("Invalid barline style " + string);
 }
 
 Barline::Location BarlineHandler::locationFromString(const std::string& string) {
     if (string == "left")
-        return Barline::LEFT;
+        return Barline::Location::Left;
     else if (string == "middle")
-        return Barline::MIDDLE;
+        return Barline::Location::Middle;
     else if (string == "right")
-        return Barline::RIGHT;
+        return Barline::Location::Right;
     throw dom::InvalidDataError("Invalid barline location " + string);
 }
 

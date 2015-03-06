@@ -32,9 +32,9 @@ namespace dom {
 
 class ScoreProperties {
 public:
-    enum LayoutType : int {
-        kLayoutTypeScroll,
-        kLayoutTypePage
+    enum class LayoutType : int {
+        Scroll,
+        Page
     };
 
 public:

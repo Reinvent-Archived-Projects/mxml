@@ -72,7 +72,7 @@ void ChordGeometryFactory::buildDot(const NoteGeometry& noteGeom) {
 
     coord_t staffY = dotLocation.y - _metrics.staffOrigin(note.staff());
     if ((int)staffY % 10 == 0) {
-        if (note.dot()->placement() == dom::kPlacementAbove)
+        if (note.dot()->placement() == dom::Placement::Above)
             dotLocation.y -= 5;
         else
             dotLocation.y += 5;
@@ -146,7 +146,7 @@ void ChordGeometryFactory::buildFermata(const dom::Fermata& fermata, Rect& notes
     Point location;
     location.x = _geometry->_refNoteLocation.x;
 
-    bool above = fermata.type() == dom::Fermata::TYPE_UPRIGHT;
+    bool above = fermata.type() == dom::Fermata::Type::Upright;
     if (above) {
         location.y = notesFrame.origin.y - size.height/2 - ChordGeometry::kFermataSpacing;
     } else {
@@ -161,7 +161,7 @@ void ChordGeometryFactory::buildFermata(const dom::Fermata& fermata, Rect& notes
 
 void ChordGeometryFactory::buildStem(const dom::Chord& chord) {
     const dom::Note* note = chord.firstNote();
-    if (note->type() > dom::Note::TYPE_HALF || (note->stem() != dom::kStemUp && note->stem() != dom::kStemDown))
+    if (note->type() > dom::Note::Type::Half || (note->stem() != dom::Stem::Up && note->stem() != dom::Stem::Down))
         return;
 
     bool flags = note->beams().empty() && chord.firstNote()->beams().empty();
@@ -183,7 +183,7 @@ Rect ChordGeometryFactory::placeNotes(ChordGeometry* chordGeometry) {
     // Sort notes by stem position
     std::vector<NoteGeometry*> sorted = chordGeometry->_notes;
     std::sort(sorted.begin(), sorted.end(), [stem](const NoteGeometry* g1, const NoteGeometry* g2) {
-        if (stem == dom::kStemUp)
+        if (stem == dom::Stem::Up)
             return g1->location().y < g2->location().y;
         else
             return g1->location().y > g2->location().y;
@@ -198,7 +198,7 @@ Rect ChordGeometryFactory::placeNotes(ChordGeometry* chordGeometry) {
         for (std::size_t j = i + 1; j < sorted.size(); j += 1) {
             NoteGeometry* noteGeom = sorted[j];
             if (loc.x == noteGeom->location().x && std::abs(loc.y - noteGeom->location().y) < Metrics::kStaffLineSpacing) {
-                if (stem == dom::kStemUp)
+                if (stem == dom::Stem::Up)
                     loc.x += geom->size().width;
                 else
                     loc.x -= geom->size().width;
@@ -223,11 +223,11 @@ void ChordGeometryFactory::placeArticulation(ChordGeometry* chordGeometry, Artic
 
     bool above = true;
     if (articulation.placement().isPresent()) {
-        above = articulation.placement() == dom::kPlacementAbove;
+        above = articulation.placement() == dom::Placement::Above;
     } else if (chordGeometry->stem()) {
-        above = chordGeometry->stem()->stemDirection() == dom::kStemDown;
+        above = chordGeometry->stem()->stemDirection() == dom::Stem::Down;
     } else {
-        above = chordGeometry->chord().stem() == dom::kStemDown;
+        above = chordGeometry->chord().stem() == dom::Stem::Down;
     }
 
     Size size = articulationGeometry->size();
@@ -291,14 +291,14 @@ void ChordGeometryFactory::placeStem(ChordGeometry* chordGeometry) {
     // Extend the stems of notes above and below ledger lines to staves center
     auto staffOrigin = _metrics.staffOrigin(chordGeometry->staff());
     auto stavesCenter = staffOrigin + _metrics.staffHeight()/2;
-    if (stem->stemDirection() == dom::kStemUp && stem->frame().min().y > stavesCenter)
+    if (stem->stemDirection() == dom::Stem::Up && stem->frame().min().y > stavesCenter)
         chordGeometry->extendStem(stavesCenter);
-    if (stem->stemDirection() == dom::kStemDown && stem->frame().max().y < stavesCenter)
+    if (stem->stemDirection() == dom::Stem::Down && stem->frame().max().y < stavesCenter)
         chordGeometry->extendStem(stavesCenter);
 
     // Set the location of the stem
     Point stemLocation;
-    if (stem->stemDirection() == dom::kStemUp) {
+    if (stem->stemDirection() == dom::Stem::Up) {
         stemLocation = {chordGeometry->refNoteLocation().x, topLocation.y};
         stem->setVerticalAnchorPointValues(1, -NoteGeometry::kHeight/2);
     } else {

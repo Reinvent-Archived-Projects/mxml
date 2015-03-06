@@ -33,7 +33,7 @@ void EndingGeometryFactory::buildEndings(const MeasureGeometry& measureGeom, con
 
     auto& ending = barline.ending();
 
-    if ((ending->type() == dom::Ending::kStop || ending->type() == dom::Ending::kDiscontinue) && _startEnding.isPresent()) {
+    if ((ending->type() == dom::Ending::Type::Stop || ending->type() == dom::Ending::Type::Discontinue) && _startEnding.isPresent()) {
         Point stopLocation;
         stopLocation.x = measureGeom.frame().max().x - 1;
         stopLocation.y = measureGeom.origin().y - measureGeom.contentOffset().y - EndingGeometry::kHeight - 10;
@@ -43,7 +43,7 @@ void EndingGeometryFactory::buildEndings(const MeasureGeometry& measureGeom, con
         _geometries.push_back(std::move(endingGeom));
 
         _startEnding.reset();
-    } else if (ending->type() == dom::Ending::kStart) {
+    } else if (ending->type() == dom::Ending::Type::Start) {
         _startEnding.setPresentValue(*ending);
         _startEndingLocation = measureGeom.location();
         _startEndingLocation.y = measureGeom.origin().y - measureGeom.contentOffset().y - EndingGeometry::kHeight - 10;

@@ -82,7 +82,7 @@ void StemDirectionResolver::resolve(const MeasureGeometry* measureGeometry) {
         for (std::size_t i = 0; i < chords.size(); i += 1) {
             auto value = solution[i];
             auto chordGeometry = chords[i];
-            setDirection(chordGeometry, value ? dom::Stem::kStemUp : dom::Stem::kStemDown);
+            setDirection(chordGeometry, value ? dom::Stem::Up : dom::Stem::Down);
         }
     }
 }
@@ -163,7 +163,7 @@ void StemDirectionResolver::setDirection(ChordGeometry* chordGeometry, dom::Stem
     stem->setStemDirection(stemDirection);
 
     // Set stem location
-    if (stemDirection == dom::kStemUp) {
+    if (stemDirection == dom::Stem::Up) {
         stem->setLocation({refLocation.x, topLocation.y});
         stem->setVerticalAnchorPointValues(1, -NoteGeometry::kHeight/2);
     } else {
@@ -174,7 +174,7 @@ void StemDirectionResolver::setDirection(ChordGeometry* chordGeometry, dom::Stem
     chordGeometry->setBounds(chordGeometry->subGeometriesFrame());
 
     // Adjust chord bounds
-    if (stemDirection == dom::kStemUp) {
+    if (stemDirection == dom::Stem::Up) {
         chordGeometry->setHorizontalAnchorPointValues(0, refLocation.x - chordGeometry->contentOffset().x);
         chordGeometry->setVerticalAnchorPointValues(1, -(chordGeometry->size().height - (refLocation.y - chordGeometry->contentOffset().y)));
     } else {
@@ -192,14 +192,14 @@ dom::Stem StemDirectionResolver::preferredStem(const ChordGeometry* chordGeometr
     auto staff = chordGeometry->chord().firstNote()->staff();
     auto midStaff = _measureGeometry->metrics().staffOrigin(staff) + Metrics::staffHeight()/2;
     if (location.y <= midStaff)
-        return dom::Stem::kStemDown;
-    return dom::Stem::kStemUp;
+        return dom::Stem::Down;
+    return dom::Stem::Up;
 }
 
 int StemDirectionResolver::solutionValue(const std::vector<ChordGeometry*>& chords, const std::vector<bool>& values) const {
     // Convert values to stem directions
     for (std::size_t i = 0; i < chords.size(); i += 1) {
-        auto stem = values[i] ? dom::Stem::kStemUp : dom::Stem::kStemDown;
+        auto stem = values[i] ? dom::Stem::Up : dom::Stem::Down;
         chords[i]->stem()->setStemDirection(stem);
     }
 
@@ -211,17 +211,17 @@ int StemDirectionResolver::solutionValue(const std::vector<ChordGeometry*>& chor
         auto location = chord->location();
         auto staff = chord->chord().firstNote()->staff();
         auto midStaff = _measureGeometry->metrics().staffOrigin(staff) + Metrics::staffHeight()/2;
-        if (stem == dom::Stem::kStemUp)
+        if (stem == dom::Stem::Up)
             total += midStaff - location.y;
-        else if (stem == dom::Stem::kStemDown)
+        else if (stem == dom::Stem::Down)
             total += location.y - midStaff;
 
         // Strong bias against 69-ing notes
         auto it = _variables.find(chord);
         for (auto c : it->second.opposite) {
-            if (c->location().y < location.y && stem == dom::Stem::kStemUp)
+            if (c->location().y < location.y && stem == dom::Stem::Up)
                 total += 1000;
-            else if (c->location().y > location.y && stem == dom::Stem::kStemDown)
+            else if (c->location().y > location.y && stem == dom::Stem::Down)
                 total += 1000;
         }
     }

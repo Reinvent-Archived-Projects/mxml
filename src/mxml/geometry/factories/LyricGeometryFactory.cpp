@@ -69,7 +69,7 @@ void LyricGeometryFactory::build(const MeasureGeometry& measureGeom, const Chord
     location.x = span.start() + span.eventOffset() - measureOrigin;
     location = _parent.convertFromGeometry(location, &measureGeom);
 
-    if (geometry->placement() == dom::kPlacementAbove) {
+    if (geometry->placement() == dom::Placement::Above) {
         location.y = _chordsBounds.min().y;
         geometry->setVerticalAnchorPointValues(1, 0);
     } else {
@@ -78,7 +78,7 @@ void LyricGeometryFactory::build(const MeasureGeometry& measureGeom, const Chord
     }
 
     if (lyric.number() > 1) {
-        if (geometry->placement() == dom::kPlacementAbove)
+        if (geometry->placement() == dom::Placement::Above)
             location.y -= (lyric.number() - 1) * geometry->size().height;
         else
             location.y += (lyric.number() - 1) * geometry->size().height;

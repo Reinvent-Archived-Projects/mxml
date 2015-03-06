@@ -53,16 +53,16 @@ void TimeHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
 
 Time::Symbol TimeHandler::symbolFromString(const std::string& string) {
     if (string == "common")
-        return Time::SYMBOL_COMMON;
+        return Time::Symbol::Common;
     if (string == "cut")
-        return Time::SYMBOL_CUT;
+        return Time::Symbol::Cut;
     if (string == "single-number")
-        return Time::SYMBOL_SINGLE_NUMBER;
+        return Time::Symbol::SingleNumber;
     if (string == "note")
-        return Time::SYMBOL_NOTE;
+        return Time::Symbol::Note;
     if (string == "dotted-note")
-        return Time::SYMBOL_DOTTED_NOTE;
-    return Time::SYMBOL_NORMAL;
+        return Time::Symbol::DottedNote;
+    return Time::Symbol::Normal;
 }
 
 } // namespace mxml

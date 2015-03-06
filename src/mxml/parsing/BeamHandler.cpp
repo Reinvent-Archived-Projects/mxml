@@ -25,16 +25,16 @@ void BeamHandler::endElement(const QName& qname, const std::string& contents) {
 
 Beam::Type BeamHandler::typeFromString(const std::string& string) {
     if (string == "begin")
-        return Beam::kTypeBegin;
+        return Beam::Type::Begin;
     if (string == "continue")
-        return Beam::kTypeContinue;
+        return Beam::Type::Continue;
     if (string == "end")
-        return Beam::kTypeEnd;
+        return Beam::Type::End;
     if (string == "forward hook")
-        return Beam::kTypeForwardHook;
+        return Beam::Type::ForwardHook;
     if (string == "backward hook")
-        return Beam::kTypeBackwardHook;
-    return Beam::kTypeContinue;
+        return Beam::Type::BackwardHook;
+    return Beam::Type::Continue;
 }
 
 } // namespace mxml

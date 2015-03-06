@@ -38,7 +38,7 @@ void MeasureHandler::endElement(const QName& qname, const std::string& contents)
         note->setRest(std::unique_ptr<dom::Rest>(new dom::Rest));
         note->setMeasure(_result.get());
         note->setStart(0);
-        note->setType(dom::presentOptional(dom::Note::TYPE_WHOLE));
+        note->setType(dom::presentOptional(dom::Note::Type::Whole));
         //note->setDuration(dom::presentOptional(dom::Attributes::divisionsPerMeasure(_attributes->divisions(), *_attributes->time())));
         _result->addNode(std::move(note));
     }

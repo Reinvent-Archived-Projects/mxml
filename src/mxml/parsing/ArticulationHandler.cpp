@@ -39,21 +39,21 @@ void ArticulationHandler::startElement(const QName& qname, const AttributeMap& a
 }
 
 Articulation::Type ArticulationHandler::typeFromString(const std::string& string) {
-    if (string == "accent") return Articulation::ACCENT;
-    if (string == "breath-mark") return Articulation::BREATH_MARK;
-    if (string == "caesura") return Articulation::CAESURA;
-    if (string == "detached-legato") return Articulation::DETACHED_LEGATO;
-    if (string == "doit") return Articulation::DOIT;
-    if (string == "falloff") return Articulation::FALLOFF;
-    if (string == "plop") return Articulation::PLOP;
-    if (string == "scoop") return Articulation::SCOOP;
-    if (string == "spiccato") return Articulation::SPICCATO;
-    if (string == "staccatissimo") return Articulation::STACCATISSIMO;
-    if (string == "staccato") return Articulation::STACCATO;
-    if (string == "stress") return Articulation::STRESS;
-    if (string == "strong-accent") return Articulation::STRONG_ACCENT;
-    if (string == "tenuto") return Articulation::TENUTO;
-    if (string == "unstress") return Articulation::UNSTRESS;
+    if (string == "accent") return Articulation::Type::Accent;
+    if (string == "breath-mark") return Articulation::Type::BreathMark;
+    if (string == "caesura") return Articulation::Type::Caesura;
+    if (string == "detached-legato") return Articulation::Type::DetachedLegato;
+    if (string == "doit") return Articulation::Type::Doit;
+    if (string == "falloff") return Articulation::Type::Falloff;
+    if (string == "plop") return Articulation::Type::Plop;
+    if (string == "scoop") return Articulation::Type::Scoop;
+    if (string == "spiccato") return Articulation::Type::Spiccato;
+    if (string == "staccatissimo") return Articulation::Type::Staccatissimo;
+    if (string == "staccato") return Articulation::Type::Staccato;
+    if (string == "stress") return Articulation::Type::Stress;
+    if (string == "strong-accent") return Articulation::Type::StrongAccent;
+    if (string == "tenuto") return Articulation::Type::Tenuto;
+    if (string == "unstress") return Articulation::Type::Unstress;
     throw dom::InvalidDataError("Invalid articulation type " + string);
 }
 

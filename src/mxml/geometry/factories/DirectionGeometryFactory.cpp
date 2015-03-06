@@ -122,7 +122,7 @@ Point DirectionGeometryFactory::spanOffsetInParentGeometry(const MeasureGeometry
 void DirectionGeometryFactory::placeDirection(PlacementGeometry& geometry) {
     auto location = geometry.location();
 
-    if (geometry.placement() == dom::kPlacementAbove) {
+    if (geometry.placement() == dom::Placement::Above) {
         location.y = _metrics->staffOrigin(geometry.staff()) - Metrics::kStaffLineSpacing;
         geometry.setVerticalAnchorPointValues(1, 0);
     } else {
@@ -137,7 +137,7 @@ void DirectionGeometryFactory::buildWedge(const MeasureGeometry& measureGeom, co
     using dom::Wedge;
 
     const Wedge& wedge = dynamic_cast<const Wedge&>(*direction.type());
-    if (wedge.type() == Wedge::kStop) {
+    if (wedge.type() == Wedge::Type::Stop) {
         auto it = std::find_if(_openSpanDirections.rbegin(), _openSpanDirections.rend(), [wedge](std::pair<const MeasureGeometry*, const dom::Direction*> pair) {
             if (const Wedge* startWedge = dynamic_cast<const Wedge*>(pair.second->type()))
                 return startWedge->number() == wedge.number();
@@ -148,7 +148,7 @@ void DirectionGeometryFactory::buildWedge(const MeasureGeometry& measureGeom, co
             buildWedge(*it->first, *it->second, measureGeom,direction);
             _openSpanDirections.erase(it.base() - 1);
         }
-    } else if (wedge.type() != Wedge::kContinue) {
+    } else if (wedge.type() != Wedge::Type::Continue) {
         _openSpanDirections.push_back(std::make_pair(&measureGeom, &direction));
     }
 }
@@ -169,14 +169,14 @@ void DirectionGeometryFactory::buildWedge(const MeasureGeometry& startMeasureGeo
     dom::Placement placement = startDirection.placement();
     if (!startDirection.placement().isPresent()) {
         if (staff == 1)
-            placement = dom::kPlacementBelow;
+            placement = dom::Placement::Below;
         else
-            placement = dom::kPlacementAbove;
+            placement = dom::Placement::Above;
     }
 
-    if (placement == dom::kPlacementAbove) {
+    if (placement == dom::Placement::Above) {
         startLocation.y = stopLocation.y = _metrics->staffOrigin(staff) - _metrics->staffDistance()/2;
-    } else if (placement == dom::kPlacementBelow) {
+    } else if (placement == dom::Placement::Below) {
         startLocation.y = stopLocation.y = _metrics->staffOrigin(staff) + Metrics::staffHeight() + _metrics->staffDistance()/2;
     }
 
@@ -306,7 +306,7 @@ void DirectionGeometryFactory::buildPedalFromEdgeToEdge(const dom::Direction& st
 
 void DirectionGeometryFactory::buildOctaveShift(const MeasureGeometry& measureGeom, const dom::Direction& direction) {
     const dom::OctaveShift& octaveShift = dynamic_cast<const dom::OctaveShift&>(*direction.type());
-    if (octaveShift.type == dom::OctaveShift::kStop) {
+    if (octaveShift.type == dom::OctaveShift::Type::Stop) {
         const MeasureGeometry* startMeasure;
         const dom::Direction* startDirection;
         std::tie(startMeasure, startDirection) = pullOctaveShiftStart(measureGeom, direction);
@@ -316,7 +316,7 @@ void DirectionGeometryFactory::buildOctaveShift(const MeasureGeometry& measureGe
         } else {
             buildOctaveShiftFromEdge(*startDirection, measureGeom, direction);
         }
-    } else if (octaveShift.type != dom::OctaveShift::kContinue) {
+    } else if (octaveShift.type != dom::OctaveShift::Type::Continue) {
         _openSpanDirections.push_back(std::make_pair(&measureGeom, &direction));
     }
 }
@@ -445,14 +445,14 @@ void DirectionGeometryFactory::buildWords(const MeasureGeometry& measureGeom, co
     if (!direction.placement().isPresent()) {
         if (wordsGeom->dynamics()) {
             if (direction.staff() == 1)
-                placement = dom::kPlacementBelow;
+                placement = dom::Placement::Below;
             else
-                placement = dom::kPlacementAbove;
+                placement = dom::Placement::Above;
         } else {
             if (direction.staff() == 1)
-                placement = dom::kPlacementAbove;
+                placement = dom::Placement::Above;
             else
-                placement = dom::kPlacementBelow;
+                placement = dom::Placement::Below;
         }
         wordsGeom->setPlacement(placement);
     }

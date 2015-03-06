@@ -22,26 +22,26 @@ void FermataHandler::startElement(const QName& qname, const AttributeMap& attrib
 
 void FermataHandler::endElement(const QName& qname, const std::string& contents) {
     if (contents.empty())
-        _result->setShape(Fermata::SHAPE_NORMAL);
+        _result->setShape(Fermata::Shape::Normal);
     else
         _result->setShape(shapeFromString(contents));
 }
 
 Fermata::Type FermataHandler::typeFromString(const std::string& string) {
     if (string == "upright")
-        return Fermata::TYPE_UPRIGHT;
+        return Fermata::Type::Upright;
     else if (string == "inverted")
-        return Fermata::TYPE_INVERTED;
+        return Fermata::Type::Inverted;
     throw InvalidDataError("Invalid fermata type " + string);
 }
 
 Fermata::Shape FermataHandler::shapeFromString(const std::string& string) {
     if (string == "normal")
-        return Fermata::SHAPE_NORMAL;
+        return Fermata::Shape::Normal;
     else if (string == "angled")
-        return Fermata::SHAPE_ANGLED;
+        return Fermata::Shape::Angled;
     else if (string == "square")
-        return Fermata::SHAPE_SQUARE;
+        return Fermata::Shape::Square;
     throw InvalidDataError("Invalid fermata shape " + string);
 }
 

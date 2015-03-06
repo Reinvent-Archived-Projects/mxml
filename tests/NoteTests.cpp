@@ -21,31 +21,31 @@ Note createNote(int octave, Pitch::Step step, int alter) {
 }
 
 BOOST_AUTO_TEST_CASE(midiNumberMiddleC) {
-    Note note = createNote(4, Pitch::STEP_C, 0);
+    Note note = createNote(4, Pitch::Step::C, 0);
     BOOST_CHECK_EQUAL(note.midiNumber(), 60);
 }
 
 BOOST_AUTO_TEST_CASE(midiNumberA4) {
-    Note note = createNote(4, Pitch::STEP_A, 0);
+    Note note = createNote(4, Pitch::Step::A, 0);
     BOOST_CHECK_EQUAL(note.midiNumber(), 69);
 }
 
 BOOST_AUTO_TEST_CASE(midiNumberA0) {
-    Note note = createNote(0, Pitch::STEP_A, 0);
+    Note note = createNote(0, Pitch::Step::A, 0);
     BOOST_CHECK_EQUAL(note.midiNumber(), 21);
 }
 
 BOOST_AUTO_TEST_CASE(midiNumberC8) {
-    Note note = createNote(8, Pitch::STEP_C, 0);
+    Note note = createNote(8, Pitch::Step::C, 0);
     BOOST_CHECK_EQUAL(note.midiNumber(), 108);
 }
 
 BOOST_AUTO_TEST_CASE(midiNumberMiddleCSharp) {
-    Note note = createNote(4, Pitch::STEP_C, 1);
+    Note note = createNote(4, Pitch::Step::C, 1);
     BOOST_CHECK_EQUAL(note.midiNumber(), 61);
 }
 
 BOOST_AUTO_TEST_CASE(midiNumberE4Flat) {
-    Note note = createNote(4, Pitch::STEP_E, -1);
+    Note note = createNote(4, Pitch::Step::E, -1);
     BOOST_CHECK_EQUAL(note.midiNumber(), 63);
 }

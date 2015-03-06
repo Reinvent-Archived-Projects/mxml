@@ -17,7 +17,7 @@ NoteGeometry::NoteGeometry(const Note& note) : _note(note), _tieGeometry(nullptr
 }
 
 Size NoteGeometry::Size(const Note& note) {
-    if (note.type() >= Note::TYPE_WHOLE)
+    if (note.type() >= Note::Type::Whole)
         return {kWholeWidth, kHeight};
     else
         return {kQuarterWidth, kHeight};

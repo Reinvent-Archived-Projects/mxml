@@ -58,7 +58,7 @@ void OrnamentGeometryFactory::buildOrnament(const MeasureGeometry& measureGeom, 
     Rect frame = _parentGeometry->convertToGeometry(geo->frame(), &measureGeom);
     auto collidingGeom = measureGeom.collidingGeometry(frame);
     if (collidingGeom) {
-        if (placement->placement() == dom::kPlacementAbove) {
+        if (placement->placement() == dom::Placement::Above) {
             Point origin = _parentGeometry->convertFromGeometry(collidingGeom->origin(), &measureGeom);
             location.y = origin.y - geo->size().height/2 - 4;
             geo->setLocation(location);
@@ -75,7 +75,7 @@ void OrnamentGeometryFactory::buildOrnament(const MeasureGeometry& measureGeom, 
 void OrnamentGeometryFactory::place(PlacementGeometry& geometry) {
     auto location = geometry.location();
 
-    if (geometry.placement() == dom::kPlacementAbove) {
+    if (geometry.placement() == dom::Placement::Above) {
         location.y = _metrics.staffOrigin(geometry.staff()) - Metrics::kStaffLineSpacing;
         geometry.setVerticalAnchorPointValues(1, 0);
     } else {

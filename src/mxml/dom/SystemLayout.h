@@ -29,7 +29,7 @@ struct SystemMargins {
  system and the previous system.
  */
 struct SystemDivider {
-    SystemDivider() : printObject(true), position(), horizontalAlignment(kHAlignLeft), verticalAlignment(kVAlignTop) {}
+    SystemDivider() : printObject(true), position(), horizontalAlignment(HAlign::Left), verticalAlignment(VAlign::Top) {}
     
     bool printObject;
     Position position;

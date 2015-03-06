@@ -18,9 +18,9 @@ BarlineGeometry::BarlineGeometry(const Barline& barline, const Metrics& metrics)
     Size size;
     size.width = Width(_barline);
     size.height = metrics.stavesHeight();
-    if (_barline.style() == Barline::TICK)
+    if (_barline.style() == Barline::Style::Tick)
         size.height = Metrics::kStaffLineSpacing;
-    else if (_barline.style() == Barline::SHORT)
+    else if (_barline.style() == Barline::Style::Short)
         size.height = 2*Metrics::kStaffLineSpacing;
     setSize(size);
 }
@@ -30,31 +30,31 @@ coord_t BarlineGeometry::Width(const Barline& barline) {
         return kLightLineWidth + kLineSpacing + kHeavyLineWidth + kLineSpacing + kDotDiameter;
     
     switch (barline.style()) {
-        case Barline::REGULAR:
-        case Barline::DOTTED:
-        case Barline::DASHED:
+        case Barline::Style::Regular:
+        case Barline::Style::Dotted:
+        case Barline::Style::Dashed:
             return kLightLineWidth;
             
-        case Barline::HEAVY:
+        case Barline::Style::Heavy:
             return kHeavyLineWidth;
             
-        case Barline::LIGHT_LIGHT:
+        case Barline::Style::LightLight:
             return kLightLineWidth + kLineSpacing + kLightLineWidth;
             
-        case Barline::LIGHT_HEAVY:
-        case Barline::HEAVY_LIGHT:
+        case Barline::Style::LightHeavy:
+        case Barline::Style::HeavyLight:
             return kLightLineWidth + kLineSpacing + kHeavyLineWidth;
             
-        case Barline::HEAVY_HEAVY:
+        case Barline::Style::HeavyHeavy:
             return kHeavyLineWidth + kLineSpacing + kHeavyLineWidth;
             
-        case Barline::TICK:
+        case Barline::Style::Tick:
             return kLightLineWidth;
             
-        case Barline::SHORT:
+        case Barline::Style::Short:
             return kLightLineWidth;
             
-        case Barline::NONE:
+        case Barline::Style::None:
             return kLightLineWidth;
     }
 }

@@ -43,7 +43,7 @@ void ChordGeometry::extendStem(coord_t coordinate) {
         return;
 
     auto frame = _stem->frame();
-    if (_stem->stemDirection() == dom::kStemUp) {
+    if (_stem->stemDirection() == dom::Stem::Up) {
         auto dy = frame.min().y - coordinate;
         frame.origin.y -= dy;
         frame.size.height += dy;

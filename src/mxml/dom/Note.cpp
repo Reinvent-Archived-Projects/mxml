@@ -19,30 +19,30 @@ unsigned int Note::midiNumber() const {
     number = (1 + pitch->octave()) * 12;
 
     switch (pitch->step()) {
-        case Pitch::STEP_C:
+        case Pitch::Step::C:
             break;
 
-        case Pitch::STEP_D:
+        case Pitch::Step::D:
             number += 2;
             break;
 
-        case Pitch::STEP_E:
+        case Pitch::Step::E:
             number += 4;
             break;
 
-        case Pitch::STEP_F:
+        case Pitch::Step::F:
             number += 5;
             break;
 
-        case Pitch::STEP_G:
+        case Pitch::Step::G:
             number += 7;
             break;
 
-        case Pitch::STEP_A:
+        case Pitch::Step::A:
             number += 9;
             break;
 
-        case Pitch::STEP_B:
+        case Pitch::Step::B:
             number += 11;
             break;
     }

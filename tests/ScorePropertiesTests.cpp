@@ -4,6 +4,7 @@
 #include <mxml/ScoreBuilder.h>
 #include <mxml/dom/Chord.h>
 #include <mxml/ScoreProperties.h>
+#include <mxml/StreamOperators.h>
 #include <boost/test/unit_test.hpp>
 
 using namespace mxml;
@@ -13,7 +14,7 @@ BOOST_AUTO_TEST_CASE(defaultDivisions) {
     builder.addPart();
 
     auto score = builder.build();
-    ScoreProperties properties(*score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties properties(*score, ScoreProperties::LayoutType::Scroll);
 
     BOOST_CHECK_EQUAL(properties.divisions(0), 1);
     BOOST_CHECK_EQUAL(properties.divisions(20), 1);
@@ -29,7 +30,7 @@ BOOST_AUTO_TEST_CASE(onlyDivisions) {
     attributes->setDivisions(dom::presentOptional(kInitialDivisions));
 
     auto score = builder.build();
-    ScoreProperties properties(*score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties properties(*score, ScoreProperties::LayoutType::Scroll);
 
     BOOST_CHECK_EQUAL(properties.divisions(0), 8);
     BOOST_CHECK_EQUAL(properties.divisions(20), 8);
@@ -56,7 +57,7 @@ BOOST_AUTO_TEST_CASE(varyingDivisions) {
     attributes3->setDivisions(dom::presentOptional(kModifiedDivisions));
 
     auto score = builder.build();
-    ScoreProperties properties(*score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties properties(*score, ScoreProperties::LayoutType::Scroll);
 
     BOOST_CHECK_EQUAL(properties.divisions(0), kInitialDivisions);
     BOOST_CHECK_EQUAL(properties.divisions(1), kInitialDivisions);
@@ -88,34 +89,34 @@ BOOST_AUTO_TEST_CASE(alters) {
     
     // C Steps - measure 1
     auto chord_c1 = builder.addChord(measure1);
-    auto note_c1 = builder.addNote(chord_c1, dom::Note::TYPE_EIGHTH, 1);
+    auto note_c1 = builder.addNote(chord_c1, dom::Note::Type::Eighth, 1);
     note_c1->setStaff(kStaff);
-    builder.setPitch(note_c1, dom::Pitch::STEP_C, kOctave, -1);
+    builder.setPitch(note_c1, dom::Pitch::Step::C, kOctave, -1);
     
     auto chord_c2 = builder.addChord(measure1);
-    auto note_c2 = builder.addNote(chord_c2, dom::Note::TYPE_EIGHTH, 2);
+    auto note_c2 = builder.addNote(chord_c2, dom::Note::Type::Eighth, 2);
     note_c2->setStaff(kStaff);
-    builder.setPitch(note_c2, dom::Pitch::STEP_C, kOctave, 0);
+    builder.setPitch(note_c2, dom::Pitch::Step::C, kOctave, 0);
     
     // D Steps - measure 1
     auto chord_d1 = builder.addChord(measure1);
-    auto note_d1 = builder.addNote(chord_d1, dom::Note::TYPE_EIGHTH, 1);
+    auto note_d1 = builder.addNote(chord_d1, dom::Note::Type::Eighth, 1);
     note_d1->setStaff(kStaff);
-    builder.setPitch(note_d1, dom::Pitch::STEP_D, kOctave, 1);
+    builder.setPitch(note_d1, dom::Pitch::Step::D, kOctave, 1);
     
     auto chord_d2 = builder.addChord(measure1);
-    auto note_d2 = builder.addNote(chord_d2, dom::Note::TYPE_EIGHTH, 2);
+    auto note_d2 = builder.addNote(chord_d2, dom::Note::Type::Eighth, 2);
     note_d2->setStaff(kStaff);
-    builder.setPitch(note_d2, dom::Pitch::STEP_D, kOctave, 0);
+    builder.setPitch(note_d2, dom::Pitch::Step::D, kOctave, 0);
     
     // C Steps - measure 2
     auto chord_c3 = builder.addChord(measure2);
-    auto note_c3 = builder.addNote(chord_c3, dom::Note::TYPE_EIGHTH, 1);
+    auto note_c3 = builder.addNote(chord_c3, dom::Note::Type::Eighth, 1);
     note_c3->setStaff(kStaff);
-    builder.setPitch(note_c3, dom::Pitch::STEP_C, kOctave);
+    builder.setPitch(note_c3, dom::Pitch::Step::C, kOctave);
     
     auto score = builder.build();
-    ScoreProperties properties(*score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties properties(*score, ScoreProperties::LayoutType::Scroll);
     
     // Original key signature
     BOOST_CHECK_EQUAL(properties.alter(*note_c1), 1);
@@ -160,18 +161,18 @@ BOOST_AUTO_TEST_CASE(altersSecondStaff) {
 
     // C Steps - staff 1
     auto chord_c1 = builder.addChord(measure1);
-    auto note_c1 = builder.addNote(chord_c1, dom::Note::TYPE_EIGHTH, 1);
+    auto note_c1 = builder.addNote(chord_c1, dom::Note::Type::Eighth, 1);
     note_c1->setStaff(1);
-    builder.setPitch(note_c1, dom::Pitch::STEP_C, 4);
+    builder.setPitch(note_c1, dom::Pitch::Step::C, 4);
 
     // C Steps - staff 2
     auto chord_c2 = builder.addChord(measure1);
-    auto note_c2 = builder.addNote(chord_c2, dom::Note::TYPE_EIGHTH, 1);
+    auto note_c2 = builder.addNote(chord_c2, dom::Note::Type::Eighth, 1);
     note_c2->setStaff(2);
-    builder.setPitch(note_c2, dom::Pitch::STEP_C, 5);
+    builder.setPitch(note_c2, dom::Pitch::Step::C, 5);
 
     auto score = builder.build();
-    ScoreProperties properties(*score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties properties(*score, ScoreProperties::LayoutType::Scroll);
 
     // Even though the key signature is only set for the first staff, it should apply to the second staff as well
     BOOST_CHECK_EQUAL(properties.alter(*note_c1), 1);
@@ -193,7 +194,7 @@ BOOST_AUTO_TEST_CASE(keySignatures) {
     attributes->setKey(1, std::move(key));
 
     auto score = builder.build();
-    ScoreProperties proeprties(*score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties proeprties(*score, ScoreProperties::LayoutType::Scroll);
 
     // Even though the key was only specified for the first staff it should apply to all staves
     BOOST_CHECK_EQUAL(proeprties.key(0, 0, 1, 0)->fifths(), kFifths);
@@ -219,16 +220,16 @@ BOOST_AUTO_TEST_CASE(clefSignatures) {
     attributes2->setClef(2, std::move(bassClef));
 
     auto score = builder.build();
-    ScoreProperties proeprties(*score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties proeprties(*score, ScoreProperties::LayoutType::Scroll);
 
     // Measure 1
     // Even though the clef was only specified for the first staff it should apply to all staves
-    BOOST_CHECK_EQUAL(proeprties.clef(0, 0, 1, 0)->sign(), dom::Clef::SIGN_G);
-    BOOST_CHECK_EQUAL(proeprties.clef(0, 0, 2, 0)->sign(), dom::Clef::SIGN_G);
+    BOOST_CHECK(proeprties.clef(0, 0, 1, 0)->sign() == dom::Clef::Sign::G);
+    BOOST_CHECK(proeprties.clef(0, 0, 2, 0)->sign() == dom::Clef::Sign::G);
 
     // Measure 2
-    BOOST_CHECK_EQUAL(proeprties.clef(0, 1, 1, 0)->sign(), dom::Clef::SIGN_G);
-    BOOST_CHECK_EQUAL(proeprties.clef(0, 1, 2, 0)->sign(), dom::Clef::SIGN_F);
+    BOOST_CHECK(proeprties.clef(0, 1, 1, 0)->sign() == dom::Clef::Sign::G);
+    BOOST_CHECK(proeprties.clef(0, 1, 2, 0)->sign() == dom::Clef::Sign::F);
 }
 
 BOOST_AUTO_TEST_CASE(clefSignaturesOnlyFirstStaff) {
@@ -250,14 +251,14 @@ BOOST_AUTO_TEST_CASE(clefSignaturesOnlyFirstStaff) {
     attributes2->setClef(1, std::move(bassClef));
 
     auto score = builder.build();
-    ScoreProperties proeprties(*score, ScoreProperties::kLayoutTypeScroll);
+    ScoreProperties proeprties(*score, ScoreProperties::LayoutType::Scroll);
 
     // Measure 1
     // Even though the clef was only specified for the first staff it should apply to all staves
-    BOOST_CHECK_EQUAL(proeprties.clef(0, 0, 1, 0)->sign(), dom::Clef::SIGN_G);
-    BOOST_CHECK_EQUAL(proeprties.clef(0, 0, 2, 0)->sign(), dom::Clef::SIGN_G);
+    BOOST_CHECK(proeprties.clef(0, 0, 1, 0)->sign() == dom::Clef::Sign::G);
+    BOOST_CHECK(proeprties.clef(0, 0, 2, 0)->sign() == dom::Clef::Sign::G);
 
     // Measure 2
-    BOOST_CHECK_EQUAL(proeprties.clef(0, 1, 1, 0)->sign(), dom::Clef::SIGN_F);
-    BOOST_CHECK_EQUAL(proeprties.clef(0, 1, 2, 0)->sign(), dom::Clef::SIGN_F);
+    BOOST_CHECK(proeprties.clef(0, 1, 1, 0)->sign() == dom::Clef::Sign::F);
+    BOOST_CHECK(proeprties.clef(0, 1, 2, 0)->sign() == dom::Clef::Sign::F);
 }

@@ -29,40 +29,40 @@ Size RestGeometry::Size(const dom::Note& note) {
         return kWholeSize;
     
     switch (note.type().value()) {
-        case Note::TYPE_1024TH:
-        case Note::TYPE_512TH:
-        case Note::TYPE_256TH:
-        case Note::TYPE_128TH:
+        case Note::Type::_1024th:
+        case Note::Type::_512th:
+        case Note::Type::_256th:
+        case Note::Type::_128th:
             return k128thSize;
             
-        case Note::TYPE_64TH:
+        case Note::Type::_64th:
             return k64thSize;
             
-        case Note::TYPE_32ND:
+        case Note::Type::_32nd:
             return k32thSize;
             
-        case Note::TYPE_16TH:
+        case Note::Type::_16th:
             return k16thSize;
             
-        case Note::TYPE_EIGHTH:
+        case Note::Type::Eighth:
             return kEighthSize;
             
-        case Note::TYPE_QUARTER:
+        case Note::Type::Quarter:
             return kQuarterSize;
             
-        case Note::TYPE_HALF:
+        case Note::Type::Half:
             return kHalfSize;
             
-        case Note::TYPE_WHOLE:
+        case Note::Type::Whole:
             return kWholeSize;
             
-        case Note::TYPE_BREVE:
+        case Note::Type::Breve:
             return kBreveSize;
             
-        case Note::TYPE_LONG:
+        case Note::Type::Long:
             return kLongSize;
             
-        case Note::TYPE_MAXIMA:
+        case Note::Type::Maxima:
             return kMaximaSize;
     }
 }

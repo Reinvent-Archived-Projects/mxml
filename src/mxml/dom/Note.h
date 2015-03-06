@@ -28,30 +28,30 @@ class Measure;
 
 class Note : public TimedNode {
 public:
-    enum Type {
-        TYPE_1024TH,
-        TYPE_512TH,
-        TYPE_256TH,
-        TYPE_128TH,
-        TYPE_64TH,
-        TYPE_32ND,
-        TYPE_16TH,
-        TYPE_EIGHTH,
-        TYPE_QUARTER,
-        TYPE_HALF,
-        TYPE_WHOLE,
-        TYPE_BREVE,
-        TYPE_LONG,
-        TYPE_MAXIMA
+    enum class Type {
+        _1024th,
+        _512th,
+        _256th,
+        _128th,
+        _64th,
+        _32nd,
+        _16th,
+        Eighth,
+        Quarter,
+        Half,
+        Whole,
+        Breve,
+        Long,
+        Maxima
     };
     
 public:
     Note()
     : printObject(true),
-      _type(absentOptional(TYPE_QUARTER)),
+      _type(absentOptional(Type::Quarter)),
       _chord(false),
       _grace(false),
-      _stem(kStemUp, false),
+      _stem(Stem::Up, false),
       _staff(1)
     {}
     
@@ -200,7 +200,7 @@ public:
      */
     int alter() const {
         if (_accidental)
-            return _accidental->type;
+            return _accidental->type.alter;
         else if (_pitch)
             return _pitch->alter();
         return 0;

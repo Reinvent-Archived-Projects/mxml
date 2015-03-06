@@ -47,17 +47,17 @@ dom::StartStopContinue TiedHandler::typeFromString(const std::string& string) {
 
 dom::Placement TiedHandler::placementFromString(const std::string& string) {
     if (string == "above")
-        return dom::kPlacementAbove;
+        return dom::Placement::Above;
     else if (string == "below")
-        return dom::kPlacementBelow;
+        return dom::Placement::Below;
     throw dom::InvalidDataError("Invalid slur placement " + string);
 }
 
 dom::Orientation TiedHandler::orientationFromString(const std::string& string) {
     if (string == "over")
-        return dom::kOrientationOver;
+        return dom::Orientation::Over;
     else if (string == "under")
-        return dom::kOrientationUnder;
+        return dom::Orientation::Under;
     throw dom::InvalidDataError("Invalid slur orientation " + string);
 }
 

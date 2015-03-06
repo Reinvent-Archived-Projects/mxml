@@ -17,43 +17,43 @@ namespace dom {
 /**
  Possible line types for the Default's lineWidths property.
  */
-enum LineType {
-    kLineTypeBeam,
-    kLineTypeBracket,
-    kLineTypeDashes,
-    kLineTypeEnclosure,
-    kLineTypeEnding,
-    kLineTypeExtend,
-    kLineTypeHeavyBarline,
-    kLineTypeLeger,
-    kLineTypeLightBarline,
-    kLineTypeOctaveShift,
-    kLineTypePedal,
-    kLineTypeSlurMiddle,
-    kLineTypeSlurTip,
-    kLineTypeStaff,
-    kLineTypeStem,
-    kLineTypeTieMiddle,
-    kLineTypeTieTip,
-    kLineTypeTupletBracket,
-    kLineTypeWedge
+enum class LineType {
+    Beam,
+    Bracket,
+    Dashes,
+    Enclosure,
+    Ending,
+    Extend,
+    HeavyBarline,
+    Leger,
+    LightBarline,
+    OctaveShift,
+    Pedal,
+    SlurMiddle,
+    SlurTip,
+    Staff,
+    Stem,
+    TieMiddle,
+    TieTip,
+    TupletBracket,
+    Wedge
 };
 
 /**
  Possible note types for the Default's noteSizes property.
  */
-enum NoteType {
-    kNoteTypeCue,
-    kNoteTypeGrace,
-    kNoteTypeLarge
+enum class NoteType {
+    Cue,
+    Grace,
+    Large
 };
 
 /**
  Possible distance types for the Default's distances property.
  */
-enum DistanceType {
-    kDistanceTypeBeam,
-    kDistanceTypeHyphen
+enum class DistanceType {
+    Beam,
+    Hyphen
 };
 
 /**

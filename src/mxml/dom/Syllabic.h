@@ -9,15 +9,15 @@ namespace dom {
 
 class Syllabic : public Node {
 public:
-    enum Type {
-        kSingle,
-        kBegin,
-        kEnd,
-        kMiddle
+    enum class Type {
+        Single,
+        Begin,
+        End,
+        Middle
     };
 
 public:
-    Syllabic() : _type(kSingle) {}
+    Syllabic() : _type(Type::Single) {}
 
     Type type() const {
         return _type;

@@ -12,7 +12,7 @@ const coord_t TieGeometry::kMaxHeight = 20;
 const coord_t TieGeometry::kEndPointLineWidth = 0.5;
 
 TieGeometry::TieGeometry()
-: PlacementGeometry(absentOptional(kPlacementAbove), 1),
+: PlacementGeometry(absentOptional(Placement::Above), 1),
   _startLocation(),
   _stopLocation()
 {
@@ -40,7 +40,7 @@ void TieGeometry::build() {
     coord_t hConstant = 0;
     coord_t vConstant = 0;
     coord_t vMultiplier = 0;
-    if (placement().value() == kPlacementAbove) {
+    if (placement().value() == Placement::Above) {
         if (angle > 0) {
             vMultiplier = 0;
             vConstant = curveHeight;

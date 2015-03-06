@@ -11,8 +11,14 @@ namespace dom {
 
 class Pitch : public Node {
 public:
-    enum Step {
-        STEP_C = 0, STEP_D, STEP_E, STEP_F, STEP_G, STEP_A, STEP_B
+    enum class Step {
+        C = 0,
+        D,
+        E,
+        F,
+        G,
+        A,
+        B
     };
 
     /// The total number of steps (7)
@@ -25,7 +31,7 @@ public:
     static const std::size_t kUniqueCount;
 
 public:
-    Pitch() : _step(STEP_C), _alter(0), _octave(4) {}
+    Pitch() : _step(Step::C), _alter(0), _octave(4) {}
     Pitch(Step step, int alter, int octave)
     : _step(step), _alter(alter), _octave(octave) {}
     
