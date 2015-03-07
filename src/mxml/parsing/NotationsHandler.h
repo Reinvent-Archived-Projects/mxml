@@ -9,10 +9,12 @@
 #include "OrnamentsHandler.h"
 #include "SlurHandler.h"
 #include "TiedHandler.h"
+#include "TupletHandler.h"
 
 #include <mxml/dom/Notations.h>
 
 namespace mxml {
+namespace parsing {
 
 class NotationsHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Notations>> {
 public:
@@ -29,6 +31,8 @@ private:
     OrnamentsHandler _ornamentsHandler;
     SlurHandler _slurHandler;
     TiedHandler _tiedHandler;
+    TupletHandler _tupletHandler;
 };
 
+} // namespace parsing
 } // namespace mxml

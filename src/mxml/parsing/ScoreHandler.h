@@ -12,6 +12,7 @@
 #include <memory>
 
 namespace mxml {
+namespace parsing {
 
 class ScoreHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Score>> {
 public:
@@ -27,4 +28,5 @@ private:
     std::size_t _partIndex;
 };
 
+} // namespace parsing
 } // namespace mxml

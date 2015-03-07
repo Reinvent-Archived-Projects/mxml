@@ -124,12 +124,12 @@ void ChordGeometryFactory::buildNotations(const dom::Chord& chord, const Rect& n
 
     Rect frame = notesFrame;
     const auto& notations = note->notations();
-    for (auto& artic : notations->articulations()) {
+    for (auto& artic : notations->articulations) {
         buildArticulation(chord, *artic, frame);
     }
 
-    if (notations->fermata()) {
-        buildFermata(*notations->fermata(), frame);
+    if (notations->fermata) {
+        buildFermata(*notations->fermata, frame);
     }
 }
 

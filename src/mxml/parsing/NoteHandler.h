@@ -19,6 +19,7 @@
 #include <memory>
 
 namespace mxml {
+namespace parsing {
 
 class NoteHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Note>> {
 public:
@@ -58,4 +59,5 @@ private:
     LyricHandler _lyricHandler;
 };
 
+} // namespace parsing
 } // namespace mxml

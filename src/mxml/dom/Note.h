@@ -3,8 +3,10 @@
 
 #pragma once
 #include "Accidental.h"
+#include "Articulation.h"
 #include "Beam.h"
 #include "EmptyPlacement.h"
+#include "Fermata.h"
 #include "Lyric.h"
 #include "Node.h"
 #include "Notations.h"
@@ -12,7 +14,9 @@
 #include "Pitch.h"
 #include "Position.h"
 #include "Rest.h"
+#include "Slur.h"
 #include "Tie.h"
+#include "Tied.h"
 #include "TimedNode.h"
 #include "Types.h"
 #include "Unpitched.h"

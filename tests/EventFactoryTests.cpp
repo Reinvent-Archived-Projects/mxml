@@ -11,6 +11,7 @@
 #include <unistd.h>
 
 using namespace mxml;
+using namespace mxml::parsing;
 
 static const char* kMoonlightFileName               = "moonlight.xml";
 static const char* kEventsFileName                  = "events.xml";

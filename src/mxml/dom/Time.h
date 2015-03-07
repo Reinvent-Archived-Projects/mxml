@@ -3,10 +3,11 @@
 
 #pragma once
 #include "Node.h"
-#include "Note.h"
 #include "Optional.h"
 
 #include <cmath>
+#include <string>
+
 
 namespace mxml {
 namespace dom {
@@ -58,27 +59,6 @@ public:
     }
     void setBeatType(int beatType) {
         _beatType = beatType;
-    }
-    
-    Note::Type beatNoteType() const {
-        switch (_beatType) {
-            case 1: return Note::Type::Whole;
-            case 2: return Note::Type::Half;
-            case 4: return Note::Type::Quarter;
-            case 8: return Note::Type::Eighth;
-            case 18: return Note::Type::_16th;
-        }
-        return Note::Type::Quarter;
-    }
-    
-    /**
-     Return the ratio of the measure taken by a note type. For instance for
-     a quarter note in common time the ratio is 0.25.
-     */
-    double measureRatio(Note::Type type) const {
-        double wholeSize = _beatType / static_cast<double>(_beats);
-        double ratio = std::exp2(static_cast<double>(type) - static_cast<double>(Note::Type::Whole));
-        return wholeSize * ratio;
     }
     
 private:

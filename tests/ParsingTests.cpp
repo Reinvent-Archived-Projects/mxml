@@ -8,6 +8,7 @@
 
 
 using namespace mxml;
+using namespace mxml::parsing;
 
 BOOST_AUTO_TEST_CASE(parseMusicXML) {
     const char musicXML[] =

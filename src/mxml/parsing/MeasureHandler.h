@@ -16,6 +16,7 @@
 #include <memory>
 
 namespace mxml {
+namespace parsing {
 
 class MeasureHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Measure>> {
 public:
@@ -48,4 +49,5 @@ private:
     bool _empty;
 };
 
+} // namespace parsing
 } // namespace mxml

@@ -9,8 +9,7 @@
 #include <cstring>
 
 namespace mxml {
-
-using namespace parsing;
+namespace parsing {
 
 using dom::Note;
 using lxml::QName;
@@ -256,4 +255,5 @@ void NoteHandler::decreasePitch(dom::Pitch& pitch) {
     pitch.setAlter(alter);
 }
 
+} // namespace parsing
 } // namespace mxml

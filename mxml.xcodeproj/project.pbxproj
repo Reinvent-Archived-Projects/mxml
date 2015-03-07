@@ -142,6 +142,10 @@
 		61A2B7691A8E870000C1EE2A /* TimeSequence.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A2B75D1A8E870000C1EE2A /* TimeSequence.h */; };
 		61A81C091AA9375B00E230A6 /* StreamOperators.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A81C081AA9375B00E230A6 /* StreamOperators.h */; };
 		61A81C0B1AA937D800E230A6 /* Accidental.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A81C0A1AA937D800E230A6 /* Accidental.cpp */; };
+		61A81C1E1AAA6E1100E230A6 /* Tuplet.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A81C1C1AAA6E1100E230A6 /* Tuplet.h */; };
+		61A81C251AAA750100E230A6 /* TupletHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A81C231AAA750100E230A6 /* TupletHandler.cpp */; };
+		61A81C261AAA750100E230A6 /* TupletHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A81C241AAA750100E230A6 /* TupletHandler.h */; };
+		61A81C281AAA797200E230A6 /* Notations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A81C271AAA797200E230A6 /* Notations.cpp */; };
 		61B89F9A1AA5154000F7DD9C /* EqualityConstraintSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61B89F981AA5154000F7DD9C /* EqualityConstraintSolver.cpp */; };
 		61B89F9B1AA5154000F7DD9C /* EqualityConstraintSolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 61B89F991AA5154000F7DD9C /* EqualityConstraintSolver.h */; };
 		61B89F9E1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61B89F9C1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp */; };
@@ -499,6 +503,10 @@
 		61A2B75D1A8E870000C1EE2A /* TimeSequence.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeSequence.h; sourceTree = "<group>"; };
 		61A81C081AA9375B00E230A6 /* StreamOperators.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StreamOperators.h; sourceTree = "<group>"; };
 		61A81C0A1AA937D800E230A6 /* Accidental.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Accidental.cpp; sourceTree = "<group>"; };
+		61A81C1C1AAA6E1100E230A6 /* Tuplet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tuplet.h; sourceTree = "<group>"; };
+		61A81C231AAA750100E230A6 /* TupletHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TupletHandler.cpp; sourceTree = "<group>"; };
+		61A81C241AAA750100E230A6 /* TupletHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TupletHandler.h; sourceTree = "<group>"; };
+		61A81C271AAA797200E230A6 /* Notations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Notations.cpp; sourceTree = "<group>"; };
 		61B89F981AA5154000F7DD9C /* EqualityConstraintSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EqualityConstraintSolver.cpp; sourceTree = "<group>"; };
 		61B89F991AA5154000F7DD9C /* EqualityConstraintSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualityConstraintSolver.h; sourceTree = "<group>"; };
 		61B89F9C1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EqualityConstraintSolverTests.cpp; sourceTree = "<group>"; };
@@ -680,8 +688,8 @@
 		614055C91A5C6228005224C9 /* dom */ = {
 			isa = PBXGroup;
 			children = (
-				614055CA1A5C6228005224C9 /* Accidental.h */,
 				61A81C0A1AA937D800E230A6 /* Accidental.cpp */,
+				614055CA1A5C6228005224C9 /* Accidental.h */,
 				614055CC1A5C6228005224C9 /* Articulation.h */,
 				00E7B4881A81510C00B949FC /* Attributes.cpp */,
 				614055CD1A5C6228005224C9 /* Attributes.h */,
@@ -710,6 +718,7 @@
 				614055E21A5C6228005224C9 /* Measure.h */,
 				614055E31A5C6228005224C9 /* Mordent.h */,
 				614055E41A5C6228005224C9 /* Node.h */,
+				61A81C271AAA797200E230A6 /* Notations.cpp */,
 				614055E51A5C6228005224C9 /* Notations.h */,
 				614055E61A5C6228005224C9 /* Note.cpp */,
 				614055E71A5C6228005224C9 /* Note.h */,
@@ -737,6 +746,7 @@
 				614055F81A5C6228005224C9 /* Tied.h */,
 				614055F91A5C6228005224C9 /* Time.h */,
 				614055FA1A5C6228005224C9 /* TimedNode.h */,
+				61A81C1C1AAA6E1100E230A6 /* Tuplet.h */,
 				614055FB1A5C6228005224C9 /* Turn.h */,
 				614055FC1A5C6228005224C9 /* Types.h */,
 				614055FD1A5C6228005224C9 /* Unpitched.h */,
@@ -852,6 +862,8 @@
 				614056641A5C6228005224C9 /* EndingHandler.h */,
 				614056651A5C6228005224C9 /* FermataHandler.cpp */,
 				614056661A5C6228005224C9 /* FermataHandler.h */,
+				61F072EB1A6F1BEE002CA9CA /* FormattedTextHandler.cpp */,
+				61F072EC1A6F1BEE002CA9CA /* FormattedTextHandler.h */,
 				614056671A5C6228005224C9 /* ForwardHandler.cpp */,
 				614056681A5C6228005224C9 /* ForwardHandler.h */,
 				61F072E31A6F0F4C002CA9CA /* GenericNode.cpp */,
@@ -916,14 +928,14 @@
 				614056921A5C6228005224C9 /* TieHandler.h */,
 				614056931A5C6228005224C9 /* TimeHandler.cpp */,
 				614056941A5C6228005224C9 /* TimeHandler.h */,
+				61A81C231AAA750100E230A6 /* TupletHandler.cpp */,
+				61A81C241AAA750100E230A6 /* TupletHandler.h */,
 				614056951A5C6228005224C9 /* TurnHandler.cpp */,
 				614056961A5C6228005224C9 /* TurnHandler.h */,
 				61F072CF1A6EEE03002CA9CA /* TypeFactories.cpp */,
 				61F072D01A6EEE03002CA9CA /* TypeFactories.h */,
 				614056971A5C6228005224C9 /* UnpitchedHandler.cpp */,
 				614056981A5C6228005224C9 /* UnpitchedHandler.h */,
-				61F072EB1A6F1BEE002CA9CA /* FormattedTextHandler.cpp */,
-				61F072EC1A6F1BEE002CA9CA /* FormattedTextHandler.h */,
 			);
 			path = parsing;
 			sourceTree = "<group>";
@@ -1021,6 +1033,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				61A81C1E1AAA6E1100E230A6 /* Tuplet.h in Headers */,
 				61F073BF1A71CD8F002CA9CA /* DirectionGeometryFactory.h in Headers */,
 				61F074251A72C676002CA9CA /* PageScoreGeometry.h in Headers */,
 				0022AE001A7082C300139992 /* CollisionResolver.hh in Headers */,
@@ -1062,6 +1075,7 @@
 				0022AE041A7082C300139992 /* VerticalResolver.h in Headers */,
 				61A2B7601A8E870000C1EE2A /* AttributeSequence.h in Headers */,
 				00094EFE1A67464A0053C615 /* SegnoGeometry.h in Headers */,
+				61A81C261AAA750100E230A6 /* TupletHandler.h in Headers */,
 				0008689B1A68430400BAA13D /* CodaGeometry.h in Headers */,
 				0022AE021A7082C300139992 /* HorizontalResolver.h in Headers */,
 				61239A6F1A65974400B3F0A3 /* ScoreBuilder.h in Headers */,
@@ -1220,6 +1234,7 @@
 				6140571C1A5C6228005224C9 /* TimeSignatureGeometry.cpp in Sources */,
 				614057491A5C6228005224C9 /* NotationsHandler.cpp in Sources */,
 				614057BC1A5C7629005224C9 /* Key.cpp in Sources */,
+				61A81C281AAA797200E230A6 /* Notations.cpp in Sources */,
 				614056FF1A5C6228005224C9 /* NoteGeometry.cpp in Sources */,
 				0022AE011A7082C300139992 /* HorizontalResolver.cpp in Sources */,
 				61A2B7641A8E870000C1EE2A /* DivisionsSequence.cpp in Sources */,
@@ -1273,6 +1288,7 @@
 				61A2B7681A8E870000C1EE2A /* TimeSequence.cpp in Sources */,
 				614057451A5C6228005224C9 /* MeasureHandler.cpp in Sources */,
 				61F073C21A71CD8F002CA9CA /* OrnamentGeometryFactory.cpp in Sources */,
+				61A81C251AAA750100E230A6 /* TupletHandler.cpp in Sources */,
 				614057011A5C6228005224C9 /* OrnamentsGeometry.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

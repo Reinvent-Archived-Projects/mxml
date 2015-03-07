@@ -2,8 +2,11 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #include "NotationsHandler.h"
+#include "TypeFactories.h"
+
 
 namespace mxml {
+namespace parsing {
 
 using dom::Notations;
 using lxml::QName;
@@ -14,6 +17,7 @@ static const char* kFermataTag = "fermata";
 static const char* kSlurTag = "slur";
 static const char* kOrnamentsTag = "ornaments";
 static const char* kTiedTag = "tied";
+static const char* kTupletTag = "tuplet";
 
 NotationsHandler::NotationsHandler() : _articulationHandler(), _articulationsHandler(_articulationHandler) {}
 
@@ -22,7 +26,7 @@ void NotationsHandler::startElement(const QName& qname, const AttributeMap& attr
 
     auto print = attributes.find(kPrintObjectAttribute);
     if (print != attributes.end())
-        _result->setPrintObject(print->second == "no" ? false : true);
+        _result->printObject = Factory::yesNoValue(print->second);
 }
 
 lxml::RecursiveHandler* NotationsHandler::startSubElement(const QName& qname) {
@@ -36,20 +40,25 @@ lxml::RecursiveHandler* NotationsHandler::startSubElement(const QName& qname) {
         return &_slurHandler;
     else if (strcmp(qname.localName(), kTiedTag) == 0)
         return &_tiedHandler;
+    else if (strcmp(qname.localName(), kTupletTag) == 0)
+        return &_tupletHandler;
     return 0;
 }
 
 void NotationsHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     if (strcmp(qname.localName(), kArticulationsTag) == 0)
-        _result->setArticulations(_articulationsHandler.result());
+        _result->articulations = _articulationsHandler.result();
     else if (strcmp(qname.localName(), kFermataTag) == 0)
-        _result->setFermata(_fermataHandler.result());
+        _result->fermata = _fermataHandler.result();
     else if (strcmp(qname.localName(), kOrnamentsTag) == 0)
-        _result->addOrnaments(_ornamentsHandler.result());
+        _result->ornaments.push_back(_ornamentsHandler.result());
     else if (strcmp(qname.localName(), kSlurTag) == 0)
-        _result->addSlur(_slurHandler.result());
+        _result->slurs.push_back(_slurHandler.result());
     else if (strcmp(qname.localName(), kTiedTag) == 0)
-        _result->addTied(_tiedHandler.result());
+        _result->ties.push_back(_tiedHandler.result());
+    else if (strcmp(qname.localName(), kTupletTag) == 0)
+        _result->tuplets.push_back(_tupletHandler.result());
 }
 
+} // namsepace parsing
 } // namespace mxml

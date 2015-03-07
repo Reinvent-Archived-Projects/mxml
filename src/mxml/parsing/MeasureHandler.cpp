@@ -6,6 +6,7 @@
 #include <cstring>
 
 namespace mxml {
+namespace parsing {
 
 using dom::Measure;
 using lxml::QName;
@@ -129,4 +130,5 @@ void MeasureHandler::endChord() {
     _chord = 0;
 }
 
+} // namespace parsing
 } // namespace mxml

@@ -7,6 +7,9 @@
 #include "Node.h"
 #include "Turn.h"
 
+#include <memory>
+
+
 namespace mxml {
 namespace dom {
 

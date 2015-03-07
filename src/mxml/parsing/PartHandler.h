@@ -10,6 +10,7 @@
 #include <memory>
 
 namespace mxml {
+namespace parsing {
 
 class PartHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Part>> {
 public:
@@ -23,4 +24,5 @@ private:
     std::size_t _measureIndex;
 };
 
+} // namespace parsing
 } // namespace mxml

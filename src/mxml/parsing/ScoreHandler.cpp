@@ -7,6 +7,7 @@
 using namespace lxml;
 
 namespace mxml {
+namespace parsing {
 
 using dom::Score;
 using lxml::QName;
@@ -48,4 +49,5 @@ void ScoreHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     }
 }
 
+} // namespace parsing
 } // namespace mxml

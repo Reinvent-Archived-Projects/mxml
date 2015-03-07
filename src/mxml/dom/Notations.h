@@ -14,63 +14,25 @@
 namespace mxml {
 namespace dom {
 
+class Tuplet;
+
+/**
+ Musical notations. Multiple notations are allowed in order to represent multiple editorial levels. The printObject
+ attribute allows notations to represent details of performance technique, such as fingerings, without having them
+ appear in the score.
+ */
 class Notations : public Node {
 public:
-    Notations() : _printObject(true) {}
-    
-    bool printObject() const {
-        return _printObject;
-    }
-    void setPrintObject(bool printObject) {
-        _printObject = printObject;
-    }
-   
-    void addArticulation(std::unique_ptr<Articulation> articulation) {
-        _articulations.push_back(std::move(articulation));
-    }
-    
-    const std::vector<std::unique_ptr<Articulation>>& articulations() const {
-        return _articulations;
-    }
-    void setArticulations(std::vector<std::unique_ptr<Articulation>> articulations) {
-        _articulations = std::move(articulations);
-    }
-    
-    const std::unique_ptr<Fermata>& fermata() const {
-        return _fermata;
-    }
-    void setFermata(std::unique_ptr<Fermata> fermata) {
-        _fermata = std::move(fermata);
-    }
-    
-    const std::vector<std::unique_ptr<Slur>>& slurs() const {
-        return _slurs;
-    }
-    void addSlur(std::unique_ptr<Slur> slur) {
-        _slurs.push_back(std::move(slur));
-    }
-    
-    const std::vector<std::unique_ptr<Tied>>& ties() const {
-        return _ties;
-    }
-    void addTied(std::unique_ptr<Tied> tied) {
-        _ties.push_back(std::move(tied));
-    }
+    Notations();
+    ~Notations();
 
-    const std::vector<std::unique_ptr<Ornaments>>& ornaments() const {
-        return _ornaments;
-    }
-    void addOrnaments(std::unique_ptr<Ornaments> ornaments) {
-        _ornaments.push_back(std::move(ornaments));
-    }
-    
-private:
-    bool _printObject;
-    std::unique_ptr<Fermata> _fermata;
-    std::vector<std::unique_ptr<Articulation>> _articulations;
-    std::vector<std::unique_ptr<Slur>> _slurs;
-    std::vector<std::unique_ptr<Tied>> _ties;
-    std::vector<std::unique_ptr<Ornaments>> _ornaments;
+    bool printObject;
+    std::unique_ptr<Fermata> fermata;
+    std::vector<std::unique_ptr<Articulation>> articulations;
+    std::vector<std::unique_ptr<Slur>> slurs;
+    std::vector<std::unique_ptr<Tied>> ties;
+    std::vector<std::unique_ptr<Ornaments>> ornaments;
+    std::vector<std::unique_ptr<Tuplet>> tuplets;
 };
 
 } // namespace dom

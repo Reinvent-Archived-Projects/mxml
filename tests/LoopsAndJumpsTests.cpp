@@ -13,6 +13,7 @@
 
 
 using namespace mxml;
+using namespace mxml::parsing;
 
 static const char* kLoopsFileName = "loops.xml";
 static const char* kRepeatsFileName = "repeats.xml";

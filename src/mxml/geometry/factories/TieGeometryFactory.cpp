@@ -59,7 +59,7 @@ void TieGeometryFactory::createGeometryFromNote(NoteGeometry* noteGeometry) {
     
     const auto& notations = note.notations();
     
-    for (auto& tie : notations->ties()) {
+    for (auto& tie : notations->ties) {
         auto key = std::make_pair(note.staff(), note.pitch().get());
         if (tie->type() == dom::kContinue) {
             _tieStartGeometries[key] = std::make_pair(tie.get(), noteGeometry);
@@ -81,7 +81,7 @@ void TieGeometryFactory::createGeometryFromNote(NoteGeometry* noteGeometry) {
         }
     }
 
-    for (auto& slur : notations->slurs()) {
+    for (auto& slur : notations->slurs) {
         auto key = std::make_pair(note.staff(), slur->number());
         if (slur->type() == dom::kStart || slur->type() == dom::kContinue) {
             _slurStartGeometries[key] = noteGeometry;

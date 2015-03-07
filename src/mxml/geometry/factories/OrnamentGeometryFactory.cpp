@@ -34,7 +34,7 @@ void OrnamentGeometryFactory::buildOrnaments(const MeasureGeometry& measureGeom,
             continue;
 
         auto& notations = note->notations();
-        for (auto& ornament : notations->ornaments())
+        for (auto& ornament : notations->ornaments)
             buildOrnament(measureGeom, chordGeom, *ornament);
     }
 }

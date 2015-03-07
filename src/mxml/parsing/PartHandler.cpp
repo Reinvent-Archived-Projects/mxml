@@ -5,6 +5,7 @@
 #include <cstring>
 
 namespace mxml {
+namespace parsing {
 
 using dom::Part;
 using lxml::QName;
@@ -36,4 +37,5 @@ void PartHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
     }
 }
 
+} // namespace parsing
 } // namespace mxml
