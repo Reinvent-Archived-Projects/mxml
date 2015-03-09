@@ -288,6 +288,12 @@ void MeasureGeometryFactory::buildTuplet(const ChordGeometry* chordGeometry, con
     else if (auto& timeModification = startChordGeometry->chord().firstNote()->timeModification)
         tupletGeometry->setDisplayNumber(timeModification->actualNotes);
 
+    if (startTuplet->bracket.isPresent())
+        tupletGeometry->setBracket(startTuplet->bracket.value());
+    else if (stopTuplet->bracket.isPresent())
+        tupletGeometry->setBracket(stopTuplet->bracket.value());
+    else
+        tupletGeometry->setBracket(!startChordGeometry->chord().hasBeam() || !stopChordGeometry->chord().hasBeam());
     _geometry->addGeometry(std::move(tupletGeometry));
 }
 

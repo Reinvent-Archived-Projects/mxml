@@ -63,7 +63,7 @@ public:
     Type type;
 
     int number;
-    bool bracket;
+    Optional<bool> bracket;
 
     Show showNumber;
     Show showType;

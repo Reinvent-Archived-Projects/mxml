@@ -29,7 +29,7 @@ void TupletHandler::startElement(const lxml::QName& qname, const AttributeMap& a
 
     auto bracket = attributes.find(kBracketAttribute);
     if (bracket != attributes.end())
-        _result->bracket = Factory::yesNoValue(bracket->second);
+        _result->bracket = {Factory::yesNoValue(bracket->second), true};
 
     auto number = attributes.find(kNumberAttribute);
     if (number != attributes.end())

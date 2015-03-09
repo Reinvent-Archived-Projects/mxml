@@ -44,13 +44,21 @@ public:
     void setDisplayNumber(int number) {
         _displayNumber = number;
     }
-    
+
+    bool bracket() const {
+        return _bracket;
+    }
+    void setBracket(bool b) {
+        _bracket = b;
+    }
+
 private:
     const dom::Tuplet& _startTuplet;
     const dom::Tuplet& _stopTuplet;
     Point _startLocation;
     Point _stopLocation;
     int _displayNumber;
+    bool _bracket;
 };
 
 } // namespace mxml

@@ -13,7 +13,8 @@ TupletGeometry::TupletGeometry(const dom::Tuplet& startTuplet, const Point& star
   _startLocation(start),
   _stopTuplet(stopTuplet),
   _stopLocation(stop),
-  _displayNumber(0)
+  _displayNumber(0),
+  _bracket(true)
 {
     setSize({stop.x - start.x, kTupletHeight});
     setLocation(start);
