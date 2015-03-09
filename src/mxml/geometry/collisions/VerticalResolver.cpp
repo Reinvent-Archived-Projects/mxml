@@ -23,6 +23,7 @@
 #include <mxml/geometry/StemGeometry.h>
 #include <mxml/geometry/TieGeometry.h>
 #include <mxml/geometry/TimeSignatureGeometry.h>
+#include <mxml/geometry/TupletGeometry.h>
 #include <mxml/geometry/WordsGeometry.h>
 
 #include <mxml/Metrics.h>
@@ -50,6 +51,7 @@ namespace mxml {
         typeOrder[std::type_index(typeid(RestGeometry))] = 4;
         typeOrder[std::type_index(typeid(SpanDirectionGeometry))] = 5;
         typeOrder[std::type_index(typeid(OrnamentsGeometry))] = 6;
+        typeOrder[std::type_index(typeid(TupletGeometry))] = 7;
         typeOrder[std::type_index(typeid(OctaveShiftGeometry))] = 7;
         typeOrder[std::type_index(typeid(PedalGeometry))] = 7;
         typeOrder[std::type_index(typeid(SegnoGeometry))] = 8;

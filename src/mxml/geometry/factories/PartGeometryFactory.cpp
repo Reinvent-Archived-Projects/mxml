@@ -3,6 +3,7 @@
 
 #include "EndingGeometryFactory.h"
 #include "LyricGeometryFactory.h"
+#include "MeasureGeometryFactory.h"
 #include "OrnamentGeometryFactory.h"
 #include "PartGeometryFactory.h"
 #include "TieGeometryFactory.h"
@@ -33,12 +34,13 @@ std::unique_ptr<PartGeometry> PartGeometryFactory::build() {
 std::unique_ptr<PartGeometry> PartGeometryFactory::build(std::size_t beginMeasure, std::size_t endMeasure){
     _partGeometry.reset(new PartGeometry(_part, _scoreProperties, _metrics));
 
+    MeasureGeometryFactory mesureGeometryFactory(_spans, _scoreProperties, _metrics);
+
     coord_t offset = 0;
     for (std::size_t measureIndex = beginMeasure; measureIndex != endMeasure; measureIndex += 1) {
         auto& measure = _part.measures()[measureIndex];
 
-        std::unique_ptr<MeasureGeometry> geo(new MeasureGeometry(*measure, _spans, _scoreProperties, _metrics));
-        geo->build(measureIndex == beginMeasure);
+        auto geo = mesureGeometryFactory.build(*measure, measureIndex == beginMeasure);
         geo->setHorizontalAnchorPointValues(0, 0);
         geo->setVerticalAnchorPointValues(0, -geo->contentOffset().y);
         geo->setLocation({offset, 0});
@@ -93,7 +95,7 @@ std::unique_ptr<PartGeometry> PartGeometryFactory::build(std::size_t beginMeasur
 
     // Re-compute bounds after evertyhing is done
     for (auto measure : _partGeometry->measureGeometries())
-        measure->adjustBounds();
+        mesureGeometryFactory.adjustBounds(measure);
     bounds = _partGeometry->subGeometriesFrame();
     bounds.origin.x = 0;
     _partGeometry->setBounds(bounds);
