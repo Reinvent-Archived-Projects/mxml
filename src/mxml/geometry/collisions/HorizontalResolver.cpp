@@ -69,7 +69,7 @@ namespace mxml {
         // Ignore notes with stems on different voices that match exactly
         if (n1.voice() != n2.voice() &&
             n1.type() < dom::Note::Type::Half && n2.type() < dom::Note::Type::Half &&
-            n1.pitch() && n2.pitch() && n1.pitch()->step() == n2.pitch()->step())
+            n1.pitch && n2.pitch && n1.pitch->step() == n2.pitch->step())
             return;
         
         // We don't handle moving notes with ties yet

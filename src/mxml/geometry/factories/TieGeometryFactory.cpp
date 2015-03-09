@@ -54,13 +54,13 @@ void TieGeometryFactory::createGeometriesFromChord(ChordGeometry* chord) {
 
 void TieGeometryFactory::createGeometryFromNote(NoteGeometry* noteGeometry) {
     const dom::Note& note = noteGeometry->note();
-    if (!note.notations())
+    if (!note.notations)
         return;
     
-    const auto& notations = note.notations();
+    const auto& notations = note.notations;
     
     for (auto& tie : notations->ties) {
-        auto key = std::make_pair(note.staff(), note.pitch().get());
+        auto key = std::make_pair(note.staff(), note.pitch.get());
         if (tie->type() == dom::kContinue) {
             _tieStartGeometries[key] = std::make_pair(tie.get(), noteGeometry);
         } else if (tie->type() == dom::kStop) {

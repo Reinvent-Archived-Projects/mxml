@@ -30,10 +30,10 @@ std::vector<std::unique_ptr<OrnamentsGeometry>> OrnamentGeometryFactory::build()
 
 void OrnamentGeometryFactory::buildOrnaments(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom) {
     for (auto& note : chordGeom.chord().notes()) {
-        if (!note->notations())
+        if (!note->notations)
             continue;
 
-        auto& notations = note->notations();
+        auto& notations = note->notations;
         for (auto& ornament : notations->ornaments)
             buildOrnament(measureGeom, chordGeom, *ornament);
     }

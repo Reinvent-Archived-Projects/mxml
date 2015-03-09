@@ -17,6 +17,7 @@
 #include "Slur.h"
 #include "Tie.h"
 #include "Tied.h"
+#include "TimeModification.h"
 #include "TimedNode.h"
 #include "Types.h"
 #include "Unpitched.h"
@@ -135,55 +136,6 @@ public:
     void setRelease(time_t release) {
         _release = release;
     }
-
-    const std::unique_ptr<Pitch>& pitch() const {
-        return _pitch;
-    }
-    void setPitch(std::unique_ptr<Pitch> pitch) {
-        _pitch = std::move(pitch);
-    }
-    
-    const std::unique_ptr<Rest>& rest() const {
-        return _rest;
-    }
-    void setRest(std::unique_ptr<Rest> rest) {
-        _rest = std::move(rest);
-    }
-    
-    const std::unique_ptr<Unpitched>& unpitched() const {
-        return _unpitched;
-    }
-    void setUnpitched(std::unique_ptr<Unpitched> unpitched) {
-        _unpitched = std::move(unpitched);
-    }
-    
-    const std::unique_ptr<Accidental>& accidental() const {
-        return _accidental;
-    }
-    void setAccidental(std::unique_ptr<Accidental> accidental) {
-        _accidental = std::move(accidental);
-    }
-    
-    const std::unique_ptr<EmptyPlacement>& dot() const {
-        return _dot;
-    }
-    void setDot(std::unique_ptr<EmptyPlacement> dot) {
-        _dot = std::move(dot);
-    }
-    
-    const std::unique_ptr<Tie>& tie() const {
-        return _tie;
-    }
-    void setTie(std::unique_ptr<Tie> tie) {
-        _tie = std::move(tie);
-    }
-    
-    const std::unique_ptr<Notations>& notations() const {
-        return _notations;
-    }
-    void setNotations(std::unique_ptr<Notations> notations) {
-        _notations = std::move(notations);
-    }
     
     const std::vector<std::unique_ptr<Beam>>& beams() const {
         return _beams;
@@ -203,10 +155,10 @@ public:
      Return the alter value for this note, coming either from an accidental or from the pitch alter value.
      */
     int alter() const {
-        if (_accidental)
-            return _accidental->type.alter;
-        else if (_pitch)
-            return _pitch->alter();
+        if (accidental)
+            return accidental->type.alter;
+        else if (pitch)
+            return pitch->alter();
         return 0;
     }
     
@@ -215,6 +167,15 @@ public:
 public:
     Position position;
     bool printObject;
+
+    std::unique_ptr<Pitch> pitch;
+    std::unique_ptr<Rest> rest;
+    std::unique_ptr<Unpitched> unpitched;
+    std::unique_ptr<Accidental> accidental;
+    std::unique_ptr<EmptyPlacement> dot;
+    std::unique_ptr<Tie> tie;
+    std::unique_ptr<Notations> notations;
+    std::unique_ptr<TimeModification> timeModification;
 
 private:
     const Measure* _measure;
@@ -230,14 +191,6 @@ private:
     Optional<float> _endDynamics;
     time_t _attack;
     time_t _release;
-    
-    std::unique_ptr<Pitch> _pitch;
-    std::unique_ptr<Rest> _rest;
-    std::unique_ptr<Unpitched> _unpitched;
-    std::unique_ptr<Accidental> _accidental;
-    std::unique_ptr<EmptyPlacement> _dot;
-    std::unique_ptr<Tie> _tie;
-    std::unique_ptr<Notations> _notations;
     
     std::vector<std::unique_ptr<Beam>> _beams;
     std::vector<std::unique_ptr<Lyric>> _lyrics;

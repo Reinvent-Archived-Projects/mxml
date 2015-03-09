@@ -13,12 +13,12 @@
 namespace mxml {
 
 void AlterSequence::addFromNote(std::size_t partIndex, std::size_t measureIndex, const dom::Note& note) {
-    if (!note.pitch())
+    if (!note.pitch)
         return;
 
     Item item;
     item.index = indexFromNote(note);
-    item.value = note.pitch()->alter();
+    item.value = note.pitch->alter();
     _items.push_back(item);
 }
 

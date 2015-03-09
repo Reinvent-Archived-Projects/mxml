@@ -92,8 +92,8 @@ dom::Pitch* ScoreBuilder::setPitch(dom::Note* note, dom::Pitch::Step step, int o
     pitch->setStep(step);
     pitch->setAlter(alter);
 
-    note->setPitch(std::move(pitch));
-    return note->pitch().get();
+    note->pitch = std::move(pitch);
+    return note->pitch.get();
 }
 
 std::unique_ptr<dom::Score> ScoreBuilder::build() {

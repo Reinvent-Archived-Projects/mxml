@@ -135,7 +135,7 @@ BOOST_AUTO_TEST_CASE(event_order) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK(note->pitch()->step() == event_order.at(index));
+            BOOST_CHECK(note->pitch->step() == event_order.at(index));
             ++index;
         }
     }
@@ -169,7 +169,7 @@ BOOST_AUTO_TEST_CASE(event_order_repeat) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK(note->pitch()->step() == event_order.at(index));
+            BOOST_CHECK(note->pitch->step() == event_order.at(index));
             ++index;
         }
     }
@@ -203,7 +203,7 @@ BOOST_AUTO_TEST_CASE(event_order_repeat_last_measure) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK(note->pitch()->step() == event_order.at(index));
+            BOOST_CHECK(note->pitch->step() == event_order.at(index));
             ++index;
         }
     }
@@ -238,7 +238,7 @@ BOOST_AUTO_TEST_CASE(event_order_ds_al_coda) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK(note->pitch()->step() == event_order.at(index));
+            BOOST_CHECK(note->pitch->step() == event_order.at(index));
             ++index;
         }
     }
@@ -279,7 +279,7 @@ BOOST_AUTO_TEST_CASE(event_order_complex_1) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK(note->pitch()->step() == event_order.at(index));
+            BOOST_CHECK(note->pitch->step() == event_order.at(index));
             ++index;
         }
     }
@@ -327,7 +327,7 @@ BOOST_AUTO_TEST_CASE(event_order_complex_2) {
         auto& event = *it;
         if (event.onNotes().size() > 0) {
             auto note = event.onNotes().front();
-            BOOST_CHECK(note->pitch()->step() == event_order.at(index));
+            BOOST_CHECK(note->pitch->step() == event_order.at(index));
             ++index;
         }
     }

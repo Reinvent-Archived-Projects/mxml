@@ -12,10 +12,9 @@ namespace dom {
 
 unsigned int Note::midiNumber() const {
     unsigned int number = 0;
-    if (!pitch())
+    if (!pitch)
         return number;
 
-    const auto& pitch = _pitch;
     number = (1 + pitch->octave()) * 12;
 
     switch (pitch->step()) {

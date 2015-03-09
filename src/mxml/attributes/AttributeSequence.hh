@@ -24,8 +24,8 @@ typename AttributeSequence<T>::Index AttributeSequence<T>::indexFromNote(const d
     index.line.partIndex = note.measure()->part()->index();
     index.line.staff = note.staff();
 
-    if (note.pitch()) {
-        const auto& pitch = *note.pitch();
+    if (note.pitch) {
+        const auto& pitch = *note.pitch;
         index.line.octave = pitch.octave();
         index.line.step = pitch.step();
     }

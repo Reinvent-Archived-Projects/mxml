@@ -15,7 +15,7 @@ Note createNote(int octave, Pitch::Step step, int alter) {
     pitch->setAlter(alter);
 
     Note note;
-    note.setPitch(std::move(pitch));
+    note.pitch = std::move(pitch);
 
     return note;
 }

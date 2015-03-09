@@ -3,20 +3,23 @@
 
 #pragma once
 #include <lxml/BaseRecursiveHandler.h>
-#include "BeamHandler.h"
-#include "EmptyPlacementHandler.h"
 #include <lxml/IntegerHandler.h>
-#include "LyricHandler.h"
-#include "NotationsHandler.h"
-#include "PitchHandler.h"
 #include <lxml/PresenceHandler.h>
-#include "RestHandler.h"
 #include <lxml/StringHandler.h>
-#include "TieHandler.h"
-#include "UnpitchedHandler.h"
 
 #include <mxml/dom/Note.h>
 #include <memory>
+
+#include "BeamHandler.h"
+#include "EmptyPlacementHandler.h"
+#include "LyricHandler.h"
+#include "NotationsHandler.h"
+#include "PitchHandler.h"
+#include "RestHandler.h"
+#include "TieHandler.h"
+#include "TimeModificationHandler.h"
+#include "UnpitchedHandler.h"
+
 
 namespace mxml {
 namespace parsing {
@@ -57,6 +60,7 @@ private:
     TieHandler _tieHandler;
     NotationsHandler _notationsHandler;
     LyricHandler _lyricHandler;
+    TimeModificationHandler _timeModificationHandler;
 };
 
 } // namespace parsing

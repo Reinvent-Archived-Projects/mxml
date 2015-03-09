@@ -36,7 +36,7 @@ void MeasureHandler::startElement(const QName& qname, const AttributeMap& attrib
 void MeasureHandler::endElement(const QName& qname, const std::string& contents) {
     if (_empty) {
         auto note = std::unique_ptr<dom::Note>(new dom::Note);
-        note->setRest(std::unique_ptr<dom::Rest>(new dom::Rest));
+        note->rest = std::unique_ptr<dom::Rest>(new dom::Rest);
         note->setMeasure(_result.get());
         note->setStart(0);
         note->setType(dom::presentOptional(dom::Note::Type::Whole));
@@ -103,7 +103,7 @@ void MeasureHandler::handleNote(std::unique_ptr<dom::Note>&& note) {
     }
     
     // Rests are a special case. A rest ends a chord but can appear whitin a beamed set.
-    if (note->rest()) {
+    if (note->rest) {
         endChord();
         _result->addNode(std::move(note));
         return;

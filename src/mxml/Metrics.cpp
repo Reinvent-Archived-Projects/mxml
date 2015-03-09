@@ -72,10 +72,10 @@ dom::tenths_t Metrics::staffY(const Note& note) const {
     auto& clef = *_scoreProperties.clef(note);
 
     dom::tenths_t y = 20;
-    if (note.pitch()) {
-        y = staffY(clef, *note.pitch());
-    } else if (note.rest()) {
-        y = staffY(clef, *note.rest());
+    if (note.pitch) {
+        y = staffY(clef, *note.pitch);
+    } else if (note.rest) {
+        y = staffY(clef, *note.rest);
     } else if (note.position.defaultY.isPresent()) {
         y = note.position.defaultY;
     }

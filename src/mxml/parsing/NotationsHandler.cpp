@@ -46,18 +46,28 @@ lxml::RecursiveHandler* NotationsHandler::startSubElement(const QName& qname) {
 }
 
 void NotationsHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
-    if (strcmp(qname.localName(), kArticulationsTag) == 0)
+    if (strcmp(qname.localName(), kArticulationsTag) == 0) {
         _result->articulations = _articulationsHandler.result();
-    else if (strcmp(qname.localName(), kFermataTag) == 0)
+    } else if (strcmp(qname.localName(), kFermataTag) == 0) {
         _result->fermata = _fermataHandler.result();
-    else if (strcmp(qname.localName(), kOrnamentsTag) == 0)
-        _result->ornaments.push_back(_ornamentsHandler.result());
-    else if (strcmp(qname.localName(), kSlurTag) == 0)
-        _result->slurs.push_back(_slurHandler.result());
-    else if (strcmp(qname.localName(), kTiedTag) == 0)
-        _result->ties.push_back(_tiedHandler.result());
-    else if (strcmp(qname.localName(), kTupletTag) == 0)
-        _result->tuplets.push_back(_tupletHandler.result());
+        _result->fermata->setParent(_result.get());
+    } else if (strcmp(qname.localName(), kOrnamentsTag) == 0) {
+        auto ornament = _ornamentsHandler.result();
+        ornament->setParent(_result.get());
+        _result->ornaments.push_back(std::move(ornament));
+    } else if (strcmp(qname.localName(), kSlurTag) == 0) {
+        auto slur = _slurHandler.result();
+        slur->setParent(_result.get());
+        _result->slurs.push_back(std::move(slur));
+    } else if (strcmp(qname.localName(), kTiedTag) == 0) {
+        auto tie = _tiedHandler.result();
+        tie->setParent(_result.get());
+        _result->ties.push_back(std::move(tie));
+    } else if (strcmp(qname.localName(), kTupletTag) == 0) {
+        auto tuplet = _tupletHandler.result();
+        tuplet->setParent(_result.get());
+        _result->tuplets.push_back(std::move(tuplet));
+    }
 }
 
 } // namsepace parsing

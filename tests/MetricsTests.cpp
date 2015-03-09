@@ -23,13 +23,13 @@ BOOST_AUTO_TEST_CASE(noteStaffY) {
     Note note;
     note.setMeasure(measure);
 
-    note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::Step::G, 0, 4)));
+    note.pitch = std::unique_ptr<Pitch>(new Pitch(Pitch::Step::G, 0, 4));
     BOOST_CHECK_EQUAL(metrics.staffY(note), 30);
     
-    note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::Step::G, 0, 5)));
+    note.pitch = std::unique_ptr<Pitch>(new Pitch(Pitch::Step::G, 0, 5));
     BOOST_CHECK_EQUAL(metrics.staffY(note), -5);
     
-    note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::Step::G, 0, 3)));
+    note.pitch = std::unique_ptr<Pitch>(new Pitch(Pitch::Step::G, 0, 3));
     BOOST_CHECK_EQUAL(metrics.staffY(note), 65);
 }
 
@@ -50,10 +50,10 @@ BOOST_AUTO_TEST_CASE(noteStaff2Y) {
     note.setStaff(2);
     note.setMeasure(measure);
     
-    note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::Step::F, 0, 3)));
+    note.pitch = std::unique_ptr<Pitch>(new Pitch(Pitch::Step::F, 0, 3));
     BOOST_CHECK_EQUAL(metrics.staffY(note), 10);
     
-    note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::Step::C, 0, 3)));
+    note.pitch = std::unique_ptr<Pitch>(new Pitch(Pitch::Step::C, 0, 3));
     BOOST_CHECK_EQUAL(metrics.staffY(note), 25);
 }
 
@@ -90,10 +90,10 @@ BOOST_AUTO_TEST_CASE(noteY) {
     Note note;
     note.setMeasure(measure);
     note.setStaff(1);
-    note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::Step::G, 0, 4)));
+    note.pitch = std::unique_ptr<Pitch>(new Pitch(Pitch::Step::G, 0, 4));
     BOOST_CHECK_EQUAL(metrics.noteY(note), 30);
     
     note.setStaff(2);
-    note.setPitch(std::unique_ptr<Pitch>(new Pitch(Pitch::Step::F, 0, 3)));
+    note.pitch = std::unique_ptr<Pitch>(new Pitch(Pitch::Step::F, 0, 3));
     BOOST_CHECK_EQUAL(metrics.noteY(note), Metrics::staffHeight() + 65 + 10);
 }

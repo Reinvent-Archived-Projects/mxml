@@ -265,7 +265,7 @@ void SpanFactory::build(const dom::Chord* chord) {
 }
 
 void SpanFactory::build(const dom::Note* note) {
-    assert (note->rest());
+    assert(note->rest);
 
     if (!note->printObject)
         return;

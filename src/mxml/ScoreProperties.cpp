@@ -146,7 +146,7 @@ int ScoreProperties::staves() const {
 }
 
 int ScoreProperties::alter(const dom::Note& note) const {
-    if (!note.pitch())
+    if (!note.pitch)
         return 0;
 
     const auto partIndex = note.measure()->part()->index();
@@ -155,7 +155,7 @@ int ScoreProperties::alter(const dom::Note& note) const {
     if (!currentKey)
         return 0;
 
-    const int base = currentKey->alter(note.pitch()->step());
+    const int base = currentKey->alter(note.pitch->step());
     return _alterSequence.find(AlterSequence::indexFromNote(note), base);
 }
 

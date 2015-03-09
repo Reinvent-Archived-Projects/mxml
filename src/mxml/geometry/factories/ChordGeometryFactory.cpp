@@ -62,7 +62,7 @@ Rect ChordGeometryFactory::buildNotes(const dom::Chord& chord) {
 
 void ChordGeometryFactory::buildDot(const NoteGeometry& noteGeom) {
     const dom::Note& note = noteGeom.note();
-    if (!note.dot())
+    if (!note.dot)
         return;
 
     std::unique_ptr<DotGeometry> dotGeom(new DotGeometry);
@@ -72,7 +72,7 @@ void ChordGeometryFactory::buildDot(const NoteGeometry& noteGeom) {
 
     coord_t staffY = dotLocation.y - _metrics.staffOrigin(note.staff());
     if ((int)staffY % 10 == 0) {
-        if (note.dot()->placement() == dom::Placement::Above)
+        if (note.dot->placement() == dom::Placement::Above)
             dotLocation.y -= 5;
         else
             dotLocation.y += 5;
@@ -95,7 +95,7 @@ void ChordGeometryFactory::buildAccidentals(const Rect& notesFrame) {
 
 void ChordGeometryFactory::buildAccidental(const NoteGeometry& noteGeom, const Rect& notesFrame) {
     const dom::Note& note = noteGeom.note();
-    if (!note.pitch())
+    if (!note.pitch)
         return;
 
     int alter = note.alter();
@@ -119,11 +119,11 @@ void ChordGeometryFactory::buildNotations(const dom::Chord& chord, const Rect& n
     // Notations should be on the first note of the chord
     const dom::Note* note = chord.notes().front().get();
 
-    if (!note || !note->notations())
+    if (!note || !note->notations)
         return;
 
     Rect frame = notesFrame;
-    const auto& notations = note->notations();
+    const auto& notations = note->notations;
     for (auto& artic : notations->articulations) {
         buildArticulation(chord, *artic, frame);
     }

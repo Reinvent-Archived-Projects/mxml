@@ -146,6 +146,9 @@
 		61A81C251AAA750100E230A6 /* TupletHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A81C231AAA750100E230A6 /* TupletHandler.cpp */; };
 		61A81C261AAA750100E230A6 /* TupletHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A81C241AAA750100E230A6 /* TupletHandler.h */; };
 		61A81C281AAA797200E230A6 /* Notations.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A81C271AAA797200E230A6 /* Notations.cpp */; };
+		61A81C701AAE3AC900E230A6 /* TimeModification.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A81C6E1AAE3AC900E230A6 /* TimeModification.h */; };
+		61A81C731AAE3C9200E230A6 /* TimeModificationHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61A81C711AAE3C9200E230A6 /* TimeModificationHandler.cpp */; };
+		61A81C741AAE3C9200E230A6 /* TimeModificationHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 61A81C721AAE3C9200E230A6 /* TimeModificationHandler.h */; };
 		61B89F9A1AA5154000F7DD9C /* EqualityConstraintSolver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61B89F981AA5154000F7DD9C /* EqualityConstraintSolver.cpp */; };
 		61B89F9B1AA5154000F7DD9C /* EqualityConstraintSolver.h in Headers */ = {isa = PBXBuildFile; fileRef = 61B89F991AA5154000F7DD9C /* EqualityConstraintSolver.h */; };
 		61B89F9E1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61B89F9C1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp */; };
@@ -507,6 +510,9 @@
 		61A81C231AAA750100E230A6 /* TupletHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TupletHandler.cpp; sourceTree = "<group>"; };
 		61A81C241AAA750100E230A6 /* TupletHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TupletHandler.h; sourceTree = "<group>"; };
 		61A81C271AAA797200E230A6 /* Notations.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Notations.cpp; sourceTree = "<group>"; };
+		61A81C6E1AAE3AC900E230A6 /* TimeModification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeModification.h; sourceTree = "<group>"; };
+		61A81C711AAE3C9200E230A6 /* TimeModificationHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimeModificationHandler.cpp; sourceTree = "<group>"; };
+		61A81C721AAE3C9200E230A6 /* TimeModificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeModificationHandler.h; sourceTree = "<group>"; };
 		61B89F981AA5154000F7DD9C /* EqualityConstraintSolver.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EqualityConstraintSolver.cpp; sourceTree = "<group>"; };
 		61B89F991AA5154000F7DD9C /* EqualityConstraintSolver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EqualityConstraintSolver.h; sourceTree = "<group>"; };
 		61B89F9C1AA5210700F7DD9C /* EqualityConstraintSolverTests.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EqualityConstraintSolverTests.cpp; sourceTree = "<group>"; };
@@ -746,6 +752,7 @@
 				614055F81A5C6228005224C9 /* Tied.h */,
 				614055F91A5C6228005224C9 /* Time.h */,
 				614055FA1A5C6228005224C9 /* TimedNode.h */,
+				61A81C6E1AAE3AC900E230A6 /* TimeModification.h */,
 				61A81C1C1AAA6E1100E230A6 /* Tuplet.h */,
 				614055FB1A5C6228005224C9 /* Turn.h */,
 				614055FC1A5C6228005224C9 /* Types.h */,
@@ -928,6 +935,8 @@
 				614056921A5C6228005224C9 /* TieHandler.h */,
 				614056931A5C6228005224C9 /* TimeHandler.cpp */,
 				614056941A5C6228005224C9 /* TimeHandler.h */,
+				61A81C711AAE3C9200E230A6 /* TimeModificationHandler.cpp */,
+				61A81C721AAE3C9200E230A6 /* TimeModificationHandler.h */,
 				61A81C231AAA750100E230A6 /* TupletHandler.cpp */,
 				61A81C241AAA750100E230A6 /* TupletHandler.h */,
 				614056951A5C6228005224C9 /* TurnHandler.cpp */,
@@ -1041,6 +1050,7 @@
 				61F072D61A6F0212002CA9CA /* SystemMarginsHandler.h in Headers */,
 				0022ADFE1A7082C300139992 /* CollisionHandler.h in Headers */,
 				61C850501A6D79CC00031100 /* OctaveShiftHandler.h in Headers */,
+				61A81C401AAA8CD600E230A6 /* TupletGeometry.h in Headers */,
 				61F072E61A6F0F4C002CA9CA /* GenericNode.h in Headers */,
 				61F072DE1A6F0431002CA9CA /* PageMarginsHandler.h in Headers */,
 				61A2B7691A8E870000C1EE2A /* TimeSequence.h in Headers */,
@@ -1049,10 +1059,12 @@
 				61F072E21A6F0CB3002CA9CA /* AppearanceHandler.h in Headers */,
 				61239C211A6742A100B3F0A3 /* LoopFactory.h in Headers */,
 				61A81C091AA9375B00E230A6 /* StreamOperators.h in Headers */,
+				61A81C701AAE3AC900E230A6 /* TimeModification.h in Headers */,
 				61F073CF1A71CEF5002CA9CA /* EndingGeometryFactory.h in Headers */,
 				61F072EA1A6F1183002CA9CA /* GenericNodeHandler.h in Headers */,
 				61C8508D1A6EE64300031100 /* SystemLayoutHandler.h in Headers */,
 				61A2B75F1A8E870000C1EE2A /* AlterSequence.h in Headers */,
+				61A81C741AAE3C9200E230A6 /* TimeModificationHandler.h in Headers */,
 				61F072EE1A6F1BEE002CA9CA /* FormattedTextHandler.h in Headers */,
 				619AC7A01AA149C2005DFBED /* StemDirectionResolver.h in Headers */,
 				61C850581A6D838500031100 /* OctaveShiftGeometry.h in Headers */,
@@ -1190,6 +1202,7 @@
 				614057691A5C6228005224C9 /* TimeHandler.cpp in Sources */,
 				61A2B7661A8E870000C1EE2A /* KeySequence.cpp in Sources */,
 				614057431A5C6228005224C9 /* LyricHandler.cpp in Sources */,
+				61A81C731AAE3C9200E230A6 /* TimeModificationHandler.cpp in Sources */,
 				614057071A5C6228005224C9 /* PedalGeometry.cpp in Sources */,
 				614056D71A5C6228005224C9 /* Event.cpp in Sources */,
 				00E7B4891A81510C00B949FC /* Attributes.cpp in Sources */,

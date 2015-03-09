@@ -19,22 +19,24 @@ static const char* kEndDynamicsAttribute = "end-dynamics";
 static const char* kAttackAttribute = "attack";
 static const char* kReleaseAttribute = "release";
 
-static const char* kDurationTag = "duration";
-static const char* kTypeTag = "type";
+static const char* kAccidentalTag = "accidental";
+static const char* kBeamTag = "beam";
 static const char* kChordTag = "chord";
+static const char* kDotTag = "dot";
+static const char* kDurationTag = "duration";
 static const char* kGraceTag = "grace";
-static const char* kStemTag = "stem";
-static const char* kStaffTag = "staff";
-static const char* kVoiceTag = "voice";
+static const char* kLyricTag = "lyric";
+static const char* kNotationsTag = "notations";
 static const char* kPitchTag = "pitch";
 static const char* kRestTag = "rest";
-static const char* kUnpitchedTag = "unpitched";
-static const char* kAccidentalTag = "accidental";
-static const char* kDotTag = "dot";
+static const char* kStaffTag = "staff";
+static const char* kStemTag = "stem";
 static const char* kTieTag = "tie";
-static const char* kNotationsTag = "notations";
-static const char* kBeamTag = "beam";
-static const char* kLyricTag = "lyric";
+static const char* kTimeModificationTag = "time-modification";
+static const char* kTypeTag = "type";
+static const char* kUnpitchedTag = "unpitched";
+static const char* kVoiceTag = "voice";
+
 
 void NoteHandler::startElement(const QName& qname, const AttributeMap& attributes) {
     using dom::presentOptional;
@@ -63,7 +65,7 @@ void NoteHandler::startElement(const QName& qname, const AttributeMap& attribute
 }
 
 void NoteHandler::endElement(const lxml::QName& qname, const std::string& contents) {
-    auto& pitch = _result->pitch();
+    auto& pitch = _result->pitch;
     if (pitch) {
         // Avoid alter values outside of the range [-2..2]
         if (pitch->alter() >= 3) {
@@ -110,6 +112,8 @@ lxml::RecursiveHandler* NoteHandler::startSubElement(const QName& qname) {
         return &_beamHandler;
     else if (strcmp(qname.localName(), kLyricTag) == 0)
         return &_lyricHandler;
+    else if (strcmp(qname.localName(), kTimeModificationTag) == 0)
+        return &_timeModificationHandler;
     return 0;
 }
 
@@ -130,26 +134,47 @@ void NoteHandler::endSubElement(const QName& qname, RecursiveHandler* parser) {
         _result->setStaff(_integerHandler.result());
     else if (strcmp(qname.localName(), kVoiceTag) == 0)
         _result->setVoice(_stringHandler.result());
-    else if (strcmp(qname.localName(), kPitchTag) == 0)
-        _result->setPitch(_pitchHandler.result());
-    else if (strcmp(qname.localName(), kRestTag) == 0)
-        _result->setRest(_restHandler.result());
-    else if (strcmp(qname.localName(), kUnpitchedTag) == 0)
-        _result->setUnpitched(_unpitchedHandler.result());
-    else if (strcmp(qname.localName(), kAccidentalTag) == 0) {
-        std::unique_ptr<dom::Accidental> accidental(new dom::Accidental(accidentalTypeFromString(_stringHandler.result())));
-        _result->setAccidental(std::move(accidental));
+    else if (strcmp(qname.localName(), kPitchTag) == 0) {
+        auto pitch = _pitchHandler.result();
+        pitch->setParent(_result.get());
+        _result->pitch = std::move(pitch);
+    } else if (strcmp(qname.localName(), kRestTag) == 0) {
+        auto rest = _restHandler.result();
+        rest->setParent(_result.get());
+        _result->rest = std::move(rest);
+    } else if (strcmp(qname.localName(), kUnpitchedTag) == 0) {
+        auto unpitched = _unpitchedHandler.result();
+        unpitched->setParent(_result.get());
+        _result->unpitched = _unpitchedHandler.result();
+    } else if (strcmp(qname.localName(), kAccidentalTag) == 0) {
+        auto accidental = std::unique_ptr<dom::Accidental>(new dom::Accidental(accidentalTypeFromString(_stringHandler.result())));
+        accidental->setParent(_result.get());
+        _result->accidental = std::move(accidental);
+    } else if (strcmp(qname.localName(), kDotTag) == 0) {
+        auto dot = _emptyPlacementHandler.result();
+        dot->setParent(_result.get());
+        _result->dot = std::move(dot);
+    } else if (strcmp(qname.localName(), kTieTag) == 0) {
+        auto tie = _tieHandler.result();
+        tie->setParent(_result.get());
+        _result->tie = std::move(tie);
+    } else if (strcmp(qname.localName(), kNotationsTag) == 0) {
+        auto notations = _notationsHandler.result();
+        notations->setParent(_result.get());
+        _result->notations = std::move(notations);
+    } else if (strcmp(qname.localName(), kBeamTag) == 0) {
+        auto beam = _beamHandler.result();
+        beam->setParent(_result.get());
+        _result->addBeam(std::move(beam));
+    } else if (strcmp(qname.localName(), kLyricTag) == 0) {
+        auto lyric = _lyricHandler.result();
+        lyric->setParent(_result.get());
+        _result->addLyric(std::move(lyric));
+    } else if (strcmp(qname.localName(), kTimeModificationTag) == 0) {
+        auto timeModification = _timeModificationHandler.result();
+        timeModification->setParent(_result.get());
+        _result->timeModification = std::move(timeModification);
     }
-    else if (strcmp(qname.localName(), kDotTag) == 0)
-        _result->setDot(_emptyPlacementHandler.result());
-    else if (strcmp(qname.localName(), kTieTag) == 0)
-        _result->setTie(_tieHandler.result());
-    else if (strcmp(qname.localName(), kNotationsTag) == 0) {
-        _result->setNotations(_notationsHandler.result());
-    } else if (strcmp(qname.localName(), kBeamTag) == 0)
-        _result->addBeam(_beamHandler.result());
-    else if (strcmp(qname.localName(), kLyricTag) == 0)
-        _result->addLyric(_lyricHandler.result());
 }
 
 Note::Type NoteHandler::typeFromString(const std::string& string) {
