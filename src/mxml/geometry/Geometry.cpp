@@ -75,6 +75,14 @@ const Geometry* Geometry::rootGeometry() const {
     return root;
 }
 
+void Geometry::lookUpGeometriesWithTypes(const std::vector<std::type_index>& types, std::function<void (const Geometry* geometry)> f) const {
+    for (auto& geometry : geometries()) {
+        geometry->lookUpGeometriesWithTypes(types, f);
+        if (std::find(types.begin(), types.end(), std::type_index(typeid(*geometry.get()))) != types.end())
+            f(geometry.get());
+    }
+}
+
 Point Geometry::convertToParent(const Point& point) const {
     Point o = origin();
     return {o.x + point.x - _contentOffset.x, o.y + point.y - _contentOffset.y};

@@ -5,8 +5,10 @@
 #include <mxml/geometry/Rect.h>
 #include <mxml/dom/Node.h>
 
+#include <functional>
 #include <memory>
 #include <vector>
+#include <typeindex>
 
 namespace mxml {
 
@@ -141,10 +143,22 @@ public:
     }
     const Geometry* rootGeometry() const;
 
+    /**
+     Get all geometries
+     */
     const std::vector<std::unique_ptr<Geometry>>& geometries() const {
         return _geometries;
     }
-    
+
+    /**
+     Recursively looks up all geometries for the given type and calls the given function for
+     each geometry found
+     
+     @param type The type to look up
+     @param f The function to call for geometry found
+     */
+    void lookUpGeometriesWithTypes(const std::vector<std::type_index>& type, std::function<void (const Geometry* geometry)> f) const;
+
     void addGeometry(std::unique_ptr<Geometry>&& geom);
     
     /** The smallest rectangle that contains all sub-geometries. */

@@ -2,7 +2,10 @@
 //  Copyright (c) 2014 Venture Media Labs. All rights reserved.
 
 #include "TieGeometryFactory.h"
+
 #include "ChordGeometry.h"
+#include "ClefGeometry.h"
+#include "KeyGeometry.h"
 #include "MeasureGeometry.h"
 #include "NoteGeometry.h"
 
@@ -29,6 +32,15 @@ std::vector<std::unique_ptr<TieGeometry>>&& TieGeometryFactory::buildTieGeometri
         auto tieGeom = buildTieGeometryToEdge(startGeom, tie->placement());
         startGeom->setTieGeometry(tieGeom.get());
         _tieGeometries.push_back(std::move(tieGeom));
+    }
+
+    // Finish any slurs that started but did not stop
+    for (auto& pair : _slurStartGeometries) {
+        auto slur = pair.second.first;
+        auto startGeom = pair.second.second;
+        auto slurGeom = buildSlurGeometryToEdge(startGeom, slur->placement());
+        startGeom->setTieGeometry(slurGeom.get());
+        _tieGeometries.push_back(std::move(slurGeom));
     }
 
     return std::move(_tieGeometries);
@@ -58,7 +70,8 @@ void TieGeometryFactory::createGeometryFromNote(NoteGeometry* noteGeometry) {
         return;
     
     const auto& notations = note.notations;
-    
+
+    // Build ties
     for (auto& tie : notations->ties) {
         auto key = std::make_pair(note.staff(), note.pitch.get());
         if (tie->type() == dom::kContinue) {
@@ -76,25 +89,29 @@ void TieGeometryFactory::createGeometryFromNote(NoteGeometry* noteGeometry) {
                 _tieStartGeometries.erase(it);
             }
             noteGeometry->setTieGeometry(tieGeom.get());
-
             _tieGeometries.push_back(std::move(tieGeom));
         }
     }
 
+    // Build slurs
     for (auto& slur : notations->slurs) {
         auto key = std::make_pair(note.staff(), slur->number());
         if (slur->type() == dom::kStart || slur->type() == dom::kContinue) {
-            _slurStartGeometries[key] = noteGeometry;
+            _slurStartGeometries[key] = std::make_pair(slur.get(), noteGeometry);
         } else if (slur->type() == dom::kStop) {
-            auto startGeom = _slurStartGeometries.find(key);
-            if (startGeom != _slurStartGeometries.end()) {
-                std::unique_ptr<TieGeometry> slurGeom = buildSlurGeometry(startGeom->second, noteGeometry, slur->placement());
-                _tieGeometries.push_back(std::move(slurGeom));
-                startGeom->second->setTieGeometry(slurGeom.get());
-                noteGeometry->setTieGeometry(slurGeom.get());
-                
-                _slurStartGeometries.erase(startGeom);
+            auto it = _slurStartGeometries.find(key);
+            auto startGeom = it->second.second;
+
+            std::unique_ptr<TieGeometry> slurGeom;
+            if (it == _slurStartGeometries.end()) {
+                slurGeom = buildSlurGeometryFromEdge(noteGeometry, slur->placement());
+            } else {
+                slurGeom = buildSlurGeometry(startGeom, noteGeometry, slur->placement());
+                startGeom->setTieGeometry(slurGeom.get());
+                _slurStartGeometries.erase(it);
             }
+            noteGeometry->setTieGeometry(slurGeom.get());
+            _tieGeometries.push_back(std::move(slurGeom));
         }
     }
 }
@@ -137,8 +154,17 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometry(const NoteGeom
 std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometryFromEdge(const NoteGeometry* stop, const dom::Optional<dom::Placement>& placement) {
     std::unique_ptr<TieGeometry> tieGeom(new TieGeometry);
 
+    const Geometry* startGeometry = nullptr;
+    std::vector<std::type_index> types = {std::type_index(typeid(KeyGeometry)), std::type_index(typeid(ClefGeometry))};
+
+    coord_t stopX = stop->convertToGeometry(stop->frame().min(), &_parentGeometry).x;
+    _parentGeometry.lookUpGeometriesWithTypes(types, [&startGeometry, stopX](const Geometry* geometry){
+        if (!startGeometry || (geometry->frame().max().x < stopX && geometry->frame().max().x > startGeometry->frame().max().x))
+            startGeometry = geometry;
+    });
+
     Point startLocation;
-    startLocation.x = stop->convertFromGeometry({0, 0}, &_parentGeometry).x;
+    startLocation.x = startGeometry->convertToGeometry(startGeometry->bounds().max(), stop->parentGeometry()).x;
     startLocation.y = stop->center().y;
 
     Point stopLocation;
@@ -175,6 +201,7 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometryToEdge(const No
 
     Point stopLocation;
     stopLocation.x = start->convertFromGeometry(_parentGeometry.bounds().max(), &_parentGeometry).x;
+    stopLocation.x += start->frame().origin.x - kTieSpacing;
     stopLocation.y = start->center().y;
 
     if (!placement.isPresent()) {
@@ -198,6 +225,108 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometryToEdge(const No
     return tieGeom;
 }
 
+
+std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometryFromEdge(const NoteGeometry* stop, const dom::Optional<dom::Placement>& placement) {
+    std::unique_ptr<TieGeometry> tieGeom(new TieGeometry);
+
+    const Geometry* startGeometry = nullptr;
+    std::vector<std::type_index> types = {std::type_index(typeid(KeyGeometry)), std::type_index(typeid(ClefGeometry))};
+
+    coord_t stopX = stop->convertToGeometry(stop->frame().min(), &_parentGeometry).x;
+    _parentGeometry.lookUpGeometriesWithTypes(types, [&startGeometry, stopX](const Geometry* geometry){
+        if (!startGeometry || (geometry->frame().max().x < stopX && geometry->frame().max().x > startGeometry->frame().max().x))
+            startGeometry = geometry;
+    });
+
+    Point startLocation;
+    startLocation.x = startGeometry->convertToGeometry(startGeometry->bounds().max(), stop->parentGeometry()).x + kTieSpacing;
+    startLocation.y = stop->center().y;
+
+    Point stopLocation = stop->location();
+    stopLocation.x -= kTieSpacing;
+
+    const ChordGeometry& stopChordGeom = static_cast<const ChordGeometry&>(*stop->parentGeometry());
+
+    if (!placement.isPresent()) {
+        auto stem = stopChordGeom.stem();
+        if (stem && stem->stemDirection() == dom::Stem::Up)
+            tieGeom->setPlacement(absentOptional(dom::Placement::Below));
+        else
+            tieGeom->setPlacement(absentOptional(dom::Placement::Above));
+    }
+
+    Rect stopChordFrame = stopChordGeom.frame();
+
+    // Correctly place slur using depending on the stem direction
+    if (tieGeom->placement().value() == dom::Placement::Below) {
+        if (stopChordGeom.stem() && stopChordGeom.stem()->stemDirection() == dom::Stem::Down) {
+            stopLocation.y = stopChordFrame.max().y - kSlurStemOffset;
+        } else {
+            stopLocation.y = stopChordFrame.max().y + kTieSpacing;
+        }
+    } else {
+        if (stopChordGeom.stem() && stopChordGeom.stem()->stemDirection() == dom::Stem::Up) {
+            stopLocation.y = stopChordFrame.min().y + kSlurStemOffset;
+        } else {
+            stopLocation.y = stopChordFrame.min().y - kTieSpacing;
+        }
+    }
+    startLocation.y = stopLocation.y;
+
+    tieGeom->setStartLocation(_parentGeometry.convertFromGeometry(startLocation, stop->parentGeometry()));
+    tieGeom->setStopLocation(_parentGeometry.convertFromGeometry(stopLocation, stop->parentGeometry()));
+
+    return tieGeom;
+}
+
+std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometryToEdge(const NoteGeometry* start, const dom::Optional<dom::Placement>& placement) {
+    std::unique_ptr<TieGeometry> tieGeom(new TieGeometry);
+
+    Point startLocation = start->location();
+    startLocation.x += kTieSpacing;
+
+    Point stopLocation;
+    stopLocation.x = start->convertFromGeometry(_parentGeometry.bounds().max(), &_parentGeometry).x;
+    stopLocation.x += start->frame().origin.x - kTieSpacing;
+    stopLocation.y = start->center().y;
+
+
+    const ChordGeometry& startChordGeom = static_cast<const ChordGeometry&>(*start->parentGeometry());
+
+    if (!placement.isPresent()) {
+        auto stem = startChordGeom.stem();
+        if (stem && stem->stemDirection() == dom::Stem::Up)
+            tieGeom->setPlacement(absentOptional(dom::Placement::Below));
+        else
+            tieGeom->setPlacement(absentOptional(dom::Placement::Above));
+    }
+
+    Rect startChordFrame = startChordGeom.frame();
+
+    // Correctly place slur using depending on the stem direction
+    if (tieGeom->placement().value() == dom::Placement::Below) {
+        if (startChordGeom.stem() && startChordGeom.stem()->stemDirection() == dom::Stem::Down) {
+            startLocation.y = startChordFrame.max().y - kSlurStemOffset;
+            startLocation.x = start->frame().max().x - kTieSpacing;
+        } else {
+            startLocation.y = startChordFrame.max().y + kTieSpacing;
+        }
+    } else {
+        if (startChordGeom.stem() && startChordGeom.stem()->stemDirection() == dom::Stem::Up) {
+            startLocation.y = startChordFrame.min().y + kSlurStemOffset;
+            startLocation.x = start->frame().max().x + kTieSpacing;
+        } else {
+            startLocation.y = startChordFrame.min().y - kTieSpacing;
+        }
+    }
+    stopLocation.y = startLocation.y;
+
+    tieGeom->setStartLocation(_parentGeometry.convertFromGeometry(startLocation, start->parentGeometry()));
+    tieGeom->setStopLocation(_parentGeometry.convertFromGeometry(stopLocation, start->parentGeometry()));
+    
+    return tieGeom;
+}
+
 std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeometry* start, const NoteGeometry* stop, const dom::Optional<dom::Placement>& placement) {
     std::unique_ptr<TieGeometry> tieGeom(new TieGeometry);
     
@@ -209,7 +338,7 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
 
     const ChordGeometry& startChordGeom = static_cast<const ChordGeometry&>(*start->parentGeometry());
     const ChordGeometry& stopChordGeom = static_cast<const ChordGeometry&>(*stop->parentGeometry());
-    
+
     if (!placement.isPresent()) {
         auto s1 = startChordGeom.stem();
         auto s2 = stopChordGeom.stem();
@@ -222,7 +351,8 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
     
     Rect startChordFrame = startChordGeom.frame();
     Rect stopChordFrame = stopChordGeom.frame();
-    
+
+    // Correctly place slur using depending on the stem direction
     if (tieGeom->placement().value() == dom::Placement::Below) {
         if (startChordGeom.stem() && startChordGeom.stem()->stemDirection() == dom::Stem::Down) {
             startLocation.y = startChordFrame.max().y - kSlurStemOffset;
@@ -248,32 +378,6 @@ std::unique_ptr<TieGeometry> TieGeometryFactory::buildSlurGeometry(const NoteGeo
             startLocation.x = start->frame().max().x + kTieSpacing;
         } else {
             stopLocation.y = stopChordFrame.min().y - kTieSpacing;
-        }
-    }
-    
-    // Avoid collisions with beamed sets
-    if (!start->note().beams().empty() && start->note().beams().front()->type() != dom::Beam::Type::End) {
-        ChordGeometry* chordGeom = (ChordGeometry*)start->parentGeometry();
-        Rect stemFrame = chordGeom->stem()->frame();
-        
-        if (tieGeom->placement().value() == dom::Placement::Below && start->note().stem() == dom::Stem::Down) {
-            startLocation.x = stemFrame.min().x + StemGeometry::kNoFlagWidth;
-            startLocation.y = stemFrame.max().y + 2*kTieSpacing;
-        } else if (tieGeom->placement().value() == dom::Placement::Above && start->note().stem() == dom::Stem::Up) {
-            startLocation.x = stemFrame.max().x - StemGeometry::kNoFlagWidth;
-            startLocation.y = stemFrame.min().y - 2*kTieSpacing;
-        }
-    }
-    if (!stop->note().beams().empty() && stop->note().beams().front()->type() != dom::Beam::Type::Begin) {
-        ChordGeometry* chordGeom = (ChordGeometry*)stop->parentGeometry();
-        Rect stemFrame = chordGeom->stem()->frame();
-        
-        if (tieGeom->placement().value() == dom::Placement::Below && stop->note().stem() == dom::Stem::Down) {
-            stopLocation.x = stemFrame.min().x + StemGeometry::kNoFlagWidth;
-            stopLocation.y = stemFrame.max().y + 2*kTieSpacing;
-        } else if (tieGeom->placement().value() == dom::Placement::Above && stop->note().stem() == dom::Stem::Up) {
-            stopLocation.x = stemFrame.max().x - StemGeometry::kNoFlagWidth;
-            stopLocation.y = stemFrame.min().y - 2*kTieSpacing;
         }
     }
 

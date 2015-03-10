@@ -5,7 +5,6 @@
 #include "Geometry.h"
 #include "TieGeometry.h"
 
-#include <mxml/Metrics.h>
 #include <mxml/dom/Note.h>
 
 #include <map>
@@ -17,6 +16,7 @@ namespace mxml {
 
 class ChordGeometry;
 class NoteGeometry;
+class Metrics;
 
 class TieGeometryFactory {
 public:
@@ -32,17 +32,21 @@ private:
     void createGeometries(const std::vector<std::unique_ptr<Geometry>>& geometries);
     void createGeometriesFromChord(ChordGeometry* chord);
     void createGeometryFromNote(NoteGeometry* noteGeometry);
+
     std::unique_ptr<TieGeometry> buildTieGeometry(const NoteGeometry* startGeom, const NoteGeometry* stopGeom, const dom::Optional<dom::Placement>& placement);
     std::unique_ptr<TieGeometry> buildTieGeometryFromEdge(const NoteGeometry* stopGeom, const dom::Optional<dom::Placement>& placement);
     std::unique_ptr<TieGeometry> buildTieGeometryToEdge(const NoteGeometry* startGeom, const dom::Optional<dom::Placement>& placement);
+
     std::unique_ptr<TieGeometry> buildSlurGeometry(const NoteGeometry* startGeom, const NoteGeometry* stopGeom, const dom::Optional<dom::Placement>& placement);
+    std::unique_ptr<TieGeometry> buildSlurGeometryFromEdge(const NoteGeometry* stop, const dom::Optional<dom::Placement>& placement);
+    std::unique_ptr<TieGeometry> buildSlurGeometryToEdge(const NoteGeometry* start, const dom::Optional<dom::Placement>& placement);
     
 private:
     const Geometry& _parentGeometry;
     const Metrics& _metrics;
 
     std::vector<std::unique_ptr<TieGeometry>> _tieGeometries;
-    std::map<std::pair<int, int>, NoteGeometry*> _slurStartGeometries;
+    std::map<std::pair<int, int>, std::pair<const dom::Slur*, NoteGeometry*>> _slurStartGeometries;
     
     typedef std::pair<int, const dom::Pitch*> PitchKey;
     struct PitchComparator {
