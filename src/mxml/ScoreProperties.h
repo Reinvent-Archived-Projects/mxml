@@ -38,7 +38,7 @@ public:
     };
 
 public:
-    ScoreProperties(const dom::Score& score, LayoutType layoutType);
+    ScoreProperties(const dom::Score& score, LayoutType layoutType = LayoutType::Scroll);
 
     /**
      Get the number of measures in the score.
