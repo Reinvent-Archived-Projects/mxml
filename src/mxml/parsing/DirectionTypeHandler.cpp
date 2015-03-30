@@ -85,8 +85,11 @@ void WedgeHandler::startElement(const QName& qname, const AttributeMap& attribut
         _result->setNumber(lxml::IntegerHandler::parseInteger(number->second));
     
     auto spread = attributes.find(kSpreadAttribute);
-    if (spread != attributes.end())
-        _result->setSpread(DoubleHandler::parseDouble(spread->second));
+    if (spread != attributes.end()) {
+        auto spreadValue = DoubleHandler::parseDouble(spread->second);
+        if (spreadValue > 0)
+            _result->setSpread(spreadValue);
+    }
 }
 
 Wedge::Type WedgeHandler::typeFromString(const std::string& string) {
