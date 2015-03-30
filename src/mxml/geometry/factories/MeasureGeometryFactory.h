@@ -46,7 +46,7 @@ private:
 
     void buildTuplet(const ChordGeometry* chordGeometry, const dom::Tuplet* tuplet);
     
-    void centerLoneRest();
+    void centerWholeRests();
     
 private:
     const SpanCollection& _spans;

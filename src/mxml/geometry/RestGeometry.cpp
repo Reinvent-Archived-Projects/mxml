@@ -13,9 +13,9 @@ const Size RestGeometry::k32thSize   = {13, 44};
 const Size RestGeometry::k16thSize   = {13, 44};
 const Size RestGeometry::kEighthSize  = {12, 20};
 const Size RestGeometry::kQuarterSize = {13, 30};
-const Size RestGeometry::kHalfSize    = {13, 20};
-const Size RestGeometry::kWholeSize   = {13, 20};
-const Size RestGeometry::kBreveSize   = { 6, 20};
+const Size RestGeometry::kHalfSize    = {13, 10};
+const Size RestGeometry::kWholeSize   = {13, 10};
+const Size RestGeometry::kBreveSize   = { 6, 10};
 const Size RestGeometry::kLongSize    = { 6, 20};
 const Size RestGeometry::kMaximaSize  = {17, 20};
 

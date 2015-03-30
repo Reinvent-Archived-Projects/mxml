@@ -70,7 +70,7 @@ std::unique_ptr<MeasureGeometry> MeasureGeometryFactory::build(const Measure& me
 
     buildBeams();
     adjustBounds(_geometry.get());
-    centerLoneRest();
+    centerWholeRests();
 
     return std::move(_geometry);
 }
@@ -343,37 +343,13 @@ void MeasureGeometryFactory::buildRest(const Note* note) {
     _geometry->addGeometry(std::move(geo));
 }
 
-void MeasureGeometryFactory::centerLoneRest() {
-    std::map<int, RestGeometry*> staffRests;
-
+void MeasureGeometryFactory::centerWholeRests() {
     for (auto& geometry : _geometry->geometries()) {
-        NoteGeometry* note = dynamic_cast<NoteGeometry*>(geometry.get());
-        if (note) {
-            staffRests[note->note().staff()-1] = nullptr;
-            continue;
-        }
-
-        ChordGeometry* chord = dynamic_cast<ChordGeometry*>(geometry.get());
-        if (chord) {
-            staffRests[chord->chord().firstNote()->staff() - 1] = nullptr;
-            continue;
-        }
-
         RestGeometry* rest = dynamic_cast<RestGeometry*>(geometry.get());
-        if (rest) {
-            const int staff = rest->note().staff() - 1;
-            if (staffRests.find(staff) != staffRests.end()) {
-                staffRests[staff] = nullptr;
-            } else {
-                staffRests[staff] = rest;
-            }
-        }
-    }
+        if (!rest)
+            continue;
 
-    // If there is only a Rest on this Measures Staff, center it
-    for (auto& staffRest : staffRests) {
-        RestGeometry* rest = staffRest.second;
-        if (rest) {
+        if (!rest->note().type().isPresent() || rest->note().type() == dom::Note::Type::Whole) {
             auto location = rest->location();
             const Span& span = *_spans.with(&rest->note());
             auto start = -_spans.origin(_measureIndex) + span.start();

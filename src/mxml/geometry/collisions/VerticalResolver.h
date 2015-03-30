@@ -26,11 +26,13 @@ namespace mxml {
     protected:
         void resolveCollision(const CollisionPair& pair);
         void resolveCollision(const Geometry* g1, Geometry* g2);
-        void resolveCollision(const NoteGeometry* note, RestGeometry* rest);
+        void resolveCollision(const Geometry* g1, RestGeometry* rest);
         
         bool isImmovable(const Geometry* geometry) const;
         
         void readdGeometry(Geometry* geometry);
+
+        Rect chooseBestFrame(Geometry* geometry, const Rect& f1, const Rect& f2);
         
         std::map<Geometry*, int> _collisionCount;
     };

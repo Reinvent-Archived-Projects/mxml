@@ -84,6 +84,25 @@ bool CollisionResolver<Comparator>::colliding(const Geometry* g1, const Geometry
 }
 
 template <typename Comparator>
+bool CollisionResolver<Comparator>::colliding(const Geometry* geometry) const {
+    Rect frame = _geometry.convertFromGeometry(geometry->frame(), geometry->parentGeometry());
+
+    for (auto i = _geometries.begin(); i != _geometries.end(); ++i) {
+        if (*i == geometry)
+            continue;
+
+        Rect f2 = _geometry.convertFromGeometry((*i)->frame(), (*i)->parentGeometry());
+        if (f2.origin.x > frame.origin.x + frame.size.width)
+            break;
+
+        if (colliding(geometry, *i))
+            return true;
+    }
+    
+    return false;
+}
+
+template <typename Comparator>
 void CollisionResolver<Comparator>::resolveCollisions() {
     addAllCollisions();
     

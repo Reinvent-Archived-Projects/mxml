@@ -89,6 +89,11 @@ protected:
      Check if two given geometries are colliding.
      */
     virtual bool colliding(const Geometry* g1, const Geometry* g2) const;
+
+    /**
+     Check if a given geometry is colliding.
+     */
+    virtual bool colliding(const Geometry* g1) const;
     
     /**
      Check if this collision pair can be resolved.

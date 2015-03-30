@@ -89,10 +89,14 @@ namespace mxml {
             std::swap(first, second);
         
         auto noteGeometry = dynamic_cast<NoteGeometry*>(first);
+        auto stemGeometry = dynamic_cast<StemGeometry*>(first);
         auto restGeometry = dynamic_cast<RestGeometry*>(second);
         if (noteGeometry && restGeometry)
             resolveCollision(noteGeometry, restGeometry);
-        resolveCollision(first, second);
+        else if (stemGeometry && restGeometry)
+            resolveCollision(stemGeometry, restGeometry);
+        else
+            resolveCollision(first, second);
     }
     
     void VerticalResolver::resolveCollision(const Geometry* g1, Geometry* g2) {
@@ -114,23 +118,55 @@ namespace mxml {
         removeCollisions(g2);
         readdGeometry(g2);
     }
-    
-    void VerticalResolver::resolveCollision(const NoteGeometry* note, RestGeometry* rest) {
-        Rect noteFrame = _geometry.convertFromGeometry(note->frame(), note->parentGeometry());
+
+    void VerticalResolver::resolveCollision(const Geometry* g1, RestGeometry* rest) {
+        Rect stemFrame = _geometry.convertFromGeometry(g1->frame(), g1->parentGeometry());
         Rect restFrame = _geometry.convertFromGeometry(rest->frame(), rest->parentGeometry());
-        
-        // Only move things that are already outside the staves further away
-        if (note->note().stem() == dom::Stem::Up)
-            restFrame.origin.y = noteFrame.origin.y + noteFrame.size.height + 1;
-        else if (note->note().stem() == dom::Stem::Down)
-            restFrame.origin.y = noteFrame.origin.y - restFrame.size.height - 1;
-        
-        rest->setFrame(rest->parentGeometry()->convertFromRoot(restFrame));
-        
+        auto upFrame = restFrame;
+        auto downFrame = restFrame;
+
+        // Reduce the frame size to avoid close call collisions
+        upFrame.size.height -= 2;
+        downFrame.size.height -= 2;
+
+        // Try moving it both up and down
+        while (intersect(stemFrame, upFrame)) upFrame.origin.y -= 10;
+        while (intersect(stemFrame, downFrame)) downFrame.origin.y += 10;
+
+        // Reset frame size
+        upFrame.size = restFrame.size;
+        downFrame.size = restFrame.size;
+
+        auto bestFrame = chooseBestFrame(rest, upFrame, downFrame);
+        rest->setFrame(rest->parentGeometry()->convertFromRoot(bestFrame));
+
         removeCollisions(rest);
         readdGeometry(rest);
     }
-    
+
+    Rect VerticalResolver::chooseBestFrame(Geometry* geometry, const Rect& f1, const Rect& f2) {
+        Rect currentFrame = _geometry.convertFromGeometry(geometry->frame(), geometry->parentGeometry());
+
+        geometry->setFrame(geometry->parentGeometry()->convertFromRoot(f1));
+        auto firstColliding = colliding(geometry);
+
+        geometry->setFrame(geometry->parentGeometry()->convertFromRoot(f2));
+        auto secondColliding = colliding(geometry);
+
+        if (firstColliding && secondColliding)
+            return currentFrame;
+
+        if (firstColliding)
+            return f2;
+
+        if (secondColliding)
+            return f1;
+
+        if (std::abs(f1.origin.y - currentFrame.origin.y) < std::abs(f2.origin.y - currentFrame.origin.y))
+            return f1;
+        return f2;
+    }
+
     bool VerticalResolver::isImmovable(const Geometry* geometry) const {
         return (typeid(*geometry) == typeid(ClefGeometry) ||
                 typeid(*geometry) == typeid(KeyGeometry) ||
