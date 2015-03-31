@@ -91,12 +91,16 @@ namespace mxml {
         auto noteGeometry = dynamic_cast<NoteGeometry*>(first);
         auto stemGeometry = dynamic_cast<StemGeometry*>(first);
         auto restGeometry = dynamic_cast<RestGeometry*>(second);
-        auto placementGeometry = dynamic_cast<PlacementGeometry*>(second);
+
         if (noteGeometry && restGeometry)
             resolveCollision(noteGeometry, restGeometry);
         else if (stemGeometry && restGeometry)
             resolveCollision(stemGeometry, restGeometry);
-        else if (placementGeometry)
+        else if (auto placementGeometry = dynamic_cast<TupletGeometry*>(second))
+            resolveCollision(first, placementGeometry);
+        else if (auto placementGeometry = dynamic_cast<OctaveShiftGeometry*>(second))
+            resolveCollision(first, placementGeometry);
+        else if (auto placementGeometry = dynamic_cast<PedalGeometry*>(second))
             resolveCollision(first, placementGeometry);
         else
             resolveCollision(first, second);
