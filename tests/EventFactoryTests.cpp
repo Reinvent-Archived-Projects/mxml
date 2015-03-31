@@ -40,17 +40,24 @@ BOOST_AUTO_TEST_CASE(moonlight) {
     BOOST_CHECK_EQUAL(scoreProperties.tempo(14, 0), 160);
 }
 
-BOOST_AUTO_TEST_CASE(beats4_4) {
+BOOST_AUTO_TEST_CASE(beats_short_measure) {
     ScoreBuilder builder;
     auto part = builder.addPart();
-    auto measure = builder.addMeasure(part);
 
-    auto attributes = builder.addAttributes(measure);
-    attributes->setDivisions(dom::presentOptional(8));
-
-    auto time = builder.setTime(attributes);
+    auto measure1 = builder.addMeasure(part);
+    auto attributes1 = builder.addAttributes(measure1);
+    attributes1->setDivisions(dom::presentOptional(1));
+    auto time = builder.setTime(attributes1);
     time->setBeats(4);
     time->setBeatType(4);
+
+    auto measure2 = builder.addMeasure(part);
+
+    builder.addNote(measure1, dom::Note::Type::Quarter, 0);
+    builder.addNote(measure2, dom::Note::Type::Quarter, 0);
+    builder.addNote(measure2, dom::Note::Type::Quarter, 1);
+    builder.addNote(measure2, dom::Note::Type::Quarter, 2);
+    builder.addNote(measure2, dom::Note::Type::Quarter, 4);
 
     auto score = builder.build();
     ScoreProperties scoreProperties(*score, ScoreProperties::LayoutType::Scroll);
@@ -58,27 +65,78 @@ BOOST_AUTO_TEST_CASE(beats4_4) {
     EventFactory factory(*score, scoreProperties);
     auto events = factory.build();
 
-    BOOST_CHECK_EQUAL(events->events().size(), 4);
+    BOOST_CHECK_EQUAL(events->events().size(), 6);
 
-    auto it = events->begin();
-    BOOST_CHECK_EQUAL(it->measureIndex(), 0);
-    BOOST_CHECK_EQUAL(it->measureTime(), 0);
-    BOOST_CHECK(it->isBeatMark());
+    auto& beatEvent = events->events().at(0);
+    BOOST_CHECK_EQUAL(beatEvent.measureIndex(), 0);
+    BOOST_CHECK_EQUAL(beatEvent.measureTime(), 0);
+    BOOST_CHECK(beatEvent.isBeatMark());
 
-    ++it;
-    BOOST_CHECK_EQUAL(it->measureIndex(), 0);
-    BOOST_CHECK_EQUAL(it->measureTime(), 8);
-    BOOST_CHECK(it->isBeatMark());
+    beatEvent = events->events().at(1);
+    BOOST_CHECK_EQUAL(beatEvent.measureIndex(), 1);
+    BOOST_CHECK_EQUAL(beatEvent.measureTime(), 0);
+    BOOST_CHECK(beatEvent.isBeatMark());
 
-    ++it;
-    BOOST_CHECK_EQUAL(it->measureIndex(), 0);
-    BOOST_CHECK_EQUAL(it->measureTime(), 16);
-    BOOST_CHECK(it->isBeatMark());
+    beatEvent = events->events().at(2);
+    BOOST_CHECK_EQUAL(beatEvent.measureIndex(), 1);
+    BOOST_CHECK_EQUAL(beatEvent.measureTime(), 1);
+    BOOST_CHECK(beatEvent.isBeatMark());
 
-    ++it;
-    BOOST_CHECK_EQUAL(it->measureIndex(), 0);
-    BOOST_CHECK_EQUAL(it->measureTime(), 24);
-    BOOST_CHECK(it->isBeatMark());
+    beatEvent = events->events().at(3);
+    BOOST_CHECK_EQUAL(beatEvent.measureIndex(), 1);
+    BOOST_CHECK_EQUAL(beatEvent.measureTime(), 2);
+    BOOST_CHECK(beatEvent.isBeatMark());
+
+    beatEvent = events->events().at(4);
+    BOOST_CHECK_EQUAL(beatEvent.measureIndex(), 1);
+    BOOST_CHECK_EQUAL(beatEvent.measureTime(), 3);
+    BOOST_CHECK(beatEvent.isBeatMark());
+}
+
+BOOST_AUTO_TEST_CASE(beats4_4) {
+    ScoreBuilder builder;
+    auto part = builder.addPart();
+    auto measure = builder.addMeasure(part);
+
+    auto attributes = builder.addAttributes(measure);
+    attributes->setDivisions(dom::presentOptional(1));
+
+    auto time = builder.setTime(attributes);
+    time->setBeats(4);
+    time->setBeatType(4);
+
+    builder.addNote(measure, dom::Note::Type::Quarter, 0);
+    builder.addNote(measure, dom::Note::Type::Quarter, 1);
+    builder.addNote(measure, dom::Note::Type::Quarter, 2);
+    builder.addNote(measure, dom::Note::Type::Quarter, 3);
+
+    auto score = builder.build();
+    ScoreProperties scoreProperties(*score, ScoreProperties::LayoutType::Scroll);
+
+    EventFactory factory(*score, scoreProperties);
+    auto events = factory.build();
+
+    BOOST_CHECK_EQUAL(events->events().size(), 5);
+
+    auto& beatEvent = events->events().at(0);
+    BOOST_CHECK_EQUAL(beatEvent.measureIndex(), 0);
+    BOOST_CHECK_EQUAL(beatEvent.measureTime(), 0);
+    BOOST_CHECK(beatEvent.isBeatMark());
+
+    beatEvent = events->events().at(1);
+    BOOST_CHECK_EQUAL(beatEvent.measureIndex(), 0);
+    BOOST_CHECK_EQUAL(beatEvent.measureTime(), 1);
+    BOOST_CHECK(beatEvent.isBeatMark());
+
+    beatEvent = events->events().at(2);
+    BOOST_CHECK_EQUAL(beatEvent.measureIndex(), 0);
+    BOOST_CHECK_EQUAL(beatEvent.measureTime(), 2);
+    BOOST_CHECK(beatEvent.isBeatMark());
+
+    beatEvent = events->events().at(3);
+    BOOST_CHECK_EQUAL(beatEvent.measureIndex(), 0);
+    BOOST_CHECK_EQUAL(beatEvent.measureTime(), 3);
+    BOOST_CHECK(beatEvent.isBeatMark());
 }
 
 BOOST_AUTO_TEST_CASE(beats2_12) {
@@ -93,23 +151,26 @@ BOOST_AUTO_TEST_CASE(beats2_12) {
     time->setBeats(2);
     time->setBeatType(12);
 
+    builder.addNote(measure, dom::Note::Type::Quarter, 0, 8);
+    builder.addNote(measure, dom::Note::Type::Quarter, 8, 8);
+
     auto score = builder.build();
     ScoreProperties scoreProperties(*score, ScoreProperties::LayoutType::Scroll);
 
     EventFactory factory(*score, scoreProperties);
     auto events = factory.build();
 
-    BOOST_CHECK_EQUAL(events->events().size(), 2);
+    BOOST_CHECK_EQUAL(events->events().size(), 3);
 
-    auto it = events->begin();
-    BOOST_CHECK_EQUAL(it->measureIndex(), 0);
-    BOOST_CHECK_EQUAL(it->measureTime(), 0);
-    BOOST_CHECK(it->isBeatMark());
+    auto& beatEvent = events->events().at(0);
+    BOOST_CHECK_EQUAL(beatEvent.measureIndex(), 0);
+    BOOST_CHECK_EQUAL(beatEvent.measureTime(), 0);
+    BOOST_CHECK(beatEvent.isBeatMark());
 
-    ++it;
-    BOOST_CHECK_EQUAL(it->measureIndex(), 0);
-    BOOST_CHECK_EQUAL(it->measureTime(), 8);
-    BOOST_CHECK(it->isBeatMark());
+    beatEvent = events->events().at(1);
+    BOOST_CHECK_EQUAL(beatEvent.measureIndex(), 0);
+    BOOST_CHECK_EQUAL(beatEvent.measureTime(), 8);
+    BOOST_CHECK(beatEvent.isBeatMark());
 }
 
 BOOST_AUTO_TEST_CASE(event_order) {
