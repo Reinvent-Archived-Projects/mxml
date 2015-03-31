@@ -71,6 +71,7 @@ std::unique_ptr<MeasureGeometry> MeasureGeometryFactory::build(const Measure& me
     buildBeams();
     adjustBounds(_geometry.get());
     centerWholeRests();
+    _tupletStart.clear();
 
     return std::move(_geometry);
 }
@@ -294,7 +295,9 @@ void MeasureGeometryFactory::buildTuplet(const ChordGeometry* chordGeometry, con
         tupletGeometry->setBracket(stopTuplet->bracket.value());
     else
         tupletGeometry->setBracket(!startChordGeometry->chord().hasBeam() || !stopChordGeometry->chord().hasBeam());
+    
     _geometry->addGeometry(std::move(tupletGeometry));
+    _tupletStart.erase(it);
 }
 
 void MeasureGeometryFactory::placeChord(ChordGeometry* chordGeom) {
