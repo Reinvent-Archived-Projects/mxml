@@ -6,6 +6,7 @@
 
 #include <mxml/geometry/AccidentalGeometry.h>
 #include <mxml/geometry/BarlineGeometry.h>
+#include <mxml/geometry/ChordGeometry.h>
 #include <mxml/geometry/ClefGeometry.h>
 #include <mxml/geometry/KeyGeometry.h>
 #include <mxml/geometry/LyricGeometry.h>
@@ -25,7 +26,7 @@ static const coord_t kMeasureRightPadding = 4;
 
 static const coord_t kAttributeMargin = 10;
 static const coord_t kRestWidth = 12;
-static const coord_t kNoteMargin = 12;
+static const coord_t kNoteMargin = 6;
 
 SpanFactory::SpanFactory(const dom::Score& score, const ScoreProperties& scoreProperties)
 : _score(score),
@@ -235,9 +236,10 @@ void SpanFactory::build(const dom::Chord* chord) {
     coord_t width = headWidth;
 
     // The accidental should overlap the left margin
-    if (accidentalWidth > 0)
+    if (accidentalWidth > 0) {
+        accidentalWidth += ChordGeometry::kAccidentalSpacing * 2; // Make sure there is spacing on each side
         width += std::max(coord_t(0), accidentalWidth - kNoteMargin);
-
+    }
     // The stem flag should overlap the right margin
     if (stemWidth > 0)
         width += std::max(coord_t(0), stemWidth - kNoteMargin);
