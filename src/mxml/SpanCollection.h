@@ -19,6 +19,9 @@ class SpanCollection {
 public:
     typedef std::vector<Span>::iterator iterator;
     typedef std::vector<Span>::const_iterator const_iterator;
+
+    static constexpr coord_t kMeasureLeftPadding = 12;
+    static constexpr coord_t kMeasureRightPadding = 4;
     
 public:
     explicit SpanCollection(const ScoreProperties& scoreProperties);

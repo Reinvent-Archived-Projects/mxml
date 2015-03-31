@@ -9,8 +9,6 @@
 
 namespace mxml {
 
-static const std::size_t kMeasureLeftPadding = 12;
-
 SpanCollection::SpanCollection(const ScoreProperties& scoreProperties)
 : _scoreProperties(scoreProperties),
   _naturalSpacing(true)
@@ -267,15 +265,9 @@ void SpanCollection::fillStarts() {
     coord_t width = 0;
     coord_t margin = 0;
     std::size_t measureIndex = -1;
-    bool firstElementInMeasure = true;
     for (auto& span : _spans) {
-        if (span.measureIndex() != measureIndex)
-            firstElementInMeasure = true;
-
-        if (firstElementInMeasure && span.leftMargin() > 0) {
-            span.setLeftMargin(kMeasureLeftPadding);
+        if (span.measureIndex() != measureIndex) {
             margin += span.leftMargin();
-            firstElementInMeasure = false;
         } else {
             margin = std::max(margin, span.leftMargin());
         }

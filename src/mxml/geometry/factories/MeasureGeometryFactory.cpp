@@ -187,8 +187,8 @@ bool MeasureGeometryFactory::buildTimeGeometry(const dom::Time* time, int staff)
 
 void MeasureGeometryFactory::buildBarline(const Barline* barline) {
     std::unique_ptr<BarlineGeometry> geo(new BarlineGeometry(*barline, _metrics));
-    geo->setVerticalAnchorPointValues(0, 0);
-    geo->setHorizontalAnchorPointValues(0, 0);
+    geo->setVerticalAnchorPointValues(0, BarlineGeometry::kLightLineWidth/2);
+    geo->setHorizontalAnchorPointValues(0, BarlineGeometry::kLightLineWidth/2);
 
     auto it = _spans.with(barline);
     assert(it != _spans.end());

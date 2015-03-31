@@ -21,9 +21,6 @@
 
 namespace mxml {
 
-static const coord_t kMeasureLeftPadding = 4;
-static const coord_t kMeasureRightPadding = 4;
-
 static const coord_t kAttributeMargin = 10;
 static const coord_t kRestWidth = 12;
 static const coord_t kNoteMargin = 6;
@@ -106,18 +103,18 @@ void SpanFactory::build(const dom::Measure* measure, bool buildMeasureAttributes
     if (measureRange.first == measureRange.second) {
         // Set measure padding for an empty measure
         auto span = _spans->add(_measureIndex, 0);
-        span->pushLeftMargin(kMeasureLeftPadding);
-        span->pushRightMargin(kMeasureRightPadding);
+        span->pushLeftMargin(SpanCollection::kMeasureLeftPadding);
+        span->pushRightMargin(SpanCollection::kMeasureRightPadding);
     } else {
         // Set measure padding unless the edge spans specifically want 0 margin (i.e. barlines)
         auto first = measureRange.first;
         if (first->leftMargin() > 0)
-            first->pushLeftMargin(kMeasureLeftPadding);
+            first->pushLeftMargin(SpanCollection::kMeasureLeftPadding);
 
         auto last = measureRange.second;
         --last;
         if (last->rightMargin() > 0)
-            last->pushRightMargin(kMeasureRightPadding);
+            last->pushRightMargin(SpanCollection::kMeasureRightPadding);
     }
 }
 
@@ -135,9 +132,10 @@ void SpanFactory::build(const dom::Barline* barline) {
     span->pushWidth(BarlineGeometry::Width(*barline));
     
     if (span->time() == 0) {
-        span->setRightMargin(kMeasureLeftPadding);
+        span->setLeftMargin(0);
+        span->setRightMargin(SpanCollection::kMeasureLeftPadding);
     } else if (span->time() == std::numeric_limits<int>::max()) {
-        span->setLeftMargin(kMeasureRightPadding);
+        span->setLeftMargin(SpanCollection::kMeasureRightPadding);
         span->setRightMargin(-1);
     }
     
