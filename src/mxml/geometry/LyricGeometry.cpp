@@ -6,6 +6,8 @@
 
 namespace mxml {
 
+static const std::size_t kLyricPadding = 2;
+
 // Character widths for the first 256 code points of the font used to render lyrics
 // See https://gist.github.com/aleph7/3f29c6da342f639b9232
 static const int kCharacterHeight = 21;
@@ -37,7 +39,7 @@ LyricGeometry::LyricGeometry(const dom::Lyric& lyric, int staff)
 : PlacementGeometry(lyric.placement(), staff),
   _lyric(lyric)
 {
-    setSize({static_cast<coord_t>(width(lyric)), kCharacterHeight});
+    setSize({static_cast<coord_t>(width(lyric)), kCharacterHeight + kLyricPadding});
 
     setHorizontalAnchorPointValues(0.5, 0);
     if (lyric.placement() == dom::Placement::Above)
@@ -65,7 +67,7 @@ coord_t LyricGeometry::width(const dom::Lyric& lyric) {
         else
             width += kCharacterDefaultWidth;
     }
-    return width;
+    return width + kLyricPadding;
 }
 
 } // namespace
