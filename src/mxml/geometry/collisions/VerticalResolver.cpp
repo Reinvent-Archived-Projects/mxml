@@ -91,10 +91,13 @@ namespace mxml {
         auto noteGeometry = dynamic_cast<NoteGeometry*>(first);
         auto stemGeometry = dynamic_cast<StemGeometry*>(first);
         auto restGeometry = dynamic_cast<RestGeometry*>(second);
+        auto placementGeometry = dynamic_cast<PlacementGeometry*>(second);
         if (noteGeometry && restGeometry)
             resolveCollision(noteGeometry, restGeometry);
         else if (stemGeometry && restGeometry)
             resolveCollision(stemGeometry, restGeometry);
+        else if (placementGeometry)
+            resolveCollision(first, placementGeometry);
         else
             resolveCollision(first, second);
     }
@@ -142,6 +145,21 @@ namespace mxml {
 
         removeCollisions(rest);
         readdGeometry(rest);
+    }
+
+    void VerticalResolver::resolveCollision(const Geometry* g1, PlacementGeometry* placement) {
+        Rect frame = _geometry.convertFromGeometry(g1->frame(), g1->parentGeometry());
+        Rect placementFrame = _geometry.convertFromGeometry(placement->frame(), placement->parentGeometry());
+
+        if (placement->placement() == dom::Placement::Above)
+            placementFrame.origin.y = frame.origin.y - placementFrame.size.height - 1;
+        else
+            placementFrame.origin.y = frame.origin.y + placementFrame.size.height + 1;
+
+        placement->setFrame(placement->parentGeometry()->convertFromRoot(placementFrame));
+
+        removeCollisions(placement);
+        readdGeometry(placement);
     }
 
     Rect VerticalResolver::chooseBestFrame(Geometry* geometry, const Rect& f1, const Rect& f2) {

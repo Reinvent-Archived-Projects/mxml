@@ -8,6 +8,7 @@ namespace mxml {
     
     class NoteGeometry;
     class RestGeometry;
+    class PlacementGeometry;
     
     /**
      Comparator used to sort geometries by type
@@ -27,6 +28,7 @@ namespace mxml {
         void resolveCollision(const CollisionPair& pair);
         void resolveCollision(const Geometry* g1, Geometry* g2);
         void resolveCollision(const Geometry* g1, RestGeometry* rest);
+        void resolveCollision(const Geometry* g1, PlacementGeometry* placement);
         
         bool isImmovable(const Geometry* geometry) const;
         
