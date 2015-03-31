@@ -153,6 +153,11 @@ public:
      with() methods.
      */
     void generateNodesMap();
+
+    /**
+     Sets chords in each measure to the same width, the width used is the largest chord width in the measure.
+     */
+    void normalizeChords();
     
 private:
     const ScoreProperties& _scoreProperties;

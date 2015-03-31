@@ -3,7 +3,7 @@
 
 #include "Algorithm.h"
 #include "SpanCollection.h"
-#include <mxml/dom/TimedNode.h>
+#include <mxml/dom/Chord.h>
 #include <mxml/dom/Types.h>
 #include <algorithm>
 
@@ -290,6 +290,22 @@ void SpanCollection::generateNodesMap() {
         for (const dom::Node* node : span.nodes()) {
             _nodesMap[node] = i;
         }
+    }
+}
+
+void SpanCollection::normalizeChords() {
+    coord_t maxWidth = 0;
+    for (auto measureIndex = beginMeasureIndex(); measureIndex < endMeasureIndex(); measureIndex +=1) {
+        auto spanRange = range(measureIndex);
+        for (auto it = spanRange.first; it != spanRange.second; ++it) {
+            if (it->hasNodeType(typeid(dom::Chord)))
+                maxWidth = std::max(maxWidth, it->width());
+        }
+        for (auto it = spanRange.first; it != spanRange.second; ++it) {
+            if (it->hasNodeType(typeid(dom::Chord)))
+                it->setWidth(maxWidth);
+        }
+        maxWidth = 0;
     }
 }
     

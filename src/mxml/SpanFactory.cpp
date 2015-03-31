@@ -47,6 +47,7 @@ std::unique_ptr<SpanCollection> SpanFactory::build() {
     }
     removeRedundantSpans();
 
+    _spans->normalizeChords();
     _spans->fillStarts();
     _spans->generateNodesMap();
     return std::move(_spans);
