@@ -267,11 +267,19 @@ void SpanCollection::fillStarts() {
     coord_t width = 0;
     coord_t margin = 0;
     std::size_t measureIndex = -1;
+    bool firstElementInMeasure = true;
     for (auto& span : _spans) {
         if (span.measureIndex() != measureIndex)
-            span.setLeftMargin(kMeasureLeftPadding);
+            firstElementInMeasure = true;
 
-        margin = std::max(margin, span.leftMargin());
+        if (firstElementInMeasure && span.leftMargin() > 0) {
+            span.setLeftMargin(kMeasureLeftPadding);
+            margin += span.leftMargin();
+            firstElementInMeasure = false;
+        } else {
+            margin = std::max(margin, span.leftMargin());
+        }
+
         measureIndex = span.measureIndex();
         
         width += margin;
