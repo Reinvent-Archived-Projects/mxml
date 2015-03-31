@@ -67,7 +67,8 @@ private:
     dom::time_t _measureStartTime;
     dom::time_t _time;
 
-    std::map<std::pair<std::size_t, dom::time_t>, Event> _events;
+    using MapKeyType = std::pair<std::size_t, dom::time_t>;
+    std::map<MapKeyType, Event> _events;
 };
 
 } // namespace mxml

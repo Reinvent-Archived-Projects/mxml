@@ -108,9 +108,19 @@ void EventFactory::setBeatMarks() {
     dom::time_t absoluteTime = 0;
     for (std::size_t measureIndex = _startMeasureIndex; measureIndex < _endMeasureIndex; measureIndex += 1) {
         auto divisionsPerBeat = _scoreProperties.divisionsPerBeat(measureIndex);
-        auto divisionsPerMeasure = _scoreProperties.divisionsPerMeasure(measureIndex);
 
-        for (dom::time_t time = 0; time < divisionsPerMeasure; time += divisionsPerBeat) {
+        dom::time_t lastTime = 0;
+        auto begin = _events.lower_bound({measureIndex, 0});
+        for (auto it = begin; it != _events.end(); ++it) {
+            auto index = it->first.first;
+            auto time = it->first.second;
+            if (index != measureIndex)
+                break;
+            if (time > lastTime)
+                lastTime = time;
+        }
+
+        for (dom::time_t time = 0; time < lastTime; time += divisionsPerBeat) {
             auto& e = event(measureIndex, time, absoluteTime);
             e.setBeatMark(true);
             absoluteTime += divisionsPerBeat;
