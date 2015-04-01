@@ -244,6 +244,8 @@ void MeasureGeometryFactory::buildChord(const Chord* chord) {
 }
 
 void MeasureGeometryFactory::buildTuplet(const ChordGeometry* chordGeometry, const dom::Tuplet* tuplet) {
+    static constexpr coord_t kStaffSpacing = 2;
+
     if (tuplet->type == dom::Tuplet::Type::Start) {
         _tupletStart.insert(std::make_pair(tuplet->number, std::make_pair(chordGeometry, tuplet)));
         return;
@@ -259,6 +261,7 @@ void MeasureGeometryFactory::buildTuplet(const ChordGeometry* chordGeometry, con
     const auto startTuplet = it->second.second;
     const auto stopChordGeometry = chordGeometry;
     const auto stopTuplet = tuplet;
+    const auto staff = startChordGeometry->chord().firstNote()->staff();
 
     auto placement = dom::Placement::Above;
     if (startTuplet->placement.isPresent())
@@ -274,14 +277,13 @@ void MeasureGeometryFactory::buildTuplet(const ChordGeometry* chordGeometry, con
     startLocation.x = startChordGeometry->frame().min().x;
     stopLocation.x = stopChordGeometry->frame().max().x;
     if (placement == dom::Placement::Above) {
-        startLocation.y = startChordGeometry->frame().min().y;
-        stopLocation.y = stopChordGeometry->frame().min().y;
+        startLocation.y = _metrics.staffOrigin(staff) - kStaffSpacing;
+        stopLocation.y = startLocation.y;
     } else {
-        startLocation.y = startChordGeometry->frame().max().y;
-        stopLocation.y = stopChordGeometry->frame().max().y;
+        startLocation.y = _metrics.staffOrigin(staff) + _metrics.staffHeight() + kStaffSpacing;
+        stopLocation.y = startLocation.y;
     }
 
-    auto staff = startChordGeometry->chord().firstNote()->staff();
     auto tupletGeometry = std::unique_ptr<TupletGeometry>(new TupletGeometry{*startTuplet, startLocation, *stopTuplet, stopLocation, placement, staff});
 
     if (startTuplet->actual.number.isPresent())

@@ -19,7 +19,10 @@ TupletGeometry::TupletGeometry(const dom::Tuplet& startTuplet, const Point& star
     setSize({stop.x - start.x, kTupletHeight});
     setLocation(start);
     setHorizontalAnchorPointValues(0, 0);
-    setVerticalAnchorPointValues(0, 0);
+    if (placement == dom::Placement::Below)
+        setVerticalAnchorPointValues(0, 0);
+    else
+        setVerticalAnchorPointValues(1, 0);
 }
 
 } // namespace mxml

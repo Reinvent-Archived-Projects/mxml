@@ -155,9 +155,9 @@ namespace mxml {
         Rect frame = _geometry.convertFromGeometry(g1->frame(), g1->parentGeometry());
         Rect placementFrame = _geometry.convertFromGeometry(placement->frame(), placement->parentGeometry());
 
-        if (placement->placement() == dom::Placement::Above)
+        if (placement->placement() == dom::Placement::Above && placement->staff() == 1)
             placementFrame.origin.y = frame.origin.y - placementFrame.size.height - 1;
-        else
+        else if (placement->placement() == dom::Placement::Below && placement->staff() == _metrics.staves())
             placementFrame.origin.y = frame.origin.y + placementFrame.size.height + 1;
 
         placement->setFrame(placement->parentGeometry()->convertFromRoot(placementFrame));

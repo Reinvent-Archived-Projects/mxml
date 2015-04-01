@@ -16,14 +16,14 @@ public:
     const dom::Optional<dom::Placement> placement() const {
         return _placement;
     }
-    void setPlacement(dom::Optional<dom::Placement> placement) {
+    virtual void setPlacement(dom::Optional<dom::Placement> placement) {
         _placement = placement;
     }
 
     int staff() const {
         return _staff;
     }
-    void setStaff(int staff) {
+    virtual void setStaff(int staff) {
         _staff = staff;
     }
 

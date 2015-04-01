@@ -16,6 +16,14 @@ public:
 public:
     TupletGeometry(const dom::Tuplet& startTuplet, const Point& start, const dom::Tuplet& stopTuplet, const Point& stop, dom::Placement placement, int staff);
 
+    void setPlacement(dom::Optional<dom::Placement> placement) override {
+        PlacementGeometry::setPlacement(placement);
+        if (placement == dom::Placement::Below)
+            setVerticalAnchorPointValues(0, 0);
+        else
+            setVerticalAnchorPointValues(1, 0);
+    }
+    
     const dom::Tuplet& startTuplet() const {
         return _startTuplet;
     }
