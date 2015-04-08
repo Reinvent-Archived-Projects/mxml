@@ -85,10 +85,12 @@ void EventFactory::addNote(const Note& note) {
     auto measureIndex = note.measure()->index();
 
     auto& onEvent = event(measureIndex, note.start(), _time);
-    onEvent.addOnNote(note);
+    if (!isTieStop(note))
+        onEvent.addOnNote(note);
 
     auto& offEvent = event(measureIndex, note.start() + note.duration(), _time + note.duration());
-    offEvent.addOffNote(note);
+    if (!isTieStart(note))
+        offEvent.addOffNote(note);
 }
 
 Event& EventFactory::event(std::size_t measureIndex, dom::time_t measureTime, dom::time_t absoluteTime) {
@@ -230,6 +232,30 @@ void EventFactory::fillWallTimes(EventSequence& eventSequence) {
         event.setWallTimeDuration(event.maxDuration() * divisionDuration);
     }
 
+}
+
+bool EventFactory::isTieStart(const mxml::dom::Note& note) {
+    if (note.notations) {
+        const auto& notations = note.notations;
+        for (auto& tie : notations->ties) {
+            if (tie->type() == mxml::dom::kStart || tie->type() == mxml::dom::kContinue)
+                return true;
+        }
+    }
+
+    return false;
+}
+
+bool EventFactory::isTieStop(const mxml::dom::Note& note) {
+    if (note.notations) {
+        const auto& notations = note.notations;
+        for (auto& tie : notations->ties) {
+            if (tie->type() == mxml::dom::kStop || tie->type() == mxml::dom::kContinue)
+                return true;
+        }
+    }
+    
+    return false;
 }
 
 } // namespace mxml

@@ -55,6 +55,9 @@ private:
      */
     void fillWallTimes(EventSequence& eventSequence);
 
+    bool isTieStart(const mxml::dom::Note& note);
+    bool isTieStop(const mxml::dom::Note& note);
+
 private:
     std::size_t _startMeasureIndex;
     std::size_t _endMeasureIndex;

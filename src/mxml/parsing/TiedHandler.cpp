@@ -37,7 +37,7 @@ void TiedHandler::startElement(const QName& qname, const AttributeMap& attribute
 
 dom::StartStopContinue TiedHandler::typeFromString(const std::string& string) {
     if (string == "start")
-        return dom::kContinue;
+        return dom::kStart;
     else if (string == "continue")
         return dom::kContinue;
     else if (string == "stop")
