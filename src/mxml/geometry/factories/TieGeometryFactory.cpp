@@ -74,46 +74,60 @@ void TieGeometryFactory::createGeometryFromNote(NoteGeometry* noteGeometry) {
     // Build ties
     for (auto& tie : notations->ties) {
         auto key = std::make_pair(note.staff(), note.pitch.get());
-        if (tie->type() == dom::kContinue) {
-            _tieStartGeometries[key] = std::make_pair(tie.get(), noteGeometry);
+        if (tie->type() == dom::kStart || tie->type() == dom::kContinue) {
+            _tieStartGeometries[key] = {tie.get(), noteGeometry};
+        } else if (tie->type() == dom::kContinue) {
+            buildTieGeometry(key, *noteGeometry, *tie);
+            _tieStartGeometries[key] = {tie.get(), noteGeometry};
         } else if (tie->type() == dom::kStop) {
-            auto it = _tieStartGeometries.find(key);
-            auto startGeom = it->second.second;
-
-            std::unique_ptr<TieGeometry> tieGeom;
-            if (it == _tieStartGeometries.end()) {
-                tieGeom = buildTieGeometryFromEdge(noteGeometry, tie->placement());
-            } else {
-                tieGeom = buildTieGeometry(startGeom, noteGeometry, tie->placement());
-                startGeom->setTieGeometry(tieGeom.get());
-                _tieStartGeometries.erase(it);
-            }
-            noteGeometry->setTieGeometry(tieGeom.get());
-            _tieGeometries.push_back(std::move(tieGeom));
+            buildTieGeometry(key, *noteGeometry, *tie);
         }
     }
 
     // Build slurs
     for (auto& slur : notations->slurs) {
         auto key = std::make_pair(note.staff(), slur->number());
-        if (slur->type() == dom::kStart || slur->type() == dom::kContinue) {
-            _slurStartGeometries[key] = std::make_pair(slur.get(), noteGeometry);
+        if (slur->type() == dom::kStart) {
+            _slurStartGeometries[key] = {slur.get(), noteGeometry};
+        } else if (slur->type() == dom::kContinue) {
+            buildSlurGeometry(key, *noteGeometry, *slur);
+            _slurStartGeometries[key] = {slur.get(), noteGeometry};
         } else if (slur->type() == dom::kStop) {
-            auto it = _slurStartGeometries.find(key);
-            auto startGeom = it->second.second;
-
-            std::unique_ptr<TieGeometry> slurGeom;
-            if (it == _slurStartGeometries.end()) {
-                slurGeom = buildSlurGeometryFromEdge(noteGeometry, slur->placement());
-            } else {
-                slurGeom = buildSlurGeometry(startGeom, noteGeometry, slur->placement());
-                startGeom->setTieGeometry(slurGeom.get());
-                _slurStartGeometries.erase(it);
-            }
-            noteGeometry->setTieGeometry(slurGeom.get());
-            _tieGeometries.push_back(std::move(slurGeom));
+            buildSlurGeometry(key, *noteGeometry, *slur);
         }
     }
+}
+
+void TieGeometryFactory::buildTieGeometry(const PitchKey& key, NoteGeometry& noteGeometry, const dom::Tied& tie) {
+    auto it = _tieStartGeometries.find(key);
+    auto startGeom = it->second.second;
+
+    std::unique_ptr<TieGeometry> tieGeom;
+    if (it == _tieStartGeometries.end()) {
+        tieGeom = buildTieGeometryFromEdge(&noteGeometry, tie.placement());
+    } else {
+        tieGeom = buildTieGeometry(startGeom, &noteGeometry, tie.placement());
+        startGeom->setTieGeometry(tieGeom.get());
+        _tieStartGeometries.erase(it);
+    }
+    noteGeometry.setTieGeometry(tieGeom.get());
+    _tieGeometries.push_back(std::move(tieGeom));
+}
+
+void TieGeometryFactory::buildSlurGeometry(const SlurKey& key, NoteGeometry& noteGeometry, const dom::Slur& slur) {
+    auto it = _slurStartGeometries.find(key);
+    auto startGeom = it->second.second;
+
+    std::unique_ptr<TieGeometry> slurGeom;
+    if (it == _slurStartGeometries.end()) {
+        slurGeom = buildSlurGeometryFromEdge(&noteGeometry, slur.placement());
+    } else {
+        slurGeom = buildSlurGeometry(startGeom, &noteGeometry, slur.placement());
+        startGeom->setTieGeometry(slurGeom.get());
+        _slurStartGeometries.erase(it);
+    }
+    noteGeometry.setTieGeometry(slurGeom.get());
+    _tieGeometries.push_back(std::move(slurGeom));
 }
 
 std::unique_ptr<TieGeometry> TieGeometryFactory::buildTieGeometry(const NoteGeometry* start, const NoteGeometry* stop, const dom::Optional<dom::Placement>& placement) {
