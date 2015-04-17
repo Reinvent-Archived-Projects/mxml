@@ -67,6 +67,11 @@ public:
     Iterator find(dom::time_t time);
 
     /**
+     Find the event at the given measure location
+     */
+    ConstIterator findClosest(MeasureLocation measureLocation) const;
+
+    /**
      Find the closest event to the given absolute time.
      */
     ConstIterator findClosest(dom::time_t time) const;

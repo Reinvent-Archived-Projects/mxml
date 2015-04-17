@@ -68,6 +68,21 @@ EventSequence::Iterator EventSequence::find(dom::time_t time) {
     return it;
 }
 
+
+EventSequence::ConstIterator EventSequence::findClosest(MeasureLocation measureLocation) const {
+    auto it2 = std::lower_bound(_events.begin(), _events.end(), measureLocation, [](const Event& event, MeasureLocation measureLocation) {
+        return event.measureLocation() < measureLocation;
+    });
+    auto it1 = std::prev(it2);
+    if (it2 == _events.begin())
+        return it2;
+    if (it1 == _events.end())
+        return it2;
+    if (it1 < it2)
+        return it1;
+    return it2;
+}
+
 EventSequence::ConstIterator EventSequence::findClosest(dom::time_t time) const {
     auto it2 = std::lower_bound(_events.begin(), _events.end(), time, [](const Event& event, dom::time_t time) {
         return event.absoluteTime() < time;

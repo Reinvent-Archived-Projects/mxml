@@ -7,6 +7,21 @@
 
 namespace mxml {
 
+struct MeasureLocation {
+    std::size_t measureIndex = 0;
+    dom::time_t division = 0;
+
+    bool operator==(const MeasureLocation& rhs) const noexcept {
+        return measureIndex == rhs.measureIndex && division == rhs.division;
+    }
+    bool operator!=(const MeasureLocation& rhs) const noexcept {
+        return !operator==(rhs);
+    }
+    bool operator<(const MeasureLocation& rhs) const noexcept {
+        return measureIndex < rhs.measureIndex || (measureIndex == rhs.measureIndex && division < rhs.division);
+    }
+};
+
 class Event {
 public:
     Event() = default;
@@ -20,7 +35,14 @@ public:
     void setScore(const dom::Score& score) {
         _score = &score;
     }
-    
+
+    MeasureLocation measureLocation() const {
+        MeasureLocation location;
+        location.measureIndex = _measureIndex;
+        location.division = _measureTime;
+        return location;
+    }
+
     std::size_t measureIndex() const {
         return _measureIndex;
     }
