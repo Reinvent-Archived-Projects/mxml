@@ -5,6 +5,9 @@
 #include <mxml/dom/Attributes.h>
 #include <mxml/dom/Chord.h>
 #include <mxml/dom/Score.h>
+#include <mxml/dom/Note.h>
+#include <mxml/dom/Ornaments.h>
+#include <mxml/dom/Types.h>
 #include <memory>
 
 
@@ -27,6 +30,12 @@ public:
     dom::Note* addNote(dom::Chord* chord, dom::Note::Type type = dom::Note::Type::Eighth, dom::time_t start = 0, dom::time_t duration = 1);
     dom::Note* addNote(dom::Measure* measure, dom::Note::Type type = dom::Note::Type::Eighth, dom::time_t start = 0, dom::time_t duration = 1);
     dom::Pitch* setPitch(dom::Note* note, dom::Pitch::Step step, int octave, int alter = 0);
+    
+    dom::Ornaments* addTrill(dom::Note* note, dom::Placement placement);
+    dom::Ornaments* addInvertedMordent(dom::Note* note, bool isLong);
+    dom::Ornaments* addMordent(dom::Note* note, bool isLong);
+    dom::Ornaments* addInvertedTurn(dom::Note* note, bool slash);
+    dom::Ornaments* addTurn(dom::Note* note, bool slash);
 
     std::unique_ptr<dom::Score> build();
 

@@ -95,6 +95,71 @@ dom::Pitch* ScoreBuilder::setPitch(dom::Note* note, dom::Pitch::Step step, int o
     note->pitch = std::move(pitch);
     return note->pitch.get();
 }
+    
+dom::Ornaments* ScoreBuilder::addTrill(dom::Note* note, dom::Placement placement) {
+    auto ornament = std::unique_ptr<dom::Ornaments>(new dom::Ornaments());
+    auto emptyPlacement = std::unique_ptr<dom::EmptyPlacement>(new dom::EmptyPlacement());
+    emptyPlacement->setPlacement(placement);
+    ornament->setTrillMark(std::move(emptyPlacement));
+    
+    if (!note->notations)
+        note->notations.reset(new dom::Notations());
+    
+    note->notations->ornaments.push_back(std::move(ornament));
+    return note->notations->ornaments.back().get();
+}
+
+dom::Ornaments* ScoreBuilder::addInvertedMordent(dom::Note* note, bool isLong) {
+    auto ornament = std::unique_ptr<dom::Ornaments>(new dom::Ornaments());
+    auto mordent = std::unique_ptr<dom::Mordent>(new dom::Mordent());
+    mordent->setLong(isLong);
+    ornament->setInvertedMordent(std::move(mordent));
+    
+    if (!note->notations)
+        note->notations.reset(new dom::Notations());
+    
+    note->notations->ornaments.push_back(std::move(ornament));
+    return note->notations->ornaments.back().get();
+}
+
+dom::Ornaments* ScoreBuilder::addMordent(dom::Note* note, bool isLong) {
+    auto ornament = std::unique_ptr<dom::Ornaments>(new dom::Ornaments());
+    auto mordent = std::unique_ptr<dom::Mordent>(new dom::Mordent());
+    mordent->setLong(isLong);
+    ornament->setMordent(std::move(mordent));
+    
+    if (!note->notations)
+        note->notations.reset(new dom::Notations());
+    
+    note->notations->ornaments.push_back(std::move(ornament));
+    return note->notations->ornaments.back().get();
+}
+
+dom::Ornaments* ScoreBuilder::addInvertedTurn(dom::Note* note, bool slash) {
+    auto ornament = std::unique_ptr<dom::Ornaments>(new dom::Ornaments());
+    auto turn = std::unique_ptr<dom::Turn>(new dom::Turn());
+    turn->setSlash(slash);
+    ornament->setInvertedTurn(std::move(turn));
+    
+    if (!note->notations)
+        note->notations.reset(new dom::Notations());
+    
+    note->notations->ornaments.push_back(std::move(ornament));
+    return note->notations->ornaments.back().get();
+}
+
+dom::Ornaments* ScoreBuilder::addTurn(dom::Note* note, bool slash) {
+    auto ornament = std::unique_ptr<dom::Ornaments>(new dom::Ornaments());
+    auto turn = std::unique_ptr<dom::Turn>(new dom::Turn());
+    turn->setSlash(slash);
+    ornament->setTurn(std::move(turn));
+    
+    if (!note->notations)
+        note->notations.reset(new dom::Notations());
+    
+    note->notations->ornaments.push_back(std::move(ornament));
+    return note->notations->ornaments.back().get();
+}
 
 std::unique_ptr<dom::Score> ScoreBuilder::build() {
     return std::move(_score);
