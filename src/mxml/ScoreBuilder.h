@@ -4,9 +4,11 @@
 #pragma once
 #include <mxml/dom/Attributes.h>
 #include <mxml/dom/Chord.h>
+#include <mxml/dom/Direction.h>
 #include <mxml/dom/Score.h>
 #include <mxml/dom/Note.h>
 #include <mxml/dom/Ornaments.h>
+#include <mxml/dom/Pedal.h>
 #include <mxml/dom/Types.h>
 #include <memory>
 
@@ -36,6 +38,8 @@ public:
     dom::Ornaments* addMordent(dom::Note* note, bool isLong);
     dom::Ornaments* addInvertedTurn(dom::Note* note, bool slash);
     dom::Ornaments* addTurn(dom::Note* note, bool slash);
+    
+    dom::Pedal* addPedal(dom::Measure* measure, dom::StartStopContinue type, bool line, bool sign, time_t position);
 
     std::unique_ptr<dom::Score> build();
 

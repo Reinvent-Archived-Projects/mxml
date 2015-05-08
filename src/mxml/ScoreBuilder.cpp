@@ -160,6 +160,22 @@ dom::Ornaments* ScoreBuilder::addTurn(dom::Note* note, bool slash) {
     note->notations->ornaments.push_back(std::move(ornament));
     return note->notations->ornaments.back().get();
 }
+    
+dom::Pedal* ScoreBuilder::addPedal(dom::Measure* measure, dom::StartStopContinue type, bool line, bool sign, time_t position) {
+    auto pedal = std::unique_ptr<dom::Pedal>(new dom::Pedal());
+    pedal->setType(type);
+    pedal->setSign(sign);
+    pedal->setLine(line);
+    auto tempPedal = pedal.get();
+    
+    auto direction = std::unique_ptr<dom::Direction>(new dom::Direction());
+    direction->setType(std::move(pedal));
+    direction->setStart(position);
+    
+    measure->addNode(std::move(direction));
+    
+    return tempPedal;
+}
 
 std::unique_ptr<dom::Score> ScoreBuilder::build() {
     return std::move(_score);
