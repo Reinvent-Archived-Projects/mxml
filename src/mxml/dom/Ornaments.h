@@ -25,7 +25,7 @@ public:
         if (_turn.get())
             return _turn.get();
         if (_invertedTurn.get())
-            return _turn.get();
+            return _invertedTurn.get();
         
         return nullptr;
     }
