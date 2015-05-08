@@ -164,8 +164,14 @@ dom::Ornaments* ScoreBuilder::addTurn(dom::Note* note, bool slash) {
 dom::Pedal* ScoreBuilder::addPedal(dom::Measure* measure, dom::StartStopContinue type, bool line, bool sign, time_t position) {
     auto pedal = std::unique_ptr<dom::Pedal>(new dom::Pedal());
     pedal->setType(type);
-    pedal->setSign(sign);
-    pedal->setLine(line);
+
+    auto signVal = dom::Optional<bool>(new dom::Optional<bool>());
+    signVal.setPresentValue(sign);
+    pedal->setSign(signVal);
+    
+    auto lineVal = dom::Optional<bool>(new dom::Optional<bool>());
+    lineVal.setPresentValue(line);
+    pedal->setLine(lineVal);
     auto tempPedal = pedal.get();
     
     auto direction = std::unique_ptr<dom::Direction>(new dom::Direction());

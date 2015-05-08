@@ -7,6 +7,7 @@
 #include <mxml/dom/Direction.h>
 #include <mxml/dom/Score.h>
 #include <mxml/dom/Note.h>
+#include <mxml/dom/Optional.h>
 #include <mxml/dom/Ornaments.h>
 #include <mxml/dom/Pedal.h>
 #include <mxml/dom/Types.h>
