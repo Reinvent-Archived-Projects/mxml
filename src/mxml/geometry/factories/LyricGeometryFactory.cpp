@@ -14,7 +14,15 @@ LyricGeometryFactory::LyricGeometryFactory(const Geometry& parent, const std::ve
 : _parent(parent),
   _measureGeometries(measureGeometries),
   _metrics(metrics)
-{}
+{
+    auto staffBound = Rect();
+    staffBound.origin.x = 0;
+    staffBound.origin.y = -Metrics::kStaffLineSpacing;
+    staffBound.size.width = 0;
+    staffBound.size.height = Metrics::staffHeight() + Metrics::kStaffLineSpacing;
+
+    _chordsBounds = std::vector<Rect>(metrics.staves(), staffBound);
+}
 
 std::vector<std::unique_ptr<LyricGeometry>> LyricGeometryFactory::build() {
     _lyricGeometries.clear();
@@ -31,11 +39,6 @@ std::vector<std::unique_ptr<LyricGeometry>> LyricGeometryFactory::build() {
 }
 
 void LyricGeometryFactory::computeNotesBounds() {
-    _chordsBounds.origin.x = 0;
-    _chordsBounds.origin.y = -Metrics::kStaffLineSpacing;
-    _chordsBounds.size.width = 0;
-    _chordsBounds.size.height = Metrics::staffHeight() + Metrics::kStaffLineSpacing;
-
     // Get the bounding box of all notes on this part to place lyrics below that
     for (auto& measure: _measureGeometries) {
         for (auto& geom : measure->geometries()) {
@@ -43,7 +46,8 @@ void LyricGeometryFactory::computeNotesBounds() {
             if (!chord)
                 continue;
 
-            _chordsBounds = join(_chordsBounds, chord->frame());
+            auto staffIndex = chord->staff() - 1;
+            _chordsBounds[staffIndex] = join(_chordsBounds[staffIndex], chord->frame());
         }
     }
 }
@@ -57,7 +61,7 @@ void LyricGeometryFactory::build(const MeasureGeometry& measureGeom, const Chord
 }
 
 void LyricGeometryFactory::build(const MeasureGeometry& measureGeom, const ChordGeometry& chordGeom, const dom::Lyric& lyric) {
-    const int staff = chordGeom.chord().firstNote()->staff();
+    const int staff = chordGeom.staff();
     std::unique_ptr<LyricGeometry> geometry(new LyricGeometry(lyric, staff));
 
     auto& spans = measureGeom.spans();
@@ -70,10 +74,10 @@ void LyricGeometryFactory::build(const MeasureGeometry& measureGeom, const Chord
     location = _parent.convertFromGeometry(location, &measureGeom);
 
     if (geometry->placement() == dom::Placement::Above) {
-        location.y = _chordsBounds.min().y;
+        location.y = _chordsBounds[staff - 1].min().y;
         geometry->setVerticalAnchorPointValues(1, 0);
     } else {
-        location.y = _chordsBounds.max().y;
+        location.y = _chordsBounds[staff - 1].max().y;
         geometry->setVerticalAnchorPointValues(0, 0);
     }
 
