@@ -29,7 +29,7 @@ private:
     const Metrics& _metrics;
 
     std::vector<std::unique_ptr<LyricGeometry>> _lyricGeometries;
-    Rect _chordsBounds;
+    std::vector<Rect> _chordsBounds;
 };
 
 }
