@@ -224,7 +224,9 @@ void EventFactory::fillWallTimes(EventSequence& eventSequence) {
         divisions = _scoreProperties.divisions(event.measureIndex());
         tempo = _scoreProperties.tempo(event.measureIndex(), event.measureTime());
 
-        double divisionDuration = 60.0 / (divisions * tempo);
+        const auto divisionsPerBeat = _scoreProperties.divisionsPerBeat(event.measureIndex());
+        const auto divisionDuration = 60.0 / (divisionsPerBeat * tempo); // In seconds
+
         wallTime += divisionDuration * static_cast<double>(event.absoluteTime() - time);
         time = event.absoluteTime();
 
