@@ -24,6 +24,7 @@ file(GLOB TESTS_SRC "tests/*.cpp")
 add_executable(mxml_tester ${TESTS_SRC})
 
 find_package(Boost COMPONENTS unit_test_framework REQUIRED)
+include_directories(${Boost_INCLUDE_DIRS})
 target_link_libraries(mxml_tester lxml mxml ${LIBXML2_LIBRARIES} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY})
 
 add_test(
