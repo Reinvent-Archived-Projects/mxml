@@ -1,5 +1,8 @@
-//  Created by Alejandro Isaza on 2/20/2014.
-//  Copyright (c) 2014 Venture Media Labs Inc. All rights reserved.
+// Copyright © 2016 Venture Media Labs.
+//
+// This file is part of mxml. The full mxml copyright notice, including
+// terms governing use, modification, and redistribution, is contained in the
+// file LICENSE at the root of the source code distribution tree.
 
 #include "NoteHandler.h"
 #include "PositionFactory.h"

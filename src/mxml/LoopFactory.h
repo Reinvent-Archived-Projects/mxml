@@ -1,5 +1,8 @@
-//  Created by Alejandro Isaza on 2015-01-14.
-//  Copyright (c) 2015 Venture Media Labs. All rights reserved.
+// Copyright © 2016 Venture Media Labs.
+//
+// This file is part of mxml. The full mxml copyright notice, including
+// terms governing use, modification, and redistribution, is contained in the
+// file LICENSE at the root of the source code distribution tree.
 
 #pragma once
 #include "Loop.h"
