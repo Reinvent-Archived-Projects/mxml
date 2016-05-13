@@ -8,12 +8,14 @@ You will need:
 
 * CMake >= 2.6
 * LibXML2
+* boost (for unit tests)
 
 To build a stand-alone static library:
 
 ```
 git clone https://github.com/venturemedia/mxml
 cd mxml
+git submodule update --init
 cmake .
 make test
 ```
