@@ -17,6 +17,7 @@ git clone https://github.com/venturemedia/mxml
 cd mxml
 git submodule update --init
 cmake .
+make
 make test
 ```
 
