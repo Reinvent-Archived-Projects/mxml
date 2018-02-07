@@ -21,6 +21,7 @@ using dom::Pedal;
 using dom::Wedge;
 using dom::Words;
 using lxml::QName;
+using dom::Bracket;
 
 static const char* kTypeAttribute = "type";
 static const char* kNumberAttribute = "number";
@@ -35,6 +36,8 @@ static const char* kWordsTag = "words";
 static const char* kSegnoTag = "segno";
 static const char* kCodaTag = "coda";
 static const char* kOctaveShiftTag = "octave-shift";
+static const char* kBracketTag = "bracket";
+
 
 void DynamicsHandler::startElement(const QName& qname, const AttributeMap& attributes) {
     _result.reset(new Dynamics{});
@@ -69,6 +72,14 @@ lxml::RecursiveHandler* DynamicsHandler::startSubElement(const QName& qname) {
     if (valid)
         _result->setString(qname.localName());
     return 0;
+}
+    
+void BracketHandler::startElement(const QName& qname, const AttributeMap& attributes) {
+        using dom::presentOptional;
+        using lxml::DoubleHandler;
+        using lxml::StringHandler;
+        _result.reset(new Bracket{});
+        _result->position = PositionFactory::buildFromAttributes(attributes);
 }
 
 
@@ -170,6 +181,8 @@ lxml::RecursiveHandler* DirectionTypeHandler::startSubElement(const QName& qname
         return &_codaHandler;
     else if (strcmp(qname.localName(), kOctaveShiftTag) == 0)
         return &_octaveShiftHandler;
+    else if (strcmp(qname.localName(), kBracketTag) == 0)
+        return &_bracketHandler;
     return 0;
 }
 
@@ -188,6 +201,8 @@ void DirectionTypeHandler::endSubElement(const QName& qname, RecursiveHandler* p
         _result = _codaHandler.result();
     else if (strcmp(qname.localName(), kOctaveShiftTag) == 0)
         _result = _octaveShiftHandler.result();
+    else if (strcmp(qname.localName(), kBracketTag) == 0)
+        _result = _bracketHandler.result();
 }
 
 } // namespace mxml

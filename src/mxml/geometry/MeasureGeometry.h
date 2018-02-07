@@ -45,6 +45,10 @@ public:
         return _showNumber;
     }
     
+    const ScoreProperties& scoreProperties() const {
+        return _scoreProperties;
+    }
+    
 private:
     const dom::Measure& _measure;
     const SpanCollection& _spans;

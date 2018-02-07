@@ -55,6 +55,10 @@ private:
     void buildWords(const MeasureGeometry&  measureGeom, const dom::Direction& direction);
     void buildSegno(const MeasureGeometry&  measureGeom, const dom::Direction& direction);
     void buildCoda(const MeasureGeometry&  measureGeom, const dom::Direction& direction);
+    
+    void buildBracket(const MeasureGeometry&  measureGeom, const dom::Direction& direction);
+    void buildBracketToEdge(const dom::Direction& startDirection, const MeasureGeometry& stopMeasureGeom, const dom::Direction& stopDirection, bool isPage);
+
 
     Point spanOffsetInParentGeometry(const MeasureGeometry& measureGeometry, Point p);
     void placeDirection(PlacementGeometry& geometry);

@@ -9,6 +9,7 @@
 #include <mxml/dom/Types.h>
 #include <mxml/dom/Pedal.h>
 #include <mxml/dom/Wedge.h>
+#include <mxml/dom/Bracket.h>
 
 #include <lxml/BaseRecursiveHandler.h>
 #include <lxml/DoubleHandler.h>
@@ -65,6 +66,13 @@ public:
     }
 };
 
+class BracketHandler: public lxml::BaseRecursiveHandler<std::unique_ptr<dom::Bracket>> {
+    public:
+        void startElement(const lxml::QName& qname, const AttributeMap& attributes);
+        static dom::StartStopContinue typeFromString(const std::string& string);
+};
+
+
 class DirectionTypeHandler : public lxml::BaseRecursiveHandler<std::unique_ptr<dom::DirectionType>> {
 public:
     void startElement(const lxml::QName& qname, const AttributeMap& attributes);
@@ -80,6 +88,7 @@ private:
     SegnoHandler _segnoHandler;
     CodaHandler _codaHandler;
     OctaveShiftHandler _octaveShiftHandler;
+    BracketHandler _bracketHandler;
 };
 
 } // namespace mxml

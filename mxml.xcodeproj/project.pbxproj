@@ -205,6 +205,10 @@
 		61F073CF1A71CEF5002CA9CA /* EndingGeometryFactory.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F073CD1A71CEF5002CA9CA /* EndingGeometryFactory.h */; };
 		61F074241A72C676002CA9CA /* PageScoreGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61F074221A72C676002CA9CA /* PageScoreGeometry.cpp */; };
 		61F074251A72C676002CA9CA /* PageScoreGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = 61F074231A72C676002CA9CA /* PageScoreGeometry.h */; };
+		DD5A4BA1202ACDCF0049F021 /* BracketGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD5A4B9F202ACDCE0049F021 /* BracketGeometry.cpp */; };
+		DD5A4BA2202ACDCF0049F021 /* BracketGeometry.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DD5A4B9F202ACDCE0049F021 /* BracketGeometry.cpp */; };
+		DD5A4BA3202ACDCF0049F021 /* BracketGeometry.h in Headers */ = {isa = PBXBuildFile; fileRef = DD5A4BA0202ACDCE0049F021 /* BracketGeometry.h */; };
+		DD5A4BA5202ACE2C0049F021 /* Bracket.h in Headers */ = {isa = PBXBuildFile; fileRef = DD5A4BA4202ACE2C0049F021 /* Bracket.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -579,6 +583,9 @@
 		61F073CD1A71CEF5002CA9CA /* EndingGeometryFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndingGeometryFactory.h; sourceTree = "<group>"; };
 		61F074221A72C676002CA9CA /* PageScoreGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PageScoreGeometry.cpp; sourceTree = "<group>"; };
 		61F074231A72C676002CA9CA /* PageScoreGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PageScoreGeometry.h; sourceTree = "<group>"; };
+		DD5A4B9F202ACDCE0049F021 /* BracketGeometry.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BracketGeometry.cpp; sourceTree = "<group>"; };
+		DD5A4BA0202ACDCE0049F021 /* BracketGeometry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BracketGeometry.h; sourceTree = "<group>"; };
+		DD5A4BA4202ACE2C0049F021 /* Bracket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bracket.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -766,6 +773,7 @@
 				614055FC1A5C6228005224C9 /* Types.h */,
 				614055FD1A5C6228005224C9 /* Unpitched.h */,
 				614055FE1A5C6228005224C9 /* Wedge.h */,
+				DD5A4BA4202ACE2C0049F021 /* Bracket.h */,
 			);
 			path = dom;
 			sourceTree = "<group>";
@@ -841,6 +849,8 @@
 				00094EF81A6746340053C615 /* WordsGeometry.h */,
 				61F074221A72C676002CA9CA /* PageScoreGeometry.cpp */,
 				61F074231A72C676002CA9CA /* PageScoreGeometry.h */,
+				DD5A4B9F202ACDCE0049F021 /* BracketGeometry.cpp */,
+				DD5A4BA0202ACDCE0049F021 /* BracketGeometry.h */,
 			);
 			path = geometry;
 			sourceTree = "<group>";
@@ -1075,8 +1085,10 @@
 				61F073CF1A71CEF5002CA9CA /* EndingGeometryFactory.h in Headers */,
 				61F072EA1A6F1183002CA9CA /* GenericNodeHandler.h in Headers */,
 				61C8508D1A6EE64300031100 /* SystemLayoutHandler.h in Headers */,
+				DD5A4BA5202ACE2C0049F021 /* Bracket.h in Headers */,
 				61A2B75F1A8E870000C1EE2A /* AlterSequence.h in Headers */,
 				61A81C741AAE3C9200E230A6 /* TimeModificationHandler.h in Headers */,
+				DD5A4BA3202ACDCF0049F021 /* BracketGeometry.h in Headers */,
 				61F072EE1A6F1BEE002CA9CA /* FormattedTextHandler.h in Headers */,
 				619AC7A01AA149C2005DFBED /* StemDirectionResolver.h in Headers */,
 				61C850581A6D838500031100 /* OctaveShiftGeometry.h in Headers */,
@@ -1266,6 +1278,7 @@
 				61A2B7641A8E870000C1EE2A /* DivisionsSequence.cpp in Sources */,
 				614057031A5C6228005224C9 /* PartGeometry.cpp in Sources */,
 				61F073CA1A71CD8F002CA9CA /* TieGeometryFactory.cpp in Sources */,
+				DD5A4BA1202ACDCF0049F021 /* BracketGeometry.cpp in Sources */,
 				61F072ED1A6F1BEE002CA9CA /* FormattedTextHandler.cpp in Sources */,
 				614056B91A5C6228005224C9 /* Measure.cpp in Sources */,
 				0022ADFD1A7082C300139992 /* CollisionHandler.cpp in Sources */,
@@ -1327,6 +1340,7 @@
 			files = (
 				61E530BD1A79A43700E5B2FF /* AlgorithmTests.cpp in Sources */,
 				614057901A5C625A005224C9 /* ParsingTests.cpp in Sources */,
+				DD5A4BA2202ACDCF0049F021 /* BracketGeometry.cpp in Sources */,
 				614057C01A5CAA47005224C9 /* ScorePropertiesTests.cpp in Sources */,
 				614057BE1A5C79EF005224C9 /* KeyTests.cpp in Sources */,
 				6140578F1A5C625A005224C9 /* NoteTests.cpp in Sources */,
