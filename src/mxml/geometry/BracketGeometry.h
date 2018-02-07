@@ -1,10 +1,8 @@
+// Copyright © 2016 Venture Media Labs.
 //
-//  BracketGeometry.hpp
-//  pianomarvel
-//
-//  Created by nhatlee on 2/6/18.
-//  Copyright © 2018 nhatlee. All rights reserved.
-//
+// This file is part of mxml. The full mxml copyright notice, including
+// terms governing use, modification, and redistribution, is contained in the
+// file LICENSE at the root of the source code distribution tree.
 
 #pragma once
 #include <mxml/dom/Bracket.h>
