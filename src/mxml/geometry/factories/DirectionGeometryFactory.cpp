@@ -17,10 +17,12 @@
 #include <mxml/geometry/SegnoGeometry.h>
 #include <mxml/geometry/SpanDirectionGeometry.h>
 #include <mxml/geometry/WordsGeometry.h>
+#include <mxml/geometry/BracketGeometry.h>
 
 #include <mxml/dom/OctaveShift.h>
 #include <mxml/dom/Pedal.h>
 #include <mxml/dom/Wedge.h>
+#include <mxml/dom/Bracket.h>
 
 
 namespace mxml {
@@ -108,6 +110,11 @@ void DirectionGeometryFactory::buildDirection(const MeasureGeometry& measureGeom
     if (dynamic_cast<const dom::Words*>(direction.type()) ||
         dynamic_cast<const dom::Dynamics*>(direction.type()) ) {
         buildWords(measureGeom, direction);
+        return;
+    }
+    
+    if (dynamic_cast<const dom::Bracket*>(direction.type())) {
+        buildBracket(measureGeom, direction);
         return;
     }
 }
@@ -489,5 +496,45 @@ void DirectionGeometryFactory::buildCoda(const MeasureGeometry& measureGeom, con
 
     _geometries.push_back(std::move(codaGeom));
 }
+    
+void DirectionGeometryFactory::buildBracket(const MeasureGeometry&  measureGeom, const dom::Direction& direction) {
+        using dom::Bracket;
+        bool isPage = measureGeom.scoreProperties().layoutType() == ScoreProperties::LayoutType::Page;
+        const Bracket& bracket = dynamic_cast<const Bracket&>(*direction.type());
+        if (bracket.type() == dom::kStart) {
+            auto pair = pullPedalStart(measureGeom, direction);
+            if (pair.first) {
+                //It seem this case never happen with Bracket
+                printf("If see this line in the log then we need to review code and handle it!!!!\n");
+            } else {
+                buildBracketToEdge(*pair.second, measureGeom, direction, isPage);
+            }
+        } else if (bracket.type() != dom::kContinue) {
+            _openSpanDirections.push_back(std::make_pair(&measureGeom, &direction));
+        }
+ }
+    
+void DirectionGeometryFactory::buildBracketToEdge(const dom::Direction& startDirection, const MeasureGeometry& stopMeasureGeom, const dom::Direction& stopDirection, bool isPage) {
+        Point startLocation;
+        startLocation.x = _parentGeometry->bounds().min().x;
+        
+        const Span& stopSpan = *stopMeasureGeom.spans().with(&stopDirection);
+        Point stopLocation;
+        stopLocation.x = stopSpan.start() + stopSpan.eventOffset();
+        stopLocation = spanOffsetInParentGeometry(stopMeasureGeom, stopLocation);
+        if(isPage){
+            startLocation.y = stopLocation.y = Metrics::staffHeight() + _metrics->staffDistance()/2;
+        } else {
+            startLocation.y = Metrics::staffHeight() + _metrics->staffDistance()/1.3 ;
+        }
+        
+        std::unique_ptr<BracketGeometry> geo(new BracketGeometry(&startDirection, startLocation, &stopDirection, stopLocation));
+        geo->setContinuation();
+        geo->setSize(Size(0, Metrics::staffHeight() + 2*_metrics->staffDistance()));
+        geo->setLocation(startLocation);
+        
+        _geometries.push_back(std::move(geo));
+}
+
 
 } // namespace mxml
