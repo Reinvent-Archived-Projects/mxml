@@ -335,9 +335,7 @@ void MeasureGeometryFactory::placeChord(ChordGeometry* chordGeom) {
 
 void MeasureGeometryFactory::buildRest(const Note* note) {
     assert(note->rest);
-//    if (!note->printObject)
-//        return;
-
+    
     std::unique_ptr<RestGeometry> geo(new RestGeometry(*note));
 
     auto it = _spans.with(note);
