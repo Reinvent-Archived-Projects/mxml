@@ -21,6 +21,7 @@ public:
         DetachedLegato,
         Doit,
         Falloff,
+        OtherArticulation,
         Plop,
         Scoop,
         Spiccato,

@@ -21,6 +21,7 @@ const std::string ArticulationHandler::kTagNames[] = {
     "detached-legato",
     "doit",
     "falloff",
+    "other-articulation",
     "plop",
     "scoop",
     "spiccato",
@@ -48,6 +49,7 @@ Articulation::Type ArticulationHandler::typeFromString(const std::string& string
     if (string == "detached-legato") return Articulation::Type::DetachedLegato;
     if (string == "doit") return Articulation::Type::Doit;
     if (string == "falloff") return Articulation::Type::Falloff;
+    if (string == "other-articulation") return Articulation::Type::OtherArticulation;
     if (string == "plop") return Articulation::Type::Plop;
     if (string == "scoop") return Articulation::Type::Scoop;
     if (string == "spiccato") return Articulation::Type::Spiccato;

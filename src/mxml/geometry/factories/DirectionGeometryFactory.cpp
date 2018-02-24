@@ -503,12 +503,9 @@ void DirectionGeometryFactory::buildBracket(const MeasureGeometry&  measureGeom,
         const Bracket& bracket = dynamic_cast<const Bracket&>(*direction.type());
         if (bracket.type() == dom::kStart) {
             auto pair = pullPedalStart(measureGeom, direction);
-            if (pair.first) {
-                //It seem this case never happen with Bracket
-                printf("If see this line in the log then we need to review code and handle it!!!!\n");
-            } else {
-                buildBracketToEdge(*pair.second, measureGeom, direction, isPage);
-            }
+            assert(!pair.first);
+            
+            buildBracketToEdge(*pair.second, measureGeom, direction, isPage);
         } else if (bracket.type() != dom::kContinue) {
             _openSpanDirections.push_back(std::make_pair(&measureGeom, &direction));
         }
