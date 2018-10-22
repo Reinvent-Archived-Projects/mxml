@@ -62,16 +62,16 @@ std::vector<std::unique_ptr<PlacementGeometry>> DirectionGeometryFactory::build(
     for (auto& pair : _openSpanDirections) {
         auto measureGeometry = pair.first;
         auto direction = pair.second;
-        if (dynamic_cast<const dom::OctaveShift*>(direction->type())) {
+        if (dynamic_cast<const dom::OctaveShift*>(direction->type()) && _metrics->scoreProperties().layoutType() == ScoreProperties::LayoutType::Page) {
             buildOctaveShiftToEdge(*measureGeometry, *direction);
         } else if (dynamic_cast<const dom::Pedal*>(direction->type())) {
             buildPedalToEdge(*measureGeometry, *direction);
         }
     }
-
+    
     // Build directions that neither started or stopped
     for (auto& direction : _previouslyOpenSpanDirections) {
-        if (dynamic_cast<const dom::OctaveShift*>(direction->type())) {
+        if (dynamic_cast<const dom::OctaveShift*>(direction->type()) && _metrics->scoreProperties().layoutType() == ScoreProperties::LayoutType::Page) {
             buildOctaveShiftFromEdgeToEdge(*direction);
         } else if (dynamic_cast<const dom::Pedal*>(direction->type())) {
             buildPedalFromEdgeToEdge(*direction);
