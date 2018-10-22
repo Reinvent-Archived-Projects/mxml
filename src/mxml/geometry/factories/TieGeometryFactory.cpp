@@ -28,22 +28,24 @@ std::vector<std::unique_ptr<TieGeometry>>&& TieGeometryFactory::buildTieGeometri
     _slurStartGeometries.clear();
     createGeometries(geometries);
 
-    // Finish any ties that started but did not stop
-    for (auto& pair : _tieStartGeometries) {
-        auto tie = pair.second.first;
-        auto startGeom = pair.second.second;
-        auto tieGeom = buildTieGeometryToEdge(startGeom, tie->placement());
-        startGeom->setTieGeometry(tieGeom.get());
-        _tieGeometries.push_back(std::move(tieGeom));
-    }
-
-    // Finish any slurs that started but did not stop
-    for (auto& pair : _slurStartGeometries) {
-        auto slur = pair.second.first;
-        auto startGeom = pair.second.second;
-        auto slurGeom = buildSlurGeometryToEdge(startGeom, slur->placement());
-        startGeom->setTieGeometry(slurGeom.get());
-        _tieGeometries.push_back(std::move(slurGeom));
+    if (_metrics.scoreProperties().layoutType() == ScoreProperties::LayoutType::Page) {
+        // Finish any ties that started but did not stop
+        for (auto& pair : _tieStartGeometries) {
+            auto tie = pair.second.first;
+            auto startGeom = pair.second.second;
+            auto tieGeom = buildTieGeometryToEdge(startGeom, tie->placement());
+            startGeom->setTieGeometry(tieGeom.get());
+            _tieGeometries.push_back(std::move(tieGeom));
+        }
+        
+        // Finish any slurs that started but did not stop
+        for (auto& pair : _slurStartGeometries) {
+            auto slur = pair.second.first;
+            auto startGeom = pair.second.second;
+            auto slurGeom = buildSlurGeometryToEdge(startGeom, slur->placement());
+            startGeom->setTieGeometry(slurGeom.get());
+            _tieGeometries.push_back(std::move(slurGeom));
+        }
     }
 
     return std::move(_tieGeometries);
@@ -77,7 +79,7 @@ void TieGeometryFactory::createGeometryFromNote(NoteGeometry* noteGeometry) {
     // Build ties
     for (auto& tie : notations->ties) {
         auto key = std::make_pair(note.staff(), note.pitch.get());
-        if (tie->type() == dom::kStart || tie->type() == dom::kContinue) {
+        if (tie->type() == dom::kStart) {
             _tieStartGeometries[key] = {tie.get(), noteGeometry};
         } else if (tie->type() == dom::kContinue) {
             buildTieGeometry(key, *noteGeometry, *tie);
@@ -107,7 +109,11 @@ void TieGeometryFactory::buildTieGeometry(const PitchKey& key, NoteGeometry& not
 
     std::unique_ptr<TieGeometry> tieGeom;
     if (it == _tieStartGeometries.end()) {
-        tieGeom = buildTieGeometryFromEdge(&noteGeometry, tie.placement());
+        if (_metrics.scoreProperties().layoutType() == ScoreProperties::LayoutType::Page) {
+            tieGeom = buildTieGeometryFromEdge(&noteGeometry, tie.placement());
+        } else {
+            return;
+        }
     } else {
         tieGeom = buildTieGeometry(startGeom, &noteGeometry, tie.placement());
         startGeom->setTieGeometry(tieGeom.get());
@@ -123,7 +129,11 @@ void TieGeometryFactory::buildSlurGeometry(const SlurKey& key, NoteGeometry& not
 
     std::unique_ptr<TieGeometry> slurGeom;
     if (it == _slurStartGeometries.end()) {
-        slurGeom = buildSlurGeometryFromEdge(&noteGeometry, slur.placement());
+        if (_metrics.scoreProperties().layoutType() == ScoreProperties::LayoutType::Page) {
+            slurGeom = buildSlurGeometryFromEdge(&noteGeometry, slur.placement());
+        } else {
+            return;
+        }
     } else {
         slurGeom = buildSlurGeometry(startGeom, &noteGeometry, slur.placement());
         startGeom->setTieGeometry(slurGeom.get());
