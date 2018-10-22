@@ -26,6 +26,10 @@ public:
     const dom::Score& score() const {
         return _score;
     }
+    
+    const ScoreProperties& scoreProperties() const {
+        return _scoreProperties;
+    }
 
     std::size_t partIndex() const {
         return _partIndex;

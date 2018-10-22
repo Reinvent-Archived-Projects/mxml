@@ -577,7 +577,7 @@
 		61F073B51A71CD8F002CA9CA /* OrnamentGeometryFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrnamentGeometryFactory.h; sourceTree = "<group>"; };
 		61F073B61A71CD8F002CA9CA /* PartGeometryFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PartGeometryFactory.cpp; sourceTree = "<group>"; };
 		61F073B71A71CD8F002CA9CA /* PartGeometryFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PartGeometryFactory.h; sourceTree = "<group>"; };
-		61F073BC1A71CD8F002CA9CA /* TieGeometryFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TieGeometryFactory.cpp; sourceTree = "<group>"; };
+		61F073BC1A71CD8F002CA9CA /* TieGeometryFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TieGeometryFactory.cpp; sourceTree = "<group>"; tabWidth = 4; };
 		61F073BD1A71CD8F002CA9CA /* TieGeometryFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TieGeometryFactory.h; sourceTree = "<group>"; };
 		61F073CC1A71CEF5002CA9CA /* EndingGeometryFactory.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = EndingGeometryFactory.cpp; sourceTree = "<group>"; };
 		61F073CD1A71CEF5002CA9CA /* EndingGeometryFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EndingGeometryFactory.h; sourceTree = "<group>"; };
